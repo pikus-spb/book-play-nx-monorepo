@@ -1,0 +1,22 @@
+<mat-accordion>
+  <mat-expansion-panel>
+    <mat-expansion-panel-header>
+      <mat-panel-title [innerHTML]="data.key"></mat-panel-title>
+    </mat-expansion-panel-header>
+    <ul>
+      @for ( book of data.value | slice: 0 : MAX_BOOKS_PER_AUTHOR; track
+      book.bookFullName; let index = $index ) { @if (index ===
+      MAX_BOOKS_PER_AUTHOR - 1) {
+      <div>
+        <a href=""><i>Смотреть все книги</i> > ...</a>
+      </div>
+      } @else {
+      <li>
+        <a href="/player/{{ book.id }}" [title]="book.title">{{
+          book.title
+        }}</a>
+      </li>
+      } }
+    </ul>
+  </mat-expansion-panel>
+</mat-accordion>

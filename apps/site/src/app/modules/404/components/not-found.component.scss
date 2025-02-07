@@ -1,0 +1,5 @@
+@use 'vars' as *;
+
+.container {
+  padding: 2 * $default-padding;
+}

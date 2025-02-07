@@ -1,0 +1,20 @@
+<div #container class="voice-container">
+  <h1>Форма озвучки произвольного текста</h1>
+
+  <textarea
+    #input
+    [value]="text"
+    placeholder="Введите произвольный текст..."
+  ></textarea>
+  <p>
+    <br />
+
+    <button
+      mat-flat-button
+      [disabled]="(valid$ | async) === false"
+      (click)="voice()"
+    >
+      Озвучить!
+    </button>
+  </p>
+</div>

@@ -1,0 +1,28 @@
+@use 'vars' as *;
+
+:host {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  height: $header-height;
+  padding: $default-padding;
+  gap: $default-padding;
+
+  button {
+    border-radius: $default-border-radius;
+
+    &.menu {
+      width: $main-menu-width - 2 * $default-padding;
+    }
+  }
+
+  a {
+    display: flex;
+    justify-self: center;
+
+    img {
+      margin-top: 3px;
+      height: $header-height - $default-padding;
+    }
+  }
+}

@@ -1,0 +1,46 @@
+<div>
+  @if (scrolling()) {
+  <div class="skeleton-container">
+    <canvas-skeleton></canvas-skeleton>
+  </div>
+  } @if (bookData !== null) {
+  <div
+    class="scrollable-canvas"
+    [class.scrolling]="scrolling()"
+    cdkVirtualScrollingElement
+  >
+    <h1>
+      {{ bookData.author.first }} {{ bookData.author.last }} -
+      {{ bookData.bookTitle }}
+    </h1>
+
+    <section class="title-picture-container">
+      <img
+        *ngIf="bookData.bookTitlePicture"
+        [src]="bookData.bookTitlePicture"
+        alt="Обложка книги"
+      />
+    </section>
+
+    <cdk-virtual-scroll-viewport
+      #scrollViewport
+      autosize
+      class="infinite-scroll-container"
+      [style.visibility]="scrolling() ? 'hidden' : 'visible'"
+    >
+      <book-paragraph
+        *cdkVirtualFor="
+          let text of bookData.paragraphs;
+          index as index;
+          trackBy: trackByFn
+        "
+        [index]="index"
+        [text]="text"
+        (click)="onParagraphClick(index)"
+        class="scroll-item"
+      >
+      </book-paragraph>
+    </cdk-virtual-scroll-viewport>
+  </div>
+  }
+</div>

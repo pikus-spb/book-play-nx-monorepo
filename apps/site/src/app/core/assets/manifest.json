@@ -1,0 +1,13 @@
+{
+  "name": "Book-Play.Ru",
+  "short_name": "Book-Play",
+  "start_url": "/",
+  "icons": [
+    {
+      "src": "/assets/images/favicon.ico",
+      "sizes": "256x256",
+      "type": "image/x-icon"
+    }
+  ],
+  "permissions": ["storage"]
+}

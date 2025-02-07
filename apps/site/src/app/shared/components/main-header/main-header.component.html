@@ -1,0 +1,21 @@
+<ng-container>
+  <button
+    mat-fab
+    extended
+    color="success"
+    class="menu"
+    matTooltip="Показать главное меню"
+    matTooltipPosition="below"
+    matTooltipShowDelay="1500"
+    (click)="menuClick.emit()"
+  >
+    <mat-icon>menu</mat-icon>
+    Меню
+  </button>
+  @if (showPlayerButton()) {
+  <player-button></player-button>
+  }
+  <a href="/"
+    ><img src="assets/images/book-play.ru.png" alt="Book-play.ru"
+  /></a>
+</ng-container>

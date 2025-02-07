@@ -1,0 +1,19 @@
+@use 'vars' as *;
+
+:host {
+  mat-nav-list {
+    a {
+      border-left: 3px solid transparent;
+
+      &.active {
+        border-left-color: gray;
+        background-color: $default-highlight-color;
+      }
+
+      mat-icon {
+        margin-right: 1rem;
+        vertical-align: bottom;
+      }
+    }
+  }
+}

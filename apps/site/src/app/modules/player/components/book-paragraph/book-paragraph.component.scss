@@ -1,0 +1,17 @@
+@use 'vars' as *;
+
+p {
+  cursor: pointer;
+  padding: 0 $default-padding * 2;
+  text-align: justify;
+
+  &.active {
+    font-weight: bold;
+    -webkit-text-stroke: 0;
+
+    &:before {
+      margin-left: -$default-padding;
+      content: '\21e8';
+    }
+  }
+}

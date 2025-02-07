@@ -1,0 +1,10 @@
+@use 'vars' as *;
+
+:host {
+  display: contents;
+
+  button {
+    width: 48px;
+    border-radius: $default-border-radius;
+  }
+}

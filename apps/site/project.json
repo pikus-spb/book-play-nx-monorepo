@@ -1,0 +1,136 @@
+{
+  "name": "site",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "prefix": "app",
+  "sourceRoot": "apps/site/src",
+  "schematics": {
+    "@schematics/angular:component": {
+      "style": "scss",
+      "standalone": true,
+      "skipImport": true,
+      "changeDetection": "OnPush"
+    },
+    "@schematics/angular:pipe": {
+      "standalone": true,
+      "skipImport": true
+    }
+  },
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@angular-devkit/build-angular:application",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/apps/site",
+        "index": "apps/site/src/app/core/index.html",
+        "browser": "apps/site/src/app/core/main.ts",
+        "polyfills": ["zone.js"],
+        "tsConfig": "apps/site/tsconfig.app.json",
+        "inlineStyleLanguage": "scss",
+        "stylePreprocessorOptions": {
+          "includePaths": ["apps/site/src/app/core/styles/"]
+        },
+        "assets": [
+          {
+            "glob": "**/*",
+            "input": "apps/site/src/app/core/assets/fonts",
+            "output": "/assets/fonts"
+          },
+          {
+            "glob": "**/*",
+            "input": "apps/site/src/app/core/assets/images",
+            "output": "/assets/images"
+          },
+          {
+            "glob": "**/.htaccess",
+            "input": "apps/site/src/app/core/assets/",
+            "output": "/"
+          },
+          {
+            "glob": "**/manifest.json",
+            "input": "apps/site/src/app/core/assets/",
+            "output": "/"
+          },
+          {
+            "glob": "**/favicon.ico",
+            "input": "apps/site/src/app/core/assets/",
+            "output": "/"
+          }
+        ],
+        "styles": [
+          "@angular/material/prebuilt-themes/pink-bluegrey.css",
+          "apps/site/src/app/core/styles/main.scss"
+        ],
+        "scripts": []
+      },
+      "configurations": {
+        "production": {
+          "budgets": [
+            {
+              "type": "initial",
+              "maximumWarning": "500kb",
+              "maximumError": "1mb"
+            },
+            {
+              "type": "anyComponentStyle",
+              "maximumWarning": "4kb",
+              "maximumError": "8kb"
+            }
+          ],
+          "outputHashing": "all"
+        },
+        "development": {
+          "optimization": false,
+          "extractLicenses": false,
+          "sourceMap": true
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "serve": {
+      "executor": "@angular-devkit/build-angular:dev-server",
+      "configurations": {
+        "production": {
+          "buildTarget": "site:build:production"
+        },
+        "development": {
+          "buildTarget": "site:build:development"
+        }
+      },
+      "defaultConfiguration": "development"
+    },
+    "extract-i18n": {
+      "executor": "@angular-devkit/build-angular:extract-i18n",
+      "options": {
+        "buildTarget": "site:build"
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "options": {
+        "lintFilePatterns": [
+          "apps/site/src/**/*.ts",
+          "apps/site/src/**/*.html",
+          "apps/site/src/**/*.scss"
+        ]
+      }
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "apps/site/jest.config.ts"
+      }
+    },
+    "serve-static": {
+      "executor": "@nx/web:file-server",
+      "options": {
+        "buildTarget": "site:build",
+        "port": 4200,
+        "staticFilePath": "dist/apps/site/browser",
+        "spa": true
+      }
+    }
+  }
+}

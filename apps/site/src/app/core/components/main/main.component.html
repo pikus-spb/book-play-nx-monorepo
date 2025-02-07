@@ -1,0 +1,23 @@
+<ng-container>
+  <mat-toolbar>
+    <main-header (menuClick)="sidenav.toggle()"></main-header>
+  </mat-toolbar>
+  <mat-progress-bar
+    mode="indeterminate"
+    [style.visibility]="
+      (eventStatesService.get$(AppEvents.loading) | async)
+        ? 'visible'
+        : 'hidden'
+    "
+  ></mat-progress-bar>
+  <mat-sidenav-container>
+    <mat-sidenav #sidenav mode="side" opened="true" (click)="sidenav.close()">
+      <main-menu></main-menu>
+      <copyright-owner></copyright-owner>
+      <copyright></copyright>
+    </mat-sidenav>
+    <mat-sidenav-content>
+      <router-outlet></router-outlet>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+</ng-container>

@@ -1,0 +1,14 @@
+<div class="library-container">
+  <h1 class="main" loading [thenShow]="books">
+    Книги <small #loading>(по авторам)</small>
+  </h1>
+  <ng-template #books>
+    <div class="authors-books-grid">
+      @for (item of data.value() ?? {} | keyvalue; track item.key) {
+      <author-books [data]="item"></author-books>
+      } @empty {
+      <span>Книги временно не доступны</span>
+      }
+    </div>
+  </ng-template>
+</div>

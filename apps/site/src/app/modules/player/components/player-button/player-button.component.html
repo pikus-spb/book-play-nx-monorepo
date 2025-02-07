@@ -1,0 +1,22 @@
+<button
+  mat-mini-fab
+  color="success"
+  matTooltip="Играть"
+  matTooltipPosition="below"
+  matTooltipShowDelay="1500"
+  [disabled]="(autoPlay.paused$ | async) === false"
+  (click)="click($event)"
+>
+  <mat-icon>play_arrow</mat-icon>
+</button>
+<button
+  mat-mini-fab
+  color="success"
+  matTooltip="Пауза"
+  matTooltipPosition="below"
+  matTooltipShowDelay="1500"
+  [disabled]="autoPlay.paused$ | async"
+  (click)="click($event)"
+>
+  <mat-icon>pause</mat-icon>
+</button>

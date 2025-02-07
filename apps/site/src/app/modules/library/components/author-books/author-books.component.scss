@@ -1,0 +1,29 @@
+@use 'vars' as *;
+
+mat-expansion-panel {
+  width: 100%;
+  max-height: $card-size;
+  border-radius: $default-border-radius;
+  background-color: $default-highlight-color;
+
+  mat-expansion-panel-header {
+    height: $card-header-height;
+    padding: calc($default-padding / 2) $default-padding;
+  }
+
+  ul {
+    list-style: none;
+    padding-left: 0;
+    margin-bottom: 0;
+
+    a {
+      display: block;
+      color: $default-color;
+      text-decoration: none;
+      font-size: small;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
+    }
+  }
+}

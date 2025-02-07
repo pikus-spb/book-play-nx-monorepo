@@ -1,0 +1,13 @@
+@use 'vars' as *;
+
+.library-container {
+  padding: 2 * $default-padding;
+
+  .authors-books-grid {
+    margin-top: $default-padding;
+    display: grid;
+    gap: $default-padding;
+    grid-template-columns: repeat(auto-fit, minmax($card-size, 1fr));
+    grid-template-rows: repeat(auto-fit, 1fr);
+  }
+}

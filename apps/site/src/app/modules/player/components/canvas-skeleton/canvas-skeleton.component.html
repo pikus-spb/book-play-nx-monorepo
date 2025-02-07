@@ -1,0 +1,11 @@
+<ng-container *ngFor="let theme of themes; index as index">
+  <ngx-skeleton-loader
+    [theme]="theme"
+    animation="progress-dark"
+    count="1"
+    appearance="line"
+    animation="progress-dark"
+  >
+  </ngx-skeleton-loader>
+  <p *ngIf="index % 2 === 0">&nbsp;</p>
+</ng-container>

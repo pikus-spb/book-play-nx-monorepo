@@ -1,0 +1,13 @@
+@if (book()) {
+<ng-container>
+  <book-canvas
+    [book]="book"
+    (paragraphClick)="playParagraph($event)"
+  ></book-canvas>
+</ng-container>
+
+@if (contentLoading()) {
+<ng-container class="skeleton-container">
+  <canvas-skeleton></canvas-skeleton>
+</ng-container>
+} }

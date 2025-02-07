@@ -1,0 +1,16 @@
+// == Sizes ==
+// - Paddings
+$default-padding: 1rem;
+$default-border-width: 1px;
+// - Geometry
+$default-border-radius: 10px;
+$card-size: 250px;
+$card-header-height: 50px;
+$card-content-height: $card-size - $card-header-height;
+$main-menu-width: 12rem;
+$header-height: 3.5rem;
+// == Colors ==
+$default-color: rgb(250 250 250 / 90%);
+$default-highlight-color: rgb(200 200 200 / 25%);
+// == Etc ==
+$default-border: $default-border-width solid $default-highlight-color;

@@ -1,0 +1,14 @@
+@use 'vars' as *;
+
+.welcome-container {
+  padding: 2 * $default-padding;
+
+  fieldset {
+    border-radius: 5px;
+    padding: $default-padding;
+    legend {
+      padding: 0 $default-padding;
+      font-size: large;
+    }
+  }
+}
