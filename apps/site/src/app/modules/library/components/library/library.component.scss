@@ -7,7 +7,7 @@
     margin-top: $default-padding;
     display: grid;
     gap: $default-padding;
-    grid-template-columns: repeat(auto-fit, minmax($card-size, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax($card-width, 1fr));
     grid-template-rows: repeat(auto-fit, 1fr);
   }
 }

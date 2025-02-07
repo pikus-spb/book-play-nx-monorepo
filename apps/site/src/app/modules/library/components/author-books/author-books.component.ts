@@ -8,8 +8,6 @@ import {
 } from '@angular/material/expansion';
 import { BookDescription } from 'app/modules/library/model/books-model';
 
-const MAX_BOOKS_PER_AUTHOR = 8;
-
 @Component({
   selector: 'author-books',
   imports: [
@@ -25,6 +23,4 @@ const MAX_BOOKS_PER_AUTHOR = 8;
 })
 export class AuthorBooksComponent {
   @Input() data!: KeyValue<string, BookDescription[]>;
-
-  protected readonly MAX_BOOKS_PER_AUTHOR = MAX_BOOKS_PER_AUTHOR;
 }

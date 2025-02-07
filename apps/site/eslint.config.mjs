@@ -22,7 +22,7 @@ export default [
           style: 'kebab-case',
         },
       ],
-      '@angular-eslint/prefer-standalone': 'warn',
+      '@angular-eslint/prefer-standalone': 'off',
     },
   },
   {
