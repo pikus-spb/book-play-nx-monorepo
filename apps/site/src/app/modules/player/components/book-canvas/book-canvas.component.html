@@ -18,6 +18,7 @@
       <img
         *ngIf="bookData.bookTitlePicture"
         [src]="bookData.bookTitlePicture"
+        (error)="removeImage($event)"
         alt="Обложка книги"
       />
     </section>

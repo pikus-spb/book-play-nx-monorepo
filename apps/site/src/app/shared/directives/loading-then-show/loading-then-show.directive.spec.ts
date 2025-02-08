@@ -1,12 +1,17 @@
 import {
   Component,
   DebugElement,
+  provideExperimentalZonelessChangeDetection,
   Signal,
   TemplateRef,
   ViewContainerRef,
 } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
+import {
+  BrowserDynamicTestingModule,
+  platformBrowserDynamicTesting,
+} from '@angular/platform-browser-dynamic/testing';
 import { EventsStateService } from 'app/shared/services/events-state.service';
 import { LoadingThenShowDirective } from './loading-then-show.directive';
 
@@ -25,22 +30,27 @@ describe('LoadingThenShowDirective', () => {
   let fixture: ComponentFixture<TestComponent>;
   let directiveEl: DebugElement;
   let directive: LoadingThenShowDirective;
-  let eventsStateServiceMock: jasmine.SpyObj<EventsStateService>;
+  let eventsStateServiceMock: jest.Mocked<EventsStateService>;
+
+  TestBed.initTestEnvironment(
+    BrowserDynamicTestingModule,
+    platformBrowserDynamicTesting()
+  );
 
   beforeEach(() => {
-    // Create a mock for the EventsStateService
-    eventsStateServiceMock = jasmine.createSpyObj('EventsStateService', [
-      'get',
-    ]);
+    eventsStateServiceMock = {
+      get: jest.fn(),
+    } as unknown as jest.Mocked<EventsStateService>;
 
     TestBed.configureTestingModule({
       imports: [LoadingThenShowDirective, TestComponent],
       providers: [
+        provideExperimentalZonelessChangeDetection(),
         ViewContainerRef,
         { provide: TemplateRef, useValue: {} as TemplateRef<unknown> },
         { provide: EventsStateService, useValue: eventsStateServiceMock },
       ],
-    }).compileComponents();
+    });
 
     fixture = TestBed.createComponent(TestComponent);
     directiveEl = fixture.debugElement.query(
@@ -49,12 +59,12 @@ describe('LoadingThenShowDirective', () => {
     directive = directiveEl.injector.get(LoadingThenShowDirective);
   });
 
-  it('should create an instance', () => {
+  test('should create an instance', () => {
     expect(directive).toBeTruthy();
   });
 
-  it('should create a loading component when loading', () => {
-    eventsStateServiceMock.get.and.returnValue((() => {
+  test('should create a loading component when loading', () => {
+    eventsStateServiceMock.get.mockReturnValue((() => {
       return true;
     }) as unknown as Signal<boolean>);
     fixture.detectChanges();
@@ -64,8 +74,8 @@ describe('LoadingThenShowDirective', () => {
     ).toBeTruthy();
   });
 
-  it('should initialize the embedded view when not loading', () => {
-    eventsStateServiceMock.get.and.returnValue((() => {
+  test('should initialize the embedded view when not loading', () => {
+    eventsStateServiceMock.get.mockReturnValue((() => {
       return false;
     }) as unknown as Signal<boolean>);
     fixture.detectChanges();

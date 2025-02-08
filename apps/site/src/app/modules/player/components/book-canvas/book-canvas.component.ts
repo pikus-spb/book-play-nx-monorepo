@@ -1,8 +1,8 @@
+import { ScrollingModule as ExperimentalScrollingModule } from '@angular/cdk-experimental/scrolling';
 import {
   CdkVirtualScrollViewport,
   ScrollingModule,
 } from '@angular/cdk/scrolling';
-import { ScrollingModule as ExperimentalScrollingModule } from '@angular/cdk-experimental/scrolling';
 import {
   AfterViewInit,
   ChangeDetectionStrategy,
@@ -15,8 +15,6 @@ import {
   Signal,
   ViewChild,
 } from '@angular/core';
-
-import { Subject } from 'rxjs';
 import { MaterialModule } from 'app/core/modules/material.module';
 import { BookParagraphComponent } from 'app/modules/player/components/book-paragraph/book-paragraph.component';
 import { createViewportScrollerService } from 'app/modules/player/services/viewport-scroller.service';
@@ -25,6 +23,8 @@ import {
   AppEventNames,
   EventsStateService,
 } from 'app/shared/services/events-state.service';
+
+import { Subject } from 'rxjs';
 
 import { CanvasSkeletonComponent } from '../canvas-skeleton/canvas-skeleton.component';
 
@@ -52,6 +52,10 @@ export class BookCanvasComponent implements AfterViewInit, OnDestroy {
 
   constructor(private el: ElementRef, public eventState: EventsStateService) {
     this.scrolling = this.eventState.get(AppEventNames.scrollingIntoView);
+  }
+
+  public removeImage(event: Event): void {
+    (event.target as HTMLImageElement).remove();
   }
 
   public trackByFn(index: number, item: string): string {

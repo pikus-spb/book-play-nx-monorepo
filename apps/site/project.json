@@ -25,7 +25,6 @@
         "outputPath": "dist/apps/site",
         "index": "apps/site/src/app/core/index.html",
         "browser": "apps/site/src/app/core/main.ts",
-        "polyfills": ["zone.js"],
         "tsConfig": "apps/site/tsconfig.app.json",
         "inlineStyleLanguage": "scss",
         "stylePreprocessorOptions": {
