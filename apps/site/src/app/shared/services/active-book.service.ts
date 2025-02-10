@@ -8,16 +8,16 @@ import {
 } from '@angular/core';
 import { ParamMap } from '@angular/router';
 import { BooksApiService } from 'app/modules/library/services/books-api.service';
-import { CursorPositionLocalStorageService } from 'app/modules/player/services/cursor-position-local-storage.service';
-import { DomHelperService } from 'app/modules/player/services/dom-helper.service';
-import { IndexedDbBookStorageService } from 'app/modules/player/services/indexed-db-book-storage.service';
 import { BookData } from 'app/shared/model/fb2-book.types';
 import { BookStringsService } from 'app/shared/services/book-strings.service';
+import { CursorPositionLocalStorageService } from 'app/shared/services/cursor-position-local-storage.service';
+import { DomHelperService } from 'app/shared/services/dom-helper.service';
 import {
   AppEventNames,
   EventsStateService,
 } from 'app/shared/services/events-state.service';
 import { Fb2ParsingService } from 'app/shared/services/fb2-parsing.service';
+import { IndexedDbBookStorageService } from 'app/shared/services/indexed-db-book-storage.service';
 
 @Injectable({
   providedIn: 'root',

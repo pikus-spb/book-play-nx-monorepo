@@ -1,6 +1,6 @@
 import { effect, Injectable } from '@angular/core';
-import { ActiveBookService } from 'app/modules/player/services/active-book.service';
-import { AudioStorageService } from 'app/modules/player/services/audio-storage.service';
+import { ActiveBookService } from 'app/shared/services/active-book.service';
+import { AudioStorageService } from 'app/shared/services/audio-storage.service';
 import { Base64Service } from 'app/shared/services/base64.service';
 import { TtsApiService } from 'app/shared/services/tts-api.service';
 import { first, firstValueFrom, Observable, switchMap, tap } from 'rxjs';

@@ -1,7 +1,7 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { PARAGRAPH_CLASS_PREFIX } from 'app/modules/player/components/book-paragraph/book-paragraph.component';
-import { CursorPositionLocalStorageService } from 'app/modules/player/services/cursor-position-local-storage.service';
-import { viewportScroller } from 'app/modules/player/services/viewport-scroller.service';
+import { CursorPositionLocalStorageService } from 'app/shared/services/cursor-position-local-storage.service';
+import { viewportScroller } from 'app/shared/services/viewport-scroller.service';
 import { debounce } from 'lodash';
 import {
   firstValueFrom,

@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
-import { viewportScroller } from 'app/modules/player/services/viewport-scroller.service';
 import {
   AppEventNames,
   EventsStateService,
 } from 'app/shared/services/events-state.service';
+import { viewportScroller } from 'app/shared/services/viewport-scroller.service';
 
 @Injectable({
   providedIn: 'root',

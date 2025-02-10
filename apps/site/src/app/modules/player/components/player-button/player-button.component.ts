@@ -4,7 +4,7 @@ import {
   HostListener,
 } from '@angular/core';
 import { MaterialModule } from 'app/core/modules/material.module';
-import { AutoPlayService } from 'app/modules/player/services/auto-play.service';
+import { AutoPlayService } from 'app/shared/services/auto-play.service';
 
 @Component({
   selector: 'player-button',

@@ -10,7 +10,7 @@ import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
 import { MaterialModule } from 'app/core/modules/material.module';
 import { PlayerButtonComponent } from 'app/modules/player/components/player-button/player-button.component';
-import { ActiveBookService } from 'app/modules/player/services/active-book.service';
+import { ActiveBookService } from 'app/shared/services/active-book.service';
 import { merge, tap } from 'rxjs';
 
 @Component({

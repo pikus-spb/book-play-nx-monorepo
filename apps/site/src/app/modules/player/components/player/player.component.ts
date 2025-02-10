@@ -7,9 +7,9 @@ import {
 import { MaterialModule } from 'app/core/modules/material.module';
 import { BookCanvasComponent } from 'app/modules/player/components/book-canvas/book-canvas.component';
 import { CanvasSkeletonComponent } from 'app/modules/player/components/canvas-skeleton/canvas-skeleton.component';
-import { ActiveBookService } from 'app/modules/player/services/active-book.service';
-import { AutoPlayService } from 'app/modules/player/services/auto-play.service';
 import { BookData } from 'app/shared/model/fb2-book.types';
+import { ActiveBookService } from 'app/shared/services/active-book.service';
+import { AutoPlayService } from 'app/shared/services/auto-play.service';
 import { BookStringsService } from 'app/shared/services/book-strings.service';
 import { DocumentTitleService } from 'app/shared/services/document-title.service';
 import {

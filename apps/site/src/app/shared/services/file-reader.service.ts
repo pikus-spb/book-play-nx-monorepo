@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { ActiveBookService } from 'app/modules/player/services/active-book.service';
+import { ActiveBookService } from 'app/shared/services/active-book.service';
 import { Fb2ParsingService } from 'app/shared/services/fb2-parsing.service';
 
 @Injectable({

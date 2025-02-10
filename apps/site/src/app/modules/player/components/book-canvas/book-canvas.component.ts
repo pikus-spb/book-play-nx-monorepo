@@ -17,15 +17,13 @@ import {
 } from '@angular/core';
 import { MaterialModule } from 'app/core/modules/material.module';
 import { BookParagraphComponent } from 'app/modules/player/components/book-paragraph/book-paragraph.component';
-import { createViewportScrollerService } from 'app/modules/player/services/viewport-scroller.service';
 import { BookData } from 'app/shared/model/fb2-book.types';
 import {
   AppEventNames,
   EventsStateService,
 } from 'app/shared/services/events-state.service';
-
+import { createViewportScrollerService } from 'app/shared/services/viewport-scroller.service';
 import { Subject } from 'rxjs';
-
 import { CanvasSkeletonComponent } from '../canvas-skeleton/canvas-skeleton.component';
 
 const PARAGRAPH_TAG = 'book-paragraph';

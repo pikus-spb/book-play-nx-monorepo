@@ -7,8 +7,8 @@ import {
 import { MatListItem } from '@angular/material/list';
 import { RouterModule } from '@angular/router';
 import { MaterialModule } from 'app/core/modules/material.module';
-import { ActiveBookService } from 'app/modules/player/services/active-book.service';
 import { UploadFileDirective } from 'app/shared/directives/file-upload/upload-file.directive';
+import { ActiveBookService } from 'app/shared/services/active-book.service';
 import {
   AppEventNames,
   EventsStateService,

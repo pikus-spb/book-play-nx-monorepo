@@ -1,11 +1,11 @@
 import { effect, Injectable } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NavigationEnd, Router } from '@angular/router';
-import { ActiveBookService } from 'app/modules/player/services/active-book.service';
-import { AudioStorageService } from 'app/modules/player/services/audio-storage.service';
-import { CursorPositionLocalStorageService } from 'app/modules/player/services/cursor-position-local-storage.service';
-import { DomAudioHelperService } from 'app/modules/player/services/dom-audio-helper.service';
-import { DomHelperService } from 'app/modules/player/services/dom-helper.service';
+import { ActiveBookService } from 'app/shared/services/active-book.service';
+import { AudioStorageService } from 'app/shared/services/audio-storage.service';
+import { CursorPositionLocalStorageService } from 'app/shared/services/cursor-position-local-storage.service';
+import { DomAudioHelperService } from 'app/shared/services/dom-audio-helper.service';
+import { DomHelperService } from 'app/shared/services/dom-helper.service';
 import {
   AppEventNames,
   EventsStateService,

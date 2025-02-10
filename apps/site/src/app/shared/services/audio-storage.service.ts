@@ -1,5 +1,5 @@
 import { effect, Injectable } from '@angular/core';
-import { ActiveBookService } from 'app/modules/player/services/active-book.service';
+import { ActiveBookService } from 'app/shared/services/active-book.service';
 
 @Injectable({
   providedIn: 'root',
