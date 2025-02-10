@@ -1,11 +1,5 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  inject,
-  signal,
-  WritableSignal,
-} from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { MaterialModule } from 'app/core/modules/material.module';
 import { ActiveBookService } from 'app/modules/player/services/active-book.service';
@@ -17,7 +11,6 @@ import {
   AppEventNames,
   EventsStateService,
 } from 'app/shared/services/events-state.service';
-import { tap } from 'rxjs';
 
 @Component({
   selector: 'main',
@@ -38,18 +31,13 @@ export class MainComponent {
   public eventStatesService = inject(EventsStateService);
 
   private route = inject(ActivatedRoute);
-  private idSignal: WritableSignal<string | null> = signal(null);
   private activeBookService = inject(ActiveBookService);
 
   constructor() {
-    this.route.firstChild?.paramMap
-      .pipe(
-        takeUntilDestroyed(),
-        tap((params) => {
-          this.idSignal.set(params.get('id'));
-        })
-      )
-      .subscribe();
-    this.activeBookService.setRouteParamSignal(this.idSignal);
+    if (this.route.firstChild) {
+      this.activeBookService.setRouteSignal(
+        toSignal(this.route.firstChild.paramMap)
+      );
+    }
   }
 }

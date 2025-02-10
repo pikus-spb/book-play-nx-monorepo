@@ -2,9 +2,11 @@ import {
   effect,
   inject,
   Injectable,
+  Signal,
   signal,
   WritableSignal,
 } from '@angular/core';
+import { ParamMap } from '@angular/router';
 import { BooksApiService } from 'app/modules/library/services/books-api.service';
 import { CursorPositionLocalStorageService } from 'app/modules/player/services/cursor-position-local-storage.service';
 import { DomHelperService } from 'app/modules/player/services/dom-helper.service';
@@ -30,12 +32,12 @@ export class ActiveBookService {
   private domHelper = inject(DomHelperService);
   private booksApi = inject(BooksApiService);
   private fb2ParsingService = inject(Fb2ParsingService);
-  private idSignal?: WritableSignal<string | null>;
+  private paramMapSignal?: Signal<ParamMap | undefined>;
 
   constructor() {
     effect(async () => {
-      if (this.idSignal) {
-        const id = this.idSignal();
+      if (this.paramMapSignal) {
+        const id = this.paramMapSignal()?.get('id');
         let bookData;
 
         if (id) {
@@ -72,11 +74,11 @@ export class ActiveBookService {
     return false;
   }
 
-  public setRouteParamSignal(idSignal: WritableSignal<string | null>): void {
-    this.idSignal = idSignal;
+  public setRouteSignal(signal: Signal<ParamMap | undefined>): void {
+    this.paramMapSignal = signal;
   }
 
-  update(value: BookData | null): void {
+  public update(value: BookData | null): void {
     this.book.set(value);
 
     if (value !== null) {
