@@ -1,11 +1,11 @@
 import { Injectable, OnDestroy } from '@angular/core';
+// import { EqualizerService } from 'app/shared/services/equalizer.service';
 import { firstValueFrom, fromEvent, merge, Subject } from 'rxjs';
-import { EqualizerService } from './equalizer.service';
 
 @Injectable({
   providedIn: 'root',
 })
-export class AudioPlayerService implements OnDestroy {
+export class DomAudioHelperService implements OnDestroy {
   private audio!: HTMLAudioElement;
   private destroyed$: Subject<void> = new Subject<void>();
   private _ended$: Subject<boolean> = new Subject<boolean>();
@@ -19,7 +19,7 @@ export class AudioPlayerService implements OnDestroy {
     return this._stopped;
   }
 
-  constructor(private equalizer: EqualizerService) {
+  constructor() {
     this.createAudioElement();
   }
 
@@ -40,9 +40,9 @@ export class AudioPlayerService implements OnDestroy {
   public async play(): Promise<boolean | Event> {
     const reallyEnded$ = fromEvent(this.audio, 'ended');
 
-    if (!this.equalizer.applied) {
-      this.equalizer.equalize(this.audio);
-    }
+    // if (!this.equalizer.applied) {
+    //   this.equalizer.equalize(this.audio);
+    // }
 
     await this.audio.play();
     this._stopped = false;

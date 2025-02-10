@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { CursorPositionStoreService } from 'app/modules/player/services/cursor-position-store.service';
-import { OpenedBookService } from 'app/modules/player/services/opened-book.service';
+import { ActiveBookService } from 'app/modules/player/services/active-book.service';
+import { CursorPositionLocalStorageService } from 'app/modules/player/services/cursor-position-local-storage.service';
 import { viewportScroller } from 'app/modules/player/services/viewport-scroller.service';
 import {
   AppEventNames,
@@ -13,8 +13,8 @@ import {
 export class ScrollPositionHelperService {
   constructor(
     private eventStateService: EventsStateService,
-    private cursorService: CursorPositionStoreService,
-    private openedBook: OpenedBookService
+    private cursorService: CursorPositionLocalStorageService,
+    private openedBook: ActiveBookService
   ) {}
 
   public cursorPositionIsValid(): boolean {

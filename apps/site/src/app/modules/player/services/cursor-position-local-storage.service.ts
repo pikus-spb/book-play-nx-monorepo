@@ -4,7 +4,7 @@ import { BehaviorSubject, Observable, shareReplay } from 'rxjs';
 @Injectable({
   providedIn: 'root',
 })
-export class CursorPositionStoreService {
+export class CursorPositionLocalStorageService {
   private storageName = '';
   private _position$: BehaviorSubject<number> = new BehaviorSubject<number>(0);
 

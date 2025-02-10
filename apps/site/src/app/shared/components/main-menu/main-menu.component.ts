@@ -7,13 +7,13 @@ import {
 import { MatListItem } from '@angular/material/list';
 import { RouterModule } from '@angular/router';
 import { MaterialModule } from 'app/core/modules/material.module';
-import { OpenedBookService } from 'app/modules/player/services/opened-book.service';
+import { ActiveBookService } from 'app/modules/player/services/active-book.service';
 import { UploadFileDirective } from 'app/shared/directives/file-upload/upload-file.directive';
 import {
   AppEventNames,
   EventsStateService,
 } from 'app/shared/services/events-state.service';
-import { FileUploadService } from 'app/shared/services/file-upload.service';
+import { FileReaderService } from 'app/shared/services/file-reader.service';
 
 @Component({
   selector: 'main-menu',
@@ -26,9 +26,9 @@ export class MainMenuComponent {
   @ViewChild('uploadButton') uploadButton?: MatListItem;
 
   constructor(
-    private fileService: FileUploadService,
+    private fileReaderService: FileReaderService,
     private eventStates: EventsStateService,
-    public openedBookService: OpenedBookService
+    public openedBookService: ActiveBookService
   ) {
     effect(() => {
       if (this.eventStates.get(AppEventNames.runUploadFile)()) {
@@ -38,6 +38,6 @@ export class MainMenuComponent {
   }
 
   fileUploaded(files?: FileList) {
-    this.fileService.parseNewFile(files);
+    this.fileReaderService.parseNewFile(files);
   }
 }

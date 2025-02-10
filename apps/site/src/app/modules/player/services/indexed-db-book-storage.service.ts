@@ -15,7 +15,7 @@ const DB_TABLE = {
 @Injectable({
   providedIn: 'root',
 })
-export class IndexedDbStorageService extends Dexie {
+export class IndexedDbBookStorageService extends Dexie {
   private dbTable!: Table<any, number>;
 
   constructor() {

@@ -1,4 +1,7 @@
 import { Injectable, OnDestroy } from '@angular/core';
+import { PARAGRAPH_CLASS_PREFIX } from 'app/modules/player/components/book-paragraph/book-paragraph.component';
+import { CursorPositionLocalStorageService } from 'app/modules/player/services/cursor-position-local-storage.service';
+import { viewportScroller } from 'app/modules/player/services/viewport-scroller.service';
 import { debounce } from 'lodash';
 import {
   firstValueFrom,
@@ -8,9 +11,6 @@ import {
   tap,
   timer,
 } from 'rxjs';
-import { PARAGRAPH_CLASS_PREFIX } from 'app/modules/player/components/book-paragraph/book-paragraph.component';
-import { CursorPositionStoreService } from 'app/modules/player/services/cursor-position-store.service';
-import { viewportScroller } from 'app/modules/player/services/viewport-scroller.service';
 
 import { ScrollPositionHelperService } from './scroll-position-helper.service';
 
@@ -22,7 +22,7 @@ export class DomHelperService implements OnDestroy {
   private scrollingStopped$: Subject<void> = new Subject();
 
   constructor(
-    private cursorService: CursorPositionStoreService,
+    private cursorService: CursorPositionLocalStorageService,
     private scrollPositionHelper: ScrollPositionHelperService
   ) {}
 

@@ -63,7 +63,7 @@ export class EqualizerService {
     return filters;
   }
 
-  public equalize(audio: HTMLAudioElement) {
+  public equalizeDOMAudio(audio: HTMLAudioElement) {
     if (!this._applied) {
       this._applied = true;
       this.context = new AudioContext();

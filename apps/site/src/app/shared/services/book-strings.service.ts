@@ -5,7 +5,7 @@ import { BookData } from 'app/shared/model/fb2-book.types';
 @Injectable({
   providedIn: 'root',
 })
-export class BookUtilsService {
+export class BookStringsService {
   public getBookFullDisplayName(book: BookData): string {
     return `${book.author.first} ${book.author.last} - ${book.bookTitle}`;
   }

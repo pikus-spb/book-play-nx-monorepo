@@ -1,6 +1,16 @@
 import { effect, Injectable } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NavigationEnd, Router } from '@angular/router';
+import { ActiveBookService } from 'app/modules/player/services/active-book.service';
+import { AudioStorageService } from 'app/modules/player/services/audio-storage.service';
+import { CursorPositionLocalStorageService } from 'app/modules/player/services/cursor-position-local-storage.service';
+import { DomAudioHelperService } from 'app/modules/player/services/dom-audio-helper.service';
+import { DomHelperService } from 'app/modules/player/services/dom-helper.service';
+import {
+  AppEventNames,
+  EventsStateService,
+} from 'app/shared/services/events-state.service';
+import { TtsApiService } from 'app/shared/services/tts-api.service';
 import {
   BehaviorSubject,
   filter,
@@ -9,18 +19,10 @@ import {
   shareReplay,
   tap,
 } from 'rxjs';
-import { AudioPlayerService } from 'app/modules/player/services/audio-player.service';
-import { AudioStorageService } from 'app/modules/player/services/audio-storage.service';
-import { CursorPositionStoreService } from 'app/modules/player/services/cursor-position-store.service';
-import { DomHelperService } from 'app/modules/player/services/dom-helper.service';
-import { OpenedBookService } from 'app/modules/player/services/opened-book.service';
-import { TtsApiService } from 'app/modules/player/services/tts-api.service';
 import {
-  AppEventNames,
-  EventsStateService,
-} from 'app/shared/services/events-state.service';
-import { AudioPreloadingService } from './audio-preloading.service';
-import { DataHelperService } from './data-helper.service';
+  AudioPreloadingService,
+  PRELOAD_EXTRA,
+} from './audio-preloading.service';
 import { ScrollPositionHelperService } from './scroll-position-helper.service';
 
 @Injectable({
@@ -35,15 +37,14 @@ export class AutoPlayService {
 
   constructor(
     private router: Router,
-    private openedBook: OpenedBookService,
-    private audioPlayer: AudioPlayerService,
+    private openedBook: ActiveBookService,
+    private audioPlayer: DomAudioHelperService,
     private speechService: TtsApiService,
     private audioStorage: AudioStorageService,
     private eventStateService: EventsStateService,
-    private dataHelper: DataHelperService,
     private preloadingService: AudioPreloadingService,
     private scrollPositionHelper: ScrollPositionHelperService,
-    private cursorService: CursorPositionStoreService,
+    private cursorService: CursorPositionLocalStorageService,
     private domHelper: DomHelperService,
     private preloadHelper: AudioPreloadingService
   ) {
@@ -98,6 +99,19 @@ export class AutoPlayService {
     this._paused$.next(true);
   }
 
+  public async ensureAudioDataReady() {
+    if (!this.audioStorage.get(this.cursorService.position)) {
+      this.eventStateService.add(AppEventNames.loading);
+
+      await this.preloadHelper.preloadParagraph(
+        this.cursorService.position,
+        PRELOAD_EXTRA.min
+      );
+
+      this.eventStateService.remove(AppEventNames.loading);
+    }
+  }
+
   public stop(): void {
     this.audioPlayer.stop();
     this._paused$.next(true);
@@ -136,7 +150,7 @@ export class AutoPlayService {
         );
       }
 
-      await this.dataHelper.ensureAudioDataReady();
+      await this.ensureAudioDataReady();
 
       this.audioPlayer.setAudio(
         this.audioStorage.get(this.cursorService.position)

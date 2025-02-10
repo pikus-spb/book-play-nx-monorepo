@@ -1,10 +1,17 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
+import { Router } from '@angular/router';
+import { ActiveBookService } from 'app/modules/player/services/active-book.service';
+import { Fb2ParsingService } from 'app/shared/services/fb2-parsing.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class FileReaderService {
-  private detectEncoding(
+  private fb2Service = inject(Fb2ParsingService);
+  private activeBookService = inject(ActiveBookService);
+  private router = inject(Router);
+
+  private detectFileEncoding(
     file: Blob,
     defaultEncoding = 'UTF-8'
   ): Promise<string> {
@@ -22,8 +29,8 @@ export class FileReaderService {
     });
   }
 
-  public async readFile(file: Blob): Promise<string> {
-    return this.detectEncoding(file).then((encoding: string) => {
+  public async readBlobFromFile(file: Blob): Promise<string> {
+    return this.detectFileEncoding(file).then((encoding: string) => {
       const reader = new FileReader();
       return new Promise((resolve) => {
         reader.onload = (fileEvent: Event) => {
@@ -33,5 +40,16 @@ export class FileReaderService {
         reader.readAsText(file, encoding);
       });
     });
+  }
+
+  public async parseNewFile(files?: FileList): Promise<void> {
+    if (files && files.length > 0) {
+      const text = await this.readBlobFromFile(files[0]);
+      const bookData = await this.fb2Service.parseBookFromString(text);
+      this.activeBookService.update(bookData);
+      this.router.navigateByUrl('/player');
+    } else {
+      this.activeBookService.update(null);
+    }
   }
 }

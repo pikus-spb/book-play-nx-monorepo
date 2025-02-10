@@ -1,5 +1,5 @@
 import { effect, Injectable } from '@angular/core';
-import { OpenedBookService } from 'app/modules/player/services/opened-book.service';
+import { ActiveBookService } from 'app/modules/player/services/active-book.service';
 
 @Injectable({
   providedIn: 'root',
@@ -8,7 +8,7 @@ export class AudioStorageService {
   private storage: Map<number, string> = new Map<number, string>();
   private previousBookTitle = '';
 
-  constructor(private bookService: OpenedBookService) {
+  constructor(private bookService: ActiveBookService) {
     effect(() => {
       const title = this.bookService.book()?.bookTitle || '';
       if (title !== this.previousBookTitle) {

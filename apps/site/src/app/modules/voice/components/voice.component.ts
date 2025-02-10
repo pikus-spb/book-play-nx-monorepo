@@ -7,12 +7,12 @@ import {
   ViewEncapsulation,
 } from '@angular/core';
 import { MaterialModule } from 'app/core/modules/material.module';
-import { TtsApiService } from 'app/modules/player/services/tts-api.service';
-import { Base64HelperService } from 'app/shared/services/base64-helper.service';
+import { Base64Service } from 'app/shared/services/base64.service';
 import {
   AppEventNames,
   EventsStateService,
 } from 'app/shared/services/events-state.service';
+import { TtsApiService } from 'app/shared/services/tts-api.service';
 import {
   BehaviorSubject,
   distinctUntilChanged,
@@ -41,7 +41,7 @@ export class VoiceComponent implements AfterViewInit {
 
   constructor(
     private speechService: TtsApiService,
-    private base64Helper: Base64HelperService,
+    private base64Helper: Base64Service,
     private eventsState: EventsStateService
   ) {}
 

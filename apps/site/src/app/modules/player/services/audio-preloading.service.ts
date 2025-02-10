@@ -1,9 +1,9 @@
 import { effect, Injectable } from '@angular/core';
-import { first, firstValueFrom, Observable, switchMap, tap } from 'rxjs';
+import { ActiveBookService } from 'app/modules/player/services/active-book.service';
 import { AudioStorageService } from 'app/modules/player/services/audio-storage.service';
-import { OpenedBookService } from 'app/modules/player/services/opened-book.service';
-import { TtsApiService } from 'app/modules/player/services/tts-api.service';
-import { Base64HelperService } from 'app/shared/services/base64-helper.service';
+import { Base64Service } from 'app/shared/services/base64.service';
+import { TtsApiService } from 'app/shared/services/tts-api.service';
+import { first, firstValueFrom, Observable, switchMap, tap } from 'rxjs';
 
 export const PRELOAD_EXTRA = Object.freeze({
   min: 0,
@@ -21,10 +21,10 @@ export class AudioPreloadingService {
     return this._initialized;
   }
   constructor(
-    private openedBook: OpenedBookService,
+    private openedBook: ActiveBookService,
     private audioStorage: AudioStorageService,
     private speechService: TtsApiService,
-    private base64Helper: Base64HelperService
+    private base64Helper: Base64Service
   ) {
     effect(() => {
       if (this.openedBook.book()) {
@@ -33,7 +33,7 @@ export class AudioPreloadingService {
     });
   }
 
-  private fetchAudio(index: number): Observable<string> {
+  private paragraphToSpeech(index: number): Observable<string> {
     return this.speechService
       .textToSpeech(this.openedBook.book()?.paragraphs[index] ?? '')
       .pipe(
@@ -60,7 +60,7 @@ export class AudioPreloadingService {
       for (let i = startIndex; i <= endIndex && i < data.length; i++) {
         const savedAudio = this.audioStorage.get(i);
         if (!savedAudio) {
-          await firstValueFrom(this.fetchAudio(i));
+          await firstValueFrom(this.paragraphToSpeech(i));
           if (i - startIndex >= PRELOAD_EXTRA.forInitialization) {
             this._initialized = true;
           }

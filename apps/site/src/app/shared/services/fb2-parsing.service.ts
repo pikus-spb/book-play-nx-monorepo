@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import { stripHtml } from 'string-strip-html';
 
-import { Author } from '../model/fb2-book.types';
+import { Author, BookData } from '../model/fb2-book.types';
 
 @Injectable({
   providedIn: 'root',
 })
-export class XmlQueryService {
+export class Fb2ParsingService {
   public getAuthorName(xml: XMLDocument): Author {
     const authorFirstName =
       xml.documentElement?.querySelector('author first-name')?.innerHTML;
@@ -50,5 +50,22 @@ export class XmlQueryService {
         return removeTags ? stripHtml(item.innerHTML).result : item.innerHTML;
       })
       .filter((item) => item.trim().length > 0);
+  }
+
+  public parseBookFromString(text: string): BookData {
+    const parser = new DOMParser();
+    const xml = parser.parseFromString(text, 'text/xml') as XMLDocument;
+
+    const author = this.getAuthorName(xml);
+    const bookTitle = this.getBookTitle(xml);
+    const bookTitlePicture = this.getBookTitlePicture(xml);
+    const paragraphs = this.getParagraphs(xml, true);
+
+    return {
+      author,
+      bookTitle,
+      bookTitlePicture,
+      paragraphs,
+    } as BookData;
   }
 }
