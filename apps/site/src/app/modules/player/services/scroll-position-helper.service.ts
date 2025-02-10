@@ -1,6 +1,4 @@
 import { Injectable } from '@angular/core';
-import { ActiveBookService } from 'app/modules/player/services/active-book.service';
-import { CursorPositionLocalStorageService } from 'app/modules/player/services/cursor-position-local-storage.service';
 import { viewportScroller } from 'app/modules/player/services/viewport-scroller.service';
 import {
   AppEventNames,
@@ -11,19 +9,7 @@ import {
   providedIn: 'root',
 })
 export class ScrollPositionHelperService {
-  constructor(
-    private eventStateService: EventsStateService,
-    private cursorService: CursorPositionLocalStorageService,
-    private openedBook: ActiveBookService
-  ) {}
-
-  public cursorPositionIsValid(): boolean {
-    const book = this.openedBook.book();
-    if (book !== null) {
-      return this.cursorService.position < book.paragraphs.length;
-    }
-    return false;
-  }
+  constructor(private eventStateService: EventsStateService) {}
 
   public async scrollToIndex(cursorIndex: number): Promise<void> {
     if (viewportScroller) {

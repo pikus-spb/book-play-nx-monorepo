@@ -1,17 +1,14 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  effect,
   inject,
+  signal,
+  WritableSignal,
 } from '@angular/core';
-import { toSignal } from '@angular/core/rxjs-interop';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { MaterialModule } from 'app/core/modules/material.module';
 import { ActiveBookService } from 'app/modules/player/services/active-book.service';
-import {
-  DBBookData,
-  IndexedDbBookStorageService,
-} from 'app/modules/player/services/indexed-db-book-storage.service';
 import { CopyrightOwnerComponent } from 'app/shared/components/copyright-owner/copyright-owner.component';
 import { CopyrightComponent } from 'app/shared/components/copyright/copyright.component';
 import { MainHeaderComponent } from 'app/shared/components/main-header/main-header.component';
@@ -20,6 +17,7 @@ import {
   AppEventNames,
   EventsStateService,
 } from 'app/shared/services/events-state.service';
+import { tap } from 'rxjs';
 
 @Component({
   selector: 'main',
@@ -39,32 +37,19 @@ export class MainComponent {
   public AppEvents = AppEventNames;
   public eventStatesService = inject(EventsStateService);
 
-  private indexedDbStorageService = inject(IndexedDbBookStorageService);
-  private activeBookService = inject(ActiveBookService);
   private route = inject(ActivatedRoute);
-  private routeParams = toSignal(this.route.paramMap);
+  private idSignal: WritableSignal<string | null> = signal(null);
+  private activeBookService = inject(ActiveBookService);
 
   constructor() {
-    effect(() => {
-      // TODO: find a better place for this code
-      const id = this.routeParams()?.get('id');
-      if (!id) {
-        this.indexedDbStorageService.get().then((data: DBBookData) => {
-          if (data && data.content.length > 0) {
-            const bookData = JSON.parse(data.content);
-            this.activeBookService.update(bookData);
-          }
-        });
-      }
-    });
-
-    effect(() => {
-      // TODO: find a better place for this code
-      if (this.activeBookService.book()) {
-        this.indexedDbStorageService.set(
-          JSON.stringify(this.activeBookService.book())
-        );
-      }
-    });
+    this.route.firstChild?.paramMap
+      .pipe(
+        takeUntilDestroyed(),
+        tap((params) => {
+          this.idSignal.set(params.get('id'));
+        })
+      )
+      .subscribe();
+    this.activeBookService.setRouteParamSignal(this.idSignal);
   }
 }

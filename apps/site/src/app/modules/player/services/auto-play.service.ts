@@ -23,7 +23,6 @@ import {
   AudioPreloadingService,
   PRELOAD_EXTRA,
 } from './audio-preloading.service';
-import { ScrollPositionHelperService } from './scroll-position-helper.service';
 
 @Injectable({
   providedIn: 'root',
@@ -37,13 +36,12 @@ export class AutoPlayService {
 
   constructor(
     private router: Router,
-    private openedBook: ActiveBookService,
+    private activeBookService: ActiveBookService,
     private audioPlayer: DomAudioHelperService,
     private speechService: TtsApiService,
     private audioStorage: AudioStorageService,
     private eventStateService: EventsStateService,
     private preloadingService: AudioPreloadingService,
-    private scrollPositionHelper: ScrollPositionHelperService,
     private cursorService: CursorPositionLocalStorageService,
     private domHelper: DomHelperService,
     private preloadHelper: AudioPreloadingService
@@ -82,7 +80,7 @@ export class AutoPlayService {
       .subscribe();
 
     effect(() => {
-      if (this.openedBook.book()) {
+      if (this.activeBookService.book()) {
         this.stop();
         this.domHelper.showActiveParagraph();
       }
@@ -160,7 +158,7 @@ export class AutoPlayService {
         this.cursorService.position++;
       }
     } while (
-      this.scrollPositionHelper.cursorPositionIsValid() &&
+      this.activeBookService.cursorPositionIsValid() &&
       !this.audioPlayer.stopped
     );
   }

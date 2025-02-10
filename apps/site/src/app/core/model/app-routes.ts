@@ -45,15 +45,6 @@ export const APP_ROUTES: Route[] = [
         title: DEFAULT_TITLE,
       },
       {
-        path: 'library/:letter',
-        loadComponent() {
-          return import(
-            'app/modules/library/components/library/library.component'
-          ).then((imported) => imported.LibraryComponent);
-        },
-        title: DEFAULT_TITLE,
-      },
-      {
         path: 'library',
         loadComponent() {
           return import(
