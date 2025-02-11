@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 
 import { Author, BookData } from '@book-play/models';
-import { stripHtml } from 'string-strip-html';
+
+declare let stringStripHtml: any;
 
 @Injectable({
   providedIn: 'root',
@@ -47,7 +48,9 @@ export class Fb2ParsingService {
   public getParagraphs(xml: XMLDocument, removeTags = false): string[] {
     return Array.from(xml.documentElement?.querySelectorAll('body p'))
       .map((item: Element) => {
-        return removeTags ? stripHtml(item.innerHTML).result : item.innerHTML;
+        return removeTags
+          ? stringStripHtml.stripHtml(item.innerHTML).result
+          : item.innerHTML;
       })
       .filter((item) => item.trim().length > 0);
   }
