@@ -9,15 +9,12 @@ import {
   BrowserDynamicTestingModule,
   platformBrowserDynamicTesting,
 } from '@angular/platform-browser-dynamic/testing';
+import { AuthorsBooks, BookDescription } from '@book-play/models';
 import {
   AppEventNames,
+  BooksApiService,
   EventsStateService,
-} from '@book-play-nx-monorepo/services';
-import {
-  AuthorsBooks,
-  BookDescription,
-} from 'app/modules/library/model/books-model';
-import { BooksApiService } from 'app/modules/library/services/books-api.service';
+} from '@book-play/services';
 import { LibraryComponent } from './library.component';
 
 @Directive({
