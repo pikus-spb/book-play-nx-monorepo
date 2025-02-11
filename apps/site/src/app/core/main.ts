@@ -5,9 +5,8 @@ import {
 import { provideExperimentalZonelessChangeDetection } from '@angular/core';
 import { bootstrapApplication } from '@angular/platform-browser';
 import { provideRouter } from '@angular/router';
-
-import { RootComponent } from 'app/core/components/root/root.component';
-import { APP_ROUTES } from 'app/core/model/app-routes';
+import { RootComponent } from './components/root/root.component';
+import { APP_ROUTES } from './model/app-routes';
 
 bootstrapApplication(RootComponent, {
   providers: [

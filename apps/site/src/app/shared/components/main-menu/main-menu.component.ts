@@ -6,14 +6,14 @@ import {
 } from '@angular/core';
 import { MatListItem } from '@angular/material/list';
 import { RouterModule } from '@angular/router';
-import { MaterialModule } from 'app/core/modules/material.module';
-import { UploadFileDirective } from 'app/shared/directives/file-upload/upload-file.directive';
-import { ActiveBookService } from 'app/shared/services/active-book.service';
 import {
+  ActiveBookService,
   AppEventNames,
   EventsStateService,
-} from 'app/shared/services/events-state.service';
-import { FileReaderService } from 'app/shared/services/file-reader.service';
+  FileReaderService,
+} from '@book-play/services';
+import { MaterialModule } from '../../../core/modules/material.module';
+import { UploadFileDirective } from '../../directives/file-upload/upload-file.directive';
 
 @Component({
   selector: 'main-menu',

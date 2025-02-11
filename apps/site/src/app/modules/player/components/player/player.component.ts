@@ -4,18 +4,18 @@ import {
   effect,
   Signal,
 } from '@angular/core';
-import { MaterialModule } from 'app/core/modules/material.module';
-import { BookCanvasComponent } from 'app/modules/player/components/book-canvas/book-canvas.component';
-import { CanvasSkeletonComponent } from 'app/modules/player/components/canvas-skeleton/canvas-skeleton.component';
-import { BookData } from 'app/shared/model/fb2-book.types';
-import { ActiveBookService } from 'app/shared/services/active-book.service';
-import { AutoPlayService } from 'app/shared/services/auto-play.service';
-import { BookStringsService } from 'app/shared/services/book-strings.service';
-import { DocumentTitleService } from 'app/shared/services/document-title.service';
+import { BookData } from '@book-play/models';
 import {
+  ActiveBookService,
   AppEventNames,
+  AutoPlayService,
+  BookStringsService,
+  DocumentTitleService,
   EventsStateService,
-} from 'app/shared/services/events-state.service';
+} from '@book-play/services';
+import { MaterialModule } from '../../../../core/modules/material.module';
+import { BookCanvasComponent } from '../book-canvas/book-canvas.component';
+import { CanvasSkeletonComponent } from '../canvas-skeleton/canvas-skeleton.component';
 
 @Component({
   selector: 'player',

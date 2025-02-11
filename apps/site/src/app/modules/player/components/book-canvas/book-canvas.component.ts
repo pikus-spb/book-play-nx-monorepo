@@ -15,15 +15,15 @@ import {
   Signal,
   ViewChild,
 } from '@angular/core';
-import { MaterialModule } from 'app/core/modules/material.module';
-import { BookParagraphComponent } from 'app/modules/player/components/book-paragraph/book-paragraph.component';
-import { BookData } from 'app/shared/model/fb2-book.types';
+import { BookData } from '@book-play/models';
 import {
   AppEventNames,
+  createViewportScrollerService,
   EventsStateService,
-} from 'app/shared/services/events-state.service';
-import { createViewportScrollerService } from 'app/shared/services/viewport-scroller.service';
+} from '@book-play/services';
 import { Subject } from 'rxjs';
+import { MaterialModule } from '../../../../core/modules/material.module';
+import { BookParagraphComponent } from '../book-paragraph/book-paragraph.component';
 import { CanvasSkeletonComponent } from '../canvas-skeleton/canvas-skeleton.component';
 
 const PARAGRAPH_TAG = 'book-paragraph';

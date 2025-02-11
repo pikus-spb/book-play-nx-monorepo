@@ -1,6 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-
-export const PARAGRAPH_CLASS_PREFIX = 'book-paragraph-';
+import { PARAGRAPH_CLASS_PREFIX } from '@book-play/constants';
 
 @Component({
   selector: 'book-paragraph',

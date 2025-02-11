@@ -5,14 +5,14 @@ import {
   effect,
   resource,
 } from '@angular/core';
-import { AuthorBooksComponent } from 'app/modules/library/components/author-books/author-books.component';
-import { AuthorsBooks } from 'app/modules/library/model/books-model';
-import { BooksApiService } from 'app/modules/library/services/books-api.service';
-import { LoadingThenShowDirective } from 'app/shared/directives/loading-then-show/loading-then-show.directive';
+import { AuthorsBooks } from '@book-play/models';
 import {
   AppEventNames,
+  BooksApiService,
   EventsStateService,
-} from 'app/shared/services/events-state.service';
+} from '@book-play/services';
+import { LoadingThenShowDirective } from '../../../../shared/directives/loading-then-show/loading-then-show.directive';
+import { AuthorBooksComponent } from '../author-books/author-books.component';
 
 @Component({
   selector: 'library',

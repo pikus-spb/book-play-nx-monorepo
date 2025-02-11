@@ -2,8 +2,9 @@
   "name": "site",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "projectType": "application",
-  "prefix": "app",
+  "prefix": "book-play",
   "sourceRoot": "apps/site/src",
+  "implicitDependencies": [],
   "schematics": {
     "@schematics/angular:component": {
       "style": "scss",

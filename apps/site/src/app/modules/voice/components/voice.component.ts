@@ -6,13 +6,12 @@ import {
   ViewChild,
   ViewEncapsulation,
 } from '@angular/core';
-import { MaterialModule } from 'app/core/modules/material.module';
-import { Base64Service } from 'app/shared/services/base64.service';
 import {
   AppEventNames,
+  Base64Service,
   EventsStateService,
-} from 'app/shared/services/events-state.service';
-import { TtsApiService } from 'app/shared/services/tts-api.service';
+  TtsApiService,
+} from '@book-play/services';
 import {
   BehaviorSubject,
   distinctUntilChanged,
@@ -23,6 +22,7 @@ import {
   switchMap,
   tap,
 } from 'rxjs';
+import { MaterialModule } from '../../../core/modules/material.module';
 
 @Component({
   selector: 'voice',

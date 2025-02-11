@@ -6,7 +6,7 @@ import {
   MatExpansionPanelHeader,
   MatExpansionPanelTitle,
 } from '@angular/material/expansion';
-import { BookDescription } from 'app/modules/library/model/books-model';
+import { BookDescription } from '@book-play/models';
 
 @Component({
   selector: 'author-books',

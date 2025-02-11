@@ -8,11 +8,8 @@ import {
   TemplateRef,
   ViewContainerRef,
 } from '@angular/core';
-import { LoadingIndicatorComponent } from 'app/shared/components/loading-indicator/loading-indicator.component';
-import {
-  AppEventNames,
-  EventsStateService,
-} from 'app/shared/services/events-state.service';
+import { AppEventNames, EventsStateService } from '@book-play/services';
+import { LoadingIndicatorComponent } from '../../components/loading-indicator/loading-indicator.component';
 
 @Directive({
   selector: '[loading]',

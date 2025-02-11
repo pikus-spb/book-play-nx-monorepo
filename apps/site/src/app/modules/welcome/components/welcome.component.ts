@@ -1,9 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import {
-  AppEventNames,
-  EventsStateService,
-} from 'app/shared/services/events-state.service';
+import { AppEventNames, EventsStateService } from '@book-play/services';
 
 @Component({
   selector: 'welcome',

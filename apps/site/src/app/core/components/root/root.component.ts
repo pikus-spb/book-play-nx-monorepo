@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { MaterialModule } from 'app/core/modules/material.module';
+import { MaterialModule } from '../../modules/material.module';
 
 @Component({
   selector: 'root',
