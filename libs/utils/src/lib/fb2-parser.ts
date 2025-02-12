@@ -1,13 +1,10 @@
-import { Injectable } from '@angular/core';
-
 import { Author, BookData } from '@book-play/models';
 
-declare let stringStripHtml: any;
+declare let stringStripHtml: {
+  stripHtml: (html: string) => { result: string };
+};
 
-@Injectable({
-  providedIn: 'root',
-})
-export class Fb2ParsingService {
+export class Fb2Parser {
   public getAuthorName(xml: XMLDocument): Author {
     const authorFirstName =
       xml.documentElement?.querySelector('author first-name')?.innerHTML;

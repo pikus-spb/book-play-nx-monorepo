@@ -8,13 +8,12 @@ import {
 } from '@angular/core';
 import { ParamMap } from '@angular/router';
 import { BookData } from '@book-play/models';
+import { Fb2Parser, getBookHashKey } from '@book-play/utils';
 
-import { BookStringsService } from './book-strings.service';
 import { BooksApiService } from './books-api.service';
 import { CursorPositionLocalStorageService } from './cursor-position-local-storage.service';
 import { DomHelperService } from './dom-helper.service';
 import { AppEventNames, EventsStateService } from './events-state.service';
-import { Fb2ParsingService } from './fb2-parsing.service';
 import { IndexedDbBookStorageService } from './indexed-db-book-storage.service';
 
 @Injectable({
@@ -24,12 +23,11 @@ export class ActiveBookService {
   public book: WritableSignal<BookData | null> = signal(null);
 
   private cursorService = inject(CursorPositionLocalStorageService);
-  private bookUtils = inject(BookStringsService);
   private indexedDbStorageService = inject(IndexedDbBookStorageService);
   private eventStatesService = inject(EventsStateService);
   private domHelper = inject(DomHelperService);
   private booksApi = inject(BooksApiService);
-  private fb2ParsingService = inject(Fb2ParsingService);
+  private fb2Parser = new Fb2Parser();
   private paramMapSignal?: Signal<ParamMap | undefined>;
 
   constructor() {
@@ -43,7 +41,7 @@ export class ActiveBookService {
           this.eventStatesService.add(AppEventNames.contentLoading);
 
           const book = await this.booksApi.getById(id);
-          bookData = this.fb2ParsingService.parseBookFromString(book.content);
+          bookData = this.fb2Parser.parseBookFromString(book.content);
           this.update(bookData || null);
 
           this.eventStatesService.remove(AppEventNames.contentLoading);
@@ -80,7 +78,7 @@ export class ActiveBookService {
     this.book.set(value);
 
     if (value !== null) {
-      this.cursorService.setCursorName(this.bookUtils.getBookHashKey(value));
+      this.cursorService.setCursorName(getBookHashKey(value));
     }
   }
 }

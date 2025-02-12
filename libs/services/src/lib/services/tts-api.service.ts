@@ -1,9 +1,9 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AUDIO_API_URL, HTTP_RETRY_NUMBER } from '@book-play/constants';
-import { Observable, ReplaySubject, retry, Subscription } from 'rxjs';
 
-import { HttpUtilsService } from './http-utils.service';
+import { createQueryString } from '@book-play/utils';
+import { Observable, ReplaySubject, retry, Subscription } from 'rxjs';
 
 const AUDIO_HEADERS = new HttpHeaders({
   'Content-Type': 'application/x-www-form-urlencoded',
@@ -17,13 +17,13 @@ export class TtsApiService {
   // http requests subscription list, is needed for an ability to cancel not needed http requests
   private subscriptions: Map<Subscription, ReplaySubject<Blob>> = new Map();
 
-  constructor(private http: HttpClient, private httpUtils: HttpUtilsService) {}
+  constructor(private http: HttpClient) {}
 
   private _getVoice(text: string): ReplaySubject<Blob> {
     text = encodeURIComponent(text);
 
     const options = { text };
-    const postParams = this.httpUtils.createQueryParameters(options);
+    const postParams = createQueryString(options);
     const result$ = new ReplaySubject<Blob>(1);
 
     this.subscriptions.set(

@@ -1,13 +1,13 @@
 import { inject, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
+import { Fb2Parser } from '@book-play/utils';
 import { ActiveBookService } from './active-book.service';
-import { Fb2ParsingService } from './fb2-parsing.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class FileReaderService {
-  private fb2Service = inject(Fb2ParsingService);
+  private fb2Parser = new Fb2Parser();
   private activeBookService = inject(ActiveBookService);
   private router = inject(Router);
 
@@ -45,7 +45,7 @@ export class FileReaderService {
   public async parseNewFile(files?: FileList): Promise<void> {
     if (files && files.length > 0) {
       const text = await this.readBlobFromFile(files[0]);
-      const bookData = await this.fb2Service.parseBookFromString(text);
+      const bookData = await this.fb2Parser.parseBookFromString(text);
       this.activeBookService.update(bookData);
       this.router.navigateByUrl('/player');
     } else {

@@ -9,10 +9,12 @@ import {
   ActiveBookService,
   AppEventNames,
   AutoPlayService,
-  BookStringsService,
-  DocumentTitleService,
   EventsStateService,
 } from '@book-play/services';
+import {
+  getBookFullDisplayName,
+  setWindowsTitleWithContext,
+} from '@book-play/utils';
 import { MaterialModule } from '../../../../core/modules/material.module';
 import { BookCanvasComponent } from '../book-canvas/book-canvas.component';
 import { CanvasSkeletonComponent } from '../canvas-skeleton/canvas-skeleton.component';
@@ -33,18 +35,14 @@ export class PlayerComponent {
   constructor(
     public eventState: EventsStateService,
     private activeBookService: ActiveBookService,
-    private autoPlay: AutoPlayService,
-    private documentTitle: DocumentTitleService,
-    private bookUtils: BookStringsService
+    private autoPlay: AutoPlayService
   ) {
     this.contentLoading = this.eventState.get(AppEventNames.contentLoading);
 
     effect(() => {
       const book = this.book();
       if (book !== null) {
-        this.documentTitle.setContextTitle(
-          this.bookUtils.getBookFullDisplayName(book)
-        );
+        setWindowsTitleWithContext(getBookFullDisplayName(book));
       }
     });
   }

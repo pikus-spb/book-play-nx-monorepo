@@ -17,7 +17,8 @@
     "paths": {
       "@book-play/constants": ["libs/constants/src/index.ts"],
       "@book-play/models": ["libs/models/src/index.ts"],
-      "@book-play/services": ["libs/services/src/index.ts"]
+      "@book-play/services": ["libs/services/src/index.ts"],
+      "@book-play/utils": ["libs/utils/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

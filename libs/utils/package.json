@@ -1,0 +1,14 @@
+{
+  "name": "@book-play/utils",
+  "version": "0.0.1",
+  "private": true,
+  "type": "commonjs",
+  "main": "./src/index.js",
+  "types": "./src/index.d.ts",
+  "dependencies": {
+    "tslib": "^2.3.0",
+    "rxjs": "~7.8.0",
+    "@book-play/models": "0.0.1",
+    "@book-play/constants": "0.0.1"
+  }
+}

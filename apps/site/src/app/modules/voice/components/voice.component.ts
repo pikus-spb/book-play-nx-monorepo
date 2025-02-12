@@ -8,10 +8,10 @@ import {
 } from '@angular/core';
 import {
   AppEventNames,
-  Base64Service,
   EventsStateService,
   TtsApiService,
 } from '@book-play/services';
+import { blobToBase64 } from '@book-play/utils';
 import {
   BehaviorSubject,
   distinctUntilChanged,
@@ -41,7 +41,6 @@ export class VoiceComponent implements AfterViewInit {
 
   constructor(
     private speechService: TtsApiService,
-    private base64Helper: Base64Service,
     private eventsState: EventsStateService
   ) {}
 
@@ -65,7 +64,7 @@ export class VoiceComponent implements AfterViewInit {
     const data = await firstValueFrom(
       this.speechService.textToSpeech(this.text).pipe(
         switchMap((blob: Blob) => {
-          return this.base64Helper.blobToBase64(blob);
+          return blobToBase64(blob);
         })
       )
     );

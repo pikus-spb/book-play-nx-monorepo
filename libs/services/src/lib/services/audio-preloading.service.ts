@@ -1,9 +1,9 @@
 import { effect, Injectable } from '@angular/core';
+import { blobToBase64 } from '@book-play/utils';
 import { first, firstValueFrom, Observable, switchMap, tap } from 'rxjs';
 
 import { ActiveBookService } from './active-book.service';
 import { AudioStorageService } from './audio-storage.service';
-import { Base64Service } from './base64.service';
 import { TtsApiService } from './tts-api.service';
 
 export const PRELOAD_EXTRA = Object.freeze({
@@ -24,8 +24,7 @@ export class AudioPreloadingService {
   constructor(
     private openedBook: ActiveBookService,
     private audioStorage: AudioStorageService,
-    private speechService: TtsApiService,
-    private base64Helper: Base64Service
+    private speechService: TtsApiService
   ) {
     effect(() => {
       if (this.openedBook.book()) {
@@ -39,7 +38,7 @@ export class AudioPreloadingService {
       .textToSpeech(this.openedBook.book()?.paragraphs[index] ?? '')
       .pipe(
         switchMap((blob: Blob) => {
-          return this.base64Helper.blobToBase64(blob);
+          return blobToBase64(blob);
         }),
         tap((base64audio: string) => {
           this.audioStorage.set(index, base64audio);
