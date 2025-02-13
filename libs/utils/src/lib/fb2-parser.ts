@@ -1,71 +1,84 @@
-import { Author, BookData } from '@book-play/models';
-
-declare let stringStripHtml: {
-  stripHtml: (html: string) => { result: string };
-};
+import { LOGO_MAX_LENGTH } from '@book-play/constants';
+import { Author, Book, ImageBase64Data } from '@book-play/models';
+import { cleanHTML, cleanHTMLAndCopyrights } from './cleanup-tools';
 
 export class Fb2Parser {
-  public getAuthorName(xml: XMLDocument): Author {
-    const authorFirstName =
+  public getAuthor(xml: XMLDocument): Author {
+    let firstName =
       xml.documentElement?.querySelector('author first-name')?.innerHTML;
-    const authorMiddleName =
+    let middleName =
       xml?.documentElement?.querySelector('author middle-name')?.innerHTML;
-    const authorLastName =
+    let lastName =
       xml?.documentElement?.querySelector('author last-name')?.innerHTML;
 
+    if (firstName) {
+      firstName = cleanHTML(firstName);
+    }
+    if (middleName) {
+      middleName = cleanHTML(middleName);
+    }
+    if (lastName) {
+      lastName = cleanHTML(lastName);
+    }
+
     return {
-      first: authorFirstName,
-      middle: authorMiddleName,
-      last: authorLastName,
+      firstName,
+      middleName,
+      lastName,
     } as Author;
   }
 
-  public getBookTitle(xml: XMLDocument): string | undefined {
-    return xml.documentElement?.querySelector('book-title')?.innerHTML;
+  public getBookName(xml: XMLDocument): string | null {
+    const name = xml.documentElement?.querySelector('book-title')?.innerHTML;
+    if (name) {
+      return cleanHTML(name);
+    }
+
+    return null;
   }
 
-  public getBookTitlePicture(xml: XMLDocument): string | null {
+  private getCoverPicture(xml: XMLDocument): ImageBase64Data | null {
     const imageElement = xml?.documentElement?.querySelector('coverpage image');
     if (imageElement != null) {
       const srcAttribute = Array.from(imageElement.attributes)
         .find((attr) => {
           return Boolean(attr.localName.match('href'));
         })
-        ?.value.substr(1);
+        ?.value.substring(1);
 
       if (srcAttribute != null) {
         const binary = xml.getElementById(srcAttribute);
-        const imageType = binary?.getAttribute('content-type');
-        return `data:${imageType};base64,${binary?.innerHTML}`;
+        if (binary && binary.innerHTML.length <= LOGO_MAX_LENGTH) {
+          const imageType = binary.getAttribute('content-type');
+          return {
+            imageType,
+            base64Content: binary.innerHTML,
+          } as ImageBase64Data;
+        }
       }
     }
+
     return null;
   }
 
-  public getParagraphs(xml: XMLDocument, removeTags = false): string[] {
+  public getParagraphs(xml: XMLDocument): string[] {
     return Array.from(xml.documentElement?.querySelectorAll('body p'))
       .map((item: Element) => {
-        return removeTags
-          ? stringStripHtml.stripHtml(item.innerHTML).result
-          : item.innerHTML;
+        return cleanHTMLAndCopyrights(item.innerHTML);
       })
       .filter((item) => item.trim().length > 0);
   }
 
-  public parseBookFromString(text: string): BookData {
+  public parseBookFromString(text: string): Book {
     const parser = new DOMParser();
     const xml = parser.parseFromString(text, 'text/xml') as XMLDocument;
 
-    const author = this.getAuthorName(xml);
-    const bookTitle = this.getBookTitle(xml);
-    const bookTitlePicture = this.getBookTitlePicture(xml);
-    const paragraphs = this.getParagraphs(xml, true);
+    const author = this.getAuthor(xml);
+    const name = this.getBookName(xml);
 
-    return {
-      author,
-      bookTitle,
-      bookTitlePicture,
-      paragraphs,
-    } as BookData;
+    const cover = this.getCoverPicture(xml);
+    const paragraphs = this.getParagraphs(xml);
+
+    return { author, name, cover, paragraphs } as Book;
   }
 }

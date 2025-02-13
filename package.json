@@ -15,7 +15,9 @@
     "@angular/platform-browser": "~19.1.0",
     "@angular/platform-browser-dynamic": "~19.1.0",
     "@angular/router": "~19.1.0",
-    "rxjs": "~7.8.0"
+    "mysql2": "^3.12.0",
+    "rxjs": "~7.8.0",
+    "windows-1251": "^3.0.4"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "~19.1.0",
@@ -28,6 +30,7 @@
     "@eslint/js": "^9.8.0",
     "@nx/angular": "20.4.1",
     "@nx/cypress": "20.4.1",
+    "@nx/esbuild": "20.4.1",
     "@nx/eslint": "20.4.1",
     "@nx/eslint-plugin": "20.4.1",
     "@nx/express": "^20.4.1",
@@ -54,6 +57,7 @@
     "axios": "^1.7.9",
     "cypress": "^13.13.0",
     "dexie": "^4.0.11",
+    "esbuild": "^0.19.2",
     "eslint": "^9.8.0",
     "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-cypress": "^3.5.0",

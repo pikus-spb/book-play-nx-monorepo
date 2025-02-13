@@ -10,14 +10,14 @@
     cdkVirtualScrollingElement
   >
     <h1>
-      {{ bookData.author.first }} {{ bookData.author.last }} -
-      {{ bookData.bookTitle }}
+      {{ bookData.author.firstName }} {{ bookData.author.lastName }} -
+      {{ bookData.name }}
     </h1>
 
     <section class="title-picture-container">
       <img
-        *ngIf="bookData.bookTitlePicture"
-        [src]="bookData.bookTitlePicture"
+        *ngIf="bookData.cover"
+        [src]="bookData.cover.toBase64String()"
         (error)="removeImage($event)"
         alt="Обложка книги"
       />

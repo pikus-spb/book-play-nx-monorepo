@@ -7,8 +7,8 @@ import {
   WritableSignal,
 } from '@angular/core';
 import { ParamMap } from '@angular/router';
-import { BookData } from '@book-play/models';
-import { Fb2Parser, getBookHashKey } from '@book-play/utils';
+import { Book } from '@book-play/models';
+import { Fb2Parser } from '@book-play/utils';
 
 import { BooksApiService } from './books-api.service';
 import { CursorPositionLocalStorageService } from './cursor-position-local-storage.service';
@@ -20,7 +20,7 @@ import { IndexedDbBookStorageService } from './indexed-db-book-storage.service';
   providedIn: 'root',
 })
 export class ActiveBookService {
-  public book: WritableSignal<BookData | null> = signal(null);
+  public book: WritableSignal<Book | null> = signal(null);
 
   private cursorService = inject(CursorPositionLocalStorageService);
   private indexedDbStorageService = inject(IndexedDbBookStorageService);
@@ -74,11 +74,11 @@ export class ActiveBookService {
     this.paramMapSignal = signal;
   }
 
-  public update(value: BookData | null): void {
-    this.book.set(value);
+  public update(book: Book | null): void {
+    this.book.set(book);
 
-    if (value !== null) {
-      this.cursorService.setCursorName(getBookHashKey(value));
+    if (book !== null) {
+      this.cursorService.setCursorName(book.hash);
     }
   }
 }

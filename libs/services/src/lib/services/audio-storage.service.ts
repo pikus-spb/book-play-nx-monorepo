@@ -10,7 +10,7 @@ export class AudioStorageService {
 
   constructor(private bookService: ActiveBookService) {
     effect(() => {
-      const title = this.bookService.book()?.bookTitle || '';
+      const title = this.bookService.book()?.name || '';
       if (title !== this.previousBookTitle) {
         this.previousBookTitle = title;
         this.clear();

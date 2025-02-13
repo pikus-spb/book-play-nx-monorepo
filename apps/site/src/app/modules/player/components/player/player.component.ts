@@ -4,17 +4,14 @@ import {
   effect,
   Signal,
 } from '@angular/core';
-import { BookData } from '@book-play/models';
+import { Book } from '@book-play/models';
 import {
   ActiveBookService,
   AppEventNames,
   AutoPlayService,
   EventsStateService,
 } from '@book-play/services';
-import {
-  getBookFullDisplayName,
-  setWindowsTitleWithContext,
-} from '@book-play/utils';
+import { setWindowsTitleWithContext } from '@book-play/utils';
 import { MaterialModule } from '../../../../core/modules/material.module';
 import { BookCanvasComponent } from '../book-canvas/book-canvas.component';
 import { CanvasSkeletonComponent } from '../canvas-skeleton/canvas-skeleton.component';
@@ -27,7 +24,7 @@ import { CanvasSkeletonComponent } from '../canvas-skeleton/canvas-skeleton.comp
   imports: [MaterialModule, BookCanvasComponent, CanvasSkeletonComponent],
 })
 export class PlayerComponent {
-  public get book(): Signal<BookData | null> {
+  public get book(): Signal<Book | null> {
     return this.activeBookService.book;
   }
   public contentLoading: Signal<boolean>;
@@ -42,7 +39,7 @@ export class PlayerComponent {
     effect(() => {
       const book = this.book();
       if (book !== null) {
-        setWindowsTitleWithContext(getBookFullDisplayName(book));
+        setWindowsTitleWithContext(book.fullName);
       }
     });
   }

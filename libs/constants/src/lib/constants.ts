@@ -14,3 +14,6 @@ export const DEFAULT_EMPTY_CONTEXT =
   'Бесплатное проигрывание книг в формате fb2 онлайн';
 export const DEFAULT_TITLE_CONTEXT = 'бесплатно слушать аудиокнигу онлайн';
 export const DEFAULT_TITLE = `${DEFAULT_TITLE_PREFIX} - ${DEFAULT_EMPTY_CONTEXT}`;
+
+// BOOKS CRAWLER
+export const LOGO_MAX_LENGTH = 1000000;

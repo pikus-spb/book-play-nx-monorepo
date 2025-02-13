@@ -3,6 +3,7 @@ import {
   CdkVirtualScrollViewport,
   ScrollingModule,
 } from '@angular/cdk/scrolling';
+import { NgOptimizedImage } from '@angular/common';
 import {
   AfterViewInit,
   ChangeDetectionStrategy,
@@ -15,7 +16,7 @@ import {
   Signal,
   ViewChild,
 } from '@angular/core';
-import { BookData } from '@book-play/models';
+import { Book } from '@book-play/models';
 import {
   AppEventNames,
   createViewportScrollerService,
@@ -39,10 +40,11 @@ const PARAGRAPH_TAG = 'book-paragraph';
     ExperimentalScrollingModule,
     BookParagraphComponent,
     CanvasSkeletonComponent,
+    NgOptimizedImage,
   ],
 })
 export class BookCanvasComponent implements AfterViewInit, OnDestroy {
-  @Input() book!: Signal<BookData | null>;
+  @Input() book!: Signal<Book | null>;
   @Output() paragraphClick: EventEmitter<number> = new EventEmitter<number>();
   @ViewChild('scrollViewport') viewport!: CdkVirtualScrollViewport;
 
@@ -60,7 +62,7 @@ export class BookCanvasComponent implements AfterViewInit, OnDestroy {
     return item;
   }
 
-  public get bookData(): BookData | null {
+  public get bookData(): Book | null {
     return this.book();
   }
 
