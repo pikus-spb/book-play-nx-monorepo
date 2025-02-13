@@ -61,9 +61,6 @@
         "styles": [
           "@angular/material/prebuilt-themes/pink-bluegrey.css",
           "apps/site/src/app/core/styles/main.scss"
-        ],
-        "scripts": [
-          "node_modules/string-strip-html/dist/string-strip-html.umd.js"
         ]
       },
       "configurations": {

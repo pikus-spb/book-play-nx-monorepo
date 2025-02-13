@@ -1,7 +1,11 @@
-import { stripHtml } from 'string-strip-html';
-
 export function cleanHTMLTags(text: string): string {
-  return stripHtml(text.trim()).result;
+  try {
+    const document = new DOMParser().parseFromString(text, 'text/html');
+    return (document.body.textContent || '').trim();
+  } catch (error) {
+    console.error('Error parsing HTML string:', error);
+    return '';
+  }
 }
 
 export function cleanSpaces(text: string): string {

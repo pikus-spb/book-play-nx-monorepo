@@ -3,7 +3,6 @@ import {
   CdkVirtualScrollViewport,
   ScrollingModule,
 } from '@angular/cdk/scrolling';
-import { NgOptimizedImage } from '@angular/common';
 import {
   AfterViewInit,
   ChangeDetectionStrategy,
@@ -40,7 +39,6 @@ const PARAGRAPH_TAG = 'book-paragraph';
     ExperimentalScrollingModule,
     BookParagraphComponent,
     CanvasSkeletonComponent,
-    NgOptimizedImage,
   ],
 })
 export class BookCanvasComponent implements AfterViewInit, OnDestroy {
