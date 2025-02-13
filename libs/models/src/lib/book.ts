@@ -42,6 +42,10 @@ export class Book {
   public cover?: ImageBase64Data;
   public paragraphs!: string[];
 
+  constructor(obj: Partial<Book>) {
+    Object.assign(this, obj, {});
+  }
+
   public get fullName(): string {
     return `${this.author.toString()} - ${this.name}`;
   }

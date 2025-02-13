@@ -28,16 +28,12 @@ export class Fb2Parser {
     } as Author;
   }
 
-  public getBookName(xml: XMLDocument): string | null {
-    const name = xml.documentElement?.querySelector('book-title')?.innerHTML;
-    if (name) {
-      return cleanHTML(name);
-    }
-
-    return null;
+  public getBookName(xml: XMLDocument): string {
+    const name = xml.documentElement!.querySelector('book-title')!.innerHTML;
+    return cleanHTML(name);
   }
 
-  private getCoverPicture(xml: XMLDocument): ImageBase64Data | null {
+  private getCoverPicture(xml: XMLDocument): ImageBase64Data | undefined {
     const imageElement = xml?.documentElement?.querySelector('coverpage image');
     if (imageElement != null) {
       const srcAttribute = Array.from(imageElement.attributes)
@@ -58,7 +54,7 @@ export class Fb2Parser {
       }
     }
 
-    return null;
+    return undefined;
   }
 
   public getParagraphs(xml: XMLDocument): string[] {
@@ -79,6 +75,6 @@ export class Fb2Parser {
     const cover = this.getCoverPicture(xml);
     const paragraphs = this.getParagraphs(xml);
 
-    return { author, name, cover, paragraphs } as Book;
+    return new Book({ author, name, cover, paragraphs });
   }
 }
