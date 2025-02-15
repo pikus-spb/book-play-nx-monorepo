@@ -1,7 +1,7 @@
 {
   "name": "book-files-crawler",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "apps/book-files-crawler/src",
+  "sourceRoot": "apps/crawler/src",
   "projectType": "application",
   "tags": [],
   "targets": {
@@ -13,12 +13,11 @@
         "outputFileName": "add-books.js",
         "thirdParty": true,
         "platform": "node",
-        "outputPath": "dist/apps/book-files-crawler",
+        "outputPath": "dist/apps/crawler",
         "format": ["cjs"],
         "bundle": true,
-        "main": "apps/book-files-crawler/src/main.ts",
-        "tsConfig": "apps/book-files-crawler/tsconfig.app.json",
-        "assets": ["apps/book-files-crawler/src/assets"],
+        "main": "apps/crawler/src/main.ts",
+        "tsConfig": "apps/crawler/tsconfig.app.json",
         "externalDependencies": false,
         "generatePackageJson": false,
         "esbuildOptions": {

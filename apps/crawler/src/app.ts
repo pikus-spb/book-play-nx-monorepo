@@ -1,5 +1,5 @@
 import { DB_CONFIG } from '@book-play/constants';
-import { Fb2Parser } from '@book-play/utils';
+import { Fb2Parser, UIBookToDBBook } from '@book-play/utils';
 import fs from 'fs';
 import mysql, { PoolOptions } from 'mysql2';
 import path from 'path';
@@ -63,8 +63,8 @@ async function parseFiles(results: string[]) {
   for (const file of results) {
     try {
       const text = await readFile(file);
-      const bookData = parser.parseBookFromString(text);
-      await addToDataBase(pool, bookData)
+      const book = parser.parseBookFromString(text);
+      await addToDataBase(pool, UIBookToDBBook(book))
         .then((name) => console.log('Added to database: ' + name))
         .catch((err) => console.error(err.message));
     } catch (e) {

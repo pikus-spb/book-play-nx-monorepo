@@ -6,9 +6,7 @@
     <ul>
       @for (book of data.value; track book.id) {
       <li>
-        <a href="/player/{{ book.id }}" [title]="book.title">{{
-          book.title
-        }}</a>
+        <a href="/player/{{ book.id }}" [title]="book.name">{{ book.name }}</a>
       </li>
       }
     </ul>

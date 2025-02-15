@@ -9,12 +9,7 @@
     [class.scrolling]="scrolling()"
     cdkVirtualScrollingElement
   >
-    <h1>
-      {{ bookData.author.firstName }} {{ bookData.author.middleName }}
-      {{ bookData.author.lastName }} -
-      {{ bookData.name }}
-    </h1>
-
+    <h1>{{ bookData.fullName }}</h1>
     <section class="title-picture-container">
       <img
         *ngIf="bookData.cover"

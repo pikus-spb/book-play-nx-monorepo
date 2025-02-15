@@ -1,3 +1,5 @@
+import { load } from 'cheerio';
+
 export function cleanSpaces(text: string): string {
   return text
     .trim()
@@ -6,7 +8,7 @@ export function cleanSpaces(text: string): string {
 }
 
 export function cleanHTMLAndCopyrights(text: string): string {
-  text = cleanSpaces(text).trim();
+  text = cleanSpaces(cleanHTML(text)).trim();
   if (
     text.startsWith('©') ||
     text.match(/авторские права/gi) ||
@@ -25,4 +27,13 @@ export function cleanHTMLAndCopyrights(text: string): string {
   }
 
   return text;
+}
+
+export function cleanHTML(text: string): string {
+  return load(text).text();
+}
+
+export function capitalizeFirstLetter(text: string): string {
+  text = text.toLowerCase();
+  return String(text).charAt(0).toUpperCase() + String(text).slice(1);
 }

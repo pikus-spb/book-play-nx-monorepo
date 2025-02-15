@@ -1,17 +1,3 @@
-export interface BookDescription {
-  id: number;
-  authorFirstName: string;
-  authorLastName: string;
-  title: string;
-  bookFullName: string;
-  logo?: string;
-}
-
-export interface BookContents {
-  bookFullName: string;
-  content: string;
-}
-
 export class ImageBase64Data {
   public imageType!: string;
   public base64Content!: string;
@@ -22,6 +8,19 @@ export class ImageBase64Data {
 
   public toBase64String(): string {
     return `data:${this.imageType};base64,${this.base64Content}`;
+  }
+
+  public static fromBase64String(str: string): ImageBase64Data | undefined {
+    const matches = str.match(/data:(.+);base64,([\s\S]+)/);
+    if (matches && matches.length === 3) {
+      const data = {
+        imageType: matches[1],
+        base64Content: matches[2],
+      };
+      return new ImageBase64Data(data);
+    }
+
+    return undefined;
   }
 }
 
@@ -41,7 +40,19 @@ export class Author {
   }
 }
 
-export type AuthorsBooks = Record<string, BookDescription[]>;
+export type DBAuthorBooks = Record<string, DBBook[]>;
+export type AuthorBooks = Record<string, Book[]>;
+
+export interface DBBook {
+  id: string;
+  first: string;
+  middle: string;
+  last: string;
+  name: string;
+  full: string;
+  cover: string;
+  paragraphs: string;
+}
 
 export class Book {
   public id?: string;

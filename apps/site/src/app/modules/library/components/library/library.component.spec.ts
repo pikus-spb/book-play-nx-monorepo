@@ -9,7 +9,7 @@ import {
   BrowserDynamicTestingModule,
   platformBrowserDynamicTesting,
 } from '@angular/platform-browser-dynamic/testing';
-import { AuthorsBooks, BookDescription } from '@book-play/models';
+import { AuthorBooks } from '@book-play/models';
 import {
   AppEventNames,
   BooksApiService,
@@ -71,7 +71,7 @@ describe('LibraryComponent', () => {
     });
 
     test('should remove loading event after data is loaded', async () => {
-      booksApi.getAllGroupedByAuthor.mockResolvedValue({} as AuthorsBooks);
+      booksApi.getAllGroupedByAuthor.mockResolvedValue({} as AuthorBooks);
 
       await fixture.whenStable();
       fixture.detectChanges();
@@ -82,7 +82,7 @@ describe('LibraryComponent', () => {
 
   describe('Data handling', () => {
     test('should handle empty data correctly', async () => {
-      booksApi.getAllGroupedByAuthor.mockResolvedValue({} as AuthorsBooks);
+      booksApi.getAllGroupedByAuthor.mockResolvedValue({} as AuthorBooks);
 
       await fixture.whenStable();
       component.data.reload();
@@ -93,7 +93,7 @@ describe('LibraryComponent', () => {
     });
 
     test('should fetch and display grouped books', async () => {
-      const mockData: AuthorsBooks = { author1: [{} as BookDescription] };
+      const mockData: AuthorBooks = { author1: [] } as AuthorBooks;
       booksApi.getAllGroupedByAuthor.mockResolvedValue(mockData);
 
       await fixture.whenStable();
