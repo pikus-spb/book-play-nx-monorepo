@@ -4,8 +4,7 @@ import fs from 'fs';
 import mysql, { PoolOptions } from 'mysql2';
 import path from 'path';
 import { addToDataBase } from './db';
-
-const __dirname = path.resolve();
+import { readFile } from './fs';
 
 export function run() {
   console.log('Start looking for books....');
@@ -35,7 +34,7 @@ function getFilesNames(
       file = path.resolve(dir, file);
       fs.stat(file, (err, stat) => {
         if (stat && stat.isDirectory()) {
-          this.getFilesNames(file, (err, res) => {
+          getFilesNames(file, (err, res) => {
             results = results.concat(res);
             next();
           });
@@ -57,25 +56,13 @@ function getFilesNames(
   });
 }
 
-function readFileFromFS(file: string): Promise<string> {
-  return new Promise((resolve, reject) => {
-    fs.readFile(file, null, (err: Error, data: string) => {
-      if (err) {
-        reject(err);
-      } else {
-        resolve(data);
-      }
-    });
-  });
-}
-
 async function parseFiles(results: string[]) {
   const pool = mysql.createPool(DB_CONFIG as unknown as PoolOptions);
   const parser = new Fb2Parser();
 
   for (const file of results) {
     try {
-      const text = await readFileFromFS(file);
+      const text = await readFile(file);
       const bookData = parser.parseBookFromString(text);
       await addToDataBase(pool, bookData)
         .then((name) => console.log('Added to database: ' + name))

@@ -1,6 +1,6 @@
 // HTTP
-export const protocol = document.location.protocol;
-const BOOKS_API_PORT = protocol === 'https:' ? 8443 : 8282;
+export const protocol = 'http:';
+const BOOKS_API_PORT = protocol === 'http:' ? 8282 : 8443;
 export const AUDIO_API_URL = 'http://192.168.31.200:8181/tts';
 export const BOOKS_API_URL = protocol + '//192.168.31.200:' + BOOKS_API_PORT;
 export const HTTP_RETRY_NUMBER = 3;

@@ -45,9 +45,9 @@ export class FileReaderService {
   public async parseNewFile(files?: FileList): Promise<void> {
     if (files && files.length > 0) {
       const text = await this.readBlobFromFile(files[0]);
-      const bookData = await this.fb2Parser.parseBookFromString(text);
-      this.activeBookService.update(bookData);
-      this.router.navigateByUrl('/player');
+      const book = this.fb2Parser.parseBookFromString(text);
+      this.activeBookService.update(book);
+      await this.router.navigateByUrl('/player');
     } else {
       this.activeBookService.update(null);
     }

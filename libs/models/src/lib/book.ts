@@ -16,6 +16,10 @@ export class ImageBase64Data {
   public imageType!: string;
   public base64Content!: string;
 
+  constructor(obj: Partial<ImageBase64Data>) {
+    Object.assign(this, obj, {});
+  }
+
   public toBase64String(): string {
     return `data:${this.imageType};base64,${this.base64Content}`;
   }
@@ -26,6 +30,10 @@ export class Author {
   public middleName?: string;
   public lastName!: string;
 
+  constructor(obj: Partial<Author>) {
+    Object.assign(this, obj, {});
+  }
+
   public toString(): string {
     return `${this.firstName} ${this.middleName ? this.middleName + ' ' : ''}${
       this.lastName
@@ -33,7 +41,7 @@ export class Author {
   }
 }
 
-export type AuthorsBooks = Record<string, Book[]>;
+export type AuthorsBooks = Record<string, BookDescription[]>;
 
 export class Book {
   public id?: string;
@@ -44,6 +52,12 @@ export class Book {
 
   constructor(obj: Partial<Book>) {
     Object.assign(this, obj, {});
+    if (obj.author) {
+      this.author = new Author(obj.author);
+    }
+    if (obj.cover) {
+      this.cover = new ImageBase64Data(obj.cover);
+    }
   }
 
   public get fullName(): string {

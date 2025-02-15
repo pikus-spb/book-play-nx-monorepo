@@ -10,14 +10,17 @@
       "outputs": ["{options.outputPath}"],
       "defaultConfiguration": "production",
       "options": {
+        "outputFileName": "add-books.js",
+        "thirdParty": true,
         "platform": "node",
         "outputPath": "dist/apps/book-files-crawler",
         "format": ["cjs"],
-        "bundle": false,
+        "bundle": true,
         "main": "apps/book-files-crawler/src/main.ts",
         "tsConfig": "apps/book-files-crawler/tsconfig.app.json",
         "assets": ["apps/book-files-crawler/src/assets"],
-        "generatePackageJson": true,
+        "externalDependencies": false,
+        "generatePackageJson": false,
         "esbuildOptions": {
           "sourcemap": true,
           "outExtension": {

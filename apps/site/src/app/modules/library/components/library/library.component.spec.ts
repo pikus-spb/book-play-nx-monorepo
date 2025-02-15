@@ -9,7 +9,7 @@ import {
   BrowserDynamicTestingModule,
   platformBrowserDynamicTesting,
 } from '@angular/platform-browser-dynamic/testing';
-import { AuthorsBooks, Book } from '@book-play/models';
+import { AuthorsBooks, BookDescription } from '@book-play/models';
 import {
   AppEventNames,
   BooksApiService,
@@ -93,7 +93,7 @@ describe('LibraryComponent', () => {
     });
 
     test('should fetch and display grouped books', async () => {
-      const mockData: AuthorsBooks = { author1: [{} as Book] };
+      const mockData: AuthorsBooks = { author1: [{} as BookDescription] };
       booksApi.getAllGroupedByAuthor.mockResolvedValue(mockData);
 
       await fixture.whenStable();

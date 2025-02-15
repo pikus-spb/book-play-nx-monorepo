@@ -1,55 +1,54 @@
 import { LOGO_MAX_LENGTH } from '@book-play/constants';
 import { Author, Book, ImageBase64Data } from '@book-play/models';
-import { cleanHTML, cleanHTMLAndCopyrights } from './cleanup-tools';
+import { CheerioAPI, load } from 'cheerio';
+import { cleanHTMLAndCopyrights, cleanSpaces } from './cleanup-tools';
 
 export class Fb2Parser {
-  public getAuthor(xml: XMLDocument): Author {
-    let firstName =
-      xml.documentElement?.querySelector('author first-name')?.innerHTML;
-    let middleName =
-      xml?.documentElement?.querySelector('author middle-name')?.innerHTML;
-    let lastName =
-      xml?.documentElement?.querySelector('author last-name')?.innerHTML;
+  public getAuthor($: CheerioAPI): Author {
+    let firstName = $('author first-name').first().text();
+    let middleName = $('author middle-name').first().text();
+    let lastName = $('author last-name').first().text();
 
     if (firstName) {
-      firstName = cleanHTML(firstName);
+      firstName = cleanSpaces(firstName);
     }
     if (middleName) {
-      middleName = cleanHTML(middleName);
+      middleName = cleanSpaces(middleName);
     }
     if (lastName) {
-      lastName = cleanHTML(lastName);
+      lastName = cleanSpaces(lastName);
     }
 
-    return {
+    return new Author({
       firstName,
       middleName,
       lastName,
-    } as Author;
+    });
   }
 
-  public getBookName(xml: XMLDocument): string {
-    const name = xml.documentElement!.querySelector('book-title')!.innerHTML;
-    return cleanHTML(name);
+  public getBookName($: CheerioAPI): string {
+    const name = $('book-title').first().text();
+    return cleanSpaces(name);
   }
 
-  private getCoverPicture(xml: XMLDocument): ImageBase64Data | undefined {
-    const imageElement = xml?.documentElement?.querySelector('coverpage image');
-    if (imageElement != null) {
-      const srcAttribute = Array.from(imageElement.attributes)
-        .find((attr) => {
-          return Boolean(attr.localName.match('href'));
-        })
-        ?.value.substring(1);
+  private getCoverPicture($: CheerioAPI): ImageBase64Data | undefined {
+    const imageElement = $('coverpage > *').first();
+    if (imageElement.get(0)) {
+      const attr = [...imageElement.get(0)!.attributes].find(
+        (attr) => attr.name.indexOf('href') !== -1
+      )!;
+      const src = imageElement.attr(attr.name)!.substring(1);
 
-      if (srcAttribute != null) {
-        const binary = xml.getElementById(srcAttribute);
-        if (binary && binary.innerHTML.length <= LOGO_MAX_LENGTH) {
-          const imageType = binary.getAttribute('content-type');
-          return {
+      if (src !== undefined) {
+        const binary = $(
+          [...$('binary')].find((el) => $(el).attr('id') === src)
+        );
+        if (binary && binary.text().length <= LOGO_MAX_LENGTH) {
+          const imageType = binary.attr('content-type');
+          return new ImageBase64Data({
             imageType,
-            base64Content: binary.innerHTML,
-          } as ImageBase64Data;
+            base64Content: binary.text(),
+          });
         }
       }
     }
@@ -57,23 +56,22 @@ export class Fb2Parser {
     return undefined;
   }
 
-  public getParagraphs(xml: XMLDocument): string[] {
-    return Array.from(xml.documentElement?.querySelectorAll('body p'))
-      .map((item: Element) => {
-        return cleanHTMLAndCopyrights(item.innerHTML);
+  public getParagraphs($: CheerioAPI): string[] {
+    return $('body p')
+      .toArray()
+      .map((item) => {
+        return cleanHTMLAndCopyrights($(item).text());
       })
-      .filter((item) => item.trim().length > 0);
+      .filter((item) => item.length > 0);
   }
 
   public parseBookFromString(text: string): Book {
-    const parser = new DOMParser();
-    const xml = parser.parseFromString(text, 'text/xml') as XMLDocument;
+    const $ = load(text);
 
-    const author = this.getAuthor(xml);
-    const name = this.getBookName(xml);
-
-    const cover = this.getCoverPicture(xml);
-    const paragraphs = this.getParagraphs(xml);
+    const cover = this.getCoverPicture($);
+    const author = this.getAuthor($);
+    const name = this.getBookName($);
+    const paragraphs = this.getParagraphs($);
 
     return new Book({ author, name, cover, paragraphs });
   }

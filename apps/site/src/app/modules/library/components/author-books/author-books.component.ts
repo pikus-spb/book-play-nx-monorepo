@@ -6,7 +6,7 @@ import {
   MatExpansionPanelHeader,
   MatExpansionPanelTitle,
 } from '@angular/material/expansion';
-import { Book } from '@book-play/models';
+import { BookDescription } from '@book-play/models';
 
 @Component({
   selector: 'author-books',
@@ -22,5 +22,5 @@ import { Book } from '@book-play/models';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AuthorBooksComponent {
-  @Input() data!: KeyValue<string, Book[]>;
+  @Input() data!: KeyValue<string, BookDescription[]>;
 }

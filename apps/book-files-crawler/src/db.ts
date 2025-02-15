@@ -1,19 +1,19 @@
 import { Book } from '@book-play/models';
-import { Pool as BasePool } from 'mysql2/typings/mysql/lib/Pool';
+import { Pool } from 'mysql2';
 
-export function addToDataBase(pool: BasePool, book: Book): Promise<string> {
+export function addToDataBase(pool: Pool, book: Book): Promise<string> {
   console.log('Adding to database: ' + book.fullName);
   return new Promise((resolve, reject) => {
     pool.query(
       'INSERT INTO books (authorFirstName, authorMiddleName, authorLastName, title, bookFullName, logo, content)' +
-        ' VALUES (?, ?, ?, ?, ?, ?)',
+        ' VALUES (?, ?, ?, ?, ?, ?, ?)',
       [
         book.author.firstName,
         book.author.middleName,
         book.author.lastName,
         book.name,
         book.fullName,
-        book.cover.toBase64String(),
+        book.cover ? book.cover.toBase64String() : '',
         book.xml,
       ],
       (err: Error) => {

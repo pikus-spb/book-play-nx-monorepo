@@ -4,9 +4,11 @@
       <mat-panel-title [innerHTML]="data.key"></mat-panel-title>
     </mat-expansion-panel-header>
     <ul>
-      @for ( book of data.value; track book.fullName;) {
+      @for (book of data.value; track book.id) {
       <li>
-        <a href="/player/{{ book.id }}" [title]="book.name">{{ book.name }}</a>
+        <a href="/player/{{ book.id }}" [title]="book.title">{{
+          book.title
+        }}</a>
       </li>
       }
     </ul>
