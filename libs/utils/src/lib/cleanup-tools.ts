@@ -37,3 +37,16 @@ export function capitalizeFirstLetter(text: string): string {
   text = text.toLowerCase();
   return String(text).charAt(0).toUpperCase() + String(text).slice(1);
 }
+
+export function isInRussian(text: string): boolean {
+  return /[а-яА-ЯЁёЁ]/.test(text);
+}
+
+export function containsLetters(text: string): boolean {
+  return /\S+/.test(text);
+}
+
+export function findRussianIndex(text: string[]): number {
+  const found = text.find((item) => isInRussian(item));
+  return text.indexOf(found || '');
+}

@@ -33,7 +33,7 @@ export class Author {
     Object.assign(this, obj, {});
   }
 
-  public toString(): string {
+  public get fullName(): string {
     return `${this.firstName} ${this.middleName ? this.middleName + ' ' : ''}${
       this.lastName
     }`;
@@ -72,7 +72,7 @@ export class Book {
   }
 
   public get fullName(): string {
-    return `${this.author.toString()} - ${this.name}`;
+    return `${this.author.fullName} - ${this.name}`;
   }
 
   public get hash(): string {

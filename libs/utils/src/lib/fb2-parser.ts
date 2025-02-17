@@ -1,28 +1,31 @@
 import { LOGO_MAX_LENGTH } from '@book-play/constants';
 import { Author, Book, ImageBase64Data } from '@book-play/models';
 import { CheerioAPI, load } from 'cheerio';
-import { cleanHTMLAndCopyrights, cleanSpaces } from './cleanup-tools';
+import {
+  cleanHTMLAndCopyrights,
+  cleanSpaces,
+  findRussianIndex,
+  isInRussian,
+} from './cleanup-tools';
 
 export class Fb2Parser {
   public getAuthor($: CheerioAPI): Author {
-    let firstName = $('author first-name').first().text();
-    let middleName = $('author middle-name').first().text();
-    let lastName = $('author last-name').first().text();
+    const first = $('author first-name')
+      .toArray()
+      .map((item) => cleanSpaces($(item).text()));
+    const middle = $('author middle-name')
+      .toArray()
+      .map((item) => cleanSpaces($(item).text()));
+    const last = $('author last-name')
+      .toArray()
+      .map((item) => cleanSpaces($(item).text()));
 
-    if (firstName) {
-      firstName = cleanSpaces(firstName);
-    }
-    if (middleName) {
-      middleName = cleanSpaces(middleName);
-    }
-    if (lastName) {
-      lastName = cleanSpaces(lastName);
-    }
+    const index = findRussianIndex(first);
 
     return new Author({
-      firstName,
-      middleName,
-      lastName,
+      firstName: first[index],
+      middleName: isInRussian(middle[index]) ? middle[index] : '',
+      lastName: last[index],
     });
   }
 

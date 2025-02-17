@@ -2,16 +2,16 @@ import { Author, Book, DBBook, ImageBase64Data } from '@book-play/models';
 import { capitalizeFirstLetter, cleanHTML, cleanSpaces } from './cleanup-tools';
 
 export function DBBookToUIBook(input: Partial<DBBook>): Book {
-  const data: Partial<Book> = {
+  const data = {
     id: input.id,
     name: input.name,
     paragraphs: JSON.parse(input.paragraphs || '[]'),
     cover: ImageBase64Data.fromBase64String(input.cover || ''),
-    author: {
+    author: new Author({
       middleName: input.middle,
       lastName: input.last!,
       firstName: input.first!,
-    },
+    }),
   };
   return new Book(data);
 }

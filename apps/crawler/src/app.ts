@@ -1,5 +1,10 @@
 import { DB_CONFIG } from '@book-play/constants';
-import { Fb2Parser, UIBookToDBBook } from '@book-play/utils';
+import {
+  containsLetters,
+  Fb2Parser,
+  isInRussian,
+  UIBookToDBBook,
+} from '@book-play/utils';
 import fs from 'fs';
 import mysql, { PoolOptions } from 'mysql2';
 import path from 'path';
@@ -64,9 +69,11 @@ async function parseFiles(results: string[]) {
     try {
       const text = await readFile(file);
       const book = parser.parseBookFromString(text);
-      await addToDataBase(pool, UIBookToDBBook(book))
-        .then((name) => console.log('Added to database: ' + name))
-        .catch((err) => console.error(err.message));
+      if (isInRussian(book.fullName) && containsLetters(book.author.fullName)) {
+        await addToDataBase(pool, UIBookToDBBook(book))
+          .then((name) => console.log('Added to database: ' + name))
+          .catch((err) => console.error(err.message));
+      }
     } catch (e) {
       console.error(e);
     }
