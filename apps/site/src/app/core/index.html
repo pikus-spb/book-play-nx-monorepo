@@ -1,13 +1,19 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
   <head>
-    <meta charset="utf-8" />
-    <meta name="darkreader-lock" />
     <title>
       Book-play.ru - Бесплатное проигрывание книг в формате fb2 онлайн
     </title>
+    <meta charset="utf-8" />
+    <meta name="darkreader-lock" />
+    <meta name="google" content="notranslate" />
+    <meta http-equiv="Content-Language" content="ru_RU" />
     <base href="/" />
-    <meta name="viewport" content="width=530, initial-scale=1" />
+    <meta
+      name="viewport"
+      content="width=530, initial-scale=0.9, maximum-scale=0.9"
+    />
+    <meta name="yandex-verification" content="3440eb5c63c623cf" />
     <link rel="icon" type="image/x-icon" href="favicon.ico" />
     <link rel="manifest" href="manifest.json" />
     <link rel="preconnect" href="https://fonts.gstatic.com" />
@@ -19,9 +25,8 @@
       href="https://fonts.googleapis.com/icon?family=Material+Icons"
       rel="stylesheet"
     />
-    <meta name="yandex-verification" content="3440eb5c63c623cf" />
   </head>
-  <body class="mat-body" onresize="fitVH()">
+  <body class="mat-body" onresize="fitVH()" onscroll="fitVH()">
     <root class="mat-typography"></root>
     <script>
       function fitVH() {

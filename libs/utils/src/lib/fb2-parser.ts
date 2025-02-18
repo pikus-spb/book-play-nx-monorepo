@@ -60,6 +60,8 @@ export class Fb2Parser {
   }
 
   public getParagraphs($: CheerioAPI): string[] {
+    $('history').remove();
+
     return $('body p')
       .toArray()
       .map((item) => {
