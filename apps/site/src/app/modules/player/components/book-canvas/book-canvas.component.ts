@@ -4,7 +4,6 @@ import {
   ScrollingModule,
 } from '@angular/cdk/scrolling';
 import {
-  AfterViewInit,
   ChangeDetectionStrategy,
   Component,
   ElementRef,
@@ -17,14 +16,14 @@ import {
 } from '@angular/core';
 import { Book } from '@book-play/models';
 import {
-  AppEventNames,
-  createViewportScrollerService,
-  EventsStateService,
+  DomHelperService,
+  HeightCalculateComponent,
+  HeightDelta,
+  setupViewportScrollerService,
 } from '@book-play/services';
 import { Subject } from 'rxjs';
 import { MaterialModule } from '../../../../core/modules/material.module';
 import { BookParagraphComponent } from '../book-paragraph/book-paragraph.component';
-import { CanvasSkeletonComponent } from '../canvas-skeleton/canvas-skeleton.component';
 
 const PARAGRAPH_TAG = 'book-paragraph';
 
@@ -38,18 +37,26 @@ const PARAGRAPH_TAG = 'book-paragraph';
     ScrollingModule,
     ExperimentalScrollingModule,
     BookParagraphComponent,
-    CanvasSkeletonComponent,
+    HeightCalculateComponent,
   ],
 })
-export class BookCanvasComponent implements AfterViewInit, OnDestroy {
+export class BookCanvasComponent implements OnDestroy {
   @Input() book!: Signal<Book | null>;
   @Output() paragraphClick: EventEmitter<number> = new EventEmitter<number>();
   @ViewChild('scrollViewport') viewport!: CdkVirtualScrollViewport;
 
-  public scrolling: Signal<boolean>;
+  constructor(private el: ElementRef, private domHelper: DomHelperService) {}
 
-  constructor(private el: ElementRef, public eventState: EventsStateService) {
-    this.scrolling = this.eventState.get(AppEventNames.scrollingIntoView);
+  public heightCalculated(delta: HeightDelta) {
+    setupViewportScrollerService(
+      this.el,
+      this.viewport,
+      PARAGRAPH_TAG,
+      delta,
+      this.bookData!.paragraphs,
+      this.destroyed$
+    );
+    this.domHelper.showActiveParagraph();
   }
 
   public removeImage(event: Event): void {
@@ -66,15 +73,6 @@ export class BookCanvasComponent implements AfterViewInit, OnDestroy {
 
   public onParagraphClick(index: number): void {
     this.paragraphClick.emit(index);
-  }
-
-  ngAfterViewInit() {
-    createViewportScrollerService(
-      this.el,
-      this.viewport,
-      PARAGRAPH_TAG,
-      this.destroyed$
-    );
   }
 
   ngOnDestroy() {

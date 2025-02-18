@@ -13,3 +13,5 @@ export * from './lib/services/indexed-db-book-storage.service';
 export * from './lib/services/scroll-position-helper.service';
 export * from './lib/services/tts-api.service';
 export * from './lib/services/books-api.service';
+export * from './lib/model/delta';
+export * from './lib/components/height-calculate/height-calculate.component';

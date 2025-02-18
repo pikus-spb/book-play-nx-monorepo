@@ -4,3 +4,4 @@ export * from './lib/fb2-parser';
 export * from './lib/http';
 export * from './lib/window-title';
 export * from './lib/book-mapper';
+export * from './lib/dom';

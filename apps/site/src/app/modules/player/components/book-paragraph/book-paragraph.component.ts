@@ -3,7 +3,6 @@ import { PARAGRAPH_CLASS_PREFIX } from '@book-play/constants';
 
 @Component({
   selector: 'book-paragraph',
-  standalone: true,
   templateUrl: './book-paragraph.component.html',
   styleUrls: ['./book-paragraph.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

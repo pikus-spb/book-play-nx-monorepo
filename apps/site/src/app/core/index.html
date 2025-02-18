@@ -7,7 +7,7 @@
       Book-play.ru - Бесплатное проигрывание книг в формате fb2 онлайн
     </title>
     <base href="/" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=530, initial-scale=1" />
     <link rel="icon" type="image/x-icon" href="favicon.ico" />
     <link rel="manifest" href="manifest.json" />
     <link rel="preconnect" href="https://fonts.gstatic.com" />
@@ -21,7 +21,14 @@
     />
     <meta name="yandex-verification" content="3440eb5c63c623cf" />
   </head>
-  <body class="mat-body">
+  <body class="mat-body" onresize="fitVH()">
     <root class="mat-typography"></root>
+    <script>
+      function fitVH() {
+        let vh = window.innerHeight * 0.01;
+        document.documentElement.style.setProperty('--vh', `${vh}px`);
+      }
+      fitVH();
+    </script>
   </body>
 </html>

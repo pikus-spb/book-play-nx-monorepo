@@ -28,15 +28,6 @@ div {
       font-family: Literata, sans-serif !important;
     }
 
-    &.scrolling {
-      -ms-overflow-style: none;
-      scrollbar-width: none;
-
-      &::-webkit-scrollbar {
-        display: none;
-      }
-    }
-
     h1,
     section {
       padding: 0 $default-padding * 2;
@@ -46,7 +37,19 @@ div {
       max-width: 100%;
     }
 
-    .infinite-scroll-container {
+    ::ng-deep p {
+      cursor: pointer;
+      padding: 0 $default-padding * 2;
+      text-align: justify;
+
+      &.active {
+        font-weight: bold;
+
+        &:before {
+          margin-left: -$default-padding;
+          content: '\21e8';
+        }
+      }
     }
   }
 }

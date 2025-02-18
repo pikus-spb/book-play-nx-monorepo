@@ -1,10 +1,10 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { AppEventNames, EventsStateService } from '@book-play/services';
+import { MainHeaderComponent } from '../../../modules/main-header/main-header.component';
+import { MainMenuComponent } from '../../../modules/main-menu/main-menu.component';
 import { CopyrightOwnerComponent } from '../../../shared/components/copyright-owner/copyright-owner.component';
 import { CopyrightComponent } from '../../../shared/components/copyright/copyright.component';
-import { MainHeaderComponent } from '../../../shared/components/main-header/main-header.component';
-import { MainMenuComponent } from '../../../shared/components/main-menu/main-menu.component';
 import { MaterialModule } from '../../modules/material.module';
 
 @Component({

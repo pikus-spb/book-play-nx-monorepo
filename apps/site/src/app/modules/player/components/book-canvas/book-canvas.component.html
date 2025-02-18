@@ -1,14 +1,6 @@
-<div>
-  @if (scrolling()) {
-  <div class="skeleton-container">
-    <canvas-skeleton></canvas-skeleton>
-  </div>
-  } @if (bookData !== null) {
-  <div
-    class="scrollable-canvas"
-    [class.scrolling]="scrolling()"
-    cdkVirtualScrollingElement
-  >
+<div #container>
+  @if (bookData !== null) {
+  <div class="scrollable-canvas" cdkVirtualScrollingElement>
     <h1>{{ bookData.fullName }}</h1>
     <section class="title-picture-container">
       <img
@@ -23,8 +15,11 @@
       #scrollViewport
       autosize
       class="infinite-scroll-container"
-      [style.visibility]="scrolling() ? 'hidden' : 'visible'"
     >
+      <lib-height-calculate
+        [resizable]="container"
+        (done)="heightCalculated($event)"
+      ></lib-height-calculate>
       <book-paragraph
         *cdkVirtualFor="
           let text of bookData.paragraphs;
@@ -35,8 +30,7 @@
         [text]="text"
         (click)="onParagraphClick(index)"
         class="scroll-item"
-      >
-      </book-paragraph>
+      ></book-paragraph>
     </cdk-virtual-scroll-viewport>
   </div>
   }

@@ -16,8 +16,8 @@ import {
   FileReaderService,
   IndexedDbBookStorageService,
 } from '@book-play/services';
-import { MaterialModule } from '../../../core/modules/material.module';
-import { UploadFileDirective } from '../../directives/file-upload/upload-file.directive';
+import { MaterialModule } from '../../core/modules/material.module';
+import { UploadFileDirective } from '../../shared/directives/file-upload/upload-file.directive';
 
 @Component({
   selector: 'main-menu',

@@ -74,7 +74,7 @@ export class DomHelperService implements OnDestroy {
         this.attachScrollingEvent(); // TODO: find a better place
       }
     },
-    500
+    100
   );
 
   ngOnDestroy() {

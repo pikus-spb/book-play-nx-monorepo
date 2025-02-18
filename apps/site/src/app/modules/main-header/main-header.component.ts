@@ -10,8 +10,8 @@ import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
 import { ActiveBookService } from '@book-play/services';
 import { merge, tap } from 'rxjs';
-import { MaterialModule } from '../../../core/modules/material.module';
-import { PlayerButtonComponent } from '../player-button/player-button.component';
+import { MaterialModule } from '../../core/modules/material.module';
+import { PlayerButtonComponent } from '../../shared/components/player-button/player-button.component';
 
 @Component({
   selector: 'main-header',

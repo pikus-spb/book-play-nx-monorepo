@@ -1,6 +1,7 @@
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 import { ElementRef } from '@angular/core';
 import { first, firstValueFrom, Observable, tap, timer } from 'rxjs';
+import { HeightDelta } from '../model/delta';
 
 export let viewportScroller: null | ViewportScrollerService = null;
 
@@ -11,6 +12,8 @@ class ViewportScrollerService {
     private el: ElementRef | undefined,
     private viewport: CdkVirtualScrollViewport | undefined,
     private defaultElementTag: string,
+    public delta: HeightDelta,
+    private paragraphs: string[],
     private onDestroy$: Observable<void>
   ) {
     this.onDestroy$
@@ -34,97 +37,75 @@ class ViewportScrollerService {
       `${this.defaultElementTag}:nth-of-type(${index})`
     );
     if (paragraph) {
-      paragraph.scrollIntoView({ block: 'center' });
+      paragraph.scrollIntoView({ block: 'center', behavior: 'smooth' });
     }
   }
 
-  private scrollToFirstParagraph() {
-    const paragraph = this.el?.nativeElement.querySelector(
-      `${this.defaultElementTag}`
-    );
-    if (paragraph) {
-      paragraph.scrollIntoView({ block: 'end' });
+  private scrollToOffset(guessOffset: number, sign: -1 | 1): number {
+    if (this.viewport) {
+      const size = this.viewport.getViewportSize();
+      guessOffset += size * sign;
+      this.viewport.scrollToOffset(Math.round(guessOffset - size), 'instant');
+
+      return guessOffset;
     }
+
+    return 0;
   }
 
-  private scrollToLastParagraph() {
-    const paragraphs = this.el?.nativeElement.querySelectorAll(
-      `${this.defaultElementTag}`
-    );
-    if (paragraphs.length) {
-      const paragraph = Array.from(paragraphs).slice(
-        -1
-      )[0] as HTMLParagraphElement;
-      paragraph.scrollIntoView({ block: 'start' });
-    }
-  }
-
-  private getOuterHeight(el: HTMLElement) {
-    const styles = window.getComputedStyle(el);
-    const margin =
-      parseFloat(styles['marginTop']) + parseFloat(styles['marginBottom']);
-
-    return Math.ceil(el.offsetHeight + margin);
-  }
-
-  private getItemHeight(): number {
-    const paragraphs = this.el?.nativeElement.querySelectorAll(
-      `${this.defaultElementTag}`
-    );
-    return (
-      Array.from(paragraphs)
-        .map((p) => this.getOuterHeight(p as HTMLElement))
-        .reduce((memo, height) => {
-          memo += height;
-          return memo;
-        }, 0) / paragraphs.length
-    );
-  }
-
-  private async adjustOffset(index: number) {
+  private async adjustOffset(index: number, guessOffset: number) {
     if (this.viewport) {
       const range = this.viewport.getRenderedRange();
       if (index >= range.start && index <= range.end) {
         this.scrollToFoundParagraph(index - range.start);
       } else {
-        if (index <= range.start) {
-          this.scrollToFirstParagraph();
-        } else if (index >= range.end) {
-          this.scrollToLastParagraph();
+        if (index < range.start) {
+          guessOffset = this.scrollToOffset(guessOffset, -1);
+        } else if (index > range.end) {
+          guessOffset = this.scrollToOffset(guessOffset, 1);
         }
 
         await firstValueFrom(timer(1));
-        await this.adjustOffset(index);
+        await this.adjustOffset(index, guessOffset);
       }
     }
   }
 
   public async scrollToIndex(index: number): Promise<void> {
     if (this.viewport) {
-      const itemHeight = this.getItemHeight();
-      const guessOffset = index * itemHeight;
+      let guessOffset = 0;
+      this.paragraphs.slice(0, index).forEach((p) => {
+        const rowsNum = Math.ceil(p.length / this.delta.length);
+        guessOffset += rowsNum * this.delta.height + this.delta.margin;
+      });
 
-      this.viewport.scrollToOffset(Math.round(guessOffset));
-      await firstValueFrom(timer(300));
+      this.viewport.scrollToOffset(Math.round(guessOffset), 'instant');
+      console.log(guessOffset);
 
-      await this.adjustOffset(index);
+      await firstValueFrom(timer(1));
+      await this.adjustOffset(index, guessOffset);
     }
   }
 }
 
-export function createViewportScrollerService(
+export function setupViewportScrollerService(
   el: ElementRef | undefined,
   viewport: CdkVirtualScrollViewport | undefined,
   defaultElementTag: string,
+  delta: HeightDelta,
+  paragraphs: string[],
   destroy$: Observable<void>
 ) {
-  if (viewportScroller != null) {
-    throw new Error('Multiple viewport scroller creation!');
+  if (viewportScroller !== null) {
+    viewportScroller.delta = delta;
+  } else {
+    viewportScroller = new ViewportScrollerService(
+      el,
+      viewport,
+      defaultElementTag,
+      delta,
+      paragraphs,
+      destroy$
+    );
   }
-  viewportScroller = new ViewportScrollerService(
-    el,
-    viewport,
-    defaultElementTag,
-    destroy$
-  );
 }
