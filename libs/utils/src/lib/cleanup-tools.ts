@@ -11,7 +11,6 @@ export function cleanHTMLAndCopyrights(text: string): string {
   text = cleanSpaces(cleanHTML(text)).trim();
   if (
     text.startsWith('©') ||
-    text.match(/v [0-9.]+/gi) ||
     text.match(/авторские права/gi) ||
     text.match(/создание fb2/gi) ||
     text.match(/Издательство [а-я]+®/gi) ||
