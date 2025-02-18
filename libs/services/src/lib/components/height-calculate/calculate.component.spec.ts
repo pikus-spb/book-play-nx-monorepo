@@ -1,16 +1,16 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { HeightComponentComponent } from './calculate.component';
+import { CalculateComponent } from './calculate.component';
 
 describe('HeightComponentComponent', () => {
-  let component: HeightComponentComponent;
-  let fixture: ComponentFixture<HeightComponentComponent>;
+  let component: CalculateComponent;
+  let fixture: ComponentFixture<CalculateComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [HeightComponentComponent],
+      imports: [CalculateComponent],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(HeightComponentComponent);
+    fixture = TestBed.createComponent(CalculateComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
