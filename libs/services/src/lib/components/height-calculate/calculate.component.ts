@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import {
   AfterViewInit,
+  ChangeDetectionStrategy,
   Component,
   ElementRef,
   EventEmitter,
@@ -25,6 +26,7 @@ const SAMPLE = `Участвовавшая в беседе Нэнси Уайт �
       }
     `,
   ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CalculateComponent implements AfterViewInit {
   @ViewChild('sample') sample!: ElementRef<HTMLElement>;
