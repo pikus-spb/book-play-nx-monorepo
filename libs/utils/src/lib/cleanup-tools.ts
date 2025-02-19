@@ -4,7 +4,7 @@ export function cleanSpaces(text: string): string {
   return text
     .trim()
     .replace(/&nbsp;/gi, ' ')
-    .replace(/[ ]{2,}/gi, ' ');
+    .replace(/ {2,}/gi, ' ');
 }
 
 export function cleanHTMLAndCopyrights(text: string): string {
@@ -40,14 +40,18 @@ export function capitalizeFirstLetter(text: string): string {
 }
 
 export function isInRussian(text: string): boolean {
-  return /[а-яА-ЯЁёЁ]/.test(text);
+  return /[а-яА-ЯЁё]/.test(text);
 }
 
 export function containsLetters(text: string): boolean {
   return /\S+/.test(text);
 }
 
+export function cleanNonRussianWords(text = ''): string {
+  return cleanSpaces(text.replace(/[^\w\s]*\b[^а-яА-Я]+\b[^\w\s]*/g, ''));
+}
+
 export function findRussianIndex(text: string[]): number {
   const found = text.find((item) => isInRussian(item));
-  return text.indexOf(found || '');
+  return found ? text.indexOf(found) : -1;
 }

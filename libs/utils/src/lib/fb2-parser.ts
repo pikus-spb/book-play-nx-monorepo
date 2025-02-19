@@ -3,6 +3,7 @@ import { Author, Book, ImageBase64Data } from '@book-play/models';
 import { CheerioAPI, load } from 'cheerio';
 import {
   cleanHTMLAndCopyrights,
+  cleanNonRussianWords,
   cleanSpaces,
   findRussianIndex,
   isInRussian,
@@ -22,11 +23,17 @@ export class Fb2Parser {
 
     const index = findRussianIndex(first);
 
-    return new Author({
-      firstName: first[index],
-      middleName: isInRussian(middle[index]) ? middle[index] : '',
-      lastName: last[index],
-    });
+    if (index !== -1) {
+      return new Author({
+        firstName: cleanNonRussianWords(first[index]),
+        middleName: isInRussian(middle[index])
+          ? cleanNonRussianWords(middle[index])
+          : '',
+        lastName: cleanNonRussianWords(last[index]),
+      });
+    }
+
+    return new Author({});
   }
 
   public getBookName($: CheerioAPI): string {
