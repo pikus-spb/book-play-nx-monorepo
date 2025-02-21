@@ -1,6 +1,5 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { PARAGRAPH_CLASS_PREFIX } from '@book-play/constants';
-import { debounce } from 'lodash';
 import {
   firstValueFrom,
   Observable,
@@ -17,8 +16,8 @@ import { viewportScroller } from './viewport-scroller.service';
   providedIn: 'root',
 })
 export class DomHelperService implements OnDestroy {
-  public scrolled$?: Observable<Event>;
-  private scrollingStopped$: Subject<void> = new Subject();
+  public viewportScrolled$?: Observable<Event>;
+  private viewportScrolledDestroy$: Subject<void> = new Subject();
 
   constructor(
     private cursorService: CursorPositionLocalStorageService,
@@ -27,14 +26,15 @@ export class DomHelperService implements OnDestroy {
 
   private attachScrollingEvent() {
     if (viewportScroller) {
-      if (this.scrolled$) {
-        this.scrollingStopped$.next();
+      // Delete previous subscription
+      if (this.viewportScrolled$) {
+        this.viewportScrolledDestroy$.next();
       }
 
-      this.scrolled$ = viewportScroller.scrolled$;
-      this.scrolled$
+      this.viewportScrolled$ = viewportScroller.scrolled$;
+      this.viewportScrolled$
         ?.pipe(
-          takeUntil(this.scrollingStopped$),
+          takeUntil(this.viewportScrolledDestroy$),
           tap(() => {
             const node = this.getParagraphNode(this.cursorService.position);
             this.updateActiveCSSClass(node);
@@ -53,31 +53,24 @@ export class DomHelperService implements OnDestroy {
     return document.body.querySelector(`.${PARAGRAPH_CLASS_PREFIX}${index}`);
   }
 
-  public showActiveParagraph = debounce(
-    async (index = this.cursorService.position) => {
-      await firstValueFrom(timer(100));
+  public showActiveParagraph = async (index = this.cursorService.position) => {
+    await firstValueFrom(timer(1));
 
-      let node = this.getParagraphNode(index);
+    const node = this.getParagraphNode(index);
 
-      if (viewportScroller && !node) {
-        await this.scrollPositionHelper.scrollToIndex(index);
-        await firstValueFrom(timer(100));
+    if (node) {
+      node.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      this.updateActiveCSSClass(node as HTMLElement);
+    } else {
+      await this.scrollPositionHelper.scrollToIndex(index);
+    }
 
-        node = this.getParagraphNode(index);
-      }
-      if (node) {
-        node.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        this.updateActiveCSSClass(node as HTMLElement);
-      }
-
-      if (viewportScroller) {
-        this.attachScrollingEvent(); // TODO: find a better place
-      }
-    },
-    100
-  );
+    if (viewportScroller) {
+      this.attachScrollingEvent(); // TODO: find a better place
+    }
+  };
 
   ngOnDestroy() {
-    this.scrollingStopped$.next();
+    this.viewportScrolledDestroy$.next();
   }
 }
