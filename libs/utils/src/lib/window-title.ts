@@ -10,6 +10,6 @@ export function setWindowTitle(title: string): void {
 }
 
 export function setWindowsTitleWithContext(context: string): void {
-  const title = [DEFAULT_TITLE_PREFIX, context, DEFAULT_TITLE_CONTEXT];
+  const title = [context, DEFAULT_TITLE_CONTEXT, DEFAULT_TITLE_PREFIX];
   setWindowTitle(title.join(' - '));
 }

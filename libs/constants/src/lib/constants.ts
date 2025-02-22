@@ -11,9 +11,11 @@ export const PARAGRAPH_CLASS_PREFIX = 'book-paragraph-';
 // SITE
 export const DEFAULT_TITLE_PREFIX = 'Book-play.ru';
 export const DEFAULT_EMPTY_CONTEXT =
-  'Бесплатное проигрывание книг в формате fb2 онлайн';
+  'Бесплатное проигрывание книг голосом в формате fb2 онлайн';
 export const DEFAULT_TITLE_CONTEXT = 'бесплатно слушать аудиокнигу онлайн';
-export const DEFAULT_TITLE = `${DEFAULT_TITLE_PREFIX} - ${DEFAULT_EMPTY_CONTEXT}`;
+export const DEFAULT_TITLE = [DEFAULT_TITLE_PREFIX, DEFAULT_EMPTY_CONTEXT].join(
+  ' - '
+);
 
 // BOOKS CRAWLER
 export const LOGO_MAX_LENGTH = 1000000;

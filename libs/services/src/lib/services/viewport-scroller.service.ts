@@ -80,7 +80,6 @@ class ViewportScrollerService {
       });
 
       this.viewport.scrollToOffset(Math.round(guessOffset), 'instant');
-      console.log(guessOffset);
 
       await firstValueFrom(timer(1));
       await this.adjustOffset(index, guessOffset);

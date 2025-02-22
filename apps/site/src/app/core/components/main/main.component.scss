@@ -10,6 +10,19 @@
   mat-toolbar {
     padding: 0;
     background-color: var(--mat-app-background-color);
+    display: flex;
+    overflow: hidden;
+
+    main-header {
+      flex: 0 0;
+    }
+
+    book-title {
+      flex: 1 1;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
   }
 
   mat-sidenav-container {
