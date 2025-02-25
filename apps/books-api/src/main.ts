@@ -64,6 +64,33 @@ expressApp.get(
   }
 );
 
+expressApp.get('/author/all', cors(corsOptionsDelegate), (req, res) => {
+  app
+    .authors()
+    .then((books) => {
+      res.json(books);
+    })
+    .catch((err) => {
+      res.json(err);
+    });
+});
+
+expressApp.get(
+  '/author/name/:name/books',
+  cors(corsOptionsDelegate),
+  (req, res) => {
+    const name = req.params.name;
+    app
+      .authorBooks(name)
+      .then((book) => {
+        res.json(book);
+      })
+      .catch((err) => {
+        res.json(err);
+      });
+  }
+);
+
 expressApp.get('/book/:id', cors(corsOptionsDelegate), (req, res) => {
   const id = req.params.id;
   app

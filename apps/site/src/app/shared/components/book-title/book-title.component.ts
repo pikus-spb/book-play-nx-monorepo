@@ -23,7 +23,11 @@ export class BookTitleComponent {
   public bookTitle = computed(() => {
     const name = this.activeBookService.book()?.fullName;
 
-    if (this.routeChanged() && name && this.router.url === '/player') {
+    if (
+      this.routeChanged() &&
+      name &&
+      this.router.url.indexOf('player') !== -1
+    ) {
       return name;
     }
 

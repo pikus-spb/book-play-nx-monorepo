@@ -24,6 +24,8 @@ export class ImageBase64Data {
   }
 }
 
+export type DBAuthor = [string, string];
+
 export class Author {
   public firstName!: string;
   public middleName?: string;

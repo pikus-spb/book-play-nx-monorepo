@@ -1,5 +1,5 @@
 import { DB_CONFIG } from '@book-play/constants';
-import { DBAuthorBooks, DBBook } from '@book-play/models';
+import { Author, DBAuthor, DBAuthorBooks, DBBook } from '@book-play/models';
 import { getAuthorName } from '@book-play/utils';
 import mysql, { PoolOptions } from 'mysql2';
 
@@ -45,6 +45,39 @@ export default class BooksAPIApp {
           }
         }
       );
+    });
+  }
+
+  authors(): Promise<DBAuthor[]> {
+    return new Promise((resolve, reject) => {
+      pool.query(
+        'SELECT DISTINCT first, last FROM books ORDER BY first',
+        (err, result: Partial<Author>[]) => {
+          if (err) {
+            console.error(err);
+            reject(err);
+          } else {
+            resolve(result.map((author) => Object.values(author) as DBAuthor));
+          }
+        }
+      );
+    });
+  }
+
+  authorBooks(name: string): Promise<Partial<DBBook>> {
+    const query = `SELECT id, name FROM books WHERE CONCAT(first, last) = "${name
+      .split(' ')
+      .join('')}"`;
+
+    return new Promise((resolve, reject) => {
+      pool.query(query, (err, result: Partial<DBBook>) => {
+        if (err) {
+          console.error(err);
+          reject(err);
+        } else {
+          resolve(result);
+        }
+      });
     });
   }
 
