@@ -1,12 +1,19 @@
 <div class="library-container">
-  <h1 class="main" loading [thenShow]="books">Авторы <span #loading></span></h1>
+  <h1 loading [thenShow]="books">Авторы <span #loading></span></h1>
   <ng-template #books>
-    <div class="authors-books-grid">
-      @for (item of data.value() ?? []; track item.fullName) {
-      <author-books [author]="item"></author-books>
-      } @empty {
-      <span>Книги временно не доступны</span>
-      }
-    </div>
+    @if (data.value()) {
+    <li-virtual-scroll
+      [items]="data.value()!"
+      [gridList]="true"
+      [itemWidth]="250"
+      [itemHeight]="50"
+      [trackBy]="trackByFn"
+      class="authors-books-grid"
+    >
+      <author-books [author]="item!" *liVirtualItem="let item"></author-books>
+    </li-virtual-scroll>
+    } @else {
+    <span>Книги временно не доступны</span>
+    }
   </ng-template>
 </div>

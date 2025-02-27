@@ -34,5 +34,9 @@
       padding: $default-padding;
       width: $main-menu-width;
     }
+
+    mat-sidenav-content {
+      overflow: unset !important;
+    }
   }
 }

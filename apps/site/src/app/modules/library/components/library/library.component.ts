@@ -11,12 +11,18 @@ import {
   BooksApiService,
   EventsStateService,
 } from '@book-play/services';
+import { NgxVirtualScrollModule } from '@lithiumjs/ngx-virtual-scroll';
 import { LoadingThenShowDirective } from '../../../../shared/directives/loading-then-show/loading-then-show.directive';
 import { AuthorBooksComponent } from '../author-books/author-books.component';
 
 @Component({
   selector: 'library',
-  imports: [CommonModule, AuthorBooksComponent, LoadingThenShowDirective],
+  imports: [
+    CommonModule,
+    LoadingThenShowDirective,
+    AuthorBooksComponent,
+    NgxVirtualScrollModule,
+  ],
   templateUrl: './library.component.html',
   styleUrls: ['./library.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -37,5 +43,9 @@ export class LibraryComponent {
         this.eventStates.remove(AppEventNames.loading);
       }
     });
+  }
+
+  protected trackByFn(index: number, item: Author): string {
+    return item.fullName;
   }
 }

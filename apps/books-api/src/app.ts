@@ -51,7 +51,7 @@ export default class BooksAPIApp {
   authors(): Promise<DBAuthor[]> {
     return new Promise((resolve, reject) => {
       pool.query(
-        'SELECT DISTINCT first, last FROM books ORDER BY first',
+        'SELECT DISTINCT first, last FROM books ORDER BY full',
         (err, result: Partial<Author>[]) => {
           if (err) {
             console.error(err);

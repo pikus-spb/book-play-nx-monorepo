@@ -1,13 +1,28 @@
 @use 'vars' as *;
 
-.library-container {
-  padding: 2 * $default-padding;
+:host {
+  display: block;
+  width: 100%;
+  height: 100%;
 
-  .authors-books-grid {
-    margin-top: $default-padding;
-    display: grid;
-    gap: $default-padding;
-    grid-template-columns: repeat(auto-fit, minmax($card-width, 1fr));
-    grid-template-rows: repeat(auto-fit, 1fr);
+  .library-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    padding: 2 * $default-padding;
+
+    h1 {
+      flex: 0 0;
+    }
+
+    .authors-books-grid {
+      flex: 1 0;
+      display: grid;
+      margin-top: $default-padding;
+      gap: $default-padding;
+      grid-template-columns: repeat(auto-fit, minmax($card-width, 1fr));
+      grid-template-rows: repeat(auto-fit, 1fr);
+    }
   }
 }
