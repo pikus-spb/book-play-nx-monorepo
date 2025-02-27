@@ -9,7 +9,7 @@ import {
   BrowserDynamicTestingModule,
   platformBrowserDynamicTesting,
 } from '@angular/platform-browser-dynamic/testing';
-import { AuthorBooks } from '@book-play/models';
+import { Author } from '@book-play/models';
 import {
   AppEventNames,
   BooksApiService,
@@ -37,7 +37,7 @@ describe('LibraryComponent', () => {
 
   beforeEach(async () => {
     booksApi = {
-      getAllGroupedByAuthor: jest.fn(),
+      getAllAuthors: jest.fn(),
     } as unknown as jest.Mocked<BooksApiService>;
 
     eventStates = {
@@ -71,7 +71,7 @@ describe('LibraryComponent', () => {
     });
 
     test('should remove loading event after data is loaded', async () => {
-      booksApi.getAllGroupedByAuthor.mockResolvedValue({} as AuthorBooks);
+      booksApi.getAllAuthors.mockResolvedValue([] as Author[]);
 
       await fixture.whenStable();
       fixture.detectChanges();
@@ -82,19 +82,29 @@ describe('LibraryComponent', () => {
 
   describe('Data handling', () => {
     test('should handle empty data correctly', async () => {
-      booksApi.getAllGroupedByAuthor.mockResolvedValue({} as AuthorBooks);
+      booksApi.getAllAuthors.mockResolvedValue([] as Author[]);
 
       await fixture.whenStable();
       component.data.reload();
       fixture.detectChanges();
 
       await new Promise((resolve) => setTimeout(resolve));
-      expect(component.data.value()).toEqual({});
+      expect(component.data.value()).toEqual([]);
     });
 
-    test('should fetch and display grouped books', async () => {
-      const mockData: AuthorBooks = { author1: [] } as AuthorBooks;
-      booksApi.getAllGroupedByAuthor.mockResolvedValue(mockData);
+    test('should fetch and display authors', async () => {
+      const mockData: Author[] = [
+        new Author({
+          firstName: 'A',
+          lastName: 'B',
+        }),
+        new Author({
+          firstName: '',
+          lastName: 'BBB',
+        }),
+      ] as Author[];
+
+      booksApi.getAllAuthors.mockResolvedValue(mockData);
 
       await fixture.whenStable();
       component.data.reload();
@@ -107,7 +117,7 @@ describe('LibraryComponent', () => {
 
   describe('Error handling', () => {
     test('should handle API errors gracefully', async () => {
-      booksApi.getAllGroupedByAuthor.mockRejectedValue(new Error('API error'));
+      booksApi.getAllAuthors.mockRejectedValue(new Error('API error'));
 
       await fixture.whenStable();
       component.data.reload();
