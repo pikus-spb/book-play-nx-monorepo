@@ -1,14 +1,18 @@
 <mat-accordion>
   <mat-expansion-panel>
-    <mat-expansion-panel-header>
-      <mat-panel-title [innerHTML]="data.key"></mat-panel-title>
+    <mat-expansion-panel-header (click)="loadBooks()">
+      <mat-panel-title [innerHTML]="author.fullName"></mat-panel-title>
     </mat-expansion-panel-header>
+    @if (books.isLoading()) {
+    <loading-indicator></loading-indicator>
+    } @else {
     <ul>
-      @for (book of data.value; track book.id) {
+      @for (book of books.value(); track book.id) {
       <li>
         <a href="/player/{{ book.id }}" [title]="book.name">{{ book.name }}</a>
       </li>
       }
     </ul>
+    }
   </mat-expansion-panel>
 </mat-accordion>

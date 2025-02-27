@@ -5,7 +5,7 @@ import {
   effect,
   resource,
 } from '@angular/core';
-import { AuthorBooks } from '@book-play/models';
+import { Author } from '@book-play/models';
 import {
   AppEventNames,
   BooksApiService,
@@ -22,8 +22,8 @@ import { AuthorBooksComponent } from '../author-books/author-books.component';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LibraryComponent {
-  public data = resource<AuthorBooks, unknown>({
-    loader: () => this.booksApi.getAllGroupedByAuthor(),
+  public data = resource<Author[], unknown>({
+    loader: () => this.booksApi.getAllAuthors(),
   });
 
   constructor(

@@ -2,7 +2,14 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BOOKS_API_URL, HTTP_RETRY_NUMBER } from '@book-play/constants';
 
-import { AuthorBooks, Book, DBAuthorBooks, DBBook } from '@book-play/models';
+import {
+  Author,
+  AuthorBooks,
+  Book,
+  DBAuthor,
+  DBAuthorBooks,
+  DBBook,
+} from '@book-play/models';
 import { DBBookToUIBook } from '@book-play/utils';
 import { firstValueFrom, map, Observable, retry, shareReplay } from 'rxjs';
 
@@ -30,6 +37,41 @@ export class BooksApiService {
           return result;
         })
       ) as Observable<AuthorBooks>
+    );
+  }
+
+  public getAllAuthors(): Promise<Author[]> {
+    const url = '/author/all';
+
+    return this.fromCache<Author[]>(
+      url,
+      this.http.get<DBAuthor[]>(BOOKS_API_URL + url).pipe(
+        map((data: DBAuthor[]): Author[] => {
+          return data.map((dbAuthor: DBAuthor) => {
+            return new Author({
+              firstName: dbAuthor[0],
+              lastName: dbAuthor[1],
+            });
+          });
+        })
+      ) as Observable<Author[]>
+    );
+  }
+  public getAuthorBooks(authorName: string): Promise<Book[]> {
+    const url = `/author/name/${authorName}/books`;
+
+    return this.fromCache<Book[]>(
+      url,
+      this.http.get<DBBook[]>(BOOKS_API_URL + url).pipe(
+        map((data: DBBook[]): Book[] => {
+          return data.map((book: DBBook) => {
+            return new Book({
+              id: book.id,
+              name: book.name,
+            });
+          });
+        })
+      ) as Observable<Book[]>
     );
   }
 
