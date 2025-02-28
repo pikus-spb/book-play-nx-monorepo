@@ -57,6 +57,25 @@ export class BooksApiService {
       ) as Observable<Author[]>
     );
   }
+
+  public getRandomAuthors(number = 3): Promise<Author[]> {
+    const url = `/author/random/${number}`;
+
+    return this.fromCache<Author[]>(
+      url,
+      this.http.get<DBAuthor[]>(BOOKS_API_URL + url).pipe(
+        map((data: DBAuthor[]): Author[] => {
+          return data.map((dbAuthor: DBAuthor) => {
+            return new Author({
+              firstName: dbAuthor[0],
+              lastName: dbAuthor[1],
+            });
+          });
+        })
+      ) as Observable<Author[]>
+    );
+  }
+
   public getAuthorBooks(authorName: string): Promise<Book[]> {
     const url = `/author/name/${authorName}/books`;
 

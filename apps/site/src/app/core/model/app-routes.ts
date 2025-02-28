@@ -62,6 +62,15 @@ export const APP_ROUTES: Route[] = [
         },
         title: DEFAULT_TITLE,
       },
+      {
+        path: 'for-right-holders',
+        loadComponent() {
+          return import(
+            '../../modules/for-right-holders/components/for-right-holders.component'
+          ).then((imported) => imported.ForRightHoldersComponent);
+        },
+        title: DEFAULT_TITLE,
+      },
       { path: '', redirectTo: '/welcome', pathMatch: 'full' },
       { path: '**', redirectTo: '404' },
     ],

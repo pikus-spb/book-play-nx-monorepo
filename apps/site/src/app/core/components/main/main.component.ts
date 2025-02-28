@@ -1,4 +1,9 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  effect,
+  inject,
+} from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { AppEventNames, EventsStateService } from '@book-play/services';
 import { MainHeaderComponent } from '../../../modules/main-header/main-header.component';
@@ -26,4 +31,16 @@ import { MaterialModule } from '../../modules/material.module';
 export class MainComponent {
   public AppEvents = AppEventNames;
   public eventStatesService = inject(EventsStateService);
+
+  constructor() {
+    effect(() => {
+      const loading = this.eventStatesService.get(AppEventNames.loading)();
+
+      if (loading) {
+        document.body.classList.add('loading');
+      } else {
+        document.body.classList.remove('loading');
+      }
+    });
+  }
 }

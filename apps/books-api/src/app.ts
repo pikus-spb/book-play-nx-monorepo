@@ -1,63 +1,36 @@
 import { DB_CONFIG } from '@book-play/constants';
-import { Author, DBAuthor, DBAuthorBooks, DBBook } from '@book-play/models';
-import { getAuthorName } from '@book-play/utils';
+import { DBAuthor, DBBook } from '@book-play/models';
 import mysql, { PoolOptions } from 'mysql2';
 
 const pool = mysql.createPool(DB_CONFIG as unknown as PoolOptions);
 
 export default class BooksAPIApp {
-  public all(): Promise<DBBook[]> {
-    return new Promise((resolve, reject) => {
-      pool.query(
-        'SELECT id, first, middle, last, name, full FROM books ORDER BY full ASC',
-        (err, result: DBBook[]) => {
-          if (err) {
-            console.error(err);
-            reject(err);
-          } else {
-            resolve(result);
-          }
-        }
-      );
-    });
-  }
-
-  groupedByAuthor(): Promise<DBAuthorBooks> {
-    return new Promise((resolve, reject) => {
-      pool.query(
-        'SELECT id, first, last, name, full FROM books',
-        (err, result: DBBook[]) => {
-          if (err) {
-            console.error(err);
-            reject(err);
-          } else {
-            resolve(
-              Array.from(result).reduce((memo, book) => {
-                const authorName = getAuthorName(book);
-                if (!memo[authorName]) {
-                  memo[authorName] = [];
-                }
-                memo[authorName].push(book);
-
-                return memo;
-              }, {})
-            );
-          }
-        }
-      );
-    });
-  }
-
   authors(): Promise<DBAuthor[]> {
     return new Promise((resolve, reject) => {
       pool.query(
         'SELECT DISTINCT first, last FROM books ORDER BY full',
-        (err, result: Partial<Author>[]) => {
+        (err, result: Partial<DBBook>[]) => {
           if (err) {
             console.error(err);
             reject(err);
           } else {
-            resolve(result.map((author) => Object.values(author) as DBAuthor));
+            resolve(result.map((book) => Object.values(book) as DBAuthor));
+          }
+        }
+      );
+    });
+  }
+
+  randomAuthors(number = '3'): Promise<DBAuthor[]> {
+    return new Promise((resolve, reject) => {
+      pool.query(
+        `SELECT DISTINCT first, last FROM books ORDER BY RAND() LIMIT ${number}`,
+        (err, result: Partial<DBBook>[]) => {
+          if (err) {
+            console.error(err);
+            reject(err);
+          } else {
+            resolve(result.map((book) => Object.values(book) as DBAuthor));
           }
         }
       );
@@ -65,9 +38,8 @@ export default class BooksAPIApp {
   }
 
   authorBooks(name: string): Promise<Partial<DBBook>> {
-    const query = `SELECT id, name FROM books WHERE CONCAT(first, last) = "${name
-      .split(' ')
-      .join('')}"`;
+    name = name.split(' ').join('');
+    const query = `SELECT id, name FROM books WHERE CONCAT(REPLACE(first,' ',''), REPLACE(last,' ','')) = "${name}"`;
 
     return new Promise((resolve, reject) => {
       pool.query(query, (err, result: Partial<DBBook>) => {

@@ -29,7 +29,7 @@ import { AuthorBooksComponent } from '../author-books/author-books.component';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LibraryComponent {
-  protected data = resource<Author[], { query: string }>({
+  protected data = resource<Author[], unknown>({
     loader: () => this.booksApi.getAllAuthors(),
   });
 

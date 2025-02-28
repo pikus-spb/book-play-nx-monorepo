@@ -1,14 +1,19 @@
 @use 'vars' as *;
 
 .welcome-container {
-  padding: 2 * $default-padding;
+  padding: $default-padding 2 * $default-padding;
 
-  fieldset {
-    border-radius: 5px;
-    padding: $default-padding;
-    legend {
-      padding: 0 $default-padding;
-      font-size: large;
+  section {
+    max-width: 700px;
+
+    p {
+      margin-bottom: $default-padding;
     }
+  }
+
+  author-books {
+    display: block;
+    width: $card-width * 2;
+    margin: $default-padding 0;
   }
 }

@@ -38,32 +38,6 @@ httpServer.listen(HTTP_APP_PORT, () => {
 //     console.log(`Web server is listening on port ${HTTPS_APP_PORT}`);
 // });
 
-expressApp.get('/book/all', cors(corsOptionsDelegate), (req, res) => {
-  app
-    .all()
-    .then((books) => {
-      res.json(books);
-    })
-    .catch((err) => {
-      res.json(err);
-    });
-});
-
-expressApp.get(
-  '/book/all/grouped-by-author',
-  cors(corsOptionsDelegate),
-  (req, res) => {
-    app
-      .groupedByAuthor()
-      .then((books) => {
-        res.json(books);
-      })
-      .catch((err) => {
-        res.json(err);
-      });
-  }
-);
-
 expressApp.get('/author/all', cors(corsOptionsDelegate), (req, res) => {
   app
     .authors()
@@ -74,6 +48,22 @@ expressApp.get('/author/all', cors(corsOptionsDelegate), (req, res) => {
       res.json(err);
     });
 });
+
+expressApp.get(
+  '/author/random/:number?',
+  cors(corsOptionsDelegate),
+  (req, res) => {
+    const number = req.params.number;
+    app
+      .randomAuthors(number)
+      .then((book) => {
+        res.json(book);
+      })
+      .catch((err) => {
+        res.json(err);
+      });
+  }
+);
 
 expressApp.get(
   '/author/name/:name/books',

@@ -47,7 +47,25 @@ div {
 
         &:before {
           margin-left: -$default-padding;
-          content: '\21e8';
+        }
+      }
+    }
+  }
+}
+
+::ng-deep body {
+  book-canvas {
+    p.active {
+      &:before {
+        content: '▶️';
+      }
+    }
+  }
+  &.loading {
+    book-canvas {
+      p.active {
+        &:before {
+          content: '⌛';
         }
       }
     }

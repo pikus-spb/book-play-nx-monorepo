@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { AUDIO_API_URL, HTTP_RETRY_NUMBER } from '@book-play/constants';
 
 import { createQueryString } from '@book-play/utils';
-import { Observable, ReplaySubject, retry, Subscription } from 'rxjs';
+import { Observable, retry, shareReplay, Subscription } from 'rxjs';
 
 const AUDIO_HEADERS = new HttpHeaders({
   'Content-Type': 'application/x-www-form-urlencoded',
@@ -13,47 +13,38 @@ const AUDIO_HEADERS = new HttpHeaders({
   providedIn: 'root',
 })
 export class TtsApiService {
-  private dictionary: Record<string, ReplaySubject<Blob>> = {};
+  private dictionary: Record<string, Observable<Blob>> = {};
   // http requests subscription list, is needed for an ability to cancel not needed http requests
-  private subscriptions: Map<Subscription, ReplaySubject<Blob>> = new Map();
+  private subscriptions: Record<string, Subscription> = {};
 
   constructor(private http: HttpClient) {}
 
-  private _getVoice(text: string): ReplaySubject<Blob> {
+  private _getVoice(text: string): Observable<Blob> {
     text = encodeURIComponent(text);
 
     const options = { text };
     const postParams = createQueryString(options);
-    const result$ = new ReplaySubject<Blob>(1);
+    const request$ = this.http
+      .post(AUDIO_API_URL, postParams, {
+        headers: AUDIO_HEADERS,
+        responseType: 'blob',
+      })
+      .pipe(retry(HTTP_RETRY_NUMBER), shareReplay(1));
 
-    this.subscriptions.set(
-      this.http
-        .post(AUDIO_API_URL, postParams, {
-          headers: AUDIO_HEADERS,
-          responseType: 'blob',
-        })
-        .pipe(retry(HTTP_RETRY_NUMBER))
-        .subscribe((blob: Blob) => {
-          result$.next(blob);
-        }),
-      result$
-    );
+    this.subscriptions[text] = request$.subscribe();
 
-    return result$;
+    return request$;
   }
 
   public cancelAllVoiceRequests(): void {
-    this.subscriptions.forEach(
-      (result: ReplaySubject<Blob>, http: Subscription) => {
-        http.unsubscribe();
-        result.unsubscribe();
-      }
+    Object.values(this.subscriptions).forEach((sub: Subscription) =>
+      sub.unsubscribe()
     );
-    this.subscriptions = new Map();
+    this.subscriptions = {};
   }
 
   public textToSpeech(text: string): Observable<Blob> {
-    if (!this.dictionary[text] || this.dictionary[text].closed) {
+    if (!this.dictionary[text] || this.subscriptions[text]?.closed) {
       this.dictionary[text] = this._getVoice(text);
     }
 
