@@ -1,18 +1,20 @@
-<mat-accordion>
-  <mat-expansion-panel>
-    <mat-expansion-panel-header (click)="loadBooks()">
-      <mat-panel-title [innerHTML]="author.fullName"></mat-panel-title>
-    </mat-expansion-panel-header>
-    @if (books.isLoading()) {
-    <loading-indicator></loading-indicator>
-    } @else {
-    <ul>
-      @for (book of books.value(); track book.id) {
-      <li>
-        <a href="/player/{{ book.id }}" [title]="book.name">{{ book.name }}</a>
-      </li>
-      }
-    </ul>
+<mat-expansion-panel>
+  <mat-expansion-panel-header
+    (click)="loadBooks()"
+    [collapsedHeight]="'2em'"
+    [expandedHeight]="'2em'"
+  >
+    <mat-panel-title [innerHTML]="author.fullName"></mat-panel-title>
+  </mat-expansion-panel-header>
+  @if (books.isLoading()) {
+  <loading-indicator></loading-indicator>
+  } @else {
+  <ul>
+    @for (book of books.value(); track book.id) {
+    <li>
+      <a href="/player/{{ book.id }}" [title]="book.name">{{ book.name }}</a>
+    </li>
     }
-  </mat-expansion-panel>
-</mat-accordion>
+  </ul>
+  }
+</mat-expansion-panel>

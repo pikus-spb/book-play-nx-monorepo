@@ -1,13 +1,14 @@
 @use 'vars' as *;
 
-mat-expansion-panel {
+::ng-deep mat-expansion-panel {
   width: 100%;
+  background-color: $default-highlight-color !important;
   border-radius: $default-border-radius;
-  background-color: $default-highlight-color;
 
   mat-expansion-panel-header {
-    height: $card-header-height;
-    padding: calc($default-padding / 2) $default-padding;
+    .mat-expansion-indicator {
+      height: 2em;
+    }
   }
 
   ul {

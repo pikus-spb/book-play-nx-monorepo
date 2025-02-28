@@ -1,9 +1,16 @@
 <div class="library-container">
-  <h1 loading [thenShow]="books">Авторы <span #loading></span></h1>
+  <h1 loading [thenShow]="books">
+    Авторы
+    <input
+      (input)="inputFilter($event)"
+      placeholder="Поиск по имени автора..."
+    />
+    <span #loading></span>
+  </h1>
   <ng-template #books>
     @if (data.value()) {
     <li-virtual-scroll
-      [items]="data.value()!"
+      [items]="viewData()!"
       [gridList]="true"
       [itemWidth]="250"
       [itemHeight]="50"

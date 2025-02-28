@@ -7,7 +7,6 @@ import {
   resource,
 } from '@angular/core';
 import {
-  MatAccordion,
   MatExpansionPanel,
   MatExpansionPanelHeader,
   MatExpansionPanelTitle,
@@ -23,7 +22,6 @@ import { LoadingIndicatorComponent } from '../../../../shared/components/loading
     MatExpansionPanel,
     MatExpansionPanelHeader,
     MatExpansionPanelTitle,
-    MatAccordion,
     LoadingIndicatorComponent,
   ],
   templateUrl: './author-books.component.html',

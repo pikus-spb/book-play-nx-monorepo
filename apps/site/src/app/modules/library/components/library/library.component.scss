@@ -14,15 +14,28 @@
 
     h1 {
       flex: 0 0;
+
+      input {
+        height: 100%;
+        padding: 0 $default-padding;
+        margin: 0 $default-padding;
+      }
     }
 
     .authors-books-grid {
       flex: 1 0;
       display: grid;
-      margin-top: $default-padding;
-      gap: $default-padding;
+      gap: calc($default-padding / 2);
       grid-template-columns: repeat(auto-fit, minmax($card-width, 1fr));
-      grid-template-rows: repeat(auto-fit, 1fr);
+      grid-template-rows: repeat(auto-fit, minmax(min-content, 1fr));
+      grid-auto-flow: dense;
+
+      ::ng-deep {
+        .virtual-spacer-before,
+        .virtual-spacer-after {
+          grid-column: 1 / -1;
+        }
+      }
     }
   }
 }

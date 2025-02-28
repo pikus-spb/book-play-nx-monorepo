@@ -4,6 +4,7 @@ import {
   Component,
   effect,
   resource,
+  signal,
 } from '@angular/core';
 import { Author } from '@book-play/models';
 import {
@@ -28,9 +29,11 @@ import { AuthorBooksComponent } from '../author-books/author-books.component';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LibraryComponent {
-  public data = resource<Author[], unknown>({
+  protected data = resource<Author[], { query: string }>({
     loader: () => this.booksApi.getAllAuthors(),
   });
+
+  protected viewData = signal<Author[]>([]);
 
   constructor(
     public booksApi: BooksApiService,
@@ -40,9 +43,19 @@ export class LibraryComponent {
       if (this.data.isLoading()) {
         this.eventStates.add(AppEventNames.loading);
       } else {
+        const data = this.data.value() ?? [];
+        this.viewData.set(data);
         this.eventStates.remove(AppEventNames.loading);
       }
     });
+  }
+
+  protected inputFilter(event: Event): void {
+    const value = (event.target as HTMLInputElement).value;
+    const data = (this.data.value() ?? []).filter(
+      (item) => item.fullName.toLowerCase().indexOf(value.toLowerCase()) > -1
+    );
+    this.viewData.set(data);
   }
 
   protected trackByFn(index: number, item: Author): string {
