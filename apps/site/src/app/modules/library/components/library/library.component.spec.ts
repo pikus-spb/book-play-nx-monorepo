@@ -85,10 +85,12 @@ describe('LibraryComponent', () => {
       booksApi.getAllAuthors.mockResolvedValue([] as Author[]);
 
       await fixture.whenStable();
+      // @ts-expect-error: data is protected
       component.data.reload();
       fixture.detectChanges();
 
       await new Promise((resolve) => setTimeout(resolve));
+      // @ts-expect-error: data is protected
       expect(component.data.value()).toEqual([]);
     });
 
@@ -107,10 +109,12 @@ describe('LibraryComponent', () => {
       booksApi.getAllAuthors.mockResolvedValue(mockData);
 
       await fixture.whenStable();
+      // @ts-expect-error: data is protected
       component.data.reload();
       fixture.detectChanges();
       await new Promise((resolve) => setTimeout(resolve));
 
+      // @ts-expect-error: data is protected
       expect(component.data.value()).toEqual(mockData);
     });
   });
@@ -120,10 +124,12 @@ describe('LibraryComponent', () => {
       booksApi.getAllAuthors.mockRejectedValue(new Error('API error'));
 
       await fixture.whenStable();
+      // @ts-expect-error: data is protected
       component.data.reload();
       fixture.detectChanges();
       await new Promise((resolve) => setTimeout(resolve));
 
+      // @ts-expect-error: data is protected
       expect(component.data.value()).toBeUndefined();
     });
   });
