@@ -26,9 +26,26 @@
       rel="stylesheet"
     />
   </head>
-  <body class="mat-body" onresize="fitVH()" onscroll="fitVH()">
+  <body
+    class="mat-body"
+    onresize="fitVH()"
+    onscroll="fitVH()"
+    onload="enableNoSleep()"
+  >
     <root class="mat-typography"></root>
     <script>
+      function enableNoSleep() {
+        const noSleep = new NoSleep();
+        document.addEventListener(
+          'click',
+          function enableNoSleep() {
+            document.removeEventListener('click', enableNoSleep, false);
+            noSleep.enable();
+          },
+          false
+        );
+      }
+
       function fitVH() {
         let vh = window.innerHeight * 0.01;
         document.documentElement.style.setProperty('--vh', `${vh}px`);

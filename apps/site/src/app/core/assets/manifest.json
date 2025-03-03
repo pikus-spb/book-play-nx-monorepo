@@ -9,5 +9,6 @@
       "type": "image/x-icon"
     }
   ],
+  "display": "standalone",
   "permissions": ["storage"]
 }

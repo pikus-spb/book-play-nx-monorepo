@@ -58,6 +58,7 @@
             "output": "/"
           }
         ],
+        "scripts": ["nosleep.js/dist/NoSleep.js"],
         "styles": [
           "@angular/material/prebuilt-themes/pink-bluegrey.css",
           "apps/site/src/app/core/styles/main.scss"
