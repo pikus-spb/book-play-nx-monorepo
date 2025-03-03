@@ -1,3 +1,4 @@
+import { BOOKS_API_PORT, CORS_ALLOWED_LIST } from '@book-play/constants';
 import cors from 'cors';
 import express from 'express';
 // import fs from 'fs';
@@ -10,14 +11,9 @@ import BooksAPIApp from './app';
 // const credentials = {key: privateKey, cert: certificate};
 
 const expressApp = express();
-const allowlist = [
-  'http://localhost:4200',
-  'http://192.168.31.200',
-  'https://book-play.ru',
-];
 
 function corsOptionsDelegate(req, callback): void {
-  if (allowlist.indexOf(req.header('Origin')) >= 0) {
+  if (CORS_ALLOWED_LIST.indexOf(req.header('Origin')) >= 0) {
     callback(null, { origin: true }); // reflect (enable) the requested origin in the CORS response
   } else {
     callback(null, { origin: false }); // disable CORS for this request
@@ -28,11 +24,10 @@ const httpServer = http.createServer(expressApp);
 // const httpsServer = https.createServer(credentials, expressApp);
 
 const app = new BooksAPIApp();
-const HTTP_APP_PORT = 8282;
 // const HTTPS_APP_PORT = 8443;
 
-httpServer.listen(HTTP_APP_PORT, () => {
-  console.log(`Web server is listening on port ${HTTP_APP_PORT}`);
+httpServer.listen(BOOKS_API_PORT, () => {
+  console.log(`Web server is listening on port ${BOOKS_API_PORT}`);
 });
 // httpsServer.listen(HTTPS_APP_PORT, () => {
 //     console.log(`Web server is listening on port ${HTTPS_APP_PORT}`);

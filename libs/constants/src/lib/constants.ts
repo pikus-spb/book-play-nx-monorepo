@@ -1,10 +1,16 @@
 // HTTP
 export const protocol = 'http:';
-const BOOKS_API_PORT = protocol === 'http:' ? 8282 : 8443;
+export const BOOKS_API_PORT = 8282;
+export const TTS_API_PORT = 8181;
 export const AUDIO_API_URL = 'http://192.168.31.200:8181/tts';
 export const BOOKS_API_URL = protocol + '//192.168.31.200:' + BOOKS_API_PORT;
 export const HTTP_RETRY_NUMBER = 3;
-
+export const CORS_ALLOWED_LIST = [
+  'http://localhost:4200',
+  'http://192.168.31.200',
+  'http://book-play.ru',
+  'https://book-play.ru',
+];
 // LIBRARY
 export const PARAGRAPH_CLASS_PREFIX = 'book-paragraph-';
 
