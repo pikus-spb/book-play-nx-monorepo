@@ -48,11 +48,12 @@ export type AuthorBooks = Record<string, Book[]>;
 export interface DBBook {
   id: string;
   first: string;
-  middle: string;
+  middle?: string;
   last: string;
   name: string;
+  annotation?: string;
   full: string;
-  cover: string;
+  cover?: string;
   paragraphs: string;
 }
 
@@ -60,6 +61,7 @@ export class Book {
   public id?: string;
   public author!: Author;
   public name!: string;
+  public annotation?: string;
   public cover?: ImageBase64Data;
   public paragraphs!: string[];
 

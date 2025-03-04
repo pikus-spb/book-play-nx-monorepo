@@ -10,7 +10,7 @@ export function cleanSpaces(text: string): string {
 }
 
 export function cleanHTMLAndCopyrights(text: string): string {
-  text = cleanSpaces(cleanHTML(text)).trim();
+  text = cleanSpaces(cleanFootnotes(cleanHTML(text))).trim();
   if (
     text.startsWith('©') ||
     text.match(/авторские права/gi) ||
@@ -30,6 +30,10 @@ export function cleanHTMLAndCopyrights(text: string): string {
   }
 
   return text;
+}
+
+export function cleanFootnotes(text: string): string {
+  return text.replace(/\[\d+\]/g, '');
 }
 
 export function cleanHTML(text: string): string {

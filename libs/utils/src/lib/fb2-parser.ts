@@ -66,10 +66,18 @@ export class Fb2Parser {
     return undefined;
   }
 
+  public getAnnotation($: CheerioAPI): string {
+    return ($('annotation').toArray() || [])
+      .map((item) => {
+        return cleanHTMLAndCopyrights($(item).text());
+      })
+      .filter((item) => item.length > 0)
+      .join(' ');
+  }
   public getParagraphs($: CheerioAPI): string[] {
     $('history').remove();
 
-    return $('body p')
+    return $('body p, poem')
       .toArray()
       .map((item) => {
         return cleanHTMLAndCopyrights($(item).text());
@@ -83,8 +91,9 @@ export class Fb2Parser {
     const cover = this.getCoverPicture($);
     const author = this.getAuthor($);
     const name = this.getBookName($);
+    const annotation = this.getAnnotation($);
     const paragraphs = this.getParagraphs($);
 
-    return new Book({ author, name, cover, paragraphs });
+    return new Book({ author, name, annotation, cover, paragraphs });
   }
 }

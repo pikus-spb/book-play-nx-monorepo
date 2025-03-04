@@ -20,6 +20,7 @@ export function UIBookToDBBook(input: Book): DBBook {
   return {
     id: input.id || '',
     name: input.name,
+    annotation: input.annotation,
     paragraphs: JSON.stringify(input.paragraphs),
     cover: input.cover?.toBase64String() || '',
     first: input.author.firstName,
