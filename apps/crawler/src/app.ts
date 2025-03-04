@@ -2,7 +2,7 @@ import { DB_CONFIG } from '@book-play/constants';
 import {
   containsLetters,
   Fb2Parser,
-  isInRussian,
+  isBookInRussian,
   UIBookToDBBook,
 } from '@book-play/utils';
 import fs from 'fs';
@@ -69,7 +69,7 @@ async function parseFiles(results: string[]) {
     try {
       const text = await readFile(file);
       const book = parser.parseBookFromString(text);
-      if (isInRussian(book.fullName) && containsLetters(book.author.fullName)) {
+      if (isBookInRussian(book) && containsLetters(book.author.fullName)) {
         await addToDataBase(pool, UIBookToDBBook(book))
           .then((name) => console.log('Added to database: ' + name))
           .catch((err) => console.error(err.message));

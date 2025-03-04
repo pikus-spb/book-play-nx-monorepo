@@ -1,4 +1,6 @@
+import { Book } from '@book-play/models';
 import { load } from 'cheerio';
+import LanguageDetect from 'languagedetect';
 
 export function cleanSpaces(text: string): string {
   return text
@@ -39,8 +41,22 @@ export function capitalizeFirstLetter(text: string): string {
   return String(text).charAt(0).toUpperCase() + String(text).slice(1);
 }
 
-export function isInRussian(text: string): boolean {
-  return /[а-яА-ЯЁё]/.test(text);
+export function detectLanguage(text: string): string {
+  const result = new LanguageDetect()
+    .detect(text, 3)
+    .sort((o1: [string, number], o2: [string, number]) => {
+      return o2[1] - o1[1];
+    });
+  return result[0]?.[0];
+}
+
+export function isBookInRussian(book: Book): boolean {
+  const textSample = book.paragraphs.slice(0, 1).join('');
+  return detectLanguage(textSample) === 'russian';
+}
+
+export function isTextInRussian(text: string): boolean {
+  return !/[^\w\s]*\b[^а-яА-Я]+\b[^\w\s]*/g.test(text);
 }
 
 export function containsLetters(text: string): boolean {
@@ -52,6 +68,6 @@ export function cleanNonRussianWords(text = ''): string {
 }
 
 export function findRussianIndex(text: string[]): number {
-  const found = text.find((item) => isInRussian(item));
+  const found = text.find((item) => isTextInRussian(item));
   return found ? text.indexOf(found) : -1;
 }

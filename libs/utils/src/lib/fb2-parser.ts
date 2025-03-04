@@ -6,7 +6,7 @@ import {
   cleanNonRussianWords,
   cleanSpaces,
   findRussianIndex,
-  isInRussian,
+  isTextInRussian,
 } from './cleanup-tools';
 
 export class Fb2Parser {
@@ -26,7 +26,7 @@ export class Fb2Parser {
     if (index !== -1) {
       return new Author({
         firstName: cleanNonRussianWords(first[index]),
-        middleName: isInRussian(middle[index])
+        middleName: isTextInRussian(middle[index])
           ? cleanNonRussianWords(middle[index])
           : '',
         lastName: cleanNonRussianWords(last[index]),

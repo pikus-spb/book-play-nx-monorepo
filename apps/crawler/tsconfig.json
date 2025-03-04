@@ -15,6 +15,7 @@
     "module": "ES2022",
     "types": ["node"],
     "moduleResolution": "node",
-    "allowImportingTsExtensions": true
+    "allowImportingTsExtensions": true,
+    "allowSyntheticDefaultImports": true
   }
 }
