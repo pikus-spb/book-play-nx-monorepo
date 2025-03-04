@@ -4,6 +4,8 @@ import express from 'express';
 import mysql, { PoolOptions } from 'mysql2';
 
 const pool = mysql.createPool(DB_CONFIG as unknown as PoolOptions);
+const TMP_FILE_EXTENTION = '.tmp.mp3';
+const MP3_FILE_EXTENTION = '.mp3';
 
 export default class BooksAPIApp {
   loadFromDb(text: string): Promise<any> {
@@ -67,7 +69,11 @@ export default class BooksAPIApp {
     });
   }
 
-  runTts(text: string, fileName: string, req: express.Request) {
+  runTts(
+    text: string,
+    fileName: string,
+    req: express.Request
+  ): Promise<string> {
     return new Promise((resolve, reject) => {
       text = text.replace(/"/g, '\\"').replace(/\.\s*$/, '');
       const args = [
@@ -77,16 +83,33 @@ export default class BooksAPIApp {
         '--rate',
         '+10%',
         '--write-media',
-        fileName,
+        fileName + TMP_FILE_EXTENTION,
         '--text',
         `"${text}"`,
       ];
-      const process = spawn('edge-tts', args, { detached: true });
+      const ttsProc = spawn('edge-tts', args, { detached: true });
 
-      this.killOnClose(req, process, reject);
+      this.killOnClose(req, ttsProc, reject);
 
-      process.on('close', () => {
-        setTimeout(() => resolve(fileName), 500);
+      ttsProc.on('close', () => {
+        const args = [
+          fileName + TMP_FILE_EXTENTION,
+          '-C',
+          '48',
+          fileName + MP3_FILE_EXTENTION,
+          'silence',
+          '-l',
+          '1',
+          '0.1',
+          '1%',
+          '-1',
+          '0.7',
+          '1%',
+        ];
+        const removeSilenceProc = spawn('sox', args, { detached: true });
+        removeSilenceProc.on('close', () => {
+          setTimeout(() => resolve(fileName + MP3_FILE_EXTENTION), 200);
+        });
       });
     });
   }
@@ -96,10 +119,10 @@ export default class BooksAPIApp {
     if (loadResult) {
       return loadResult.fileName;
     } else {
-      const fileName = __dirname + '/cache/part' + Date.now() + '.mp3';
+      const fileNamePrefix = __dirname + '/cache/part' + Date.now();
       try {
-        await this.runTts(text, fileName, req);
-        return this.saveToDb(text, fileName);
+        const resultFileName = await this.runTts(text, fileNamePrefix, req);
+        return this.saveToDb(text, resultFileName);
       } catch (e) {
         console.error(e);
         return '';
