@@ -24,7 +24,8 @@ export function cleanHTMLAndCopyrights(text: string): string {
     text.match(/Copyright ©/gi) ||
     text.match(/All rights reserved/gi) ||
     text.match(/Все права защищены/gi) ||
-    text.match(/litres|литрес/gi)
+    text.match(/litres|литрес/gi) ||
+    text.match(/fb2.top./gi)
   ) {
     return '';
   }
