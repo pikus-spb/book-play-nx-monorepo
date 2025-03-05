@@ -5,6 +5,7 @@ export function DBBookToUIBook(input: Partial<DBBook>): Book {
   const data = {
     id: input.id,
     name: input.name,
+    annotation: input.annotation,
     paragraphs: JSON.parse(input.paragraphs || '[]'),
     cover: ImageBase64Data.fromBase64String(input.cover || ''),
     author: new Author({

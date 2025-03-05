@@ -1,0 +1,30 @@
+<div *ngIf="book.value() as book">
+  <section>
+    <img
+      [src]="coverSrc()"
+      [width]="COVER_IMG_WIDTH"
+      [height]="COVER_IMG_HEIGHT"
+      priority
+      alt="Обложка книги"
+    />
+  </section>
+  <section>
+    <span>{{ book.author.fullName }}</span>
+    <span>«{{ book.name }}»</span>
+    <span>{{ book.annotation }}</span>
+    <div>
+      <button
+        mat-fab
+        extended="true"
+        color="success"
+        matTooltip="Слушать"
+        matTooltipPosition="below"
+        matTooltipShowDelay="1500"
+        (click)="playBook()"
+      >
+        <mat-icon>play_arrow</mat-icon>
+        Слушать
+      </button>
+    </div>
+  </section>
+</div>

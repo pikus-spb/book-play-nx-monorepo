@@ -2,14 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BOOKS_API_URL, HTTP_RETRY_NUMBER } from '@book-play/constants';
 
-import {
-  Author,
-  AuthorBooks,
-  Book,
-  DBAuthor,
-  DBAuthorBooks,
-  DBBook,
-} from '@book-play/models';
+import { Author, Book, DBAuthor, DBBook } from '@book-play/models';
 import { DBBookToUIBook } from '@book-play/utils';
 import { firstValueFrom, map, Observable, retry, shareReplay } from 'rxjs';
 
@@ -20,25 +13,6 @@ export class BooksApiService {
   private requestCache: Map<string, Observable<unknown>> = new Map();
 
   constructor(private http: HttpClient) {}
-
-  public getAllGroupedByAuthor(): Promise<AuthorBooks> {
-    const url = '/book/all/grouped-by-author';
-
-    return this.fromCache<AuthorBooks>(
-      url,
-      this.http.get<DBAuthorBooks>(BOOKS_API_URL + url).pipe(
-        map((data: DBAuthorBooks): AuthorBooks => {
-          const result = {} as AuthorBooks;
-          Object.keys(data).forEach((authorName) => {
-            result[authorName] = data[authorName].map(
-              (book: DBBook): Book => DBBookToUIBook(book)
-            );
-          });
-          return result;
-        })
-      ) as Observable<AuthorBooks>
-    );
-  }
 
   public getAllAuthors(): Promise<Author[]> {
     const url = '/author/all';
@@ -76,6 +50,15 @@ export class BooksApiService {
     );
   }
 
+  public getRandomIds(number = 3): Promise<string[]> {
+    const url = `/book/random-id/${number}`;
+
+    return this.fromCache<string[]>(
+      url,
+      this.http.get<string[]>(BOOKS_API_URL + url)
+    );
+  }
+
   public getAuthorBooks(authorName: string): Promise<Book[]> {
     const url = `/author/name/${authorName}/books`;
 
@@ -94,8 +77,8 @@ export class BooksApiService {
     );
   }
 
-  public getById(id: string): Promise<Book> {
-    const url = '/book/' + id;
+  public getBookById(id: string): Promise<Book> {
+    const url = '/book/id/' + id;
 
     return this.fromCache<Book>(
       url,

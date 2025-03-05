@@ -15,6 +15,9 @@ export const CORS_ALLOWED_LIST = [
 export const PARAGRAPH_CLASS_PREFIX = 'book-paragraph-';
 
 // SITE
+export const DEFAULT_COVER_SRC = '/assets/images/empty-cover.jpg';
+export const COVER_IMG_WIDTH = 200;
+export const COVER_IMG_HEIGHT = 300;
 export const DEFAULT_TITLE_PREFIX = 'Book-play.ru';
 export const DEFAULT_EMPTY_CONTEXT =
   'Бесплатное проигрывание книг голосом в формате fb2 онлайн';

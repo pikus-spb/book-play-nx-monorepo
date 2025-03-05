@@ -36,6 +36,21 @@ export default class BooksAPIApp {
       );
     });
   }
+  randomBookIds(number = '3'): Promise<string[]> {
+    return new Promise((resolve, reject) => {
+      pool.query(
+        `SELECT id FROM books ORDER BY RAND() LIMIT ${number}`,
+        (err, result: { id: string }[]) => {
+          if (err) {
+            console.error(err);
+            reject(err);
+          } else {
+            resolve(result.map((item) => item.id.toString()));
+          }
+        }
+      );
+    });
+  }
 
   authorBooks(name: string): Promise<Partial<DBBook>> {
     name = name.split(' ').join('');
@@ -53,10 +68,10 @@ export default class BooksAPIApp {
     });
   }
 
-  byId(id: string): Promise<DBBook> {
+  bookById(id: string): Promise<DBBook> {
     return new Promise((resolve, reject) => {
       pool.query(
-        `SELECT id, first, middle, last, name, full, cover, paragraphs  FROM books WHERE id = ${id}`,
+        `SELECT id, first, middle, last, name, annotation, full, cover, paragraphs FROM books WHERE id = ${id}`,
         (err, result: DBBook[]) => {
           if (err) {
             console.error(err);

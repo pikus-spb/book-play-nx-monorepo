@@ -6,6 +6,7 @@ import {
 import {
   ChangeDetectionStrategy,
   Component,
+  computed,
   ElementRef,
   EventEmitter,
   Input,
@@ -14,6 +15,11 @@ import {
   Signal,
   ViewChild,
 } from '@angular/core';
+import {
+  COVER_IMG_HEIGHT,
+  COVER_IMG_WIDTH,
+  DEFAULT_COVER_SRC,
+} from '@book-play/constants';
 import { Book } from '@book-play/models';
 import {
   DomHelperService,
@@ -59,6 +65,11 @@ export class BookCanvasComponent implements OnDestroy {
     this.domHelper.showActiveParagraph();
   }
 
+  public coverSrc = computed(() => {
+    const src = this.book()?.cover?.toBase64String();
+    return src ?? DEFAULT_COVER_SRC;
+  });
+
   public removeImage(event: Event): void {
     (event.target as HTMLImageElement).remove();
   }
@@ -80,4 +91,6 @@ export class BookCanvasComponent implements OnDestroy {
   }
 
   private destroyed$: Subject<void> = new Subject<void>();
+  protected readonly COVER_IMG_WIDTH = COVER_IMG_WIDTH;
+  protected readonly COVER_IMG_HEIGHT = COVER_IMG_HEIGHT;
 }

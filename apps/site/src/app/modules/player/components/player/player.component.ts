@@ -60,7 +60,7 @@ export class PlayerComponent {
         this.eventState.add(AppEventNames.loading);
         this.eventState.add(AppEventNames.contentLoading);
 
-        book = await this.booksApi.getById(id);
+        book = await this.booksApi.getBookById(id);
         this.activeBookService.update(book || null);
 
         this.eventState.remove(AppEventNames.contentLoading);

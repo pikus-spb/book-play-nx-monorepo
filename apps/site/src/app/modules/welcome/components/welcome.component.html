@@ -20,4 +20,10 @@
     <author-books [author]="author"></author-books>
     }
   </mat-accordion>
+
+  <p>&nbsp;</p>
+  <h2>3 случайных книги дня:</h2>
+  @for (id of ids.value(); track id) {
+  <book [id]="id"></book>
+  }
 </div>

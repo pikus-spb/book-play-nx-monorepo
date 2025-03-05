@@ -76,6 +76,7 @@ export class Fb2Parser {
   }
   public getParagraphs($: CheerioAPI): string[] {
     $('history').remove();
+    $('annotation').remove();
 
     return $('body p, poem')
       .toArray()

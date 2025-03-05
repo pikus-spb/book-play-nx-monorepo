@@ -39,7 +39,8 @@
       grid-gap: $default-padding * 1.5;
       grid-template-columns: repeat(auto-fit, minmax($card-width, 1fr));
       grid-template-rows: repeat(auto-fit, minmax(min-content, 1fr));
-      grid-auto-flow: dense;
+      align-content: start;
+      justify-content: start;
 
       ::ng-deep {
         .virtual-spacer-before,

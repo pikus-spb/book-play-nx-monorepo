@@ -20,7 +20,15 @@ export const APP_ROUTES: Route[] = [
         title: DEFAULT_TITLE,
       },
       {
-        path: 'player/:id',
+        path: 'book/:id',
+        loadComponent() {
+          return import(
+            '../../modules/book/components/book/book.component'
+          ).then((imported) => imported.BookComponent);
+        },
+      },
+      {
+        path: 'player',
         loadComponent() {
           return import(
             '../../modules/player/components/player/player.component'
@@ -28,7 +36,7 @@ export const APP_ROUTES: Route[] = [
         },
       },
       {
-        path: 'player',
+        path: 'player/:id',
         loadComponent() {
           return import(
             '../../modules/player/components/player/player.component'

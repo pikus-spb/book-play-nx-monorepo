@@ -76,10 +76,10 @@ expressApp.get(
   }
 );
 
-expressApp.get('/book/:id', cors(corsOptionsDelegate), (req, res) => {
+expressApp.get('/book/id/:id', cors(corsOptionsDelegate), (req, res) => {
   const id = req.params.id;
   app
-    .byId(id)
+    .bookById(id)
     .then((book) => {
       res.json(book);
     })
@@ -87,6 +87,21 @@ expressApp.get('/book/:id', cors(corsOptionsDelegate), (req, res) => {
       res.json(err);
     });
 });
+expressApp.get(
+  '/book/random-id/:number?',
+  cors(corsOptionsDelegate),
+  (req, res) => {
+    const number = req.params.number;
+    app
+      .randomBookIds(number)
+      .then((ids) => {
+        res.json(ids);
+      })
+      .catch((err) => {
+        res.json(err);
+      });
+  }
+);
 
 expressApp.get(
   '/book/all/search/:pattern',

@@ -12,7 +12,7 @@
   <ul>
     @for (book of books.value(); track book.id) {
     <li>
-      <a href="/player/{{ book.id }}" [title]="book.name">{{ book.name }}</a>
+      <a href="/book/{{ book.id }}" [title]="book.name">{{ book.name }}</a>
     </li>
     }
   </ul>

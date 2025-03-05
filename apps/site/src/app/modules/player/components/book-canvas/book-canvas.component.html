@@ -4,9 +4,9 @@
     <h1>{{ bookData.fullName }}</h1>
     <section class="title-picture-container">
       <img
-        *ngIf="bookData.cover"
-        [src]="bookData.cover.toBase64String()"
-        (error)="removeImage($event)"
+        [src]="coverSrc()"
+        [width]="COVER_IMG_WIDTH"
+        [height]="COVER_IMG_HEIGHT"
         alt="Обложка книги"
       />
     </section>
