@@ -100,10 +100,10 @@ export default class BooksAPIApp {
           'silence',
           '-l',
           '1',
-          '0.1',
+          '0.001',
           '1%',
           '-1',
-          '0.7',
+          '0.6',
           '1%',
         ];
         const removeSilenceProc = spawn('sox', args, { detached: true });
