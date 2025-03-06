@@ -27,6 +27,7 @@ import {
   HeightDelta,
   setupViewportScrollerService,
 } from '@book-play/services';
+import { showDefaultCoverImage } from '@book-play/utils';
 import { Subject } from 'rxjs';
 import { MaterialModule } from '../../../../core/modules/material.module';
 import { BookParagraphComponent } from '../book-paragraph/book-paragraph.component';
@@ -93,4 +94,5 @@ export class BookCanvasComponent implements OnDestroy {
   private destroyed$: Subject<void> = new Subject<void>();
   protected readonly COVER_IMG_WIDTH = COVER_IMG_WIDTH;
   protected readonly COVER_IMG_HEIGHT = COVER_IMG_HEIGHT;
+  protected readonly showDefaultCoverImage = showDefaultCoverImage;
 }

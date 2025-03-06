@@ -1,6 +1,7 @@
 @use 'vars' as *;
 
 .welcome-container {
+  display: block;
   padding: $default-padding 2 * $default-padding;
 
   section {
@@ -15,5 +16,11 @@
     display: block;
     max-width: $card-width * 2;
     margin: $default-padding 0;
+  }
+
+  book {
+    border: $default-border;
+    border-radius: $default-border-radius;
+    margin-bottom: $default-padding;
   }
 }

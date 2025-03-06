@@ -12,7 +12,7 @@
     border-radius: $default-border-radius;
 
     &.menu {
-      width: $main-menu-width - 2 * $default-padding;
+      width: calc($main-menu-width - 2 * $default-padding);
     }
   }
 

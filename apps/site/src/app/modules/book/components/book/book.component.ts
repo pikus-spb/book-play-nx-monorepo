@@ -23,6 +23,7 @@ import {
 } from '@book-play/constants';
 import { Book } from '@book-play/models';
 import { BooksApiService } from '@book-play/services';
+import { showDefaultCoverImage } from '@book-play/utils';
 import { firstValueFrom } from 'rxjs';
 
 @Component({
@@ -62,7 +63,7 @@ export class BookComponent implements AfterViewInit {
     return src ?? DEFAULT_COVER_SRC;
   });
 
-  protected playBook(): void {
+  public playBook(): void {
     this.router.navigateByUrl('/player/' + this.idSignal());
   }
 
@@ -78,4 +79,5 @@ export class BookComponent implements AfterViewInit {
   protected readonly COVER_IMG_WIDTH = COVER_IMG_WIDTH;
   protected readonly COVER_IMG_HEIGHT = COVER_IMG_HEIGHT;
   protected readonly FB2_GENRES = FB2_GENRES;
+  protected readonly showDefaultCoverImage = showDefaultCoverImage;
 }

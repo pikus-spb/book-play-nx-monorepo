@@ -9,6 +9,7 @@
           [width]="COVER_IMG_WIDTH"
           [height]="COVER_IMG_HEIGHT"
           alt="Обложка книги"
+          (error)="showDefaultCoverImage($event)"
         />
       </a>
     </section>

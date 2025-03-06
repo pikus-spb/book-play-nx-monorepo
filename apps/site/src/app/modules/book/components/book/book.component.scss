@@ -1,40 +1,56 @@
 @use 'vars' as *;
 
-:host > div {
-  padding: $default-padding * 2;
-  width: 100%;
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, max-content));
-  grid-gap: $default-padding;
+:host {
+  display: block;
+  padding-left: $default-padding;
+  max-width: $card-width * 3;
 
-  section:nth-child(2) {
-    display: flex;
-    flex-direction: column;
-    gap: $default-padding;
+  & > div {
+    display: block;
+    margin: $default-padding 0;
+    min-height: calc(300px + $default-padding * 2);
+    padding: $default-padding;
 
-    h1,
-    h2,
-    h3,
     h4 {
-      margin: 0;
+      display: inline-block;
     }
 
-    button {
-      border-radius: $default-border-radius;
+    img {
+      margin-right: $default-padding;
+      margin-bottom: $default-padding;
+      float: left;
     }
 
-    .annotation {
-      text-align: justify;
-    }
+    .content {
+      display: block;
 
-    ::ng-deep mat-chip-set > div {
-      align-items: center;
-      row-gap: $default-padding;
-      column-gap: calc($default-padding / 2);
-    }
+      button {
+        border-radius: $default-border-radius;
+      }
 
-    .date {
-      padding: calc($default-padding / 2);
+      .annotation {
+        display: inline-block;
+        text-align: justify;
+      }
+
+      ::ng-deep mat-chip-set {
+        margin-bottom: $default-padding;
+
+        & > div {
+          align-items: center;
+          row-gap: $default-padding;
+          column-gap: calc($default-padding / 2);
+        }
+      }
+
+      .date {
+        padding: calc($default-padding / 2);
+      }
+
+      .action-panel {
+        display: block;
+        margin-top: $default-padding;
+      }
     }
   }
 }

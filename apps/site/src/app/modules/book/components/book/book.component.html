@@ -1,14 +1,12 @@
 <div *ngIf="book.value() as book">
-  <section>
-    <img
-      [src]="coverSrc()"
-      [width]="COVER_IMG_WIDTH"
-      [height]="COVER_IMG_HEIGHT"
-      priority
-      alt="Обложка книги"
-    />
-  </section>
-  <section>
+  <img
+    [src]="coverSrc()"
+    [width]="COVER_IMG_WIDTH"
+    [height]="COVER_IMG_HEIGHT"
+    (error)="showDefaultCoverImage($event)"
+    alt="Обложка книги"
+  />
+  <div class="content">
     <h4>{{ book.author.fullName }}</h4>
     <h2>{{ book.name }}</h2>
 
@@ -21,7 +19,8 @@
     </mat-chip-set>
 
     <span class="annotation">{{ book.annotation }}</span>
-    <div>
+
+    <div class="action-panel">
       <button
         mat-fab
         extended="true"
@@ -35,5 +34,5 @@
         Слушать
       </button>
     </div>
-  </section>
+  </div>
 </div>
