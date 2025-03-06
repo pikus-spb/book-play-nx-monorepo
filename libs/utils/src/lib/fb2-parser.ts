@@ -86,6 +86,30 @@ export class Fb2Parser {
       .filter((item) => item.length > 0);
   }
 
+  public getGenres($: CheerioAPI): string[] {
+    const genres = $('genre')
+      .toArray()
+      .map((item) => {
+        return $(item).text() || '';
+      })
+      .filter((item) => item.length > 0);
+
+    return [...new Set(genres)];
+  }
+
+  public getDate($: CheerioAPI): string {
+    return (
+      $('date')
+        .toArray()
+        .map((item) => {
+          return $(item)
+            .text()
+            .match(/(\d{4})/)?.[1]; // get year only
+        })
+        .filter(Boolean)[0] ?? ''
+    );
+  }
+
   public parseBookFromString(text: string): Book {
     const $ = load(text);
 
@@ -93,8 +117,18 @@ export class Fb2Parser {
     const author = this.getAuthor($);
     const name = this.getBookName($);
     const annotation = this.getAnnotation($);
+    const genres = this.getGenres($);
+    const date = this.getDate($);
     const paragraphs = this.getParagraphs($);
 
-    return new Book({ author, name, annotation, cover, paragraphs });
+    return new Book({
+      author,
+      name,
+      annotation,
+      genres,
+      date,
+      cover,
+      paragraphs,
+    });
   }
 }

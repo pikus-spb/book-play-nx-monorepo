@@ -11,6 +11,7 @@ import {
   WritableSignal,
 } from '@angular/core';
 import { MatFabButton } from '@angular/material/button';
+import { MatChip, MatChipSet } from '@angular/material/chips';
 import { MatIcon } from '@angular/material/icon';
 import { MatTooltip } from '@angular/material/tooltip';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -18,6 +19,7 @@ import {
   COVER_IMG_HEIGHT,
   COVER_IMG_WIDTH,
   DEFAULT_COVER_SRC,
+  FB2_GENRES,
 } from '@book-play/constants';
 import { Book } from '@book-play/models';
 import { BooksApiService } from '@book-play/services';
@@ -28,7 +30,14 @@ import { firstValueFrom } from 'rxjs';
   templateUrl: './book.component.html',
   styleUrls: ['./book.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [CommonModule, MatFabButton, MatIcon, MatTooltip],
+  imports: [
+    CommonModule,
+    MatFabButton,
+    MatIcon,
+    MatTooltip,
+    MatChipSet,
+    MatChip,
+  ],
 })
 export class BookComponent implements AfterViewInit {
   @Input() id: string | null = null;
@@ -68,4 +77,5 @@ export class BookComponent implements AfterViewInit {
 
   protected readonly COVER_IMG_WIDTH = COVER_IMG_WIDTH;
   protected readonly COVER_IMG_HEIGHT = COVER_IMG_HEIGHT;
+  protected readonly FB2_GENRES = FB2_GENRES;
 }

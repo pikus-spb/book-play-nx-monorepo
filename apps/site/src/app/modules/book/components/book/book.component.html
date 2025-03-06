@@ -9,9 +9,18 @@
     />
   </section>
   <section>
-    <span>{{ book.author.fullName }}</span>
-    <span>«{{ book.name }}»</span>
-    <span>{{ book.annotation }}</span>
+    <h4>{{ book.author.fullName }}</h4>
+    <h2>{{ book.name }}</h2>
+
+    <mat-chip-set aria-label="Жанры">
+      @for (genre of book.genres; track genre) {
+      <mat-chip *ngIf="FB2_GENRES[genre]">{{ FB2_GENRES[genre] }}</mat-chip>
+      } @if (book.date) {
+      <span class="date">{{ book.date }}г.</span>
+      }
+    </mat-chip-set>
+
+    <span class="annotation">{{ book.annotation }}</span>
     <div>
       <button
         mat-fab

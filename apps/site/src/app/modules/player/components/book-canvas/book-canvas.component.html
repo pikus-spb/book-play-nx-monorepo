@@ -3,12 +3,14 @@
   <div class="scrollable-canvas" cdkVirtualScrollingElement>
     <h1>{{ bookData.fullName }}</h1>
     <section class="title-picture-container">
-      <img
-        [src]="coverSrc()"
-        [width]="COVER_IMG_WIDTH"
-        [height]="COVER_IMG_HEIGHT"
-        alt="Обложка книги"
-      />
+      <a [href]="'/book/' + bookData.id" title="Посмотреть описание книги">
+        <img
+          [src]="coverSrc()"
+          [width]="COVER_IMG_WIDTH"
+          [height]="COVER_IMG_HEIGHT"
+          alt="Обложка книги"
+        />
+      </a>
     </section>
 
     <cdk-virtual-scroll-viewport

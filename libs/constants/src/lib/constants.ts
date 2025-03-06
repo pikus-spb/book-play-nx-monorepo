@@ -13,7 +13,6 @@ export const CORS_ALLOWED_LIST = [
 ];
 // LIBRARY
 export const PARAGRAPH_CLASS_PREFIX = 'book-paragraph-';
-
 // SITE
 export const DEFAULT_COVER_SRC = '/assets/images/empty-cover.jpg';
 export const COVER_IMG_WIDTH = 200;

@@ -42,9 +42,6 @@ export class Author {
   }
 }
 
-export type DBAuthorBooks = Record<string, DBBook[]>;
-export type AuthorBooks = Record<string, Book[]>;
-
 export interface DBBook {
   id: string;
   first: string;
@@ -52,6 +49,8 @@ export interface DBBook {
   last: string;
   name: string;
   annotation?: string;
+  genres?: string;
+  date?: string;
   full: string;
   cover?: string;
   paragraphs: string;
@@ -62,6 +61,8 @@ export class Book {
   public author!: Author;
   public name!: string;
   public annotation?: string;
+  public genres?: string[];
+  public date?: string;
   public cover?: ImageBase64Data;
   public paragraphs!: string[];
 
