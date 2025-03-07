@@ -18,7 +18,6 @@
     "@lithiumjs/angular": "^8.0.1",
     "@lithiumjs/ngx-virtual-scroll": "^0.3.3",
     "cheerio": "^1.0.0",
-    "languagedetect": "^2.0.0",
     "mysql2": "^3.12.0",
     "nosleep.js": "^0.12.0",
     "rxjs": "~7.8.0",

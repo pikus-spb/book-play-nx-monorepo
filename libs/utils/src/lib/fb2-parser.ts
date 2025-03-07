@@ -110,9 +110,22 @@ export class Fb2Parser {
     );
   }
 
-  public parseBookFromString(text: string): Book {
-    const $ = load(text);
+  public load(text: string): CheerioAPI {
+    return load(text);
+  }
 
+  public parseLanguage($: CheerioAPI): string {
+    const langElement = $('lang');
+
+    let result = '';
+    if (langElement.length > 0) {
+      result = $(langElement[0]).text();
+    }
+
+    return result;
+  }
+
+  public parseBookFromLoaded($: CheerioAPI): Book {
     const cover = this.getCoverPicture($);
     const author = this.getAuthor($);
     const name = this.getBookName($);

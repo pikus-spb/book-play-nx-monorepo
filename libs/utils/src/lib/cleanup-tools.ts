@@ -1,6 +1,4 @@
-import { Book } from '@book-play/models';
 import { load } from 'cheerio';
-import LanguageDetect from 'languagedetect';
 
 export function cleanSpaces(text: string): string {
   return text
@@ -44,20 +42,6 @@ export function cleanHTML(text: string): string {
 export function capitalizeFirstLetter(text: string): string {
   text = text.toLowerCase();
   return String(text).charAt(0).toUpperCase() + String(text).slice(1);
-}
-
-export function detectLanguage(text: string): string {
-  const result = new LanguageDetect()
-    .detect(text, 3)
-    .sort((o1: [string, number], o2: [string, number]) => {
-      return o2[1] - o1[1];
-    });
-  return result[0]?.[0];
-}
-
-export function isBookInRussian(book: Book): boolean {
-  const textSample = book.paragraphs.slice(0, 1).join('');
-  return detectLanguage(textSample) === 'russian';
 }
 
 export function isTextInRussian(text: string): boolean {

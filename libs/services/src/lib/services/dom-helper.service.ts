@@ -24,7 +24,7 @@ export class DomHelperService implements OnDestroy {
     private scrollPositionHelper: ScrollPositionHelperService
   ) {}
 
-  private attachScrollingEvent() {
+  private updateActiveParagraphCSSOnScroll() {
     if (viewportScroller) {
       // Delete previous subscription
       if (this.viewportScrolled$) {
@@ -66,7 +66,7 @@ export class DomHelperService implements OnDestroy {
     }
 
     if (viewportScroller) {
-      this.attachScrollingEvent(); // TODO: find a better place
+      this.updateActiveParagraphCSSOnScroll();
     }
   };
 

@@ -1,10 +1,5 @@
 import { DB_CONFIG } from '@book-play/constants';
-import {
-  containsLetters,
-  Fb2Parser,
-  isBookInRussian,
-  UIBookToDBBook,
-} from '@book-play/utils';
+import { containsLetters, Fb2Parser, UIBookToDBBook } from '@book-play/utils';
 import fs from 'fs';
 import mysql, { PoolOptions } from 'mysql2';
 import path from 'path';
@@ -68,11 +63,22 @@ async function parseFiles(results: string[]) {
   for (const file of results) {
     try {
       const text = await readFile(file);
-      const book = parser.parseBookFromString(text);
-      if (isBookInRussian(book) && containsLetters(book.author.fullName)) {
-        await addToDataBase(pool, UIBookToDBBook(book))
-          .then((name) => console.log('Added to database: ' + name))
-          .catch((err) => console.error(err.message));
+      const loaded = parser.load(text);
+      const lang = parser.parseLanguage(loaded);
+      if (lang === 'ru') {
+        const book = parser.parseBookFromLoaded(loaded);
+        if (
+          [book.name, book.author.firstName, book.author.lastName].every(
+            (item) => containsLetters(item)
+          ) &&
+          book.paragraphs.length > 0
+        ) {
+          await addToDataBase(pool, UIBookToDBBook(book))
+            .then((name) => console.log('Added to database: ' + name))
+            .catch((err) => console.error(err.message));
+        }
+      } else {
+        console.log(`${file} - skipping because in [${lang}]`);
       }
     } catch (e) {
       console.error(e);

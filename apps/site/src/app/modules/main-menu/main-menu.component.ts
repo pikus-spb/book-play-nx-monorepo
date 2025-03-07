@@ -1,14 +1,13 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  computed,
   effect,
   inject,
-  OnInit,
   ViewChild,
 } from '@angular/core';
 import { MatListItem } from '@angular/material/list';
 import { RouterModule } from '@angular/router';
-import { Book } from '@book-play/models';
 import {
   ActiveBookService,
   AppEventNames,
@@ -26,10 +25,24 @@ import { UploadFileDirective } from '../../shared/directives/file-upload/upload-
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [RouterModule, MaterialModule, UploadFileDirective],
 })
-export class MainMenuComponent implements OnInit {
+export class MainMenuComponent {
   @ViewChild('uploadButton') uploadButton?: MatListItem;
 
   public activeBookService = inject(ActiveBookService);
+  public activeBookPresent = computed(async () => {
+    const book = this.activeBookService.book();
+
+    if (book) {
+      return true;
+    } else {
+      const data = await this.indexedDbStorageService.get();
+      if (data && data.content.length > 0) {
+        return true;
+      }
+    }
+
+    return false;
+  });
 
   private indexedDbStorageService = inject(IndexedDbBookStorageService);
   private fileReaderService = inject(FileReaderService);
@@ -45,14 +58,5 @@ export class MainMenuComponent implements OnInit {
 
   fileUploaded(files?: FileList) {
     this.fileReaderService.parseNewFile(files);
-  }
-
-  public ngOnInit() {
-    this.indexedDbStorageService.get().then((data) => {
-      if (data && data.content.length > 0) {
-        const book = new Book(JSON.parse(data.content));
-        this.activeBookService.update(book || null);
-      }
-    });
   }
 }

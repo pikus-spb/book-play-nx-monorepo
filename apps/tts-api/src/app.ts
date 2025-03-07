@@ -11,7 +11,10 @@ export default class BooksAPIApp {
   loadFromDb(text: string): Promise<any> {
     return new Promise((resolve, reject) => {
       pool.query(
-        `SELECT fileName, used FROM audiocache WHERE text = "${text}"`,
+        `SELECT fileName, used FROM audiocache WHERE text = "${text.replace(
+          /"/g,
+          '\\"'
+        )}"`,
         (err, result) => {
           if (err) {
             console.error(err);
@@ -21,7 +24,7 @@ export default class BooksAPIApp {
             pool.query(
               `UPDATE audiocache
                          SET used = ${used}
-                         WHERE text = "${text}"`,
+                         WHERE text = "${text.replace(/"/g, '\\"')}"`,
               (err2) => {
                 if (err) {
                   console.error(err2);
@@ -75,7 +78,7 @@ export default class BooksAPIApp {
     req: express.Request
   ): Promise<string> {
     return new Promise((resolve, reject) => {
-      text = text.replace(/"/g, '\\"').replace(/\.\s*$/, '');
+      text = text.replace(/\.\s*$/, '');
       const args = [
         '--voice',
         'ru-RU-DmitryNeural',
