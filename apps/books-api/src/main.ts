@@ -1,4 +1,8 @@
-import { BOOKS_API_PORT, CORS_ALLOWED_LIST } from '@book-play/constants';
+import {
+  BOOKS_API_PORT,
+  BOOKS_JSON_PATH,
+  CORS_ALLOWED_LIST,
+} from '@book-play/constants';
 import cors from 'cors';
 import express from 'express';
 // import fs from 'fs';
@@ -76,17 +80,31 @@ expressApp.get(
   }
 );
 
-expressApp.get('/book/id/:id', cors(corsOptionsDelegate), (req, res) => {
-  const id = req.params.id;
-  app
-    .bookById(id)
-    .then((book) => {
-      res.json(book);
-    })
-    .catch((err) => {
+expressApp.get(
+  '/book/id/:id',
+  cors(corsOptionsDelegate),
+  (req: express.Request, res: express.Response) => {
+    const id = req.params.id;
+    res.sendFile(BOOKS_JSON_PATH + id + '.json', (err) => {
       res.json(err);
     });
-});
+  }
+);
+expressApp.get(
+  '/book/id/:id/summary',
+  cors(corsOptionsDelegate),
+  (req, res) => {
+    const id = req.params.id;
+    app
+      .bookSummaryById(id)
+      .then((book) => {
+        res.json(book);
+      })
+      .catch((err) => {
+        res.json(err);
+      });
+  }
+);
 expressApp.get(
   '/book/random-id/:number?',
   cors(corsOptionsDelegate),

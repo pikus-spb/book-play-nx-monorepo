@@ -68,10 +68,10 @@ export default class BooksAPIApp {
     });
   }
 
-  bookById(id: string): Promise<DBBook> {
+  bookSummaryById(id: string): Promise<DBBook> {
     return new Promise((resolve, reject) => {
       pool.query(
-        `SELECT id, first, middle, last, name, annotation, genres, date, full, cover, paragraphs FROM books WHERE id = ${id}`,
+        `SELECT id, first, middle, last, name, annotation, genres, date, full, cover FROM books WHERE id = ${id}`,
         (err, result: DBBook[]) => {
           if (err) {
             console.error(err);

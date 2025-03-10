@@ -27,7 +27,7 @@ import {
   HeightDelta,
   setupViewportScrollerService,
 } from '@book-play/services';
-import { showDefaultCoverImage } from '@book-play/utils';
+import { showDefaultCoverImage } from '@book-play/utils-browser';
 import { Subject } from 'rxjs';
 import { MaterialModule } from '../../../../core/modules/material.module';
 import { BookParagraphComponent } from '../book-paragraph/book-paragraph.component';

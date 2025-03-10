@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { BOOKS_API_URL, HTTP_RETRY_NUMBER } from '@book-play/constants';
 
 import { Author, Book, DBAuthor, DBBook } from '@book-play/models';
-import { DBBookToUIBook } from '@book-play/utils';
+import { DBBookToUIBook } from '@book-play/utils-browser';
 import { firstValueFrom, map, Observable, retry, shareReplay } from 'rxjs';
 
 @Injectable({
@@ -79,6 +79,19 @@ export class BooksApiService {
 
   public getBookById(id: string): Promise<Book> {
     const url = '/book/id/' + id;
+
+    return this.fromCache<Book>(
+      url,
+      this.http.get<DBBook>(BOOKS_API_URL + url).pipe(
+        map((book: DBBook) => {
+          return DBBookToUIBook(book);
+        })
+      )
+    );
+  }
+
+  public getBookSummaryById(id: string): Promise<Book> {
+    const url = `/book/id/${id}/summary`;
 
     return this.fromCache<Book>(
       url,

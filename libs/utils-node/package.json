@@ -1,0 +1,12 @@
+{
+  "name": "@book-play/utils-node",
+  "version": "0.0.1",
+  "private": true,
+  "type": "node",
+  "main": "./src/index.js",
+  "types": "./src/index.d.ts",
+  "dependencies": {
+    "tslib": "^2.3.0",
+    "windows-1251": "^3.0.4"
+  }
+}

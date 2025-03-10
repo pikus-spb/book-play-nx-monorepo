@@ -1,10 +1,15 @@
 import { DB_CONFIG } from '@book-play/constants';
-import { containsLetters, Fb2Parser, UIBookToDBBook } from '@book-play/utils';
+import {
+  containsLetters,
+  Fb2Parser,
+  UIBookToDBBook,
+} from '@book-play/utils-browser';
+import { readFile, writeToFile } from '@book-play/utils-node';
+
 import fs from 'fs';
 import mysql, { PoolOptions } from 'mysql2';
 import path from 'path';
 import { saveToDataBase } from './db';
-import { readFile, writeToFile } from './fs';
 
 export function run() {
   console.log('Start looking for books....');
@@ -84,7 +89,7 @@ async function parseFiles(results: string[]) {
             console.log('Added to database: ' + book.name);
 
             const fileName = await writeToFile(
-              JSON.stringify(book),
+              JSON.stringify(UIBookToDBBook(book)),
               __dirname + '/books-json/' + insertedId + '.json'
             ).catch((err) => console.error(err.message));
 

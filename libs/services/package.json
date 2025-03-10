@@ -10,7 +10,7 @@
     "dexie": "^4.0.11",
     "@book-play/models": "^0.0.1",
     "@book-play/constants": "^0.0.1",
-    "@book-play/utils": "0.0.1"
+    "@book-play/utils-browser": "0.0.1"
   },
   "sideEffects": false
 }

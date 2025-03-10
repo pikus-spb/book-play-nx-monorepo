@@ -11,7 +11,7 @@ import {
   EventsStateService,
   TtsApiService,
 } from '@book-play/services';
-import { blobToBase64 } from '@book-play/utils';
+import { blobToBase64 } from '@book-play/utils-browser';
 import {
   BehaviorSubject,
   distinctUntilChanged,

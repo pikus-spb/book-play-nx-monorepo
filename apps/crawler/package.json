@@ -3,9 +3,9 @@
   "version": "0.0.1",
   "dependencies": {
     "@book-play/constants": "0.0.1",
-    "@book-play/utils": "0.0.1",
+    "@book-play/utils-node": "0.0.1",
     "@book-play/models": "0.0.1",
     "mysql2": "^3.12.0",
-    "windows-1251": "^3.0.4"
+    "@book-play/utils-browser": "0.0.1"
   }
 }

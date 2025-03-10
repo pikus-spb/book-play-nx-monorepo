@@ -2,7 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AUDIO_API_URL, HTTP_RETRY_NUMBER } from '@book-play/constants';
 
-import { createQueryString } from '@book-play/utils';
+import { createQueryString } from '@book-play/utils-browser';
 import { Observable, retry, shareReplay, Subscription } from 'rxjs';
 
 const AUDIO_HEADERS = new HttpHeaders({

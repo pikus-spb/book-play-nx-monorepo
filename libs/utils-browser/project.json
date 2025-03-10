@@ -1,0 +1,26 @@
+{
+  "name": "utils-browser",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/utils-browser/src",
+  "projectType": "library",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/utils-browser",
+        "main": "libs/utils-browser/src/index.ts",
+        "tsConfig": "libs/utils-browser/tsconfig.lib.json",
+        "assets": ["libs/utils-browser/*.md"]
+      }
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "libs/utils-browser/jest.config.ts"
+      }
+    }
+  }
+}

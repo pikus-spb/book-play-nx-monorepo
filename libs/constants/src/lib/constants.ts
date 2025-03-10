@@ -26,4 +26,4 @@ export const DEFAULT_TITLE = [DEFAULT_TITLE_PREFIX, DEFAULT_EMPTY_CONTEXT].join(
 );
 // BOOKS CRAWLER
 export const LOGO_MAX_LENGTH = 1000000;
-export const BOOKS_JSON_PATH = '~/add-books/books-json/';
+export const BOOKS_JSON_PATH = '/home/petr/add-books/books-json/';

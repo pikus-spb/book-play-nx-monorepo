@@ -1,5 +1,5 @@
 import { effect, Injectable } from '@angular/core';
-import { blobToBase64 } from '@book-play/utils';
+import { blobToBase64 } from '@book-play/utils-browser';
 import { first, firstValueFrom, Observable, switchMap, tap } from 'rxjs';
 
 import { ActiveBookService } from './active-book.service';

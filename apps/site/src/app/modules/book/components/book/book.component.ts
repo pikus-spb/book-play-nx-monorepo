@@ -23,7 +23,7 @@ import {
 } from '@book-play/constants';
 import { Book } from '@book-play/models';
 import { BooksApiService } from '@book-play/services';
-import { showDefaultCoverImage } from '@book-play/utils';
+import { showDefaultCoverImage } from '@book-play/utils-browser';
 import { firstValueFrom } from 'rxjs';
 
 @Component({
@@ -52,7 +52,7 @@ export class BookComponent implements AfterViewInit {
     request: () => this.idSignal(),
     loader: ({ request }) => {
       if (request !== null) {
-        return this.booksApiService.getBookById(request);
+        return this.booksApiService.getBookSummaryById(request);
       }
       return Promise.resolve(null);
     },

@@ -10,6 +10,7 @@ export default [
   {
     files: ['**/*.ts', '**/*.tsx', '**/*.js', '**/*.jsx'],
     rules: {
+      '@nx/dependency-checks': 'off',
       '@nx/enforce-module-boundaries': [
         'error',
         {

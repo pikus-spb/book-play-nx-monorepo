@@ -18,7 +18,8 @@
       "@book-play/constants": ["libs/constants/src/index.ts"],
       "@book-play/models": ["libs/models/src/index.ts"],
       "@book-play/services": ["libs/services/src/index.ts"],
-      "@book-play/utils": ["libs/utils/src/index.ts"]
+      "@book-play/utils-browser": ["libs/utils-browser/src/index.ts"],
+      "@book-play/utils-node": ["libs/utils-node/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

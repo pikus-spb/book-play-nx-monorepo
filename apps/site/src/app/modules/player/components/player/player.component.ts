@@ -17,7 +17,7 @@ import {
   EventsStateService,
   IndexedDbBookStorageService,
 } from '@book-play/services';
-import { setWindowsTitleWithContext } from '@book-play/utils';
+import { setWindowsTitleWithContext } from '@book-play/utils-browser';
 import { firstValueFrom } from 'rxjs';
 import { MaterialModule } from '../../../../core/modules/material.module';
 import { BookCanvasComponent } from '../book-canvas/book-canvas.component';
