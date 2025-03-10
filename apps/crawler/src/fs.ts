@@ -25,3 +25,16 @@ export function readFile(file: string): Promise<string> {
     });
   });
 }
+
+export function writeToFile(text: string, file: string): Promise<string> {
+  return new Promise((resolve, reject) => {
+    fs.writeFile(file, text, (err: Error) => {
+      if (err) {
+        console.error(err);
+        reject(err);
+      } else {
+        resolve(file);
+      }
+    });
+  });
+}

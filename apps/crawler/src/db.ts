@@ -1,11 +1,12 @@
 import { DBBook } from '@book-play/models';
 import { Pool } from 'mysql2';
+import { ResultSetHeader } from 'mysql2/typings/mysql/lib/protocol/packets/ResultSetHeader';
 
-export function addToDataBase(pool: Pool, book: DBBook): Promise<string> {
+export function saveToDataBase(pool: Pool, book: DBBook): Promise<string> {
   return new Promise((resolve, reject) => {
     pool.query(
-      'INSERT INTO books (first, middle, last, name, annotation, genres, date, full, cover, paragraphs)' +
-        ' VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+      'INSERT INTO books (first, middle, last, name, annotation, genres, date, full, cover)' +
+        ' VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
       [
         book.first,
         book.middle || '',
@@ -16,13 +17,12 @@ export function addToDataBase(pool: Pool, book: DBBook): Promise<string> {
         book.date || '',
         book.full,
         book.cover || '',
-        book.paragraphs,
       ],
-      (err: Error) => {
+      (err: Error, result: ResultSetHeader) => {
         if (err) {
           reject(err);
         } else {
-          resolve(book.full);
+          resolve(result.insertId.toString());
         }
       }
     );

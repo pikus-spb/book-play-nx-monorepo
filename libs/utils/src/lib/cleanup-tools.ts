@@ -49,7 +49,7 @@ export function isTextInRussian(text: string): boolean {
 }
 
 export function containsLetters(text: string): boolean {
-  return /\S+/.test(text);
+  return /\S+/.test((text || '').trim());
 }
 
 export function cleanNonRussianWords(text = ''): string {

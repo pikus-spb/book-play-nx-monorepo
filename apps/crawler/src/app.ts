@@ -3,8 +3,8 @@ import { containsLetters, Fb2Parser, UIBookToDBBook } from '@book-play/utils';
 import fs from 'fs';
 import mysql, { PoolOptions } from 'mysql2';
 import path from 'path';
-import { addToDataBase } from './db';
-import { readFile } from './fs';
+import { saveToDataBase } from './db';
+import { readFile, writeToFile } from './fs';
 
 export function run() {
   console.log('Start looking for books....');
@@ -65,20 +65,40 @@ async function parseFiles(results: string[]) {
       const text = await readFile(file);
       const loaded = parser.load(text);
       const lang = parser.parseLanguage(loaded);
+      const book = parser.parseBookFromLoaded(loaded);
       if (lang === 'ru') {
-        const book = parser.parseBookFromLoaded(loaded);
         if (
           [book.name, book.author.firstName, book.author.lastName].every(
             (item) => containsLetters(item)
           ) &&
           book.paragraphs.length > 0
         ) {
-          await addToDataBase(pool, UIBookToDBBook(book))
-            .then((name) => console.log('Added to database: ' + name))
-            .catch((err) => console.error(err.message));
+          const insertedId = await saveToDataBase(
+            pool,
+            UIBookToDBBook(book)
+          ).catch((err) => {
+            console.error(err.message);
+          });
+
+          if (insertedId) {
+            console.log('Added to database: ' + book.name);
+
+            const fileName = await writeToFile(
+              JSON.stringify(book),
+              __dirname + '/books-json/' + insertedId + '.json'
+            ).catch((err) => console.error(err.message));
+
+            if (fileName) {
+              console.log('Saved json file: ' + insertedId + '.json\n');
+            }
+          }
         }
       } else {
-        console.log(`${file} - skipping because in [${lang}]`);
+        console.log(
+          `Skipping "${
+            book.name
+          }" because in [ ${lang.toUpperCase()} ] language`
+        );
       }
     } catch (e) {
       console.error(e);
