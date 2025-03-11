@@ -17,12 +17,18 @@ export class PlayerButtonComponent {
   constructor(public autoPlay: AutoPlayService) {}
 
   @HostListener('document:keydown.Space', ['$event'])
-  public click(event: Event) {
+  public click(event: Event, start?: boolean) {
     const node = event.target as HTMLElement;
     if (node) {
       if (!['input', 'textarea'].includes(node.nodeName.toLowerCase())) {
         event.preventDefault();
-        this.autoPlay.toggle();
+        if (start === undefined) {
+          this.autoPlay.toggle();
+        } else if (start) {
+          this.autoPlay.start();
+        } else {
+          this.autoPlay.stop();
+        }
       }
     }
   }

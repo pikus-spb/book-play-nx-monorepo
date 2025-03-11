@@ -1,0 +1,8 @@
+@use 'vars' as *;
+
+:host {
+  img {
+    display: block;
+    margin: $default-padding-px calc(2 * $default-padding-px);
+  }
+}

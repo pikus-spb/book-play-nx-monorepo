@@ -1,6 +1,9 @@
+@use 'mixins' as *;
+
 // == Sizes ==
 // - Paddings
 $default-padding: 1rem;
+$default-padding-px: toPx(1);
 $default-border-width: 1px;
 // - Geometry
 $default-border-radius: 10px;

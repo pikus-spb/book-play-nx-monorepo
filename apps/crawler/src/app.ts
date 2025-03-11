@@ -3,7 +3,7 @@ import {
   containsLetters,
   Fb2Parser,
   UIBookToDBBook,
-} from '@book-play/utils-browser';
+} from '@book-play/utils-common';
 import { readFile, writeToFile } from '@book-play/utils-node';
 
 import fs from 'fs';
@@ -78,18 +78,17 @@ async function parseFiles(results: string[]) {
           ) &&
           book.paragraphs.length > 0
         ) {
-          const insertedId = await saveToDataBase(
-            pool,
-            UIBookToDBBook(book)
-          ).catch((err) => {
+          const dbBook = UIBookToDBBook(book);
+          const insertedId = await saveToDataBase(pool, dbBook).catch((err) => {
             console.error(err.message);
           });
 
           if (insertedId) {
             console.log('Added to database: ' + book.name);
 
+            dbBook.id = insertedId;
             const fileName = await writeToFile(
-              JSON.stringify(UIBookToDBBook(book)),
+              JSON.stringify(dbBook),
               __dirname + '/books-json/' + insertedId + '.json'
             ).catch((err) => console.error(err.message));
 

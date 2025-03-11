@@ -1,8 +1,8 @@
 <div *ngIf="book.value() as book">
   <img
     [src]="coverSrc()"
-    [width]="COVER_IMG_WIDTH"
-    [height]="COVER_IMG_HEIGHT"
+    [width]="BOOK_IMAGE_WIDTH"
+    [height]="BOOK_IMAGE_HEIGHT"
     (error)="showDefaultCoverImage($event)"
     alt="Обложка книги"
   />

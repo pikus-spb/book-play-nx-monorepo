@@ -16,8 +16,8 @@ import {
   ViewChild,
 } from '@angular/core';
 import {
-  COVER_IMG_HEIGHT,
-  COVER_IMG_WIDTH,
+  BOOK_IMAGE_HEIGHT,
+  BOOK_IMAGE_WIDTH,
   DEFAULT_COVER_SRC,
 } from '@book-play/constants';
 import { Book } from '@book-play/models';
@@ -27,12 +27,13 @@ import {
   HeightDelta,
   setupViewportScrollerService,
 } from '@book-play/services';
-import { showDefaultCoverImage } from '@book-play/utils-browser';
+import {
+  isTextParagraph,
+  showDefaultCoverImage,
+} from '@book-play/utils-browser';
 import { Subject } from 'rxjs';
 import { MaterialModule } from '../../../../core/modules/material.module';
 import { BookParagraphComponent } from '../book-paragraph/book-paragraph.component';
-
-const PARAGRAPH_TAG = 'book-paragraph';
 
 @Component({
   selector: 'book-canvas',
@@ -48,9 +49,30 @@ const PARAGRAPH_TAG = 'book-paragraph';
   ],
 })
 export class BookCanvasComponent implements OnDestroy {
-  @Input() book!: Signal<Book | null>;
+  @Input() set book(book: Signal<Book | null>) {
+    const paragraphs = book()?.paragraphs;
+    let textIndex = 0;
+    this.textIndexes = {};
+
+    paragraphs?.forEach((p, index) => {
+      this.textIndexes[index] = textIndex;
+
+      if (isTextParagraph(p)) {
+        textIndex++;
+      }
+    });
+
+    this._book = book;
+  }
+  get book(): Signal<Book | null> {
+    return this._book;
+  }
+
   @Output() paragraphClick: EventEmitter<number> = new EventEmitter<number>();
   @ViewChild('scrollViewport') viewport!: CdkVirtualScrollViewport;
+
+  private _book!: Signal<Book | null>;
+  private textIndexes: Record<number, number> = {};
 
   constructor(private el: ElementRef, private domHelper: DomHelperService) {}
 
@@ -58,7 +80,6 @@ export class BookCanvasComponent implements OnDestroy {
     setupViewportScrollerService(
       this.el,
       this.viewport,
-      PARAGRAPH_TAG,
       delta,
       this.bookData!.paragraphs,
       this.destroyed$
@@ -71,12 +92,12 @@ export class BookCanvasComponent implements OnDestroy {
     return src ?? DEFAULT_COVER_SRC;
   });
 
-  public removeImage(event: Event): void {
-    (event.target as HTMLImageElement).remove();
-  }
-
   public trackByFn(index: number, item: string): string {
     return item;
+  }
+
+  public toTextIndex(index: number): number {
+    return this.textIndexes[index];
   }
 
   public get bookData(): Book | null {
@@ -92,7 +113,7 @@ export class BookCanvasComponent implements OnDestroy {
   }
 
   private destroyed$: Subject<void> = new Subject<void>();
-  protected readonly COVER_IMG_WIDTH = COVER_IMG_WIDTH;
-  protected readonly COVER_IMG_HEIGHT = COVER_IMG_HEIGHT;
+  protected readonly BOOK_IMAGE_WIDTH = BOOK_IMAGE_WIDTH;
+  protected readonly BOOK_IMAGE_HEIGHT = BOOK_IMAGE_HEIGHT;
   protected readonly showDefaultCoverImage = showDefaultCoverImage;
 }

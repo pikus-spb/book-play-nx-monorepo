@@ -1,5 +1,5 @@
 {
-  "name": "@book-play/models",
+  "name": "@book-play/utils-common",
   "version": "0.0.1",
   "private": true,
   "type": "commonjs",
@@ -7,6 +7,8 @@
   "types": "./src/index.d.ts",
   "dependencies": {
     "tslib": "^2.3.0",
-    "@book-play/utils-browser": "0.0.1"
+    "@book-play/models": "0.0.1",
+    "@book-play/constants": "0.0.1",
+    "cheerio": "^1.0.0"
   }
 }

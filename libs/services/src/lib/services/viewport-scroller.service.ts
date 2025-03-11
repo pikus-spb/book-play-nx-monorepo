@@ -1,9 +1,16 @@
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 import { ElementRef } from '@angular/core';
+import { BOOK_IMAGE_HEIGHT, BOOK_IMAGE_MARGIN } from '@book-play/constants';
+import {
+  filterTextParagraphs,
+  getParagraphNode,
+} from '@book-play/utils-browser';
 import { first, firstValueFrom, Observable, tap, timer } from 'rxjs';
 import { HeightDelta } from '../model/delta';
 
 export let viewportScroller: null | ViewportScrollerService = null;
+
+const IMAGE_DELTA = BOOK_IMAGE_HEIGHT + BOOK_IMAGE_MARGIN;
 
 class ViewportScrollerService {
   public scrolled$!: Observable<Event>;
@@ -11,7 +18,6 @@ class ViewportScrollerService {
   constructor(
     private el: ElementRef | undefined,
     private viewport: CdkVirtualScrollViewport | undefined,
-    private defaultElementTag: string,
     public delta: HeightDelta,
     private paragraphs: string[],
     private onDestroy$: Observable<void>
@@ -33,9 +39,7 @@ class ViewportScrollerService {
   }
 
   private scrollToFoundParagraph(index: number) {
-    const paragraph = this.el?.nativeElement.querySelector(
-      `${this.defaultElementTag}:nth-of-type(${index})`
-    );
+    const paragraph = getParagraphNode(this.el?.nativeElement, index);
     if (paragraph) {
       paragraph.scrollIntoView({ block: 'center', behavior: 'smooth' });
     }
@@ -54,30 +58,48 @@ class ViewportScrollerService {
   }
 
   private async adjustOffset(index: number, guessOffset: number) {
-    if (this.viewport) {
-      const range = this.viewport.getRenderedRange();
-      if (index >= range.start && index <= range.end) {
-        this.scrollToFoundParagraph(index - range.start);
-      } else {
-        if (index < range.start) {
-          guessOffset = this.scrollToOffset(guessOffset, -1);
-        } else if (index > range.end) {
-          guessOffset = this.scrollToOffset(guessOffset, 1);
-        }
+    const shownParagraphs = Array.from(
+      this.el?.nativeElement.querySelectorAll('p')
+    );
+    const firstParagraph = shownParagraphs[0] as HTMLElement;
+    const lastParagraph = shownParagraphs.slice(-1)[0] as HTMLElement;
 
-        await firstValueFrom(timer(1));
-        await this.adjustOffset(index, guessOffset);
+    const start = Number(
+      firstParagraph.className.match(/book-paragraph-(\d+)$/)?.[1]
+    );
+    const end = Number(
+      lastParagraph.className.match(/book-paragraph-(\d+)$/)?.[1]
+    );
+
+    if (index >= start && index <= end) {
+      this.scrollToFoundParagraph(index);
+    } else {
+      if (index < start) {
+        guessOffset = this.scrollToOffset(guessOffset, -1);
+      } else if (index > end) {
+        guessOffset = this.scrollToOffset(guessOffset, 1);
       }
+
+      await firstValueFrom(timer(1));
+      await this.adjustOffset(index, guessOffset);
     }
   }
 
   public async scrollToIndex(index: number): Promise<void> {
     if (this.viewport) {
       let guessOffset = 0;
-      this.paragraphs.slice(0, index).forEach((p) => {
+
+      const paragraphs = this.paragraphs.slice(0, index);
+      const textParagraphs = filterTextParagraphs(paragraphs);
+
+      textParagraphs.forEach((p) => {
         const rowsNum = Math.ceil(p.length / this.delta.length);
         guessOffset += rowsNum * this.delta.height + this.delta.margin;
       });
+
+      const imagesNumber = paragraphs.length - textParagraphs.length;
+
+      guessOffset += IMAGE_DELTA * imagesNumber;
 
       this.viewport.scrollToOffset(Math.round(guessOffset), 'instant');
 
@@ -90,7 +112,6 @@ class ViewportScrollerService {
 export function setupViewportScrollerService(
   el: ElementRef | undefined,
   viewport: CdkVirtualScrollViewport | undefined,
-  defaultElementTag: string,
   delta: HeightDelta,
   paragraphs: string[],
   destroy$: Observable<void>
@@ -101,7 +122,6 @@ export function setupViewportScrollerService(
     viewportScroller = new ViewportScrollerService(
       el,
       viewport,
-      defaultElementTag,
       delta,
       paragraphs,
       destroy$

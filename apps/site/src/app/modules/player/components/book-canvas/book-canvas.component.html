@@ -3,11 +3,14 @@
   <div class="scrollable-canvas" cdkVirtualScrollingElement>
     <h1>{{ bookData.fullName }}</h1>
     <section class="title-picture-container">
-      <a [href]="'/book/' + bookData.id" title="Посмотреть описание книги">
+      <a
+        [attr.href]="bookData.id ? '/book/' + bookData.id : undefined"
+        title="Посмотреть описание книги"
+      >
         <img
           [src]="coverSrc()"
-          [width]="COVER_IMG_WIDTH"
-          [height]="COVER_IMG_HEIGHT"
+          [width]="BOOK_IMAGE_WIDTH"
+          [height]="BOOK_IMAGE_HEIGHT"
           alt="Обложка книги"
           (error)="showDefaultCoverImage($event)"
         />
@@ -29,9 +32,9 @@
           index as index;
           trackBy: trackByFn
         "
-        [index]="index"
+        [index]="toTextIndex(index)"
         [text]="text"
-        (click)="onParagraphClick(index)"
+        (activated)="onParagraphClick(toTextIndex(index))"
         class="scroll-item"
       ></book-paragraph>
     </cdk-virtual-scroll-viewport>

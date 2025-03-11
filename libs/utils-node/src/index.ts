@@ -1,1 +1,1 @@
-export * from './lib/fs';
+export * from './lib/files.ts';

@@ -1,4 +1,4 @@
-import { LOGO_MAX_LENGTH } from '@book-play/constants';
+import { MAX_IMAGE_DATA_LENGTH } from '@book-play/constants';
 import { Author, Book, ImageBase64Data } from '@book-play/models';
 import { CheerioAPI, load } from 'cheerio';
 import {
@@ -8,6 +8,32 @@ import {
   findRussianIndex,
   isTextInRussian,
 } from './cleanup-tools';
+
+export function parseFb2Image(
+  imageElement: HTMLElement,
+  $: CheerioAPI
+): ImageBase64Data | undefined {
+  const attrs = imageElement.attributes;
+  const attr = Array.from(attrs).find(
+    (attr) => attr.name.indexOf('href') !== -1
+  )!;
+
+  // @ts-expect-error: imageElement type
+  const src = $(imageElement).attr(attr.name)!.substring(1);
+
+  if (src !== undefined) {
+    const binary = $([...$('binary')].find((el) => $(el).attr('id') === src));
+    if (binary && binary.text().length <= MAX_IMAGE_DATA_LENGTH) {
+      const imageType = binary.attr('content-type');
+      return new ImageBase64Data({
+        imageType,
+        base64Content: binary.text(),
+      });
+    }
+  }
+
+  return undefined;
+}
 
 export class Fb2Parser {
   public getAuthor($: CheerioAPI): Author {
@@ -43,24 +69,11 @@ export class Fb2Parser {
 
   private getCoverPicture($: CheerioAPI): ImageBase64Data | undefined {
     const imageElement = $('coverpage > *').first();
-    if (imageElement.get(0)) {
-      const attr = [...imageElement.get(0)!.attributes].find(
-        (attr) => attr.name.indexOf('href') !== -1
-      )!;
-      const src = imageElement.attr(attr.name)!.substring(1);
+    $('coverpage').remove();
 
-      if (src !== undefined) {
-        const binary = $(
-          [...$('binary')].find((el) => $(el).attr('id') === src)
-        );
-        if (binary && binary.text().length <= LOGO_MAX_LENGTH) {
-          const imageType = binary.attr('content-type');
-          return new ImageBase64Data({
-            imageType,
-            base64Content: binary.text(),
-          });
-        }
-      }
+    if (imageElement.get(0)) {
+      // @ts-expect-error: imageElement types
+      return parseFb2Image(imageElement.get(0), $);
     }
 
     return undefined;
@@ -78,9 +91,14 @@ export class Fb2Parser {
     $('history').remove();
     $('annotation').remove();
 
-    return $('body p, poem')
+    return $('body p, poem, img')
       .toArray()
       .map((item) => {
+        if (item.tagName === 'img') {
+          return JSON.stringify(
+            parseFb2Image(item as unknown as HTMLElement, $)
+          );
+        }
         return cleanHTMLAndCopyrights($(item).text());
       })
       .filter((item) => item.length > 0);

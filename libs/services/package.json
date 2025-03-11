@@ -12,5 +12,8 @@
     "@book-play/constants": "^0.0.1",
     "@book-play/utils-browser": "0.0.1"
   },
-  "sideEffects": false
+  "sideEffects": false,
+  "dependencies": {
+    "@book-play/utils-common": "0.0.1"
+  }
 }

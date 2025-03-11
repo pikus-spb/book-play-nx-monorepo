@@ -16,8 +16,8 @@ import { MatIcon } from '@angular/material/icon';
 import { MatTooltip } from '@angular/material/tooltip';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
-  COVER_IMG_HEIGHT,
-  COVER_IMG_WIDTH,
+  BOOK_IMAGE_HEIGHT,
+  BOOK_IMAGE_WIDTH,
   DEFAULT_COVER_SRC,
   FB2_GENRES,
 } from '@book-play/constants';
@@ -76,8 +76,8 @@ export class BookComponent implements AfterViewInit {
     this.idSignal.set(id);
   }
 
-  protected readonly COVER_IMG_WIDTH = COVER_IMG_WIDTH;
-  protected readonly COVER_IMG_HEIGHT = COVER_IMG_HEIGHT;
+  protected readonly BOOK_IMAGE_WIDTH = BOOK_IMAGE_WIDTH;
+  protected readonly BOOK_IMAGE_HEIGHT = BOOK_IMAGE_HEIGHT;
   protected readonly FB2_GENRES = FB2_GENRES;
   protected readonly showDefaultCoverImage = showDefaultCoverImage;
 }

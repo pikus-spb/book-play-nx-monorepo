@@ -13,7 +13,7 @@ export class ActiveBookService {
   public cursorPositionIsValid(): boolean {
     const book = this.book();
     if (book !== null) {
-      return this.cursorService.position < book.paragraphs.length;
+      return this.cursorService.position < book.textParagraphs.length;
     }
     return false;
   }

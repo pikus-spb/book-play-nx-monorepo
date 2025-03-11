@@ -1,3 +1,16 @@
-<p class="{{ PARAGRAPH_CLASS_PREFIX }}{{ index }}">
+@if (isTextParagraph(text)) {
+<p
+  tabindex="0"
+  class="{{ PARAGRAPH_CLASS_PREFIX }}{{ index }}"
+  (click)="activated.emit(index)"
+  (keyup)="activated.emit(index)"
+>
   {{ text }}
 </p>
+} @else {
+<img
+  [src]="toBase64String(text)"
+  [height]="BOOK_IMAGE_HEIGHT"
+  alt="Иллюстрация"
+/>
+}

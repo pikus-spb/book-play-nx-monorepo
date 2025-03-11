@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { Fb2Parser } from '@book-play/utils-browser';
+import { Fb2Parser } from '@book-play/utils-common';
 import { ActiveBookService } from './active-book.service';
 import { IndexedDbBookStorageService } from './indexed-db-book-storage.service';
 

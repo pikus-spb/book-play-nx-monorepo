@@ -5,7 +5,7 @@
   matTooltipPosition="below"
   matTooltipShowDelay="1500"
   [disabled]="(autoPlay.paused$ | async) === false"
-  (click)="click($event)"
+  (click)="click($event, true)"
 >
   <mat-icon>play_arrow</mat-icon>
 </button>
@@ -16,7 +16,7 @@
   matTooltipPosition="below"
   matTooltipShowDelay="1500"
   [disabled]="autoPlay.paused$ | async"
-  (click)="click($event)"
+  (click)="click($event, false)"
 >
   <mat-icon>pause</mat-icon>
 </button>

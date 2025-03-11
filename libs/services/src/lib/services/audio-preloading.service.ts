@@ -35,7 +35,7 @@ export class AudioPreloadingService {
 
   private paragraphToSpeech(index: number): Observable<string> {
     return this.speechService
-      .textToSpeech(this.openedBook.book()?.paragraphs[index] ?? '')
+      .textToSpeech(this.openedBook.book()?.textParagraphs[index] ?? '')
       .pipe(
         switchMap((blob: Blob) => {
           return blobToBase64(blob);
@@ -51,7 +51,7 @@ export class AudioPreloadingService {
     startIndex: number,
     extra: number = PRELOAD_EXTRA.default
   ): Promise<void> {
-    const data = this.openedBook.book()?.paragraphs;
+    const data = this.openedBook.book()?.textParagraphs;
     const dataIsValid = data && data.length > 0 && startIndex >= 0;
 
     if (dataIsValid) {

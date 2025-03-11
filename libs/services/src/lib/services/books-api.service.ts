@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { BOOKS_API_URL, HTTP_RETRY_NUMBER } from '@book-play/constants';
 
 import { Author, Book, DBAuthor, DBBook } from '@book-play/models';
-import { DBBookToUIBook } from '@book-play/utils-browser';
+import { DBBookToUIBook } from '@book-play/utils-common';
 import { firstValueFrom, map, Observable, retry, shareReplay } from 'rxjs';
 
 @Injectable({

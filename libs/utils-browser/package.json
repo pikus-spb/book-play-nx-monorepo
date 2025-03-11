@@ -8,8 +8,6 @@
   "dependencies": {
     "tslib": "^2.3.0",
     "rxjs": "~7.8.0",
-    "cheerio": "^1.0.0",
-    "@book-play/models": "0.0.1",
     "@book-play/constants": "0.0.1"
   }
 }

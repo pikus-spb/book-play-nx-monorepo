@@ -15,8 +15,9 @@ export const CORS_ALLOWED_LIST = [
 export const PARAGRAPH_CLASS_PREFIX = 'book-paragraph-';
 // SITE
 export const DEFAULT_COVER_SRC = '/assets/images/empty-cover.jpg';
-export const COVER_IMG_WIDTH = 200;
-export const COVER_IMG_HEIGHT = 300;
+export const BOOK_IMAGE_WIDTH = 274;
+export const BOOK_IMAGE_HEIGHT = 400;
+export const BOOK_IMAGE_MARGIN = 32;
 export const DEFAULT_TITLE_PREFIX = 'Book-play.ru';
 export const DEFAULT_EMPTY_CONTEXT =
   'Бесплатное проигрывание книг голосом в формате fb2 онлайн';
@@ -25,5 +26,5 @@ export const DEFAULT_TITLE = [DEFAULT_TITLE_PREFIX, DEFAULT_EMPTY_CONTEXT].join(
   ' - '
 );
 // BOOKS CRAWLER
-export const LOGO_MAX_LENGTH = 1000000;
+export const MAX_IMAGE_DATA_LENGTH = 1000000;
 export const BOOKS_JSON_PATH = '/home/petr/add-books/books-json/';

@@ -2,7 +2,7 @@
   "name": "@book-play/utils-node",
   "version": "0.0.1",
   "private": true,
-  "type": "node",
+  "type": "commonjs",
   "main": "./src/index.js",
   "types": "./src/index.d.ts",
   "dependencies": {

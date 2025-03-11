@@ -1,5 +1,4 @@
 import { Author, Book, DBBook, ImageBase64Data } from '@book-play/models';
-import { capitalizeFirstLetter, cleanHTML, cleanSpaces } from './cleanup-tools';
 
 export function DBBookToUIBook(input: Partial<DBBook>): Book {
   const data = {
@@ -33,19 +32,4 @@ export function UIBookToDBBook(input: Book): DBBook {
     middle: input.author.middleName || '',
     full: input.fullName,
   };
-}
-
-export function getAuthorName(author: Author): string;
-export function getAuthorName(book: DBBook): string;
-export function getAuthorName(input: Author | DBBook): string {
-  let result;
-  if (input instanceof Author) {
-    result = [input.firstName, input.middleName || '', input.lastName];
-  } else {
-    result = [input.first, input.middle || '', input.last];
-  }
-
-  return cleanSpaces(
-    cleanHTML(result.map((item) => capitalizeFirstLetter(item)).join(' '))
-  );
 }

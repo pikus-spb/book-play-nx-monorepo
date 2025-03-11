@@ -37,6 +37,10 @@ div {
       max-width: 100%;
     }
 
+    .title-picture-container {
+      display: block;
+    }
+
     ::ng-deep p {
       cursor: pointer;
       padding: 0 $default-padding * 2;
