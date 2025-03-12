@@ -71,7 +71,7 @@ async function parseFiles(results: string[]) {
       const loaded = parser.load(text);
       const lang = parser.parseLanguage(loaded);
       const book = parser.parseBookFromLoaded(loaded);
-      if (lang === 'ru') {
+      if (lang.toLowerCase() === 'ru') {
         if (
           [book.name, book.author.firstName, book.author.lastName].every(
             (item) => containsLetters(item)

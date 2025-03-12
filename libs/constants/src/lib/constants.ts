@@ -15,8 +15,8 @@ export const CORS_ALLOWED_LIST = [
 export const PARAGRAPH_CLASS_PREFIX = 'book-paragraph-';
 // SITE
 export const DEFAULT_COVER_SRC = '/assets/images/empty-cover.jpg';
-export const BOOK_IMAGE_WIDTH = 274;
-export const BOOK_IMAGE_HEIGHT = 400;
+export const BOOK_IMAGE_WIDTH = 200;
+export const BOOK_IMAGE_HEIGHT = 300;
 export const BOOK_IMAGE_MARGIN = 32;
 export const DEFAULT_TITLE_PREFIX = 'Book-play.ru';
 export const DEFAULT_EMPTY_CONTEXT =

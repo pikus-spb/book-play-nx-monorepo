@@ -1,0 +1,27 @@
+{
+  "name": "scraper",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/scraper/src",
+  "projectType": "library",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/scraper",
+        "tsConfig": "libs/scraper/tsconfig.lib.json",
+        "packageJson": "libs/scraper/package.json",
+        "main": "libs/scraper/src/index.ts",
+        "assets": ["libs/scraper/*.md"]
+      }
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "libs/scraper/jest.config.ts"
+      }
+    }
+  }
+}
