@@ -1,7 +1,7 @@
 const puppeteer = require('puppeteer');
 const randomUseragent = require('random-useragent');
 
-import { AuthorInfo } from '../model/author-info';
+import { AuthorInfo } from '../';
 
 export async function searchAuthor(
   firstName: string,
