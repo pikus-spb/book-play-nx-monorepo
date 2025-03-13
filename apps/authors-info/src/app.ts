@@ -11,34 +11,44 @@ export async function run() {
 
   for (let i = 0; i < authors.length; i++) {
     const author = authors[i];
-    const authorInfo: AuthorInfo = await searchAuthor(author[0], author[1]);
 
-    if (authorInfo !== undefined) {
-      console.log('Adding info about ' + author.join(' '));
+    console.log('Searching author: ' + author.join(' ') + ' ...');
 
-      await new Promise((resolve, reject) => {
-        pool.query(
-          'INSERT INTO authors (first, last, full, about, image)' +
-            ' VALUES (?, ?, ?, ?, ?)',
-          [
-            author[0],
-            author[1],
-            author.join(' '),
-            authorInfo.about || '',
-            authorInfo.imageUrl || '',
-          ],
-          (err: Error, result: ResultSetHeader) => {
-            if (err) {
-              reject(err);
-              console.error(err);
-            } else {
-              resolve(result.insertId.toString());
-            }
+    const authorInfo: AuthorInfo = (await searchAuthor(
+      author[0],
+      author[1]
+    )) ?? { imageUrl: '', about: '' };
+
+    console.log(
+      'Adding info about ' +
+        author.join(' ') +
+        '\n' +
+        (authorInfo.about || '(empty)')
+    );
+
+    await new Promise((resolve, reject) => {
+      pool.query(
+        'INSERT INTO authors (first, last, full, about, image)' +
+          ' VALUES (?, ?, ?, ?, ?)',
+        [
+          author[0],
+          author[1],
+          author.join(' '),
+          authorInfo.about || '',
+          authorInfo.imageUrl || '',
+        ],
+        (err: Error, result: ResultSetHeader) => {
+          if (err) {
+            reject(err);
+            console.error(err);
+          } else {
+            resolve(result.insertId.toString());
           }
-        );
-      });
-      console.log('Added successfully.\n\r\n\r');
-    }
+        }
+      );
+    });
+
+    console.log('Added successfully.\n\r\n\r');
   }
 
   console.log('Done. Added info about ' + authors.length + ' authors.');

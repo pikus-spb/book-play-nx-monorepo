@@ -27,6 +27,7 @@ export async function searchAuthor(
     await page.goto(searchAuthorInfoUrl, { waitUntil: 'domcontentloaded' });
   } catch (e) {
     console.error(e);
+    return;
   }
 
   const linkData = await page.evaluate(() => {
@@ -50,35 +51,44 @@ export async function searchAuthor(
 
     if (correctAuthorCheck) {
       const searchAuthorInfoUrl = linkData.url;
-      await page.goto(searchAuthorInfoUrl, { waitUntil: 'domcontentloaded' });
-
-      authorInfo = await page.evaluate(() => {
-        const img: HTMLImageElement = document.querySelector(
-          'div[data-testid=author__wrapper] > div > div > div > img'
-        );
-        const imageUrl =
-          img.src.toLowerCase().indexOf('nophoto') === -1 ? img.src : '';
-        const data: HTMLElement = document.querySelector(
-          'div[data-testid=author__wrapper] > div:last-child > div >' +
-            ' div > div'
-        );
-
-        let about = '';
-        // Check there is any data
-        if (
-          data !== null &&
-          (data.firstChild as HTMLElement).tagName.toLowerCase() !== 'a'
-        ) {
-          about = data.innerText;
-          // Remove litres data
-          about = about
-            .split('\n')
-            .filter((line) => line.toLowerCase().indexOf('литрес') === -1)
-            .join('\n');
+      if (searchAuthorInfoUrl) {
+        try {
+          await page.goto(searchAuthorInfoUrl, {
+            waitUntil: 'domcontentloaded',
+          });
+        } catch (e) {
+          console.error(e);
+          return;
         }
 
-        return { imageUrl, about };
-      });
+        authorInfo = await page.evaluate(() => {
+          const img: HTMLImageElement = document.querySelector(
+            'div[data-testid=author__wrapper] > div > div > div > img'
+          );
+          const imageUrl =
+            img.src.toLowerCase().indexOf('nophoto') === -1 ? img.src : '';
+          const data: HTMLElement = document.querySelector(
+            'div[data-testid=author__wrapper] > div:last-child > div >' +
+              ' div > div'
+          );
+
+          let about = '';
+          // Check there is any data
+          if (
+            data !== null &&
+            (data.firstChild as HTMLElement).tagName.toLowerCase() !== 'a'
+          ) {
+            about = data.innerText;
+            // Remove litres data
+            about = about
+              .split('\n')
+              .filter((line) => line.toLowerCase().indexOf('литрес') === -1)
+              .join('\n');
+          }
+
+          return { imageUrl, about };
+        });
+      }
     }
   }
 
