@@ -1,0 +1,67 @@
+{
+  "name": "authors-info",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/authors-info/src",
+  "projectType": "application",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@nx/esbuild:esbuild",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "outputFileName": "add-authors.js",
+        "thirdParty": true,
+        "platform": "node",
+        "outputPath": "dist/apps/authors-info",
+        "format": ["cjs"],
+        "bundle": true,
+        "main": "apps/authors-info/src/main.ts",
+        "tsConfig": "apps/authors-info/tsconfig.app.json",
+        "externalDependencies": false,
+        "generatePackageJson": false,
+        "esbuildOptions": {
+          "sourcemap": true,
+          "outExtension": {
+            ".js": ".js"
+          }
+        }
+      },
+      "configurations": {
+        "development": {},
+        "production": {
+          "esbuildOptions": {
+            "sourcemap": false,
+            "outExtension": {
+              ".js": ".js"
+            }
+          }
+        }
+      }
+    },
+    "serve": {
+      "executor": "@nx/js:node",
+      "defaultConfiguration": "development",
+      "dependsOn": ["build"],
+      "options": {
+        "buildTarget": "authors-info:build",
+        "runBuildTargetDependencies": false
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "authors-info:build:development"
+        },
+        "production": {
+          "buildTarget": "authors-info:build:production"
+        }
+      }
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "apps/authors-info/jest.config.ts"
+      }
+    }
+  }
+}

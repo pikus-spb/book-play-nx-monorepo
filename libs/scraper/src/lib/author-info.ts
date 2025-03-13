@@ -23,65 +23,63 @@ export async function searchAuthor(
   const searchAuthorInfoUrl = `https://www.litres.ru/search/authors/?q=${encodeURIComponent(
     query
   )}`;
-  console.log('Opening litres site...');
-  await page.goto(searchAuthorInfoUrl, { waitUntil: 'domcontentloaded' });
+  try {
+    await page.goto(searchAuthorInfoUrl, { waitUntil: 'domcontentloaded' });
+  } catch (e) {
+    console.error(e);
+  }
 
-  console.log('Getting link url...');
   const linkData = await page.evaluate(() => {
     const link: HTMLAnchorElement = document.querySelector(
       'a[data-testid=search__personName]'
     );
-    return {
-      title: link.innerText.trim(),
-      url: link.href + 'about',
-    };
+    if (link !== null) {
+      return {
+        title: link.innerText.trim(),
+        url: link.href + 'about',
+      };
+    }
   });
-  console.log('Found: ' + linkData.title);
-  console.log(linkData.title + ': ' + linkData.url);
-
-  const correctAuthorCheck = new RegExp(
-    query.split(' ').join('.+') + '$',
-    'ig'
-  ).test(linkData.title);
-
   let authorInfo;
-  if (correctAuthorCheck) {
-    console.log('Getting author data...');
 
-    const searchAuthorInfoUrl = linkData.url;
-    await page.goto(searchAuthorInfoUrl, { waitUntil: 'domcontentloaded' });
+  if (linkData) {
+    const correctAuthorCheck = new RegExp(
+      query.split(' ').join('.+') + '$',
+      'ig'
+    ).test(linkData.title);
 
-    authorInfo = await page.evaluate(() => {
-      const img: HTMLImageElement = document.querySelector(
-        'div[data-testid=author__wrapper] > div > div > div > img'
-      );
-      const imageUrl =
-        img.src.toLowerCase().indexOf('nophoto') === -1 ? img.src : '';
-      const data: HTMLElement = document.querySelector(
-        'div[data-testid=author__wrapper] > div:last-child > div >' +
-          ' div > div'
-      );
+    if (correctAuthorCheck) {
+      const searchAuthorInfoUrl = linkData.url;
+      await page.goto(searchAuthorInfoUrl, { waitUntil: 'domcontentloaded' });
 
-      let about = '';
-      // Check there is any data
-      if (
-        data &&
-        (data.firstChild as HTMLElement).tagName.toLowerCase() !== 'a'
-      ) {
-        about = data.innerText;
-        // Remove litres data
-        about = about
-          .split('\n')
-          .filter((line) => line.toLowerCase().indexOf('литрес') === -1)
-          .join('\n');
-      }
+      authorInfo = await page.evaluate(() => {
+        const img: HTMLImageElement = document.querySelector(
+          'div[data-testid=author__wrapper] > div > div > div > img'
+        );
+        const imageUrl =
+          img.src.toLowerCase().indexOf('nophoto') === -1 ? img.src : '';
+        const data: HTMLElement = document.querySelector(
+          'div[data-testid=author__wrapper] > div:last-child > div >' +
+            ' div > div'
+        );
 
-      return { imageUrl, about };
-    });
+        let about = '';
+        // Check there is any data
+        if (
+          data !== null &&
+          (data.firstChild as HTMLElement).tagName.toLowerCase() !== 'a'
+        ) {
+          about = data.innerText;
+          // Remove litres data
+          about = about
+            .split('\n')
+            .filter((line) => line.toLowerCase().indexOf('литрес') === -1)
+            .join('\n');
+        }
 
-    console.log('Success!\n');
-  } else {
-    console.log('Author not found ' + query);
+        return { imageUrl, about };
+      });
+    }
   }
 
   await browser.close();
