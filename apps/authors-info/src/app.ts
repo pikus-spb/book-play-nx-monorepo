@@ -40,15 +40,19 @@ export async function run() {
         (err: Error, result: ResultSetHeader) => {
           if (err) {
             reject(err);
-            console.error(err);
           } else {
             resolve(result.insertId.toString());
           }
         }
       );
-    });
-
-    console.log('Added successfully.\n\r\n\r');
+    })
+      .then(() => {
+        console.log('Added successfully.\n\r\n\r');
+      })
+      .catch((e) => {
+        console.error(e);
+        console.log('\n\r');
+      });
   }
 
   console.log('Done. Added info about ' + authors.length + ' authors.');

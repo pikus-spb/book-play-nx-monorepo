@@ -76,6 +76,8 @@ export async function searchAuthor(
           // Check there is any data
           if (
             data !== null &&
+            data.firstChild &&
+            (data.firstChild as HTMLElement).tagName &&
             (data.firstChild as HTMLElement).tagName.toLowerCase() !== 'a'
           ) {
             about = data.innerText;
