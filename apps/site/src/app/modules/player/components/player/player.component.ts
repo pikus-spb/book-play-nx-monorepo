@@ -35,7 +35,7 @@ export class PlayerComponent implements AfterViewInit {
 
   private activeBookService = inject(ActiveBookService);
   private autoPlay = inject(AutoPlayService);
-  private booksApi = inject(BooksApiService);
+  private booksApiService = inject(BooksApiService);
   private domHelper = inject(DomHelperService);
   private indexedDbStorageService = inject(IndexedDbBookStorageService);
   private route = inject(ActivatedRoute);
@@ -54,7 +54,7 @@ export class PlayerComponent implements AfterViewInit {
     effect(() => {
       const book = this.book();
       if (book !== null && this.playerComponentActive()) {
-        setWindowsTitleWithContext(book.fullName);
+        setWindowsTitleWithContext(book.full);
       }
     });
   }
@@ -97,7 +97,7 @@ export class PlayerComponent implements AfterViewInit {
       this.eventState.add(AppEventNames.loading);
       this.eventState.add(AppEventNames.contentLoading);
 
-      const book = await this.booksApi.getBookById(id);
+      const book = await this.booksApiService.getBookById(id);
       this.activeBookService.update(book || null);
 
       this.eventState.remove(AppEventNames.contentLoading);

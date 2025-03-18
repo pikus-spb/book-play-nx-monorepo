@@ -48,6 +48,18 @@ expressApp.get('/author/all', cors(corsOptionsDelegate), (req, res) => {
     });
 });
 
+expressApp.get('/author/summary/:id', cors(corsOptionsDelegate), (req, res) => {
+  const id = req.params.id;
+  app
+    .authorSummary(id)
+    .then((books) => {
+      res.json(books);
+    })
+    .catch((err) => {
+      res.json(err);
+    });
+});
+
 expressApp.get(
   '/author/random/:number?',
   cors(corsOptionsDelegate),
@@ -65,12 +77,12 @@ expressApp.get(
 );
 
 expressApp.get(
-  '/author/name/:name/books',
+  '/author/id/:id/books',
   cors(corsOptionsDelegate),
   (req, res) => {
-    const name = req.params.name;
+    const id = req.params.id;
     app
-      .authorBooks(name)
+      .authorBooks(id)
       .then((book) => {
         res.json(book);
       })
@@ -98,6 +110,7 @@ expressApp.get(
     app
       .bookSummaryById(id)
       .then((book) => {
+        console.log(JSON.stringify(book));
         res.json(book);
       })
       .catch((err) => {
@@ -120,19 +133,19 @@ expressApp.get(
       });
   }
 );
-
-expressApp.get(
-  '/book/all/search/:pattern',
-  cors(corsOptionsDelegate),
-  (req, res) => {
-    const search = req.params.pattern;
-    app
-      .search(search)
-      .then((books) => {
-        res.json(books);
-      })
-      .catch((err) => {
-        res.json(err);
-      });
-  }
-);
+//
+// expressApp.get(
+//   '/book/all/search/:pattern',
+//   cors(corsOptionsDelegate),
+//   (req, res) => {
+//     const search = req.params.pattern;
+//     app
+//       .search(search)
+//       .then((books) => {
+//         res.json(books);
+//       })
+//       .catch((err) => {
+//         res.json(err);
+//       });
+//   }
+// );

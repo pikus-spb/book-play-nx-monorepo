@@ -1,36 +1,59 @@
 import { DB_CONFIG } from '@book-play/constants';
-import { DBAuthor, DBBook } from '@book-play/models';
+import { DBAuthor, DBAuthorSummary, DBBook } from '@book-play/models';
 import mysql, { PoolOptions } from 'mysql2';
 
 const pool = mysql.createPool(DB_CONFIG as unknown as PoolOptions);
 
 export default class BooksAPIApp {
-  authors(): Promise<DBAuthor[]> {
+  authors(): Promise<Partial<DBAuthor>[]> {
     return new Promise((resolve, reject) => {
       pool.query(
-        'SELECT DISTINCT first, last FROM books ORDER BY full',
-        (err, result: Partial<DBBook>[]) => {
+        'SELECT id, first, last FROM authors ORDER BY full',
+        (err, result: Partial<DBAuthor>[]) => {
           if (err) {
             console.error(err);
             reject(err);
           } else {
-            resolve(result.map((book) => Object.values(book) as DBAuthor));
+            resolve(result);
           }
         }
       );
     });
   }
 
-  randomAuthors(number = '3'): Promise<DBAuthor[]> {
+  async authorSummary(id: string): Promise<DBAuthorSummary> {
     return new Promise((resolve, reject) => {
       pool.query(
-        `SELECT DISTINCT first, last FROM books ORDER BY RAND() LIMIT ${number}`,
-        (err, result: Partial<DBBook>[]) => {
+        'SELECT first, middle, last, about, image FROM authors WHERE id = ' +
+          id,
+        async (err, result: DBAuthor[]) => {
           if (err) {
             console.error(err);
             reject(err);
           } else {
-            resolve(result.map((book) => Object.values(book) as DBAuthor));
+            const author = result[0];
+            if (result.length > 0) {
+              (author as DBAuthorSummary).books = await this.authorBooks(id);
+              resolve(author as DBAuthorSummary);
+            }
+
+            resolve({} as DBAuthorSummary);
+          }
+        }
+      );
+    });
+  }
+
+  randomAuthors(number = '3'): Promise<Partial<DBAuthor>[]> {
+    return new Promise((resolve, reject) => {
+      pool.query(
+        `SELECT id, first, last FROM authors ORDER BY RAND() LIMIT ${number}`,
+        (err, result: Partial<DBAuthor>[]) => {
+          if (err) {
+            console.error(err);
+            reject(err);
+          } else {
+            resolve(result);
           }
         }
       );
@@ -52,12 +75,11 @@ export default class BooksAPIApp {
     });
   }
 
-  authorBooks(name: string): Promise<Partial<DBBook>> {
-    name = name.split(' ').join('');
-    const query = `SELECT id, name FROM books WHERE CONCAT(REPLACE(first,' ',''), REPLACE(last,' ','')) = "${name}"`;
+  authorBooks(authorId: string): Promise<Partial<DBBook>[]> {
+    const query = `SELECT id, name FROM books WHERE authorId = "${authorId}"`;
 
     return new Promise((resolve, reject) => {
-      pool.query(query, (err, result: Partial<DBBook>) => {
+      pool.query(query, (err, result: Partial<DBBook>[]) => {
         if (err) {
           console.error(err);
           reject(err);
@@ -68,14 +90,23 @@ export default class BooksAPIApp {
     });
   }
 
-  bookSummaryById(id: string): Promise<DBBook> {
+  bookSummaryById(id: string): Promise<Partial<DBBook>> {
     return new Promise((resolve, reject) => {
       pool.query(
-        `SELECT id, first, middle, last, name, annotation, genres, date, full, cover FROM books WHERE id = ${id}`,
-        (err, result: DBBook[]) => {
+        `SELECT
+          books.id, books.name, books.annotation, books.genres, books.date,
+            books.full, books.cover,
+          authors.first, authors.middle, authors.last, authors.id as authorId 
+          FROM books
+          CROSS JOIN authors
+          WHERE authors.id = books.authorId
+          AND books.id = ${id}`,
+        (err, result: Partial<DBBook>[]) => {
           if (err) {
             console.error(err);
             reject(err);
+          } else if (result.length === 0) {
+            reject('Book not found with id: ' + id);
           } else {
             resolve(result[0]);
           }
@@ -84,6 +115,7 @@ export default class BooksAPIApp {
     });
   }
 
+  /*
   search(pattern: string): Promise<DBBook[]> {
     return new Promise((resolve, reject) => {
       pool.query(
@@ -99,4 +131,5 @@ export default class BooksAPIApp {
       );
     });
   }
+*/
 }

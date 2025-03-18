@@ -33,7 +33,7 @@ export class AuthorBooksComponent {
   protected books = resource<Book[], unknown>({
     loader: async () => {
       await this.click;
-      return this.booksApiService.getAuthorBooks(this.author.fullName);
+      return this.booksApiService.getAuthorBooks(this.author.id!);
     },
   });
 

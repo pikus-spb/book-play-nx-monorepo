@@ -73,8 +73,8 @@ async function parseFiles(results: string[]) {
       const book = parser.parseBookFromLoaded(loaded);
       if (lang.toLowerCase() === 'ru') {
         if (
-          [book.name, book.author.firstName, book.author.lastName].every(
-            (item) => containsLetters(item)
+          [book.name, book.author.first, book.author.last].every((item) =>
+            containsLetters(item)
           ) &&
           book.paragraphs.length > 0
         ) {

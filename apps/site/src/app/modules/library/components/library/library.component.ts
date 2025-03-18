@@ -53,12 +53,12 @@ export class LibraryComponent {
   protected inputFilter(event: Event): void {
     const value = (event.target as HTMLInputElement).value;
     const data = (this.data.value() ?? []).filter(
-      (item) => item.fullName.toLowerCase().indexOf(value.toLowerCase()) > -1
+      (item) => item.full.toLowerCase().indexOf(value.toLowerCase()) > -1
     );
     this.viewData.set(data);
   }
 
   protected trackByFn(index: number, item: Author): string {
-    return item.fullName;
+    return item.full;
   }
 }

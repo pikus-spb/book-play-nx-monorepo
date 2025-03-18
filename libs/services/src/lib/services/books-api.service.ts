@@ -22,10 +22,7 @@ export class BooksApiService {
       this.http.get<DBAuthor[]>(BOOKS_API_URL + url).pipe(
         map((data: DBAuthor[]): Author[] => {
           return data.map((dbAuthor: DBAuthor) => {
-            return new Author({
-              firstName: dbAuthor[0],
-              lastName: dbAuthor[1],
-            });
+            return new Author(dbAuthor);
           });
         })
       ) as Observable<Author[]>
@@ -40,10 +37,7 @@ export class BooksApiService {
       this.http.get<DBAuthor[]>(BOOKS_API_URL + url).pipe(
         map((data: DBAuthor[]): Author[] => {
           return data.map((dbAuthor: DBAuthor) => {
-            return new Author({
-              firstName: dbAuthor[0],
-              lastName: dbAuthor[1],
-            });
+            return new Author(dbAuthor);
           });
         })
       ) as Observable<Author[]>
@@ -59,8 +53,8 @@ export class BooksApiService {
     );
   }
 
-  public getAuthorBooks(authorName: string): Promise<Book[]> {
-    const url = `/author/name/${authorName}/books`;
+  public getAuthorBooks(id: string): Promise<Book[]> {
+    const url = `/author/id/${id}/books`;
 
     return this.fromCache<Book[]>(
       url,
@@ -102,7 +96,7 @@ export class BooksApiService {
       )
     );
   }
-
+  /*
   public search(key: string): Promise<Book[]> {
     const url = '/book/all/search/' + key;
 
@@ -114,7 +108,7 @@ export class BooksApiService {
         })
       )
     );
-  }
+  }*/
 
   private fromCache<T>(url: string, observable: Observable<T>): Promise<T> {
     this.putToRequestCache<T>(url, observable);

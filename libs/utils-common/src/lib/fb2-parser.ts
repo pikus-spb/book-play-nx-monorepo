@@ -51,11 +51,11 @@ export class Fb2Parser {
 
     if (index !== -1) {
       return new Author({
-        firstName: cleanNonRussianWords(first[index]),
-        middleName: isTextInRussian(middle[index])
+        first: cleanNonRussianWords(first[index]),
+        middle: isTextInRussian(middle[index])
           ? cleanNonRussianWords(middle[index])
           : '',
-        lastName: cleanNonRussianWords(last[index]),
+        last: cleanNonRussianWords(last[index]),
       });
     }
 

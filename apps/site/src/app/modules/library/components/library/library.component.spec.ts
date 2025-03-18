@@ -97,12 +97,12 @@ describe('LibraryComponent', () => {
     test('should fetch and display authors', async () => {
       const mockData: Author[] = [
         new Author({
-          firstName: 'A',
-          lastName: 'B',
+          first: 'A',
+          last: 'B',
         }),
         new Author({
-          firstName: '',
-          lastName: 'BBB',
+          first: '',
+          last: 'BBB',
         }),
       ] as Author[];
 

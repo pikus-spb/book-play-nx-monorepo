@@ -1,7 +1,7 @@
 <div #container>
   @if (bookData !== null) {
   <div class="scrollable-canvas" cdkVirtualScrollingElement>
-    <h1>{{ bookData.fullName }}</h1>
+    <h1>{{ bookData.full }}</h1>
     <section class="title-picture-container">
       <a
         [attr.href]="bookData.id ? '/book/' + bookData.id : undefined"

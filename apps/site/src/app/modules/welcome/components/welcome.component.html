@@ -16,7 +16,7 @@
   <h2>3 случайных авторов дня:</h2>
 
   <mat-accordion>
-    @for (author of authors.value(); track author.fullName) {
+    @for (author of authors.value(); track author.full) {
     <author-books [author]="author"></author-books>
     }
   </mat-accordion>

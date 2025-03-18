@@ -66,7 +66,9 @@ export async function searchAuthor(
             'div[data-testid=author__wrapper] > div > div > div > img'
           );
           const imageUrl =
-            img.src.toLowerCase().indexOf('nophoto') === -1 ? img.src : '';
+            img && img.src.toLowerCase().indexOf('nophoto') === -1
+              ? img.src
+              : '';
           const data: HTMLElement = document.querySelector(
             'div[data-testid=author__wrapper] > div:last-child > div >' +
               ' div > div'

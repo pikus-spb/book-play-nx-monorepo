@@ -21,7 +21,7 @@ export class BookTitleComponent {
   private routeChanged = toSignal(this.router.events);
 
   public bookTitle = computed(() => {
-    const name = this.activeBookService.book()?.fullName;
+    const name = this.activeBookService.book()?.full;
 
     if (
       this.routeChanged() &&
