@@ -10,16 +10,14 @@ describe('HeightComponentComponent', () => {
   let component: CalculateComponent;
   let fixture: ComponentFixture<CalculateComponent>;
 
-  TestBed.initTestEnvironment(
-    BrowserDynamicTestingModule,
-    platformBrowserDynamicTesting()
-  );
-
   beforeEach(async () => {
     TestBed.configureTestingModule({
       imports: [CalculateComponent],
       providers: [provideExperimentalZonelessChangeDetection()],
-    });
+    }).initTestEnvironment(
+      BrowserDynamicTestingModule,
+      platformBrowserDynamicTesting()
+    );
 
     fixture = TestBed.createComponent(CalculateComponent);
     component = fixture.componentInstance;
