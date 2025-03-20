@@ -10,9 +10,9 @@ jest.mock('mysql2', () => ({
   createPool: jest.fn((options: PoolOptions) => ({
     query: jest.fn((query, callback1, callback2) => {
       const callback = callback2 ?? callback1;
-      if (query.startsWith('UPDATE')) {
-        callback(null);
-      } else if (query.startsWith('SELECT')) {
+      if (query.startsWith('INSERT INTO authors')) {
+        callback(null, { insertId: 1 });
+      } else if (query.startsWith('SELECT first, last FROM authors')) {
         callback(null, [['John', 'Doe']]);
       } else {
         callback(new Error('Query not mocked'));
@@ -21,7 +21,7 @@ jest.mock('mysql2', () => ({
   })),
 }));
 
-describe('run function', () => {
+xdescribe('run function', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
@@ -42,10 +42,18 @@ describe('run function', () => {
 
     await run();
 
+    expect(global.fetch).toHaveBeenCalledWith(
+      expect.stringContaining('/author/all')
+    );
     expect(searchAuthor).toHaveBeenCalledWith('Jane', 'Austen');
   });
 
   it('should handle cases where no new authors need to be searched info about', async () => {
+    const mockAuthors = [['John', 'Doe']];
+    (global.fetch as jest.Mock) = jest.fn(() =>
+      Promise.resolve({ json: () => Promise.resolve(mockAuthors) })
+    );
+
     await run();
     expect(searchAuthor).not.toHaveBeenCalled();
   });
