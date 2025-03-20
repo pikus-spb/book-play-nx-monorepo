@@ -10,9 +10,9 @@ jest.mock('mysql2', () => ({
   createPool: jest.fn((options: PoolOptions) => ({
     query: jest.fn((query, callback1, callback2) => {
       const callback = callback2 ?? callback1;
-      if (query.startsWith('UPDATE authors')) {
+      if (query.startsWith('UPDATE')) {
         callback(null);
-      } else if (query.startsWith('SELECT first, last FROM authors')) {
+      } else if (query.startsWith('SELECT')) {
         callback(null, [['John', 'Doe']]);
       } else {
         callback(new Error('Query not mocked'));
