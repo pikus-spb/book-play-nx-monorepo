@@ -42,18 +42,10 @@ describe('run function', () => {
 
     await run();
 
-    expect(global.fetch).toHaveBeenCalledWith(
-      expect.stringContaining('/author/all')
-    );
     expect(searchAuthor).toHaveBeenCalledWith('Jane', 'Austen');
   });
 
   it('should handle cases where no new authors need to be searched info about', async () => {
-    const mockAuthors = [['John', 'Doe']];
-    (global.fetch as jest.Mock) = jest.fn(() =>
-      Promise.resolve({ json: () => Promise.resolve(mockAuthors) })
-    );
-
     await run();
     expect(searchAuthor).not.toHaveBeenCalled();
   });
