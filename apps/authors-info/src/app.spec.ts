@@ -1,8 +1,24 @@
 import { searchAuthor } from '@book-play/scraper';
+import { PoolOptions } from 'mysql2';
 import { run } from './app'; // Укажите правильный путь к вашему модулю
 
 jest.mock('@book-play/scraper', () => ({
   searchAuthor: jest.fn(),
+}));
+
+jest.mock('mysql2', () => ({
+  createPool: jest.fn((options: PoolOptions) => ({
+    query: jest.fn((query, callback1, callback2) => {
+      const callback = callback2 ?? callback1;
+      if (query.startsWith('INSERT INTO authors')) {
+        callback(null, { insertId: 1 });
+      } else if (query.startsWith('SELECT first, last FROM authors')) {
+        callback(null, [['John', 'Doe']]);
+      } else {
+        callback(new Error('Query not mocked'));
+      }
+    }),
+  })),
 }));
 
 describe('run function', () => {
