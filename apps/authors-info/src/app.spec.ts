@@ -10,8 +10,8 @@ jest.mock('mysql2', () => ({
   createPool: jest.fn((options: PoolOptions) => ({
     query: jest.fn((query, callback1, callback2) => {
       const callback = callback2 ?? callback1;
-      if (query.startsWith('INSERT INTO authors')) {
-        callback(null, { insertId: 1 });
+      if (query.startsWith('UPDATE authors')) {
+        callback(null);
       } else if (query.startsWith('SELECT first, last FROM authors')) {
         callback(null, [['John', 'Doe']]);
       } else {

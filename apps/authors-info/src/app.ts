@@ -31,7 +31,7 @@ export async function run() {
             authorInfo.imageUrl.replace("'", "\\'") +
             "' WHERE id=" +
             author.id,
-          (err: Error, result: any) => {
+          (err: Error) => {
             if (err) {
               reject(err);
             } else {
