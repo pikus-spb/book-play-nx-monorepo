@@ -2,8 +2,15 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BOOKS_API_URL, HTTP_RETRY_NUMBER } from '@book-play/constants';
 
-import { Author, Book, DBAuthor, DBBook } from '@book-play/models';
-import { DBBookToUIBook } from '@book-play/utils-common';
+import {
+  Author,
+  AuthorSummary,
+  Book,
+  DBAuthor,
+  DBAuthorSummary,
+  DBBook,
+  DBBookToUIBook,
+} from '@book-play/models';
 import { firstValueFrom, map, Observable, retry, shareReplay } from 'rxjs';
 
 @Injectable({
@@ -68,6 +75,20 @@ export class BooksApiService {
           });
         })
       ) as Observable<Book[]>
+    );
+  }
+  public getAuthorSummary(id: string): Promise<AuthorSummary> {
+    const url = `/author/id/${id}/summary`;
+
+    return this.fromCache<AuthorSummary>(
+      url,
+      this.http
+        .get<DBAuthorSummary>(BOOKS_API_URL + url)
+        .pipe(
+          map(
+            (authorSummary: DBAuthorSummary) => new AuthorSummary(authorSummary)
+          )
+        )
     );
   }
 

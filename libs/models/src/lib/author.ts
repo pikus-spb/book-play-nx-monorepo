@@ -1,4 +1,5 @@
-import { DBBook } from './book';
+import { Book, DBBook } from './book';
+import { DBBookToUIBook } from './book-mapper';
 
 export interface DBAuthor {
   id?: string;
@@ -24,9 +25,30 @@ export class Author {
 
   constructor(obj: Partial<DBAuthor>) {
     Object.assign(this, { ...obj });
+    this.about = this.about?.replace('\n', '<br><br>');
   }
 
   public get full(): string {
     return `${this.first} ${this.middle ? this.middle + ' ' : ''}${this.last}`;
+  }
+}
+
+export class AuthorSummary extends Author {
+  books: Partial<Book>[] = [];
+  genres: string[] = [];
+
+  constructor(obj: Partial<DBAuthorSummary>) {
+    super(obj);
+
+    if (obj.books) {
+      this.books = obj.books.map((book: Partial<DBBook>) =>
+        DBBookToUIBook(book)
+      );
+      this.genres = [
+        ...new Set([
+          ...obj.books.map((book) => JSON.parse(book.genres || '[]')).flat(),
+        ]),
+      ];
+    }
   }
 }

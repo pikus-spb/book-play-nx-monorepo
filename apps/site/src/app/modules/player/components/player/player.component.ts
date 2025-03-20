@@ -8,18 +8,18 @@ import {
 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Book } from '@book-play/models';
-import {
-  ActiveBookService,
-  AppEventNames,
-  AutoPlayService,
-  BooksApiService,
-  DomHelperService,
-  EventsStateService,
-  IndexedDbBookStorageService,
-} from '@book-play/services';
 import { setWindowsTitleWithContext } from '@book-play/utils-browser';
 import { firstValueFrom } from 'rxjs';
 import { MaterialModule } from '../../../../core/modules/material.module';
+import { ActiveBookService } from '../../../../shared/services/active-book.service';
+import { AutoPlayService } from '../../../../shared/services/auto-play.service';
+import { BooksApiService } from '../../../../shared/services/books-api.service';
+import { DomHelperService } from '../../../../shared/services/dom-helper.service';
+import {
+  AppEventNames,
+  EventsStateService,
+} from '../../../../shared/services/events-state.service';
+import { IndexedDbBookStorageService } from '../../../../shared/services/indexed-db-book-storage.service';
 import { BookCanvasComponent } from '../book-canvas/book-canvas.component';
 import { CanvasSkeletonComponent } from '../canvas-skeleton/canvas-skeleton.component';
 

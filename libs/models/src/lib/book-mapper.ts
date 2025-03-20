@@ -1,4 +1,6 @@
-import { Author, Book, DBBook, ImageBase64Data } from '@book-play/models';
+import { Author } from './author';
+import { Book, DBBook } from './book';
+import { ImageBase64Data } from './imageBase64Data';
 
 export function DBBookToUIBook(input: Partial<DBBook>): Book {
   const data = {

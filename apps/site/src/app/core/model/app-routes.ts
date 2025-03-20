@@ -44,6 +44,14 @@ export const APP_ROUTES: Route[] = [
         },
       },
       {
+        path: 'author/:id',
+        loadComponent() {
+          return import(
+            '../../modules/author/components/author/author.component'
+          ).then((imported) => imported.AuthorComponent);
+        },
+      },
+      {
         path: 'voice',
         loadComponent() {
           return import('../../modules/voice/components/voice.component').then(

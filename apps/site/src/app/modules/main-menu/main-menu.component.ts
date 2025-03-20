@@ -8,15 +8,15 @@ import {
 } from '@angular/core';
 import { MatListItem } from '@angular/material/list';
 import { RouterModule } from '@angular/router';
-import {
-  ActiveBookService,
-  AppEventNames,
-  EventsStateService,
-  FileReaderService,
-  IndexedDbBookStorageService,
-} from '@book-play/services';
 import { MaterialModule } from '../../core/modules/material.module';
 import { UploadFileDirective } from '../../shared/directives/file-upload/upload-file.directive';
+import { ActiveBookService } from '../../shared/services/active-book.service';
+import {
+  AppEventNames,
+  EventsStateService,
+} from '../../shared/services/events-state.service';
+import { FileReaderService } from '../../shared/services/file-reader.service';
+import { IndexedDbBookStorageService } from '../../shared/services/indexed-db-book-storage.service';
 
 @Component({
   selector: 'main-menu',

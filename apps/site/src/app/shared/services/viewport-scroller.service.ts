@@ -1,12 +1,12 @@
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 import { ElementRef } from '@angular/core';
 import { BOOK_IMAGE_HEIGHT, BOOK_IMAGE_MARGIN } from '@book-play/constants';
+import { HeightDelta } from '@book-play/ui';
 import {
   filterTextParagraphs,
   getParagraphNode,
 } from '@book-play/utils-browser';
 import { first, firstValueFrom, Observable, tap, timer } from 'rxjs';
-import { HeightDelta } from '../model/delta';
 
 export let viewportScroller: null | ViewportScrollerService = null;
 

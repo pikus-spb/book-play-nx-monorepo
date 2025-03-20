@@ -11,10 +11,6 @@
     min-height: calc(300px + $default-padding * 2);
     padding: $default-padding;
 
-    h4 {
-      display: inline-block;
-    }
-
     img {
       margin-right: $default-padding;
       margin-bottom: $default-padding;
@@ -23,20 +19,6 @@
 
     .content {
       display: block;
-
-      button {
-        border-radius: $default-border-radius;
-      }
-
-      a {
-        color: $default-color;
-        text-decoration: none;
-        font-weight: normal;
-
-        &:hover {
-          text-decoration: underline;
-        }
-      }
 
       .annotation {
         display: inline-block;
@@ -53,12 +35,7 @@
         }
       }
 
-      .date {
-        padding: calc($default-padding / 2);
-      }
-
-      .action-panel {
-        display: block;
+      .books {
         margin-top: $default-padding;
       }
     }

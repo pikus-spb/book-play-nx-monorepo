@@ -12,7 +12,6 @@ import {
   ViewChild,
 } from '@angular/core';
 import { HeightDelta } from '../../model/delta';
-import { AppEventNames } from '../../services/events-state.service';
 import { CalculateComponent } from './calculate.component';
 
 @Component({
@@ -45,6 +44,4 @@ export class HeightCalculateComponent implements OnInit {
     this.done.emit(delta);
     this.run.set(false);
   }
-
-  protected readonly AppEventNames = AppEventNames;
 }

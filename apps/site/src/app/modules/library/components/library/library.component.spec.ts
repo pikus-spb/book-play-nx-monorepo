@@ -10,11 +10,11 @@ import {
   platformBrowserDynamicTesting,
 } from '@angular/platform-browser-dynamic/testing';
 import { Author } from '@book-play/models';
+import { BooksApiService } from '../../../../shared/services/books-api.service';
 import {
   AppEventNames,
-  BooksApiService,
   EventsStateService,
-} from '@book-play/services';
+} from '../../../../shared/services/events-state.service';
 import { LibraryComponent } from './library.component';
 
 @Directive({

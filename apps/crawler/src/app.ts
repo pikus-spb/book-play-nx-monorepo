@@ -1,9 +1,6 @@
 import { DB_CONFIG } from '@book-play/constants';
-import {
-  containsLetters,
-  Fb2Parser,
-  UIBookToDBBook,
-} from '@book-play/utils-common';
+import { UIBookToDBBook } from '@book-play/models';
+import { containsLetters, Fb2Parser } from '@book-play/utils-common';
 import { readFile, writeToFile } from '@book-play/utils-node';
 
 import fs from 'fs';

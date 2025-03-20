@@ -7,13 +7,13 @@ import {
   signal,
 } from '@angular/core';
 import { Author } from '@book-play/models';
-import {
-  AppEventNames,
-  BooksApiService,
-  EventsStateService,
-} from '@book-play/services';
 import { NgxVirtualScrollModule } from '@lithiumjs/ngx-virtual-scroll';
 import { LoadingThenShowDirective } from '../../../../shared/directives/loading-then-show/loading-then-show.directive';
+import { BooksApiService } from '../../../../shared/services/books-api.service';
+import {
+  AppEventNames,
+  EventsStateService,
+} from '../../../../shared/services/events-state.service';
 import { AuthorBooksComponent } from '../author-books/author-books.component';
 
 @Component({

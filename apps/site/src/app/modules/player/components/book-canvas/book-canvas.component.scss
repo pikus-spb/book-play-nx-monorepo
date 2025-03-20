@@ -28,6 +28,16 @@ div {
       font-family: Literata, sans-serif !important;
     }
 
+    a {
+      text-decoration: none;
+      font-weight: normal;
+      color: $default-color-dark;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+
     h1,
     section {
       padding: 0 $default-padding * 2;

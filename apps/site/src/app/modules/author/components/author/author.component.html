@@ -1,0 +1,25 @@
+<div *ngIf="authorSummary.value() as author">
+  @if (author.image) {
+  <img [src]="author.image" (error)="hideImage($event)" alt="Обложка книги" />
+  }
+  <div class="content">
+    <h3>{{ author.full }}</h3>
+
+    <mat-chip-set aria-label="Жанры">
+      @for (genre of author.genres; track genre) {
+      <mat-chip *ngIf="FB2_GENRES[genre]">{{ FB2_GENRES[genre] }}</mat-chip>
+      }
+    </mat-chip-set>
+
+    <span class="annotation" [innerHTML]="author.about"></span>
+
+    <div class="books">
+      <h4>Произведения:</h4>
+      @for (book of author.books; track book.name) {
+      <div>
+        <a [href]="'book/' + book.id">{{ book.name }}</a>
+      </div>
+      }
+    </div>
+  </div>
+</div>

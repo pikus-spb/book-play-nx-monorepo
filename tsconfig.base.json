@@ -18,7 +18,7 @@
       "@book-play/constants": ["libs/constants/src/index.ts"],
       "@book-play/models": ["libs/models/src/index.ts"],
       "@book-play/scraper": ["libs/scraper/src/index.ts"],
-      "@book-play/services": ["libs/services/src/index.ts"],
+      "@book-play/ui": ["libs/ui/src/index.ts"],
       "@book-play/utils-browser": ["libs/utils-browser/src/index.ts"],
       "@book-play/utils-common": ["libs/utils-common/src/index.ts"],
       "@book-play/utils-node": ["libs/utils-node/src/index.ts"]

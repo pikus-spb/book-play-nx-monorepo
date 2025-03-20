@@ -6,11 +6,6 @@ import {
   ViewChild,
   ViewEncapsulation,
 } from '@angular/core';
-import {
-  AppEventNames,
-  EventsStateService,
-  TtsApiService,
-} from '@book-play/services';
 import { blobToBase64 } from '@book-play/utils-browser';
 import {
   BehaviorSubject,
@@ -23,6 +18,11 @@ import {
   tap,
 } from 'rxjs';
 import { MaterialModule } from '../../../core/modules/material.module';
+import {
+  AppEventNames,
+  EventsStateService,
+} from '../../../shared/services/events-state.service';
+import { TtsApiService } from '../../../shared/services/tts-api.service';
 
 @Component({
   selector: 'voice',

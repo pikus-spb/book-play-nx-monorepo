@@ -22,9 +22,9 @@ import {
   FB2_GENRES,
 } from '@book-play/constants';
 import { Book } from '@book-play/models';
-import { BooksApiService } from '@book-play/services';
 import { showDefaultCoverImage } from '@book-play/utils-browser';
 import { firstValueFrom } from 'rxjs';
+import { BooksApiService } from '../../../../shared/services/books-api.service';
 
 @Component({
   selector: 'book',

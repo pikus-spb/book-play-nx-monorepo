@@ -12,8 +12,8 @@ import {
   MatExpansionPanelTitle,
 } from '@angular/material/expansion';
 import { Author, Book } from '@book-play/models';
-import { BooksApiService } from '@book-play/services';
 import { LoadingIndicatorComponent } from '../../../../shared/components/loading-indicator/loading-indicator.component';
+import { BooksApiService } from '../../../../shared/services/books-api.service';
 
 @Component({
   selector: 'author-books',

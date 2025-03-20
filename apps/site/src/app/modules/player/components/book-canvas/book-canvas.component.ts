@@ -21,18 +21,15 @@ import {
   DEFAULT_COVER_SRC,
 } from '@book-play/constants';
 import { Book } from '@book-play/models';
-import {
-  DomHelperService,
-  HeightCalculateComponent,
-  HeightDelta,
-  setupViewportScrollerService,
-} from '@book-play/services';
+import { HeightCalculateComponent, HeightDelta } from '@book-play/ui';
 import {
   isTextParagraph,
   showDefaultCoverImage,
 } from '@book-play/utils-browser';
 import { Subject } from 'rxjs';
 import { MaterialModule } from '../../../../core/modules/material.module';
+import { DomHelperService } from '../../../../shared/services/dom-helper.service';
+import { setupViewportScrollerService } from '../../../../shared/services/viewport-scroller.service';
 import { BookParagraphComponent } from '../book-paragraph/book-paragraph.component';
 
 @Component({

@@ -5,12 +5,15 @@ import {
   inject,
 } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { AppEventNames, EventsStateService } from '@book-play/services';
 import { MainHeaderComponent } from '../../../modules/main-header/main-header.component';
 import { MainMenuComponent } from '../../../modules/main-menu/main-menu.component';
 import { BookTitleComponent } from '../../../shared/components/book-title/book-title.component';
 import { CopyrightOwnerComponent } from '../../../shared/components/copyright-owner/copyright-owner.component';
 import { CopyrightComponent } from '../../../shared/components/copyright/copyright.component';
+import {
+  AppEventNames,
+  EventsStateService,
+} from '../../../shared/services/events-state.service';
 import { MaterialModule } from '../../modules/material.module';
 
 @Component({

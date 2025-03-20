@@ -3,8 +3,8 @@ import {
   Component,
   HostListener,
 } from '@angular/core';
-import { AutoPlayService } from '@book-play/services';
 import { MaterialModule } from '../../../core/modules/material.module';
+import { AutoPlayService } from '../../services/auto-play.service';
 
 @Component({
   selector: 'player-button',

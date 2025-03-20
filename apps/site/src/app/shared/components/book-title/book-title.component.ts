@@ -6,7 +6,7 @@ import {
 } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
-import { ActiveBookService } from '@book-play/services';
+import { ActiveBookService } from '../../services/active-book.service';
 
 @Component({
   selector: 'book-title',

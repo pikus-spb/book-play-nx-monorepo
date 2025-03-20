@@ -1,5 +1,6 @@
-import { DB_CONFIG } from '@book-play/constants';
+import { BOOKS_JSON_PATH, DB_CONFIG } from '@book-play/constants';
 import { DBAuthor, DBAuthorSummary, DBBook } from '@book-play/models';
+import fs from 'fs';
 import mysql, { PoolOptions } from 'mysql2';
 
 const pool = mysql.createPool(DB_CONFIG as unknown as PoolOptions);
@@ -76,7 +77,7 @@ export default class BooksAPIApp {
   }
 
   authorBooks(authorId: string): Promise<Partial<DBBook>[]> {
-    const query = `SELECT id, name FROM books WHERE authorId = "${authorId}"`;
+    const query = `SELECT id, name, genres FROM books WHERE authorId = "${authorId}"`;
 
     return new Promise((resolve, reject) => {
       pool.query(query, (err, result: Partial<DBBook>[]) => {
@@ -88,6 +89,15 @@ export default class BooksAPIApp {
         }
       });
     });
+  }
+
+  async bookById(id: string): Promise<Partial<DBBook>> {
+    const book = await this.bookSummaryById(id);
+    book.paragraphs = JSON.parse(
+      fs.readFileSync(BOOKS_JSON_PATH + id + '.json').toString()
+    ).paragraphs;
+
+    return book;
   }
 
   bookSummaryById(id: string): Promise<Partial<DBBook>> {
