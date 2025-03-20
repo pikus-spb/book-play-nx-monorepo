@@ -1,5 +1,6 @@
 export default {
   displayName: 'ui',
+  setupFiles: ['<rootDir>/setup.jest.js'],
   preset: '../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
   coverageDirectory: '../../coverage/libs/ui',
