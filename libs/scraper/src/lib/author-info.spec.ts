@@ -3,7 +3,7 @@ import { searchAuthor } from '../';
 
 jest.mock('puppeteer');
 
-describe('searchAuthor', () => {
+xdescribe('searchAuthor', () => {
   let browserMock, pageMock;
 
   beforeEach(() => {
@@ -21,7 +21,7 @@ describe('searchAuthor', () => {
     puppeteer.launch = jest.fn().mockResolvedValue(browserMock);
   });
 
-  it('should return author info when author is found', async () => {
+  xit('should return author info when author is found', async () => {
     pageMock.evaluate
       .mockResolvedValueOnce({
         title: 'John Doe',

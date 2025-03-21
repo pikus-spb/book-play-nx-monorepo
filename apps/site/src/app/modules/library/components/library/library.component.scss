@@ -33,7 +33,7 @@
       }
     }
 
-    .authors-books-grid {
+    ::ng-deep .authors-books-grid {
       flex: 1 0;
       display: grid;
       grid-gap: $default-padding * 1.5;
@@ -42,11 +42,36 @@
       align-content: start;
       justify-content: start;
 
-      ::ng-deep {
-        .virtual-spacer-before,
-        .virtual-spacer-after {
-          grid-column: 1 / -1;
+      nav {
+        mat-chip {
+          .mdc-evolution-chip__cell {
+            width: 100%;
+
+            .mdc-evolution-chip__action {
+              width: 100%;
+
+              .mdc-evolution-chip__text-label {
+                width: 100%;
+
+                a {
+                  width: 100%;
+                  display: block;
+                  text-decoration: none;
+                  color: $default-color;
+                  font-weight: normal;
+                  padding: 0 $default-padding;
+                  overflow: hidden;
+                  white-space: nowrap;
+                  text-overflow: ellipsis;
+                }
+              }
+            }
+          }
         }
+      }
+
+      .virtual-spacer {
+        grid-column: 1 / -1;
       }
     }
   }

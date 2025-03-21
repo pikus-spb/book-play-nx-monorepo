@@ -26,7 +26,7 @@ xdescribe('run function', () => {
     jest.clearAllMocks();
   });
 
-  it('should fetch authors, filter them, and search info about', async () => {
+  xit('should fetch authors, filter them, and search info about', async () => {
     const mockAuthors = [
       ['Jane', 'Austen'],
       ['John', 'Doe'], // Уже в базе

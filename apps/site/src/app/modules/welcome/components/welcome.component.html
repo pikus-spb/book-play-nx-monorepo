@@ -14,12 +14,13 @@
 
   <p>&nbsp;</p>
   <h2>3 случайных авторов дня:</h2>
-
-  <mat-accordion>
+  <mat-chip-set aria-label="Авторы">
     @for (author of authors.value(); track author.full) {
-    <author-books [author]="author"></author-books>
+    <mat-chip
+      ><a [href]="'author/' + author.id">{{ author.full }}</a></mat-chip
+    >
     }
-  </mat-accordion>
+  </mat-chip-set>
 
   <p>&nbsp;</p>
   <h2>3 случайных книги дня:</h2>

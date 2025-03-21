@@ -13,41 +13,48 @@ export async function run() {
 
     console.log('Searching author: ' + author.full + ' ...\n\r');
 
-    const authorInfo = await searchAuthor(author.first, author.last);
+    let authorInfo = await searchAuthor(author.first, author.last);
 
-    if (authorInfo && (authorInfo.about !== '' || authorInfo.imageUrl !== '')) {
-      console.log(
-        'Adding info about ' +
-          author.full +
-          '\n' +
-          (authorInfo.about || '(empty)')
-      );
-
-      await new Promise((resolve, reject) => {
-        pool.query(
-          "UPDATE authors SET about='" +
-            authorInfo.about.replace("'", "\\'") +
-            "', image='" +
-            authorInfo.imageUrl.replace("'", "\\'") +
-            "' WHERE id=" +
-            author.id,
-          (err: Error) => {
-            if (err) {
-              reject(err);
-            } else {
-              resolve(true);
-            }
-          }
-        );
-      })
-        .then(() => {
-          console.log('Added successfully.\n\r\n\r');
-        })
-        .catch((e) => {
-          console.error(e);
-          console.log('\n\r');
-        });
+    if (!authorInfo) {
+      authorInfo = {
+        imageUrl: '',
+        about: '',
+      };
     }
+
+    console.log(
+      'Adding info about ' +
+        author.full +
+        '\n' +
+        authorInfo.about +
+        '\n' +
+        authorInfo.imageUrl
+    );
+
+    await new Promise((resolve, reject) => {
+      pool.query(
+        "UPDATE authors SET about='" +
+          authorInfo.about.replace("'", "\\'") +
+          "', image='" +
+          authorInfo.imageUrl.replace("'", "\\'") +
+          "' WHERE id=" +
+          author.id,
+        (err: Error) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(true);
+          }
+        }
+      );
+    })
+      .then(() => {
+        console.log('Added successfully.\n\r\n\r');
+      })
+      .catch((e) => {
+        console.error(e);
+        console.log('\n\r');
+      });
   }
 
   console.log('Done. Added info about ' + authors.length + ' authors.');
@@ -56,7 +63,7 @@ export async function run() {
 async function getAuthorsToUpdate(): Promise<DBAuthor[]> {
   return new Promise((resolve, reject) => {
     pool.query(
-      'SELECT id, first, last, full FROM authors WHERE about = "" AND image = ""',
+      'SELECT id, first, last, full FROM authors',
       (err: Error, result: DBAuthor[]) => {
         if (err) {
           console.error(err);

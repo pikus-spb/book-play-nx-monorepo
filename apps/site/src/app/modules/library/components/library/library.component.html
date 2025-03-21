@@ -17,7 +17,13 @@
       [trackBy]="trackByFn"
       class="authors-books-grid"
     >
-      <author-books [author]="item!" *liVirtualItem="let item"></author-books>
+      <mat-chip-set aria-label="Авторы">
+        <nav *liVirtualItem="let item">
+          <mat-chip
+            ><a [href]="'author/' + item.id">{{ item.full }}</a></mat-chip
+          >
+        </nav>
+      </mat-chip-set>
     </li-virtual-scroll>
     } @else {
     <span>Книги временно не доступны</span>
