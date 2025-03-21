@@ -1,5 +1,6 @@
 export const FB2_GENRES: Record<string, string> = {
   sf_history: 'Альтернативная история',
+  architecture: 'Архитектура',
   sf_action: 'Боевая Фантастика',
   sf_epic: 'Эпическая Фантастика',
   sf_heroic: 'Героическая фантастика',

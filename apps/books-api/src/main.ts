@@ -61,6 +61,22 @@ expressApp.get(
 );
 
 expressApp.get(
+  '/author/genre/:genre',
+  cors(corsOptionsDelegate),
+  (req, res) => {
+    const genre = req.params.genre;
+    app
+      .authorsByGenre(genre)
+      .then((books) => {
+        res.json(books);
+      })
+      .catch((err) => {
+        res.json(err);
+      });
+  }
+);
+
+expressApp.get(
   '/author/random/:number?',
   cors(corsOptionsDelegate),
   (req, res) => {
@@ -137,19 +153,3 @@ expressApp.get(
       });
   }
 );
-//
-// expressApp.get(
-//   '/book/all/search/:pattern',
-//   cors(corsOptionsDelegate),
-//   (req, res) => {
-//     const search = req.params.pattern;
-//     app
-//       .search(search)
-//       .then((books) => {
-//         res.json(books);
-//       })
-//       .catch((err) => {
-//         res.json(err);
-//       });
-//   }
-// );

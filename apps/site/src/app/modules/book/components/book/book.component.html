@@ -14,13 +14,15 @@
 
     <mat-chip-set aria-label="Жанры">
       @for (genre of book.genres; track genre) {
-      <mat-chip *ngIf="FB2_GENRES[genre]">{{ FB2_GENRES[genre] }}</mat-chip>
+      <mat-chip *ngIf="genre"
+        ><a [href]="'/author/genre/' + genre">{{ genre | genre }}</a></mat-chip
+      >
       } @if (book.date) {
       <span class="date">{{ book.date }}г.</span>
       }
     </mat-chip-set>
 
-    <span class="annotation">{{ book.annotation }}</span>
+    <span class="annotation" [innerHTML]="book.annotation"></span>
 
     <div class="action-panel">
       <button

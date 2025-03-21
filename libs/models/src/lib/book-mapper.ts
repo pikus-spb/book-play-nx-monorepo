@@ -7,7 +7,7 @@ export function DBBookToUIBook(input: Partial<DBBook>): Book {
     id: input.id,
     authorId: input.authorId,
     name: input.name,
-    annotation: input.annotation,
+    annotation: (input.annotation || '').replace('\n', '<br><br>'),
     genres: JSON.parse(input.genres || '[]'),
     date: input.date,
     paragraphs: JSON.parse(input.paragraphs || '[]'),

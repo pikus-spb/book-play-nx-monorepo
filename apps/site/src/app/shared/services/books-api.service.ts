@@ -4,9 +4,12 @@ import { BOOKS_API_URL, HTTP_RETRY_NUMBER } from '@book-play/constants';
 
 import {
   Author,
+  AuthorByGenre,
   AuthorSummary,
   Book,
   DBAuthor,
+  DBAuthorByGenre,
+  DBAuthorByGenreToUI,
   DBAuthorSummary,
   DBBook,
   DBBookToUIBook,
@@ -77,6 +80,7 @@ export class BooksApiService {
       ) as Observable<Book[]>
     );
   }
+
   public getAuthorSummary(id: string): Promise<AuthorSummary> {
     const url = `/author/id/${id}/summary`;
 
@@ -89,6 +93,19 @@ export class BooksApiService {
             (authorSummary: DBAuthorSummary) => new AuthorSummary(authorSummary)
           )
         )
+    );
+  }
+
+  public getAuthorsByGenre(genre: string): Promise<AuthorByGenre[]> {
+    const url = `/author/genre/${genre}`;
+
+    return this.fromCache<AuthorByGenre[]>(
+      url,
+      this.http.get<DBAuthorByGenre[]>(BOOKS_API_URL + url).pipe(
+        map((authors: DBAuthorByGenre[]): AuthorByGenre[] => {
+          return authors.map((author) => DBAuthorByGenreToUI(author));
+        })
+      )
     );
   }
 
@@ -117,19 +134,6 @@ export class BooksApiService {
       )
     );
   }
-  /*
-  public search(key: string): Promise<Book[]> {
-    const url = '/book/all/search/' + key;
-
-    return this.fromCache<Book[]>(
-      url,
-      this.http.get<DBBook[]>(BOOKS_API_URL + url).pipe(
-        map((books: DBBook[]): Book[] => {
-          return books.map((book) => DBBookToUIBook(book));
-        })
-      )
-    );
-  }*/
 
   private fromCache<T>(url: string, observable: Observable<T>): Promise<T> {
     this.putToRequestCache<T>(url, observable);

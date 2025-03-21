@@ -1,0 +1,36 @@
+<div class="library-container">
+  <h1 loading [thenShow]="result">
+    <span>Авторы, пишущие в жанре "{{ genreSignal() || '' | genre }}"</span>
+    <input
+      (input)="inputFilter($event)"
+      placeholder="Поиск по имени автора..."
+    />
+    <span #loading></span>
+  </h1>
+  <ng-template #result>
+    @if (authors.value()) {
+    <li-virtual-scroll
+      [items]="viewAuthors()"
+      [gridList]="true"
+      [itemWidth]="250"
+      [itemHeight]="50"
+      [trackBy]="trackByFn"
+      class="authors-books-grid"
+    >
+      <mat-chip-set aria-label="Авторы">
+        <nav *liVirtualItem="let item">
+          <mat-chip
+            ><a
+              [href]="'author/' + item.id"
+              [title]="'Пишет в жарах: ' + (item.genres | genres)"
+              >{{ item.full }}</a
+            ></mat-chip
+          >
+        </nav>
+      </mat-chip-set>
+    </li-virtual-scroll>
+    } @else {
+    <span>Данные временно не доступны</span>
+    }
+  </ng-template>
+</div>

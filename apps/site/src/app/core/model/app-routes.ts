@@ -52,6 +52,14 @@ export const APP_ROUTES: Route[] = [
         },
       },
       {
+        path: 'author/genre/:genre',
+        loadComponent() {
+          return import(
+            '../../modules/authors-by-genre/components/authors-by-genre/authors-by-genre.component'
+          ).then((imported) => imported.AuthorsByGenreComponent);
+        },
+      },
+      {
         path: 'voice',
         loadComponent() {
           return import('../../modules/voice/components/voice.component').then(

@@ -20,6 +20,12 @@
     .content {
       display: block;
 
+      ::ng-deep mat-chip-set a {
+        font-weight: normal;
+        text-decoration: none;
+        color: $default-color;
+      }
+
       .annotation {
         display: inline-block;
         text-align: justify;

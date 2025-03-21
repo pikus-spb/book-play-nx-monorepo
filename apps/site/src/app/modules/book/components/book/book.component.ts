@@ -19,9 +19,9 @@ import {
   BOOK_IMAGE_HEIGHT,
   BOOK_IMAGE_WIDTH,
   DEFAULT_COVER_SRC,
-  FB2_GENRES,
 } from '@book-play/constants';
 import { Book } from '@book-play/models';
+import { GenrePipe } from '@book-play/ui';
 import { showDefaultCoverImage } from '@book-play/utils-browser';
 import { firstValueFrom } from 'rxjs';
 import { BooksApiService } from '../../../../shared/services/books-api.service';
@@ -38,6 +38,7 @@ import { BooksApiService } from '../../../../shared/services/books-api.service';
     MatTooltip,
     MatChipSet,
     MatChip,
+    GenrePipe,
   ],
 })
 export class BookComponent implements AfterViewInit {
@@ -78,6 +79,5 @@ export class BookComponent implements AfterViewInit {
 
   protected readonly BOOK_IMAGE_WIDTH = BOOK_IMAGE_WIDTH;
   protected readonly BOOK_IMAGE_HEIGHT = BOOK_IMAGE_HEIGHT;
-  protected readonly FB2_GENRES = FB2_GENRES;
   protected readonly showDefaultCoverImage = showDefaultCoverImage;
 }

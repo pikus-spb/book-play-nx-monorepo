@@ -11,6 +11,18 @@ export interface DBAuthor {
   image?: string;
 }
 
+export interface DBAuthorByGenre {
+  id: string;
+  full: string;
+  genres: string;
+}
+
+export interface AuthorByGenre {
+  id: string;
+  full: string;
+  genres: string[];
+}
+
 export interface DBAuthorSummary extends DBAuthor {
   books: Partial<DBBook>[];
 }

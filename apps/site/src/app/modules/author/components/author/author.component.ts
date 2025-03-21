@@ -11,8 +11,8 @@ import {
 } from '@angular/core';
 import { MatChip, MatChipSet } from '@angular/material/chips';
 import { ActivatedRoute } from '@angular/router';
-import { FB2_GENRES } from '@book-play/constants';
 import { AuthorSummary } from '@book-play/models';
+import { GenrePipe } from '@book-play/ui';
 import { hideImage } from '@book-play/utils-browser';
 import { firstValueFrom } from 'rxjs';
 import { BooksApiService } from '../../../../shared/services/books-api.service';
@@ -22,7 +22,7 @@ import { BooksApiService } from '../../../../shared/services/books-api.service';
   templateUrl: './author.component.html',
   styleUrls: ['./author.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [CommonModule, MatChipSet, MatChip],
+  imports: [CommonModule, MatChipSet, MatChip, GenrePipe],
 })
 export class AuthorComponent implements AfterViewInit {
   @Input() id: string | null = null;
@@ -50,6 +50,5 @@ export class AuthorComponent implements AfterViewInit {
     this.idSignal.set(id);
   }
 
-  protected readonly FB2_GENRES = FB2_GENRES;
   protected readonly hideImage = hideImage;
 }

@@ -7,7 +7,6 @@ import {
   signal,
 } from '@angular/core';
 import { MatChip, MatChipSet } from '@angular/material/chips';
-import { FB2_GENRES } from '@book-play/constants';
 import { Author } from '@book-play/models';
 import { NgxVirtualScrollModule } from '@lithiumjs/ngx-virtual-scroll';
 import { LoadingThenShowDirective } from '../../../../shared/directives/loading-then-show/loading-then-show.directive';
@@ -63,6 +62,4 @@ export class LibraryComponent {
   protected trackByFn(index: number, item: Author): string {
     return item.full;
   }
-
-  protected readonly FB2_GENRES = FB2_GENRES;
 }

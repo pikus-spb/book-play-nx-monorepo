@@ -45,6 +45,31 @@ export default class BooksAPIApp {
     });
   }
 
+  async authorsByGenre(genre: string): Promise<Partial<DBAuthor>[]> {
+    return new Promise((resolve, reject) => {
+      pool.query(
+        `SELECT DISTINCT
+          authors.id, authors.full, books.genres
+          FROM books
+          CROSS JOIN authors
+          WHERE authors.id = books.authorId
+          AND books.genres REGEXP "${genre}" ORDER BY authors.full`,
+        (err, result: Partial<DBAuthor>[]) => {
+          if (err) {
+            console.error(err);
+            reject(err);
+          } else {
+            const hashed = result.reduce((memo, item) => {
+              memo[item.full] = item;
+              return memo;
+            }, {});
+            resolve(Object.values(hashed) as Partial<DBAuthor>[]);
+          }
+        }
+      );
+    });
+  }
+
   randomAuthors(number = '3'): Promise<Partial<DBAuthor>[]> {
     return new Promise((resolve, reject) => {
       pool.query(
