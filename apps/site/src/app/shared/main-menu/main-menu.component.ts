@@ -1,3 +1,4 @@
+import { AsyncPipe } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -6,24 +7,32 @@ import {
   inject,
   ViewChild,
 } from '@angular/core';
-import { MatListItem } from '@angular/material/list';
+import { MatIcon } from '@angular/material/icon';
+import { MatListItem, MatNavList } from '@angular/material/list';
 import { RouterModule } from '@angular/router';
-import { MaterialModule } from '../../core/modules/material.module';
-import { UploadFileDirective } from '../../shared/directives/file-upload/upload-file.directive';
-import { ActiveBookService } from '../../shared/services/active-book.service';
+import { async } from 'rxjs';
+import { UploadFileDirective } from '../directives/file-upload/upload-file.directive';
+import { ActiveBookService } from '../services/active-book.service';
 import {
   AppEventNames,
   EventsStateService,
-} from '../../shared/services/events-state.service';
-import { FileReaderService } from '../../shared/services/file-reader.service';
-import { IndexedDbBookStorageService } from '../../shared/services/indexed-db-book-storage.service';
+} from '../services/events-state.service';
+import { FileReaderService } from '../services/file-reader.service';
+import { IndexedDbBookStorageService } from '../services/indexed-db-book-storage.service';
 
 @Component({
   selector: 'main-menu',
   templateUrl: './main-menu.component.html',
   styleUrls: ['./main-menu.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [RouterModule, MaterialModule, UploadFileDirective],
+  imports: [
+    RouterModule,
+    UploadFileDirective,
+    MatIcon,
+    MatNavList,
+    MatListItem,
+    AsyncPipe,
+  ],
 })
 export class MainMenuComponent {
   @ViewChild('uploadButton') uploadButton?: MatListItem;
@@ -59,4 +68,6 @@ export class MainMenuComponent {
   fileUploaded(files?: FileList) {
     this.fileReaderService.parseNewFile(files);
   }
+
+  protected readonly async = async;
 }

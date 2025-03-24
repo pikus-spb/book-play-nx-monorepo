@@ -15,7 +15,6 @@ import { ActivatedRoute } from '@angular/router';
 import { AuthorByGenre } from '@book-play/models';
 import { GenrePipe, GenresPipe } from '@book-play/ui';
 import { NgxVirtualScrollModule } from '@lithiumjs/ngx-virtual-scroll';
-import { result } from 'lodash';
 import { firstValueFrom } from 'rxjs';
 import { LoadingThenShowDirective } from '../../../../shared/directives/loading-then-show/loading-then-show.directive';
 import { BooksApiService } from '../../../../shared/services/books-api.service';
@@ -93,6 +92,4 @@ export class AuthorsByGenreComponent implements AfterViewInit {
     );
     this.viewAuthors.set(data);
   }
-
-  protected readonly result = result;
 }

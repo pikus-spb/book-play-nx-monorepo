@@ -27,7 +27,6 @@ import {
   showDefaultCoverImage,
 } from '@book-play/utils-browser';
 import { Subject } from 'rxjs';
-import { MaterialModule } from '../../../../core/modules/material.module';
 import { DomHelperService } from '../../../../shared/services/dom-helper.service';
 import { setupViewportScrollerService } from '../../../../shared/services/viewport-scroller.service';
 import { BookParagraphComponent } from '../book-paragraph/book-paragraph.component';
@@ -38,7 +37,6 @@ import { BookParagraphComponent } from '../book-paragraph/book-paragraph.compone
   styleUrls: ['./book-canvas.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
-    MaterialModule,
     ScrollingModule,
     ExperimentalScrollingModule,
     BookParagraphComponent,

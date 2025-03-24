@@ -25,44 +25,44 @@
       "options": {
         "outputHashing": "all",
         "outputPath": "dist/apps/site",
-        "index": "apps/site/src/app/core/index.html",
-        "browser": "apps/site/src/app/core/main.ts",
+        "index": "apps/site/src/app/index.html",
+        "browser": "apps/site/src/app/modules/main/main.ts",
         "tsConfig": "apps/site/tsconfig.app.json",
         "inlineStyleLanguage": "scss",
         "stylePreprocessorOptions": {
-          "includePaths": ["apps/site/src/app/core/styles/"]
+          "includePaths": ["apps/site/src/app/modules/main/styles/"]
         },
         "assets": [
           {
             "glob": "**/*",
-            "input": "apps/site/src/app/core/assets/fonts",
+            "input": "apps/site/src/assets/fonts",
             "output": "/assets/fonts"
           },
           {
             "glob": "**/*",
-            "input": "apps/site/src/app/core/assets/images",
+            "input": "apps/site/src/assets/images",
             "output": "/assets/images"
           },
           {
             "glob": "**/.htaccess",
-            "input": "apps/site/src/app/core/assets/",
+            "input": "apps/site/src/assets/",
             "output": "/"
           },
           {
             "glob": "**/manifest.json",
-            "input": "apps/site/src/app/core/assets/",
+            "input": "apps/site/src/assets/",
             "output": "/"
           },
           {
             "glob": "**/favicon.ico",
-            "input": "apps/site/src/app/core/assets/",
+            "input": "apps/site/src/assets/",
             "output": "/"
           }
         ],
         "scripts": ["nosleep.js/dist/NoSleep.js"],
         "styles": [
           "@angular/material/prebuilt-themes/pink-bluegrey.css",
-          "apps/site/src/app/core/styles/main.scss"
+          "apps/site/src/app/modules/main/styles/main.scss"
         ]
       },
       "configurations": {

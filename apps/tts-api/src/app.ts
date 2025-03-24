@@ -1,62 +1,11 @@
-import { DB_CONFIG } from '@book-play/constants';
+import { TTSParams } from '@book-play/models';
 import { ChildProcessWithoutNullStreams, spawn } from 'child_process';
 import express from 'express';
-import mysql, { PoolOptions } from 'mysql2';
 
-const pool = mysql.createPool(DB_CONFIG as unknown as PoolOptions);
-const TMP_FILE_EXTENTION = '.tmp.mp3';
-const MP3_FILE_EXTENTION = '.mp3';
+const TMP_FILE_EXTENSION = '.tmp.mp3';
+const MP3_FILE_EXTENSION = '.mp3';
 
 export default class BooksAPIApp {
-  loadFromDb(text: string): Promise<any> {
-    return new Promise((resolve, reject) => {
-      pool.query(
-        `SELECT fileName, used FROM audiocache WHERE text = "${text.replace(
-          /"/g,
-          '\\"'
-        )}"`,
-        (err, result) => {
-          if (err) {
-            console.error(err);
-            reject(err);
-          } else if (result && result[0]) {
-            const used = result[0].used + 1;
-            pool.query(
-              `UPDATE audiocache
-                         SET used = ${used}
-                         WHERE text = "${text.replace(/"/g, '\\"')}"`,
-              (err2) => {
-                if (err) {
-                  console.error(err2);
-                  reject(err);
-                }
-              }
-            );
-          }
-
-          resolve(result && result[0]);
-        }
-      );
-    });
-  }
-
-  saveToDb(text: string, fileName: string) {
-    return new Promise((resolve, reject) => {
-      pool.query(
-        'INSERT INTO audiocache (text, fileName, used) VALUES (?, ?, ?)',
-        [text, fileName, 0],
-        (err) => {
-          if (err) {
-            console.error(err);
-            reject(err);
-          } else {
-            resolve(fileName);
-          }
-        }
-      );
-    });
-  }
-
   killOnClose(
     req: express.Request,
     precess: ChildProcessWithoutNullStreams,
@@ -73,20 +22,22 @@ export default class BooksAPIApp {
   }
 
   runTts(
-    text: string,
+    params: TTSParams,
     fileName: string,
     req: express.Request
   ): Promise<string> {
     return new Promise((resolve, reject) => {
+      const { pitch, rate, voice } = params;
+      let { text } = params;
       text = text.replace(/\.\s*$/, '');
       const args = [
-        '--voice',
-        'ru-RU-DmitryNeural',
-        '--pitch=-10Hz',
-        '--rate',
-        '+10%',
+        `--voice=${
+          voice === 'female' ? 'ru-RU-SvetlanaNeural' : 'ru-RU-DmitryNeural'
+        }`,
+        `--pitch=${pitch > 0 ? '+' + pitch : pitch}Hz`,
+        `--rate=${rate > 0 ? '+' + rate : rate}%`,
         '--write-media',
-        fileName + TMP_FILE_EXTENTION,
+        fileName + TMP_FILE_EXTENSION,
         '--text',
         `"${text}"`,
       ];
@@ -96,10 +47,10 @@ export default class BooksAPIApp {
 
       ttsProc.on('close', () => {
         const args = [
-          fileName + TMP_FILE_EXTENTION,
+          fileName + TMP_FILE_EXTENSION,
           '-C',
           '48',
-          fileName + MP3_FILE_EXTENTION,
+          fileName + MP3_FILE_EXTENSION,
           'silence',
           '-l',
           '1',
@@ -111,25 +62,19 @@ export default class BooksAPIApp {
         ];
         const removeSilenceProc = spawn('sox', args, { detached: true });
         removeSilenceProc.on('close', () => {
-          setTimeout(() => resolve(fileName + MP3_FILE_EXTENTION), 200);
+          setTimeout(() => resolve(fileName + MP3_FILE_EXTENSION), 200);
         });
       });
     });
   }
 
-  async tts(text: string, req: express.Request) {
-    const loadResult = await this.loadFromDb(text);
-    if (loadResult) {
-      return loadResult.fileName;
-    } else {
-      const fileNamePrefix = __dirname + '/cache/part' + Date.now();
-      try {
-        const resultFileName = await this.runTts(text, fileNamePrefix, req);
-        return this.saveToDb(text, resultFileName);
-      } catch (e) {
-        console.error(e);
-        return '';
-      }
+  async tts(params: TTSParams, req: express.Request): Promise<string> {
+    const fileNamePrefix = __dirname + '/cache/part' + Date.now();
+    try {
+      return this.runTts(params, fileNamePrefix, req);
+    } catch (e) {
+      console.error(e);
+      return '';
     }
   }
 }

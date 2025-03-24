@@ -10,7 +10,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Book } from '@book-play/models';
 import { setWindowsTitleWithContext } from '@book-play/utils-browser';
 import { firstValueFrom } from 'rxjs';
-import { MaterialModule } from '../../../../core/modules/material.module';
 import { ActiveBookService } from '../../../../shared/services/active-book.service';
 import { AutoPlayService } from '../../../../shared/services/auto-play.service';
 import { BooksApiService } from '../../../../shared/services/books-api.service';
@@ -28,7 +27,7 @@ import { CanvasSkeletonComponent } from '../canvas-skeleton/canvas-skeleton.comp
   templateUrl: './player.component.html',
   styleUrls: ['./player.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [MaterialModule, BookCanvasComponent, CanvasSkeletonComponent],
+  imports: [BookCanvasComponent, CanvasSkeletonComponent],
 })
 export class PlayerComponent implements AfterViewInit {
   public eventState = inject(EventsStateService);

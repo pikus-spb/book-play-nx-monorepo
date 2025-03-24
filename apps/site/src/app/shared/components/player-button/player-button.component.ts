@@ -1,9 +1,13 @@
+import { AsyncPipe } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
   HostListener,
 } from '@angular/core';
-import { MaterialModule } from '../../../core/modules/material.module';
+import { MatMiniFabButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import { MatTooltip } from '@angular/material/tooltip';
+import { async } from 'rxjs';
 import { AutoPlayService } from '../../services/auto-play.service';
 
 @Component({
@@ -11,7 +15,7 @@ import { AutoPlayService } from '../../services/auto-play.service';
   templateUrl: 'player-button.component.html',
   styleUrl: 'player-button.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [MaterialModule],
+  imports: [MatMiniFabButton, MatTooltip, MatIcon, AsyncPipe],
 })
 export class PlayerButtonComponent {
   constructor(public autoPlay: AutoPlayService) {}
@@ -32,4 +36,6 @@ export class PlayerButtonComponent {
       }
     }
   }
+
+  protected readonly async = async;
 }

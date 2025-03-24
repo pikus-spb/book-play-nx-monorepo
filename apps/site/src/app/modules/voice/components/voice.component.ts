@@ -1,3 +1,4 @@
+import { AsyncPipe } from '@angular/common';
 import {
   AfterViewInit,
   ChangeDetectionStrategy,
@@ -6,8 +7,10 @@ import {
   ViewChild,
   ViewEncapsulation,
 } from '@angular/core';
+import { MatButton } from '@angular/material/button';
 import { blobToBase64 } from '@book-play/utils-browser';
 import {
+  async,
   BehaviorSubject,
   distinctUntilChanged,
   firstValueFrom,
@@ -17,7 +20,6 @@ import {
   switchMap,
   tap,
 } from 'rxjs';
-import { MaterialModule } from '../../../core/modules/material.module';
 import {
   AppEventNames,
   EventsStateService,
@@ -26,7 +28,7 @@ import { TtsApiService } from '../../../shared/services/tts-api.service';
 
 @Component({
   selector: 'voice',
-  imports: [MaterialModule],
+  imports: [MatButton, AsyncPipe],
   templateUrl: './voice.component.html',
   styleUrls: ['./voice.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -86,4 +88,6 @@ export class VoiceComponent implements AfterViewInit {
       )
       .subscribe();
   }
+
+  protected readonly async = async;
 }

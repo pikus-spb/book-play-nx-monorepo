@@ -13,56 +13,56 @@ export const APP_ROUTES: Route[] = [
       {
         path: 'welcome',
         loadComponent() {
-          return import(
-            '../../modules/welcome/components/welcome.component'
-          ).then((imported) => imported.WelcomeComponent);
+          return import('../../welcome/components/welcome.component').then(
+            (imported) => imported.WelcomeComponent
+          );
         },
         title: DEFAULT_TITLE,
       },
       {
         path: 'book/:id',
         loadComponent() {
-          return import(
-            '../../modules/book/components/book/book.component'
-          ).then((imported) => imported.BookComponent);
+          return import('../..//book/components/book/book.component').then(
+            (imported) => imported.BookComponent
+          );
         },
       },
       {
         path: 'player',
         loadComponent() {
-          return import(
-            '../../modules/player/components/player/player.component'
-          ).then((imported) => imported.PlayerComponent);
+          return import('../../player/components/player/player.component').then(
+            (imported) => imported.PlayerComponent
+          );
         },
       },
       {
         path: 'player/:id',
         loadComponent() {
-          return import(
-            '../../modules/player/components/player/player.component'
-          ).then((imported) => imported.PlayerComponent);
+          return import('../../player/components/player/player.component').then(
+            (imported) => imported.PlayerComponent
+          );
         },
       },
       {
         path: 'author/:id',
         loadComponent() {
-          return import(
-            '../../modules/author/components/author/author.component'
-          ).then((imported) => imported.AuthorComponent);
+          return import('../../author/components/author/author.component').then(
+            (imported) => imported.AuthorComponent
+          );
         },
       },
       {
         path: 'author/genre/:genre',
         loadComponent() {
           return import(
-            '../../modules/authors-by-genre/components/authors-by-genre/authors-by-genre.component'
+            '../../authors-by-genre/components/authors-by-genre/authors-by-genre.component'
           ).then((imported) => imported.AuthorsByGenreComponent);
         },
       },
       {
         path: 'voice',
         loadComponent() {
-          return import('../../modules/voice/components/voice.component').then(
+          return import('../../voice/components/voice.component').then(
             (imported) => imported.VoiceComponent
           );
         },
@@ -72,7 +72,7 @@ export const APP_ROUTES: Route[] = [
         path: 'library',
         loadComponent() {
           return import(
-            '../../modules/library/components/library/library.component'
+            '../../library/components/library/library.component'
           ).then((imported) => imported.LibraryComponent);
         },
         title: DEFAULT_TITLE,
@@ -80,9 +80,9 @@ export const APP_ROUTES: Route[] = [
       {
         path: '404',
         loadComponent() {
-          return import(
-            '../../modules/404/components/not-found.component'
-          ).then((imported) => imported.NotFoundComponent);
+          return import('../../404/components/not-found.component').then(
+            (imported) => imported.NotFoundComponent
+          );
         },
         title: DEFAULT_TITLE,
       },
@@ -90,7 +90,7 @@ export const APP_ROUTES: Route[] = [
         path: 'for-right-holders',
         loadComponent() {
           return import(
-            '../../modules/for-right-holders/components/for-right-holders.component'
+            '../../for-right-holders/components/for-right-holders.component'
           ).then((imported) => imported.ForRightHoldersComponent);
         },
         title: DEFAULT_TITLE,
