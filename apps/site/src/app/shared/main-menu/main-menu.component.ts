@@ -10,7 +10,6 @@ import {
 import { MatIcon } from '@angular/material/icon';
 import { MatListItem, MatNavList } from '@angular/material/list';
 import { RouterModule } from '@angular/router';
-import { async } from 'rxjs';
 import { UploadFileDirective } from '../directives/file-upload/upload-file.directive';
 import { ActiveBookService } from '../services/active-book.service';
 import {
@@ -68,6 +67,4 @@ export class MainMenuComponent {
   fileUploaded(files?: FileList) {
     this.fileReaderService.parseNewFile(files);
   }
-
-  protected readonly async = async;
 }
