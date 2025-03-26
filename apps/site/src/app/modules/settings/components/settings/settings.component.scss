@@ -1,0 +1,12 @@
+@use 'vars' as *;
+
+:host > div {
+  padding: 2 * $default-padding;
+
+  form {
+    display: grid;
+    max-width: $body-min-width;
+    grid-template-columns: 0.5fr 2fr;
+    grid-gap: $default-padding;
+  }
+}

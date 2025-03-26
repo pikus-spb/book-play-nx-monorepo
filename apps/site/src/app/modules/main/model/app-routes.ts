@@ -95,6 +95,15 @@ export const APP_ROUTES: Route[] = [
         },
         title: DEFAULT_TITLE,
       },
+      {
+        path: 'settings',
+        loadComponent() {
+          return import(
+            '../../settings/components/settings/settings.component'
+          ).then((imported) => imported.SettingsComponent);
+        },
+        title: DEFAULT_TITLE,
+      },
       { path: '', redirectTo: '/welcome', pathMatch: 'full' },
       { path: '**', redirectTo: '404' },
     ],

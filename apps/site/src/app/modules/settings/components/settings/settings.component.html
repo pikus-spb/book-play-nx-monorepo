@@ -1,0 +1,31 @@
+<div>
+  <h1>Настройки</h1>
+  <form [formGroup]="form" (submit)="onSubmit()">
+    <span>Голос</span>
+    <div>
+      <select formControlName="voice">
+        <option [value]="'female'">Женский</option>
+        <option [value]="'male'">Мужской</option>
+      </select>
+    </div>
+    <span>Скорость</span>
+    <div>
+      <select formControlName="rate">
+        <option [value]="'-10'">Медленно</option>
+        <option [value]="'+1'">Нормально</option>
+        <option [value]="'+10'">Быстро</option>
+      </select>
+    </div>
+    <span>Тональность</span>
+    <div>
+      <select formControlName="pitch">
+        <option [value]="'-10'">Низкая</option>
+        <option [value]="'-1'">Нормальная</option>
+        <option [value]="'+10'">Высокая</option>
+      </select>
+    </div>
+    <span>
+      <button type="submit">Применить</button>
+    </span>
+  </form>
+</div>

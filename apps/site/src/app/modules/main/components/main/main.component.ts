@@ -18,8 +18,8 @@ import { async } from 'rxjs';
 import { BookTitleComponent } from '../../../../shared/components/book-title/book-title.component';
 import { CopyrightOwnerComponent } from '../../../../shared/components/copyright-owner/copyright-owner.component';
 import { CopyrightComponent } from '../../../../shared/components/copyright/copyright.component';
-import { MainHeaderComponent } from '../../../../shared/main-header/main-header.component';
-import { MainMenuComponent } from '../../../../shared/main-menu/main-menu.component';
+import { MainHeaderComponent } from '../../../../shared/components/main-header/main-header.component';
+import { MainMenuComponent } from '../../../../shared/components/main-menu/main-menu.component';
 import {
   AppEventNames,
   EventsStateService,

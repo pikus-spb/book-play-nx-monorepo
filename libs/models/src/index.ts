@@ -5,3 +5,4 @@ export * from './lib/author-mapper';
 export * from './lib/imageBase64Data';
 export * from './lib/indexed-db';
 export * from './lib/tts-params';
+export * from './lib/settings';

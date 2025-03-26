@@ -12,8 +12,8 @@ import { MatIcon } from '@angular/material/icon';
 import { MatTooltip } from '@angular/material/tooltip';
 import { Router } from '@angular/router';
 import { merge, tap } from 'rxjs';
-import { PlayerButtonComponent } from '../components/player-button/player-button.component';
-import { ActiveBookService } from '../services/active-book.service';
+import { ActiveBookService } from '../../services/active-book.service';
+import { PlayerButtonComponent } from '../player-button/player-button.component';
 
 @Component({
   selector: 'main-header',
