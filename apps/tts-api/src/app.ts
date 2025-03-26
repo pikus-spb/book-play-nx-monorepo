@@ -34,13 +34,14 @@ export default class BooksAPIApp {
         `--voice=${
           voice === 'female' ? 'ru-RU-SvetlanaNeural' : 'ru-RU-DmitryNeural'
         }`,
-        `--pitch=${pitch > 0 ? '+' + pitch : pitch}Hz`,
-        `--rate=${rate > 0 ? '+' + rate : rate}%`,
+        `--pitch=${Number(pitch) > 0 ? '+' + pitch : pitch}Hz`,
+        `--rate=${Number(rate) > 0 ? '+' + rate : rate}%`,
         '--write-media',
         fileName + TMP_FILE_EXTENSION,
         '--text',
         `"${text}"`,
       ];
+
       const ttsProc = spawn('edge-tts', args, { detached: true });
 
       this.killOnClose(req, ttsProc, reject);

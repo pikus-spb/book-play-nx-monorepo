@@ -1,6 +1,6 @@
 export interface TTSParams {
   text: string;
-  pitch: number;
-  rate: number;
+  pitch: string;
+  rate: string;
   voice: string;
 }
