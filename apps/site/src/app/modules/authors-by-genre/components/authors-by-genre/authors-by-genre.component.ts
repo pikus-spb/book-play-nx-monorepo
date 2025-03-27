@@ -11,7 +11,7 @@ import {
   WritableSignal,
 } from '@angular/core';
 import { MatChip, MatChipSet } from '@angular/material/chips';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { AuthorByGenre } from '@book-play/models';
 import { GenrePipe, GenresPipe } from '@book-play/ui';
 import { NgxVirtualScrollModule } from '@lithiumjs/ngx-virtual-scroll';
@@ -37,6 +37,7 @@ import {
     GenrePipe,
     GenresPipe,
     NgxVirtualScrollModule,
+    RouterLink,
   ],
 })
 export class AuthorsByGenreComponent implements AfterViewInit {

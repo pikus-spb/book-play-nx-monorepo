@@ -8,14 +8,16 @@
   />
   <div class="content">
     <h4>
-      <a [href]="'author/' + book.author.id">{{ book.author.full }}</a>
+      <a [routerLink]="['/author', book.author.id]">{{ book.author.full }}</a>
     </h4>
     <h2>{{ book.name }}</h2>
 
     <mat-chip-set aria-label="Жанры">
       @for (genre of book.genres; track genre) {
       <mat-chip *ngIf="genre"
-        ><a [href]="'/author/genre/' + genre">{{ genre | genre }}</a></mat-chip
+        ><a [routerLink]="['/author/genre', genre]">{{
+          genre | genre
+        }}</a></mat-chip
       >
       } @if (book.date) {
       <span class="date">{{ book.date }}г.</span>

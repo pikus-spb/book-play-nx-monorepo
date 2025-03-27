@@ -1,3 +1,7 @@
-@if (bookTitle()) { &nbsp;-&nbsp;
-<span title="{{ bookTitle() }}">{{ bookTitle() }}</span>
+@if (book() !== null) { &nbsp;-&nbsp;
+<span title="{{ book()?.full }}">
+  <a [routerLink]="['/author', book()?.authorId]">{{ book()?.author?.full }}</a>
+  -
+  <a [routerLink]="['/book', book()?.id]">{{ book()?.name }}</a>
+</span>
 }

@@ -14,7 +14,7 @@ import { MatFabButton } from '@angular/material/button';
 import { MatChip, MatChipSet } from '@angular/material/chips';
 import { MatIcon } from '@angular/material/icon';
 import { MatTooltip } from '@angular/material/tooltip';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import {
   BOOK_IMAGE_HEIGHT,
   BOOK_IMAGE_WIDTH,
@@ -39,6 +39,7 @@ import { BooksApiService } from '../../../../shared/services/books-api.service';
     MatChipSet,
     MatChip,
     GenrePipe,
+    RouterLink,
   ],
 })
 export class BookComponent implements AfterViewInit {

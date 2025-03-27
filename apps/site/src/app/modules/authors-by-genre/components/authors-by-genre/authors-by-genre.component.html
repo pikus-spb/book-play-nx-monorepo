@@ -21,7 +21,7 @@
         <nav *liVirtualItem="let item">
           <mat-chip
             ><a
-              [href]="'author/' + item.id"
+              [routerLink]="['/author', item.id]"
               [title]="'Пишет в жарах: ' + (item.genres | genres)"
               >{{ item.full }}</a
             ></mat-chip

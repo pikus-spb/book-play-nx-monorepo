@@ -1,13 +1,14 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, resource } from '@angular/core';
 import { MatChip, MatChipSet } from '@angular/material/chips';
+import { RouterLink } from '@angular/router';
 import { Author } from '@book-play/models';
 import { BooksApiService } from '../../../shared/services/books-api.service';
 import { BookComponent } from '../../book/components/book/book.component';
 
 @Component({
   selector: 'welcome',
-  imports: [CommonModule, BookComponent, MatChipSet, MatChip],
+  imports: [CommonModule, BookComponent, MatChipSet, MatChip, RouterLink],
   templateUrl: './welcome.component.html',
   styleUrls: ['./welcome.component.scss'],
 })

@@ -1,11 +1,13 @@
-import { Pipe, PipeTransform } from '@angular/core';
-import { FB2_GENRES } from '@book-play/constants';
+import { inject, Pipe, PipeTransform } from '@angular/core';
+import { GenrePipe } from './genre.pipe';
 
 @Pipe({
   name: 'genres',
 })
 export class GenresPipe implements PipeTransform {
+  private genrePipe = inject(GenrePipe);
+
   transform(genres: string[]): string {
-    return genres.map((genre) => FB2_GENRES[genre]).join(', ');
+    return genres.map((genre) => this.genrePipe.transform(genre)).join(', ');
   }
 }

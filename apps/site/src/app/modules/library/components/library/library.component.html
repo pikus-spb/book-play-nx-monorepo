@@ -20,7 +20,9 @@
       <mat-chip-set aria-label="Авторы">
         <nav *liVirtualItem="let item">
           <mat-chip
-            ><a [href]="'author/' + item.id">{{ item.full }}</a></mat-chip
+            ><a [routerLink]="['/author', item.id]">{{
+              item.full
+            }}</a></mat-chip
           >
         </nav>
       </mat-chip-set>

@@ -3,13 +3,16 @@
   <div class="scrollable-canvas" cdkVirtualScrollingElement>
     <h1>
       <a
-        [href]="'author/' + bookData.authorId"
+        [routerLink]="['/author', bookData.authorId]"
         title="Посмотреть описание автора"
       >
         {{ bookData.author.full }}
       </a>
       -
-      <a [href]="'book/' + bookData.id" title="Посмотреть описание книги">
+      <a
+        [routerLink]="['/book', bookData.id]"
+        title="Посмотреть описание книги"
+      >
         {{ bookData.name }}
       </a>
     </h1>

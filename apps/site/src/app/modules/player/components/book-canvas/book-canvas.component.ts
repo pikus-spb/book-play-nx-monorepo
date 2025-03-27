@@ -15,6 +15,7 @@ import {
   Signal,
   ViewChild,
 } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import {
   BOOK_IMAGE_HEIGHT,
   BOOK_IMAGE_WIDTH,
@@ -41,6 +42,7 @@ import { BookParagraphComponent } from '../book-paragraph/book-paragraph.compone
     ExperimentalScrollingModule,
     BookParagraphComponent,
     HeightCalculateComponent,
+    RouterLink,
   ],
 })
 export class BookCanvasComponent implements OnDestroy {

@@ -5,7 +5,8 @@ import {
   inject,
 } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
+import { Book } from '@book-play/models';
 import { ActiveBookService } from '../../services/active-book.service';
 
 @Component({
@@ -13,6 +14,7 @@ import { ActiveBookService } from '../../services/active-book.service';
   templateUrl: './book-title.component.html',
   styleUrls: ['./book-title.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [RouterLink],
 })
 export class BookTitleComponent {
   private activeBookService = inject(ActiveBookService);
@@ -20,17 +22,17 @@ export class BookTitleComponent {
 
   private routeChanged = toSignal(this.router.events);
 
-  public bookTitle = computed(() => {
-    const name = this.activeBookService.book()?.full;
+  public book = computed<Book | null>(() => {
+    const book = this.activeBookService.book();
 
     if (
       this.routeChanged() &&
-      name &&
+      book &&
       this.router.url.indexOf('player') !== -1
     ) {
-      return name;
+      return book;
     }
 
-    return '';
+    return null;
   });
 }

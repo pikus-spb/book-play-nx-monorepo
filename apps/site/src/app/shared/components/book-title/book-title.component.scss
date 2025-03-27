@@ -2,4 +2,14 @@
 
 :host {
   padding: 0 $default-padding;
+
+  a {
+    text-decoration: none;
+    font-weight: normal;
+    color: $default-color;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
 }

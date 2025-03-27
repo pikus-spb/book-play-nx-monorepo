@@ -7,6 +7,7 @@ import {
   signal,
 } from '@angular/core';
 import { MatChip, MatChipSet } from '@angular/material/chips';
+import { RouterLink } from '@angular/router';
 import { Author } from '@book-play/models';
 import { NgxVirtualScrollModule } from '@lithiumjs/ngx-virtual-scroll';
 import { LoadingThenShowDirective } from '../../../../shared/directives/loading-then-show/loading-then-show.directive';
@@ -24,6 +25,7 @@ import {
     NgxVirtualScrollModule,
     MatChip,
     MatChipSet,
+    RouterLink,
   ],
   templateUrl: './library.component.html',
   styleUrls: ['./library.component.scss'],

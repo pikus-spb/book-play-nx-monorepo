@@ -17,7 +17,7 @@
   <mat-chip-set aria-label="Авторы">
     @for (author of authors.value(); track author.full) {
     <mat-chip
-      ><a [href]="'author/' + author.id">{{ author.full }}</a></mat-chip
+      ><a [routerLink]="['/author', author.id]">{{ author.full }}</a></mat-chip
     >
     }
   </mat-chip-set>
