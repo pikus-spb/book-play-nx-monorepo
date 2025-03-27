@@ -1,13 +1,14 @@
 // HTTP
-export const protocol = 'http:';
+export const API_HOST = '192.168.31.200';
 export const BOOKS_API_PORT = 8282;
+export const BOOKS_API_PORT_SECURE = 8443;
 export const TTS_API_PORT = 8181;
-export const AUDIO_API_URL = 'http://192.168.31.200:8181/tts';
-export const BOOKS_API_URL = protocol + '//192.168.31.200:' + BOOKS_API_PORT;
+export const TTS_API_PORT_SECURE = 8143;
 export const HTTP_RETRY_NUMBER = 3;
 export const CORS_ALLOWED_LIST = [
   'http://localhost:4200',
   'http://192.168.31.200',
+  'https://192.168.31.200',
   'http://book-play.ru',
   'https://book-play.ru',
 ];

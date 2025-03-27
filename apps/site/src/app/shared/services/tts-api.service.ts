@@ -1,7 +1,13 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { AUDIO_API_URL, HTTP_RETRY_NUMBER } from '@book-play/constants';
+import {
+  API_HOST,
+  HTTP_RETRY_NUMBER,
+  TTS_API_PORT,
+  TTS_API_PORT_SECURE,
+} from '@book-play/constants';
 import { TTSParams } from '@book-play/models';
+import { getCurrentProtocolUrl } from '@book-play/ui';
 import { createQueryString } from '@book-play/utils-common';
 
 import { Observable, retry, shareReplay, Subscription } from 'rxjs';
@@ -21,13 +27,19 @@ export class TtsApiService {
   private settingsService = inject(SettingsService);
 
   public textToSpeech(text: string): Observable<Blob> {
+    const url =
+      getCurrentProtocolUrl(
+        API_HOST,
+        TTS_API_PORT.toString(),
+        TTS_API_PORT_SECURE.toString()
+      ) + '/tts';
     text = encodeURIComponent(text);
     const { pitch, rate, voice } = this.settingsService.getVoiceSettings();
     const options: TTSParams = { text, pitch, rate, voice };
     const postParams = createQueryString(options);
 
     const request$ = this.http
-      .post(AUDIO_API_URL, postParams, {
+      .post(url, postParams, {
         headers: AUDIO_HEADERS,
         responseType: 'blob',
       })

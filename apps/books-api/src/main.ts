@@ -1,14 +1,24 @@
-import { BOOKS_API_PORT, CORS_ALLOWED_LIST } from '@book-play/constants';
+import {
+  BOOKS_API_PORT,
+  BOOKS_API_PORT_SECURE,
+  CORS_ALLOWED_LIST,
+} from '@book-play/constants';
 import cors from 'cors';
 import express from 'express';
-// import fs from 'fs';
+import fs from 'fs';
 import http from 'http';
-// import https from 'https';
+import * as https from 'node:https';
 import BooksAPIApp from './app';
 
-// const privateKey  = fs.readFileSync('/etc/letsencrypt/live/book-play.ru/privkey.pem', 'utf8');
-// const certificate = fs.readFileSync('/etc/letsencrypt/live/book-play.ru/cert.pem', 'utf8');
-// const credentials = {key: privateKey, cert: certificate};
+const privateKey = fs.readFileSync(
+  '/etc/letsencrypt/live/book-play.ru/name.key',
+  'utf8'
+);
+const certificate = fs.readFileSync(
+  '/etc/letsencrypt/live/book-play.ru/name.crt',
+  'utf8'
+);
+const credentials = { key: privateKey, cert: certificate };
 
 const expressApp = express();
 
@@ -21,17 +31,16 @@ function corsOptionsDelegate(req, callback): void {
 }
 
 const httpServer = http.createServer(expressApp);
-// const httpsServer = https.createServer(credentials, expressApp);
+const httpsServer = https.createServer(credentials, expressApp);
 
 const app = new BooksAPIApp();
-// const HTTPS_APP_PORT = 8443;
 
 httpServer.listen(BOOKS_API_PORT, () => {
   console.log(`Web server is listening on port ${BOOKS_API_PORT}`);
 });
-// httpsServer.listen(HTTPS_APP_PORT, () => {
-//     console.log(`Web server is listening on port ${HTTPS_APP_PORT}`);
-// });
+httpsServer.listen(BOOKS_API_PORT_SECURE, () => {
+  console.log(`Web server is listening on port ${BOOKS_API_PORT_SECURE}`);
+});
 
 expressApp.get('/author/all', cors(corsOptionsDelegate), (req, res) => {
   app

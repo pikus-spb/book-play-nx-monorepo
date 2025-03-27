@@ -1,23 +1,26 @@
-import { CORS_ALLOWED_LIST, TTS_API_PORT } from '@book-play/constants';
+import {
+  CORS_ALLOWED_LIST,
+  TTS_API_PORT,
+  TTS_API_PORT_SECURE,
+} from '@book-play/constants';
 import bodyParser from 'body-parser';
 import cors from 'cors';
 import express from 'express';
 import fs from 'fs';
 import http from 'http';
+import * as https from 'node:https';
 import path from 'path';
 import BooksAPIApp from './app';
 
-/*
 const privateKey = fs.readFileSync(
-  '/etc/letsencrypt/live/book-play.ru/privkey.pem',
+  '/etc/letsencrypt/live/book-play.ru/name.key',
   'utf8'
 );
 const certificate = fs.readFileSync(
-  '/etc/letsencrypt/live/book-play.ru/cert.pem',
+  '/etc/letsencrypt/live/book-play.ru/name.crt',
   'utf8'
 );
-*/
-// const credentials = { key: privateKey, cert: certificate };
+const credentials = { key: privateKey, cert: certificate };
 
 const expressApp = express();
 
@@ -33,18 +36,17 @@ expressApp.use(bodyParser.urlencoded({ extended: false }));
 expressApp.use(bodyParser.json());
 
 const httpServer = http.createServer(expressApp);
-// const httpsServer = https.createServer(credentials, expressApp);
+const httpsServer = https.createServer(credentials, expressApp);
 
 const app = new BooksAPIApp();
-// const HTTPS_APP_PORT = 8143;
 
 httpServer.listen(TTS_API_PORT, () => {
   console.log(`Web server is listening on port ${TTS_API_PORT}`);
 });
 
-// httpsServer.listen(HTTPS_APP_PORT, () => {
-//   console.log(`Web server is listening on port ${HTTPS_APP_PORT}`);
-// });
+httpsServer.listen(TTS_API_PORT_SECURE, () => {
+  console.log(`Web server is listening on port ${TTS_API_PORT_SECURE}`);
+});
 
 expressApp.post(
   '/tts',

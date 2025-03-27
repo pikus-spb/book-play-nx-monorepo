@@ -1,6 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BOOKS_API_URL, HTTP_RETRY_NUMBER } from '@book-play/constants';
+import {
+  API_HOST,
+  BOOKS_API_PORT,
+  BOOKS_API_PORT_SECURE,
+  HTTP_RETRY_NUMBER,
+} from '@book-play/constants';
 
 import {
   Author,
@@ -14,6 +19,7 @@ import {
   DBBook,
   DBBookToUIBook,
 } from '@book-play/models';
+import { getCurrentProtocolUrl } from '@book-play/ui';
 import { firstValueFrom, map, Observable, retry, shareReplay } from 'rxjs';
 
 @Injectable({
@@ -21,15 +27,20 @@ import { firstValueFrom, map, Observable, retry, shareReplay } from 'rxjs';
 })
 export class BooksApiService {
   private requestCache: Map<string, Observable<unknown>> = new Map();
+  private readonly apiUrlPrefix = getCurrentProtocolUrl(
+    API_HOST,
+    BOOKS_API_PORT.toString(),
+    BOOKS_API_PORT_SECURE.toString()
+  );
 
   constructor(private http: HttpClient) {}
 
   public getAllAuthors(): Promise<Author[]> {
-    const url = '/author/all';
+    const url = this.apiUrlPrefix + '/author/all';
 
     return this.fromCache<Author[]>(
       url,
-      this.http.get<DBAuthor[]>(BOOKS_API_URL + url).pipe(
+      this.http.get<DBAuthor[]>(url).pipe(
         map((data: DBAuthor[]): Author[] => {
           return data.map((dbAuthor: DBAuthor) => {
             return new Author(dbAuthor);
@@ -40,11 +51,11 @@ export class BooksApiService {
   }
 
   public getRandomAuthors(number = 3): Promise<Author[]> {
-    const url = `/author/random/${number}`;
+    const url = this.apiUrlPrefix + `/author/random/${number}`;
 
     return this.fromCache<Author[]>(
       url,
-      this.http.get<DBAuthor[]>(BOOKS_API_URL + url).pipe(
+      this.http.get<DBAuthor[]>(url).pipe(
         map((data: DBAuthor[]): Author[] => {
           return data.map((dbAuthor: DBAuthor) => {
             return new Author(dbAuthor);
@@ -55,20 +66,17 @@ export class BooksApiService {
   }
 
   public getRandomIds(number = 3): Promise<string[]> {
-    const url = `/book/random-id/${number}`;
+    const url = this.apiUrlPrefix + `/book/random-id/${number}`;
 
-    return this.fromCache<string[]>(
-      url,
-      this.http.get<string[]>(BOOKS_API_URL + url)
-    );
+    return this.fromCache<string[]>(url, this.http.get<string[]>(url));
   }
 
   public getAuthorBooks(id: string): Promise<Book[]> {
-    const url = `/author/id/${id}/books`;
+    const url = this.apiUrlPrefix + `/author/id/${id}/books`;
 
     return this.fromCache<Book[]>(
       url,
-      this.http.get<DBBook[]>(BOOKS_API_URL + url).pipe(
+      this.http.get<DBBook[]>(url).pipe(
         map((data: DBBook[]): Book[] => {
           return data.map((book: DBBook) => {
             return new Book({
@@ -82,12 +90,12 @@ export class BooksApiService {
   }
 
   public getAuthorSummary(id: string): Promise<AuthorSummary> {
-    const url = `/author/id/${id}/summary`;
+    const url = this.apiUrlPrefix + `/author/id/${id}/summary`;
 
     return this.fromCache<AuthorSummary>(
       url,
       this.http
-        .get<DBAuthorSummary>(BOOKS_API_URL + url)
+        .get<DBAuthorSummary>(url)
         .pipe(
           map(
             (authorSummary: DBAuthorSummary) => new AuthorSummary(authorSummary)
@@ -97,11 +105,11 @@ export class BooksApiService {
   }
 
   public getAuthorsByGenre(genre: string): Promise<AuthorByGenre[]> {
-    const url = `/author/genre/${genre}`;
+    const url = this.apiUrlPrefix + `/author/genre/${genre}`;
 
     return this.fromCache<AuthorByGenre[]>(
       url,
-      this.http.get<DBAuthorByGenre[]>(BOOKS_API_URL + url).pipe(
+      this.http.get<DBAuthorByGenre[]>(url).pipe(
         map((authors: DBAuthorByGenre[]): AuthorByGenre[] => {
           return authors.map((author) => DBAuthorByGenreToUI(author));
         })
@@ -110,11 +118,11 @@ export class BooksApiService {
   }
 
   public getBookById(id: string): Promise<Book> {
-    const url = '/book/id/' + id;
+    const url = this.apiUrlPrefix + '/book/id/' + id;
 
     return this.fromCache<Book>(
       url,
-      this.http.get<DBBook>(BOOKS_API_URL + url).pipe(
+      this.http.get<DBBook>(url).pipe(
         map((book: DBBook) => {
           return DBBookToUIBook(book);
         })
@@ -123,11 +131,11 @@ export class BooksApiService {
   }
 
   public getBookSummaryById(id: string): Promise<Book> {
-    const url = `/book/id/${id}/summary`;
+    const url = this.apiUrlPrefix + `/book/id/${id}/summary`;
 
     return this.fromCache<Book>(
       url,
-      this.http.get<DBBook>(BOOKS_API_URL + url).pipe(
+      this.http.get<DBBook>(url).pipe(
         map((book: DBBook) => {
           return DBBookToUIBook(book);
         })
