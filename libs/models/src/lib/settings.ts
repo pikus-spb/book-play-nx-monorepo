@@ -9,7 +9,7 @@ export interface VoiceSettings {
 }
 
 export const DefaultVoiceSettings: VoiceSettings = {
-  voice: 'female',
-  rate: '1',
-  pitch: '-1',
+  voice: 'male',
+  rate: '0',
+  pitch: '0',
 };

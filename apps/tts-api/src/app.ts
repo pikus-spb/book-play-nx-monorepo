@@ -21,26 +21,46 @@ export default class BooksAPIApp {
     });
   }
 
+  private normalizeParam(param: string): string {
+    if (param === '0') {
+      return null;
+    }
+    if (Number(param) > 0) {
+      return `+${param}`;
+    }
+    return `${param}`;
+  }
+
+  private normalizeParams(params: TTSParams) {
+    let { text, pitch, rate, voice } = params;
+
+    text = text.replace(/\.\s*$/, '');
+    pitch = this.normalizeParam(pitch);
+    rate = this.normalizeParam(rate);
+    voice = voice === 'female' ? 'ru-RU-SvetlanaNeural' : 'ru-RU-DmitryNeural';
+
+    return { text, rate, pitch, voice };
+  }
+
   runTts(
     params: TTSParams,
     fileName: string,
     req: express.Request
   ): Promise<string> {
     return new Promise((resolve, reject) => {
-      const { pitch, rate, voice } = params;
-      let { text } = params;
-      text = text.replace(/\.\s*$/, '');
-      const args = [
-        `--voice=${
-          voice === 'female' ? 'ru-RU-SvetlanaNeural' : 'ru-RU-DmitryNeural'
-        }`,
-        `--pitch=${Number(pitch) > 0 ? '+' + pitch : pitch}Hz`,
-        `--rate=${Number(rate) > 0 ? '+' + rate : rate}%`,
-        '--write-media',
-        fileName + TMP_FILE_EXTENSION,
-        '--text',
-        `"${text}"`,
-      ];
+      const { text, rate, pitch, voice } = this.normalizeParams(params);
+
+      const args = [];
+
+      args.push(`--text="${text}"`);
+      args.push(`--voice=${voice}`);
+      if (pitch !== null) {
+        args.push(`--pitch=${pitch}Hz`);
+      }
+      if (rate !== null) {
+        args.push(`--rate=${rate}%`);
+      }
+      args.push(`--write-media=${fileName + TMP_FILE_EXTENSION}`);
 
       const ttsProc = spawn('edge-tts', args, { detached: true });
 
