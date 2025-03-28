@@ -1,5 +1,7 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { MatSlider, MatSliderThumb } from '@angular/material/slider';
 import { SettingsService } from '../../../../shared/services/settings.service';
 
 @Component({
@@ -7,7 +9,12 @@ import { SettingsService } from '../../../../shared/services/settings.service';
   templateUrl: './settings.component.html',
   styleUrls: ['./settings.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [ReactiveFormsModule],
+  imports: [
+    ReactiveFormsModule,
+    MatButtonToggleModule,
+    MatSlider,
+    MatSliderThumb,
+  ],
 })
 export class SettingsComponent {
   private fb = inject(FormBuilder);

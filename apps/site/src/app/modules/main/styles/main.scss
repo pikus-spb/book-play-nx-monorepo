@@ -45,11 +45,3 @@ html {
   src: url(/assets/fonts/LiterataBook-Bold.otf) format('opentype');
   font-weight: bold;
 }
-/* Customize website's scrollbar like Mac OS
-Not supports in Firefox and IE */
-
-/* total width */
-.scrollbar::-webkit-scrollbar {
-  background-color: #fff;
-  width: 16px;
-}

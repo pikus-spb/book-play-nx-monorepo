@@ -1,12 +1,45 @@
 @use 'vars' as *;
+@use '@angular/material' as mat;
 
 :host > div {
-  padding: 2 * $default-padding;
+  padding: $default-padding * 2;
 
   form {
     display: grid;
-    max-width: $body-min-width;
-    grid-template-columns: 0.5fr 2fr;
+    grid-auto-rows: 50px;
+    align-items: center;
     grid-gap: $default-padding;
+    width: min-content;
+    max-width: $body-min-width;
+    gap: $default-padding;
+
+    h3 {
+      margin: 0;
+    }
+
+    button {
+      grid-column-start: 2;
+      max-width: 50%;
+      padding: 0 $default-padding * 2;
+    }
+
+    fieldset {
+      padding: 3px $default-padding;
+      display: grid;
+      grid-template-columns: minmax(20%, 1fr) auto minmax(20%, 1fr);
+      border-radius: $default-border-radius;
+      align-items: center;
+      gap: $default-padding;
+    }
+
+    ::ng-deep {
+      .mat-button-toggle-appearance-standard .mat-button-toggle-label-content {
+        line-height: normal;
+      }
+
+      .mat-pseudo-checkbox {
+        vertical-align: unset;
+      }
+    }
   }
 }

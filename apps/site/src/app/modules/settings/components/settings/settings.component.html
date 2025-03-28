@@ -1,31 +1,32 @@
 <div>
   <h1>Настройки</h1>
   <form [formGroup]="form" (submit)="onSubmit()">
-    <span>Голос</span>
-    <div>
-      <select formControlName="voice">
-        <option [value]="'female'">Женский</option>
-        <option [value]="'male'">Мужской</option>
-      </select>
-    </div>
-    <span>Скорость</span>
-    <div>
-      <select formControlName="rate">
-        <option [value]="'-10'">Медленно</option>
-        <option [value]="'0'">Нормально</option>
-        <option [value]="'10'">Быстро</option>
-      </select>
-    </div>
-    <span>Тональность</span>
-    <div>
-      <select formControlName="pitch">
-        <option [value]="'-10'">Низкая</option>
-        <option [value]="'0'">Нормальная</option>
-        <option [value]="'10'">Высокая</option>
-      </select>
-    </div>
-    <span>
-      <button type="submit">Применить</button>
-    </span>
+    <h3>Голос</h3>
+    <section>
+      <mat-button-toggle-group formControlName="voice" aria-label="Тип голоса">
+        <mat-button-toggle [value]="'female'">Женский</mat-button-toggle>
+        <mat-button-toggle [value]="'male'">Мужской</mat-button-toggle>
+      </mat-button-toggle-group>
+    </section>
+
+    <h3>Скорость</h3>
+    <fieldset>
+      <span>Медленно</span>
+      <mat-slider discrete min="-20" max="20" step="1" color="accent">
+        <input matSliderThumb formControlName="rate" />
+      </mat-slider>
+      <span>Быстро</span>
+    </fieldset>
+
+    <h3>Тональность</h3>
+    <fieldset>
+      <span>Низкая</span>
+      <mat-slider discrete min="-20" max="20" step="1" color="accent">
+        <input matSliderThumb formControlName="pitch" />
+      </mat-slider>
+      <span>Высокая</span>
+    </fieldset>
+
+    <button type="submit">Применить</button>
   </form>
 </div>

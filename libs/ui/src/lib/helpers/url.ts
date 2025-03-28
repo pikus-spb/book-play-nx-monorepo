@@ -4,6 +4,6 @@ export function getCurrentProtocolUrl(
   portSecure: string
 ): string {
   return `${location.protocol}//${host}:${
-    location.protocol === 'http' ? port : portSecure
+    location.protocol === 'http:' ? port : portSecure
   }`;
 }
