@@ -13,6 +13,7 @@ export const FB2_GENRES: Record<string, string> = {
   sf_horror: 'Ужасы и Мистика',
   sf_humor: 'Юмористическая фантастика',
   sf_fantasy: 'Фэнтези',
+  sf_mystic: 'Мистика',
   sf: 'Научная Фантастика',
   child_sf: 'Детская Фантастика',
   det_classic: 'Классический Детектив',

@@ -9,10 +9,9 @@ import {
   signal,
   WritableSignal,
 } from '@angular/core';
-import { MatChip, MatChipSet } from '@angular/material/chips';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { AuthorSummary } from '@book-play/models';
-import { GenrePipe } from '@book-play/ui';
+import { AuthorGenresListComponent } from '@book-play/ui';
 import { hideImage } from '@book-play/utils-browser';
 import { firstValueFrom } from 'rxjs';
 import { BooksApiService } from '../../../../shared/services/books-api.service';
@@ -22,7 +21,7 @@ import { BooksApiService } from '../../../../shared/services/books-api.service';
   templateUrl: './author.component.html',
   styleUrls: ['./author.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [CommonModule, MatChipSet, MatChip, GenrePipe, RouterLink],
+  imports: [CommonModule, RouterLink, AuthorGenresListComponent],
 })
 export class AuthorComponent implements AfterViewInit {
   @Input() id: string | null = null;

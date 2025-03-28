@@ -11,7 +11,6 @@ import {
   WritableSignal,
 } from '@angular/core';
 import { MatFabButton } from '@angular/material/button';
-import { MatChip, MatChipSet } from '@angular/material/chips';
 import { MatIcon } from '@angular/material/icon';
 import { MatTooltip } from '@angular/material/tooltip';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
@@ -21,7 +20,7 @@ import {
   DEFAULT_COVER_SRC,
 } from '@book-play/constants';
 import { Book } from '@book-play/models';
-import { GenrePipe } from '@book-play/ui';
+import { AuthorGenresListComponent } from '@book-play/ui';
 import { showDefaultCoverImage } from '@book-play/utils-browser';
 import { firstValueFrom } from 'rxjs';
 import { BooksApiService } from '../../../../shared/services/books-api.service';
@@ -36,10 +35,8 @@ import { BooksApiService } from '../../../../shared/services/books-api.service';
     MatFabButton,
     MatIcon,
     MatTooltip,
-    MatChipSet,
-    MatChip,
-    GenrePipe,
     RouterLink,
+    AuthorGenresListComponent,
   ],
 })
 export class BookComponent implements AfterViewInit {

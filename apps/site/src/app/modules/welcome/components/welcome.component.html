@@ -16,9 +16,9 @@
   <h2>3 случайных авторов дня:</h2>
   <mat-chip-set aria-label="Авторы">
     @for (author of authors.value(); track author.full) {
-    <mat-chip
-      ><a [routerLink]="['/author', author.id]">{{ author.full }}</a></mat-chip
-    >
+    <lib-tag-link [value]="author.id" linkPrefix="/author">{{
+      author.full
+    }}</lib-tag-link>
     }
   </mat-chip-set>
 

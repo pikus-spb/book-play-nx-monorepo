@@ -5,15 +5,7 @@
   <div class="content">
     <h3>{{ author.full }}</h3>
 
-    <mat-chip-set aria-label="Жанры">
-      @for (genre of author.genres; track genre) {
-      <mat-chip *ngIf="genre"
-        ><a [routerLink]="['/author/genre', genre]">{{
-          genre | genre
-        }}</a></mat-chip
-      >
-      }
-    </mat-chip-set>
+    <lib-author-genres-list [genres]="author.genres"> </lib-author-genres-list>
 
     <span class="annotation" [innerHTML]="author.about"></span>
 
@@ -21,7 +13,9 @@
       <h4>Произведения:</h4>
       @for (book of author.books; track book.name) {
       <div>
-        <a [routerLink]="['/book', book.id]">{{ book.name }}</a>
+        <a [routerLink]="['/book', book.id]" class="underline">{{
+          book.name
+        }}</a>
       </div>
       }
     </div>

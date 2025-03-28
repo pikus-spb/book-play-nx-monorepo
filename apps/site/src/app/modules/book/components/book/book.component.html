@@ -12,17 +12,11 @@
     </h4>
     <h2>{{ book.name }}</h2>
 
-    <mat-chip-set aria-label="Жанры">
-      @for (genre of book.genres; track genre) {
-      <mat-chip *ngIf="genre"
-        ><a [routerLink]="['/author/genre', genre]">{{
-          genre | genre
-        }}</a></mat-chip
-      >
-      } @if (book.date) {
+    <lib-author-genres-list [genres]="book.genres">
+      @if (book.date) {
       <span class="date">{{ book.date }}г.</span>
       }
-    </mat-chip-set>
+    </lib-author-genres-list>
 
     <span class="annotation" [innerHTML]="book.annotation"></span>
 

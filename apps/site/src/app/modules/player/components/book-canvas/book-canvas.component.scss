@@ -29,13 +29,7 @@ div {
     }
 
     a {
-      text-decoration: none;
-      font-weight: normal;
       color: $default-color-dark;
-
-      &:hover {
-        text-decoration: underline;
-      }
     }
 
     h1,

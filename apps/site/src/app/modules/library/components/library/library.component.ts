@@ -6,9 +6,9 @@ import {
   resource,
   signal,
 } from '@angular/core';
-import { MatChip, MatChipSet } from '@angular/material/chips';
-import { RouterLink } from '@angular/router';
+import { MatChipSet } from '@angular/material/chips';
 import { Author } from '@book-play/models';
+import { TagLinkComponent } from '@book-play/ui';
 import { NgxVirtualScrollModule } from '@lithiumjs/ngx-virtual-scroll';
 import { LoadingThenShowDirective } from '../../../../shared/directives/loading-then-show/loading-then-show.directive';
 import { BooksApiService } from '../../../../shared/services/books-api.service';
@@ -23,9 +23,8 @@ import {
     CommonModule,
     LoadingThenShowDirective,
     NgxVirtualScrollModule,
-    MatChip,
     MatChipSet,
-    RouterLink,
+    TagLinkComponent,
   ],
   templateUrl: './library.component.html',
   styleUrls: ['./library.component.scss'],

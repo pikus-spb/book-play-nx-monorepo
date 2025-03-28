@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'copyright-owner',
@@ -6,5 +7,6 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
   styleUrls: ['./copyright-owner.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
+  imports: [RouterLink],
 })
 export class CopyrightOwnerComponent {}

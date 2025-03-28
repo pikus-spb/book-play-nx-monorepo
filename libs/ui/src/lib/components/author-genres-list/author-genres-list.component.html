@@ -1,0 +1,8 @@
+<mat-chip-set aria-label="Жанры">
+  @for (genre of genres(); track genre) {
+  <lib-tag-link [value]="genre" [linkPrefix]="linkPrefix()">{{
+    genre | genre
+  }}</lib-tag-link>
+  }
+  <ng-content></ng-content>
+</mat-chip-set>

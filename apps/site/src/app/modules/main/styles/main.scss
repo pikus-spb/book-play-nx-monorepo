@@ -14,8 +14,14 @@ body {
 html {
   color: $default-color;
 
-  a {
-    font-weight: bold;
+  a:not(.underline, .mdc-list-item) {
+    text-decoration: none;
+    font-weight: normal;
+    color: $default-color;
+
+    &:hover {
+      text-decoration: underline;
+    }
   }
 
   * {

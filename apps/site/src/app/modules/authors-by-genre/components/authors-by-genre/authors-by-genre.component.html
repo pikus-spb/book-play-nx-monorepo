@@ -19,13 +19,13 @@
     >
       <mat-chip-set aria-label="Авторы">
         <nav *liVirtualItem="let item">
-          <mat-chip
-            ><a
-              [routerLink]="['/author', item.id]"
-              [title]="'Пишет в жарах: ' + (item.genres | genres)"
-              >{{ item.full }}</a
-            ></mat-chip
+          <lib-tag-link
+            [value]="item.id"
+            linkPrefix="/author"
+            [title]="'Пишет в жанрах: ' + (item.genres | genres)"
           >
+            {{ item.full }}
+          </lib-tag-link>
         </nav>
       </mat-chip-set>
     </li-virtual-scroll>

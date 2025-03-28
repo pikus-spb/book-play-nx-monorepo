@@ -1,0 +1,7 @@
+@if (value()) {
+<mat-chip
+  ><a [routerLink]="[linkPrefix(), value()]">
+    <ng-content></ng-content>
+  </a>
+</mat-chip>
+}

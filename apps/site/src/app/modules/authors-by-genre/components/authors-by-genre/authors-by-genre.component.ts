@@ -10,10 +10,10 @@ import {
   signal,
   WritableSignal,
 } from '@angular/core';
-import { MatChip, MatChipSet } from '@angular/material/chips';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { MatChipSet } from '@angular/material/chips';
+import { ActivatedRoute } from '@angular/router';
 import { AuthorByGenre } from '@book-play/models';
-import { GenrePipe, GenresPipe } from '@book-play/ui';
+import { GenrePipe, GenresPipe, TagLinkComponent } from '@book-play/ui';
 import { NgxVirtualScrollModule } from '@lithiumjs/ngx-virtual-scroll';
 import { firstValueFrom } from 'rxjs';
 import { LoadingThenShowDirective } from '../../../../shared/directives/loading-then-show/loading-then-show.directive';
@@ -31,13 +31,12 @@ import {
   imports: [
     CommonModule,
     MatChipSet,
-    MatChip,
     LoadingThenShowDirective,
     NgxVirtualScrollModule,
     GenrePipe,
     GenresPipe,
     NgxVirtualScrollModule,
-    RouterLink,
+    TagLinkComponent,
   ],
 })
 export class AuthorsByGenreComponent implements AfterViewInit {
