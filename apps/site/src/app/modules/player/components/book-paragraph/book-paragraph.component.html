@@ -3,7 +3,7 @@
   tabindex="0"
   class="{{ PARAGRAPH_CLASS_PREFIX }}{{ index }}"
   (click)="activated.emit(index)"
-  (keyup)="activated.emit(index)"
+  (keydown.enter)="activated.emit(index)"
 >
   {{ text }}
 </p>
