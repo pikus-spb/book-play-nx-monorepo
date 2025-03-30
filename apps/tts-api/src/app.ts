@@ -34,7 +34,7 @@ export default class BooksAPIApp {
   private normalizeParams(params: TTSParams) {
     let { text, pitch, rate, voice } = params;
 
-    text = text.replace(/\.\s*$/, '');
+    text = text.replace(/([^.]+)\.$/, '$1');
     pitch = this.normalizeParam(pitch);
     rate = this.normalizeParam(rate);
     voice = voice === 'female' ? 'ru-RU-SvetlanaNeural' : 'ru-RU-DmitryNeural';
