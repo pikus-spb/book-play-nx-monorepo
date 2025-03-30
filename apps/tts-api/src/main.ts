@@ -52,7 +52,7 @@ expressApp.post(
   '/tts',
   cors(corsOptionsDelegate),
   (req: express.Request, res: express.Response) => {
-    app.tts(req.body, req).then((file) => {
+    app.tts(req.body).then((file) => {
       const filePath = path.join(file);
       const stat = fs.statSync(filePath);
 

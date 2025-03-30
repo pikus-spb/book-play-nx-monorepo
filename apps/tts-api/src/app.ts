@@ -1,27 +1,11 @@
 import { TTSParams } from '@book-play/models';
-import { ChildProcessWithoutNullStreams, spawn } from 'child_process';
-import express from 'express';
+import { spawn } from 'child_process';
 import fs from 'fs';
 
 const TMP_FILE_EXTENSION = '.tmp.mp3';
 const MP3_FILE_EXTENSION = '.mp3';
 
 export default class BooksAPIApp {
-  killOnClose(
-    req: express.Request,
-    precess: ChildProcessWithoutNullStreams,
-    reject: () => void
-  ) {
-    req.connection.on('close', () => {
-      try {
-        process.kill(precess.pid, 9);
-      } catch (e: unknown) {
-        reject();
-      }
-      reject();
-    });
-  }
-
   private normalizeParam(param: string): string {
     if (param === '0') {
       return null;
@@ -43,12 +27,8 @@ export default class BooksAPIApp {
     return { text, rate, pitch, voice };
   }
 
-  runTts(
-    params: TTSParams,
-    fileName: string,
-    req: express.Request
-  ): Promise<string> {
-    return new Promise((resolve, reject) => {
+  runTts(params: TTSParams, fileName: string): Promise<string> {
+    return new Promise((resolve) => {
       const { text, rate, pitch, voice } = this.normalizeParams(params);
 
       const args = [];
@@ -64,8 +44,6 @@ export default class BooksAPIApp {
       args.push(`--write-media=${fileName + TMP_FILE_EXTENSION}`);
 
       const ttsProc = spawn('edge-tts', args, { detached: true });
-
-      this.killOnClose(req, ttsProc, reject);
 
       ttsProc.on('close', () => {
         const args = [
@@ -90,10 +68,10 @@ export default class BooksAPIApp {
     });
   }
 
-  async tts(params: TTSParams, req: express.Request): Promise<string> {
+  async tts(params: TTSParams): Promise<string> {
     const fileNamePrefix = __dirname + '/cache/part' + Date.now();
     try {
-      return this.runTts(params, fileNamePrefix, req).then((filename) => {
+      return this.runTts(params, fileNamePrefix).then((filename) => {
         fs.unlinkSync(fileNamePrefix + TMP_FILE_EXTENSION);
         return filename;
       });
