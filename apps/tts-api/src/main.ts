@@ -64,6 +64,10 @@ expressApp.post(
       const readStream = fs.createReadStream(filePath);
 
       readStream.pipe(res);
+
+      setTimeout(() => {
+        fs.unlinkSync(filePath);
+      }, 1000);
     });
   }
 );

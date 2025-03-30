@@ -1,6 +1,7 @@
 import { TTSParams } from '@book-play/models';
 import { ChildProcessWithoutNullStreams, spawn } from 'child_process';
 import express from 'express';
+import fs from 'fs';
 
 const TMP_FILE_EXTENSION = '.tmp.mp3';
 const MP3_FILE_EXTENSION = '.mp3';
@@ -92,7 +93,10 @@ export default class BooksAPIApp {
   async tts(params: TTSParams, req: express.Request): Promise<string> {
     const fileNamePrefix = __dirname + '/cache/part' + Date.now();
     try {
-      return this.runTts(params, fileNamePrefix, req);
+      return this.runTts(params, fileNamePrefix, req).then((filename) => {
+        fs.unlinkSync(fileNamePrefix + TMP_FILE_EXTENSION);
+        return filename;
+      });
     } catch (e) {
       console.error(e);
       return '';
