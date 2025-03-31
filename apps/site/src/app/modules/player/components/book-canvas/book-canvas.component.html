@@ -1,6 +1,6 @@
 <div #container>
   @if (bookData !== null) {
-  <div class="scrollable-canvas" cdkVirtualScrollingElement>
+  <div #scrollable class="scrollable-canvas" cdkVirtualScrollingElement>
     <h1>
       <a
         [routerLink]="['/author', bookData.authorId]"

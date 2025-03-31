@@ -1,4 +1,5 @@
 @use 'vars' as *;
+@use 'sass:color' as color;
 
 :root {
   color-scheme: dark;
@@ -50,4 +51,20 @@ html {
   font-family: LiterataBold;
   src: url(/assets/fonts/LiterataBook-Bold.otf) format('opentype');
   font-weight: bold;
+}
+
+// Perfect scrollbar customization
+.ps {
+  .ps__rail-y {
+    &:hover,
+    &:focus,
+    &.ps--clicking {
+      background-color: color.change($default-color-dark, $alpha: 0.1);
+    }
+
+    .ps__thumb-y {
+      background-color: color.change($default-color-dark, $alpha: 0.8);
+      width: 11px;
+    }
+  }
 }
