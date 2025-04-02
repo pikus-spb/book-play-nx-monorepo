@@ -59,7 +59,7 @@ export class DomHelperService implements OnDestroy {
     const node = this.getParagraphNode(index);
 
     if (node) {
-      node.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      node.scrollIntoView({ block: 'center' });
       this.updateActiveCSSClass(node as HTMLElement);
     } else {
       await this.scrollPositionHelper.scrollToIndex(index);
