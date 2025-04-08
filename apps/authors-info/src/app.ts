@@ -1,9 +1,9 @@
-import { DB_CONFIG } from '@book-play/constants';
 import { DBAuthor } from '@book-play/models';
 import { searchAuthor } from '@book-play/scraper';
+import { environment } from 'environments/environment';
 import mysql, { PoolOptions } from 'mysql2';
 
-const pool = mysql.createPool(DB_CONFIG as unknown as PoolOptions);
+const pool = mysql.createPool(environment.DB_CONFIG as unknown as PoolOptions);
 
 export async function run() {
   const authors: DBAuthor[] = await getAuthorsToUpdate();
