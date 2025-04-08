@@ -22,7 +22,6 @@ export class ScrollbarDirective implements AfterViewInit {
 
   public ngAfterViewInit(): void {
     if (this.el?.nativeElement && this.ps === null) {
-      this.addScrollBarStyles();
       this.createScrollBar();
       this.addResizeListener();
     }
@@ -45,36 +44,5 @@ export class ScrollbarDirective implements AfterViewInit {
       this.onResize();
     });
     observer.observe(this.el.nativeElement);
-  }
-
-  private addScrollBarStyles(): void {
-    const stylesheet = new CSSStyleSheet();
-    stylesheet.replaceSync(`
-      .ps .ps__rail-y:hover,
-      .ps .ps__rail-y:focus,
-      .ps .ps__rail-y.ps--clicking,
-      .ps .ps__rail-x:hover,
-      .ps .ps__rail-x:focus,
-      .ps .ps__rail-x.ps--clicking {
-        background-color: rgba(0, 0, 0, 0.1);
-      }
-      .ps .ps__rail-y .ps__thumb-y,
-      .ps .ps__rail-y .ps__thumb-x,
-      .ps .ps__rail-x .ps__thumb-y,
-      .ps .ps__rail-x .ps__thumb-x {
-        background-color: rgba(0, 0, 0, 0.8);
-      }
-      .ps .ps__rail-y .ps__thumb-y,
-      .ps .ps__rail-x .ps__thumb-y {
-        background-color: rgba(0, 0, 0, 0.8);
-        width: 11px;
-      }
-      .ps .ps__rail-y .ps__thumb-x,
-      .ps .ps__rail-x .ps__thumb-x {
-        background-color: rgba(0, 0, 0, 0.8);
-        height: 11px;
-      }
-    `);
-    document.adoptedStyleSheets = [stylesheet];
   }
 }

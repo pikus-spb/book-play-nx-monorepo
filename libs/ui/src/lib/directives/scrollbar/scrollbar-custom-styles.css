@@ -1,0 +1,25 @@
+/* CSS style improvements. Optionally include this code to global styles of your project */
+.ps .ps__rail-y:hover,
+.ps .ps__rail-y:focus,
+.ps .ps__rail-y.ps--clicking,
+.ps .ps__rail-x:hover,
+.ps .ps__rail-x:focus,
+.ps .ps__rail-x.ps--clicking {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+.ps .ps__rail-y .ps__thumb-y,
+.ps .ps__rail-y .ps__thumb-x,
+.ps .ps__rail-x .ps__thumb-y,
+.ps .ps__rail-x .ps__thumb-x {
+  background-color: rgba(0, 0, 0, 0.8);
+}
+.ps .ps__rail-y .ps__thumb-y,
+.ps .ps__rail-x .ps__thumb-y {
+  background-color: rgba(0, 0, 0, 0.8);
+  width: 11px;
+}
+.ps .ps__rail-y .ps__thumb-x,
+.ps .ps__rail-x .ps__thumb-x {
+  background-color: rgba(0, 0, 0, 0.8);
+  height: 11px;
+}
