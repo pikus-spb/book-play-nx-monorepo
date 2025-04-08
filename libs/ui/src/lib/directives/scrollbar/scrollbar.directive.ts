@@ -20,7 +20,7 @@ export class ScrollbarDirective implements AfterViewInit {
   private el: ElementRef = inject(ElementRef);
   private ps: PerfectScrollbar | null = null;
 
-  public ngAfterViewInit() {
+  public ngAfterViewInit(): void {
     if (this.el?.nativeElement && this.ps === null) {
       this.addScrollBarStyles();
       this.createScrollBar();
@@ -28,7 +28,7 @@ export class ScrollbarDirective implements AfterViewInit {
     }
   }
 
-  private onResize() {
+  private onResize(): void {
     this.ps?.update();
   }
 
@@ -47,7 +47,7 @@ export class ScrollbarDirective implements AfterViewInit {
     observer.observe(this.el.nativeElement);
   }
 
-  private addScrollBarStyles() {
+  private addScrollBarStyles(): void {
     const stylesheet = new CSSStyleSheet();
     stylesheet.replaceSync(`
       .ps .ps__rail-y:hover,
