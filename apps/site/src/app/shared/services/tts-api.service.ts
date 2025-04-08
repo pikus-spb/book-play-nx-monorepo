@@ -1,7 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import {
-  API_HOST,
   HTTP_RETRY_NUMBER,
   TTS_API_PORT,
   TTS_API_PORT_SECURE,
@@ -9,7 +8,7 @@ import {
 import { TTSParams } from '@book-play/models';
 import { getCurrentProtocolUrl } from '@book-play/ui';
 import { createQueryString } from '@book-play/utils-common';
-
+import { environment } from 'environments/environment';
 import { Observable, retry, shareReplay, Subscription } from 'rxjs';
 import { SettingsService } from './settings.service';
 
@@ -29,7 +28,7 @@ export class TtsApiService {
   public textToSpeech(text: string): Observable<Blob> {
     const url =
       getCurrentProtocolUrl(
-        API_HOST,
+        environment.API_HOST,
         TTS_API_PORT.toString(),
         TTS_API_PORT_SECURE.toString()
       ) + '/tts';

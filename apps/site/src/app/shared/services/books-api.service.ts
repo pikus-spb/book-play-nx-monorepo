@@ -1,7 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import {
-  API_HOST,
   BOOKS_API_PORT,
   BOOKS_API_PORT_SECURE,
   HTTP_RETRY_NUMBER,
@@ -20,6 +19,7 @@ import {
   DBBookToUIBook,
 } from '@book-play/models';
 import { getCurrentProtocolUrl } from '@book-play/ui';
+import { environment } from 'environments/environment';
 import { firstValueFrom, map, Observable, retry, shareReplay } from 'rxjs';
 
 @Injectable({
@@ -28,7 +28,7 @@ import { firstValueFrom, map, Observable, retry, shareReplay } from 'rxjs';
 export class BooksApiService {
   private requestCache: Map<string, Observable<unknown>> = new Map();
   private readonly apiUrlPrefix = getCurrentProtocolUrl(
-    API_HOST,
+    environment.API_HOST,
     BOOKS_API_PORT.toString(),
     BOOKS_API_PORT_SECURE.toString()
   );

@@ -1,9 +1,9 @@
-import { BOOKS_JSON_PATH, DB_CONFIG } from '@book-play/constants';
 import { DBAuthor, DBAuthorSummary, DBBook } from '@book-play/models';
+import { environment } from 'environments/environment.ts';
 import fs from 'fs';
 import mysql, { PoolOptions } from 'mysql2';
 
-const pool = mysql.createPool(DB_CONFIG as unknown as PoolOptions);
+const pool = mysql.createPool(environment.DB_CONFIG as unknown as PoolOptions);
 
 export default class BooksAPIApp {
   authors(): Promise<Partial<DBAuthor>[]> {
@@ -119,7 +119,7 @@ export default class BooksAPIApp {
   async bookById(id: string): Promise<Partial<DBBook>> {
     const book = await this.bookSummaryById(id);
     book.paragraphs = JSON.parse(
-      fs.readFileSync(BOOKS_JSON_PATH + id + '.json').toString()
+      fs.readFileSync(environment.BOOKS_JSON_PATH + id + '.json').toString()
     ).paragraphs;
 
     return book;
@@ -149,22 +149,4 @@ export default class BooksAPIApp {
       );
     });
   }
-
-  /*
-  search(pattern: string): Promise<DBBook[]> {
-    return new Promise((resolve, reject) => {
-      pool.query(
-        `SELECT id, first, last, name, full FROM books WHERE full LIKE '%${pattern}%'`,
-        (err: Error, result: DBBook[]) => {
-          if (err) {
-            console.error(err);
-            reject(err);
-          } else {
-            resolve(result);
-          }
-        }
-      );
-    });
-  }
-*/
 }
