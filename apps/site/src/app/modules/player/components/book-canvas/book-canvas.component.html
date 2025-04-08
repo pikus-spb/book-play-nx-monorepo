@@ -1,6 +1,6 @@
 <div #container>
   @if (bookData !== null) {
-  <div #scrollable class="scrollable-canvas" cdkVirtualScrollingElement>
+  <div class="scrollable-canvas" libPerfectScrollbar cdkVirtualScrollingElement>
     <h1>
       <a
         [routerLink]="['/author', bookData.authorId]"

@@ -5,3 +5,4 @@ export * from './lib/components/author-genres-list/author-genres-list.component'
 export * from './lib/pipes/genre/genre.pipe';
 export * from './lib/pipes/genre/genres.pipe';
 export * from './lib/helpers/url';
+export * from './lib/directives/scrollbar/scrollbar.directive';

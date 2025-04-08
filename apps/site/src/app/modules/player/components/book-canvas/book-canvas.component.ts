@@ -9,7 +9,6 @@ import {
   computed,
   ElementRef,
   EventEmitter,
-  HostListener,
   Input,
   OnDestroy,
   Output,
@@ -23,13 +22,15 @@ import {
   DEFAULT_COVER_SRC,
 } from '@book-play/constants';
 import { Book } from '@book-play/models';
-import { HeightCalculateComponent, HeightDelta } from '@book-play/ui';
+import {
+  HeightCalculateComponent,
+  HeightDelta,
+  ScrollbarDirective,
+} from '@book-play/ui';
 import {
   isTextParagraph,
   showDefaultCoverImage,
 } from '@book-play/utils-browser';
-
-import PerfectScrollbar from 'perfect-scrollbar';
 import { Subject } from 'rxjs';
 import { DomHelperService } from '../../../../shared/services/dom-helper.service';
 import { setupViewportScrollerService } from '../../../../shared/services/viewport-scroller.service';
@@ -46,6 +47,7 @@ import { BookParagraphComponent } from '../book-paragraph/book-paragraph.compone
     BookParagraphComponent,
     HeightCalculateComponent,
     RouterLink,
+    ScrollbarDirective,
   ],
 })
 export class BookCanvasComponent implements OnDestroy {
@@ -70,18 +72,11 @@ export class BookCanvasComponent implements OnDestroy {
 
   @Output() paragraphClick: EventEmitter<number> = new EventEmitter<number>();
   @ViewChild('scrollViewport') viewport!: CdkVirtualScrollViewport;
-  @ViewChild('scrollable') scrollable?: ElementRef;
 
   private _book!: Signal<Book | null>;
   private textIndexes: Record<number, number> = {};
-  private ps: PerfectScrollbar | null = null;
 
   constructor(private el: ElementRef, private domHelper: DomHelperService) {}
-
-  @HostListener('window:resize')
-  onResize() {
-    this.ps?.update();
-  }
 
   public heightCalculated(delta: HeightDelta) {
     setupViewportScrollerService(
@@ -91,13 +86,6 @@ export class BookCanvasComponent implements OnDestroy {
       this.bookData!.paragraphs,
       this.destroyed$
     );
-
-    if (this.scrollable?.nativeElement && this.ps === null) {
-      this.ps = new PerfectScrollbar(this.scrollable.nativeElement, {
-        minScrollbarLength: 25,
-        suppressScrollX: true,
-      });
-    }
 
     this.domHelper.showActiveParagraph();
   }
