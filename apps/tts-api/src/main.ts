@@ -1,31 +1,21 @@
-import {
-  CORS_ALLOWED_LIST,
-  TTS_API_PORT,
-  TTS_API_PORT_SECURE,
-} from '@book-play/constants';
+import { TTS_API_PORT, TTS_API_PORT_SECURE } from '@book-play/constants';
 import bodyParser from 'body-parser';
 import cors from 'cors';
+import { environment } from 'environments/environment.ts';
 import express from 'express';
 import fs from 'fs';
 import http from 'http';
 import * as https from 'node:https';
-import path from 'path';
 import BooksAPIApp from './app';
 
-const privateKey = fs.readFileSync(
-  '/etc/letsencrypt/live/book-play.ru/name.key',
-  'utf8'
-);
-const certificate = fs.readFileSync(
-  '/etc/letsencrypt/live/book-play.ru/name.crt',
-  'utf8'
-);
+const privateKey = fs.readFileSync(environment.HTTPS_PRIVATE_KEY, 'utf8');
+const certificate = fs.readFileSync(environment.HTTPS_CERTIFICATE, 'utf8');
 const credentials = { key: privateKey, cert: certificate };
 
 const expressApp = express();
 
 function corsOptionsDelegate(req, callback) {
-  if (CORS_ALLOWED_LIST.indexOf(req.header('Origin')) >= 0) {
+  if (environment.CORS_ALLOWED_LIST.indexOf(req.header('Origin')) >= 0) {
     callback(null, { origin: true }); // reflect (enable) the requested origin in the CORS response
   } else {
     callback(null, { origin: false }); // disable CORS for this request
@@ -52,8 +42,7 @@ expressApp.post(
   '/tts',
   cors(corsOptionsDelegate),
   (req: express.Request, res: express.Response) => {
-    app.tts(req.body).then((file) => {
-      const filePath = path.join(file);
+    app.tts(req.body).then((filePath) => {
       const stat = fs.statSync(filePath);
 
       res.writeHead(200, {

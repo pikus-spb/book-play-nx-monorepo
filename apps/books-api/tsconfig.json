@@ -12,7 +12,7 @@
   ],
   "compilerOptions": {
     "esModuleInterop": true,
-    "module": "ES2022",
+    "module": "commonjs",
     "types": ["node"],
     "moduleResolution": "node",
     "allowImportingTsExtensions": true
