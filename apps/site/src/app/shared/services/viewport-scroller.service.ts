@@ -41,7 +41,7 @@ class ViewportScrollerService {
   private scrollToFoundParagraph(index: number) {
     const paragraph = getParagraphNode(this.el?.nativeElement, index);
     if (paragraph) {
-      paragraph.scrollIntoView({ block: 'center', behavior: 'smooth' });
+      paragraph.scrollIntoView({ block: 'center' });
     }
   }
 

@@ -1,7 +1,9 @@
 @use 'vars' as *;
+@use 'mixins' as *;
 @use '@angular/material' as mat;
 
-:host > div {
+.container {
+  @include scrollable-container;
   padding: $default-padding * 2;
 
   form {

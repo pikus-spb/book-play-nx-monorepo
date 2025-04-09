@@ -2,7 +2,16 @@
   $remValue: ($value / 16) + rem;
   @return $remValue;
 }
+
 @function toPx($value) {
   $pxValue: ($value * 16) + px;
   @return $pxValue;
+}
+
+@mixin scrollable-container {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  position: relative;
 }

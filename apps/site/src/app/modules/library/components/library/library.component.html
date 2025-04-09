@@ -1,4 +1,4 @@
-<div class="library-container">
+<div class="container">
   <h1 loading [thenShow]="books">
     <span>Авторы</span>
     <input
@@ -15,6 +15,7 @@
       [itemWidth]="250"
       [itemHeight]="50"
       [trackBy]="trackByFn"
+      libPerfectScrollbar
       class="authors-books-grid"
     >
       <mat-chip-set aria-label="Авторы">

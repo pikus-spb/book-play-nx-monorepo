@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatSlider, MatSliderThumb } from '@angular/material/slider';
+import { ScrollbarDirective } from '@book-play/ui';
 import { SettingsService } from '../../../../shared/services/settings.service';
 
 @Component({
@@ -14,6 +15,7 @@ import { SettingsService } from '../../../../shared/services/settings.service';
     MatButtonToggleModule,
     MatSlider,
     MatSliderThumb,
+    ScrollbarDirective,
   ],
 })
 export class SettingsComponent {
