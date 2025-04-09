@@ -4,7 +4,6 @@ import { DBBookToUIBook } from './book-mapper';
 export interface DBAuthor {
   id?: string;
   first: string;
-  middle?: string;
   last: string;
   full: string;
   about?: string;
@@ -30,7 +29,6 @@ export interface DBAuthorSummary extends DBAuthor {
 export class Author {
   public id!: string;
   public first!: string;
-  public middle?: string;
   public last!: string;
   public about?: string;
   public image?: string;
@@ -41,7 +39,7 @@ export class Author {
   }
 
   public get full(): string {
-    return `${this.first} ${this.middle ? this.middle + ' ' : ''}${this.last}`;
+    return `${this.first} ${this.last}`;
   }
 }
 

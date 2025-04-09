@@ -6,7 +6,6 @@ import {
   cleanNonRussianWords,
   cleanSpaces,
   findRussianIndex,
-  isTextInRussian,
 } from './cleanup-tools';
 
 export function parseFb2Image(
@@ -40,9 +39,6 @@ export class Fb2Parser {
     const first = $('author first-name')
       .toArray()
       .map((item) => cleanSpaces($(item).text()));
-    const middle = $('author middle-name')
-      .toArray()
-      .map((item) => cleanSpaces($(item).text()));
     const last = $('author last-name')
       .toArray()
       .map((item) => cleanSpaces($(item).text()));
@@ -52,9 +48,6 @@ export class Fb2Parser {
     if (index !== -1) {
       return new Author({
         first: cleanNonRussianWords(first[index]),
-        middle: isTextInRussian(middle[index])
-          ? cleanNonRussianWords(middle[index])
-          : '',
         last: cleanNonRussianWords(last[index]),
       });
     }

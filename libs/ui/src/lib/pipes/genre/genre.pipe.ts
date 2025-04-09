@@ -6,6 +6,7 @@ import { FB2_GENRES } from '@book-play/constants';
 })
 export class GenrePipe implements PipeTransform {
   transform(genre: string): string {
+    genre = genre.trim();
     return FB2_GENRES[genre] ? FB2_GENRES[genre] : genre;
   }
 }

@@ -11,7 +11,7 @@ export async function run() {
   for (let i = 0; i < books.length; i++) {
     const book = books[i];
 
-    console.log(`Updating ${book.first} ${book.middle} ${book.last}`);
+    console.log(`Updating ${book.first} ${book.last}`);
 
     let authorId: string | undefined = await searchAuthor(
       book.first,
@@ -20,14 +20,7 @@ export async function run() {
       console.error(e);
       return undefined;
     });
-    if (authorId) {
-      if (book.middle) {
-        await updateAuthorMiddleName(authorId, book.middle).catch((e) => {
-          console.error(e);
-          return undefined;
-        });
-      }
-    } else {
+    if (!authorId) {
       authorId = await insertNewAuthor(book).catch((e) => {
         console.error(e);
         return undefined;
@@ -48,40 +41,14 @@ export async function run() {
 function insertNewAuthor(author: any): Promise<string> {
   return new Promise((resolve, reject) => {
     pool.query(
-      'INSERT INTO authors (first, middle, last, full, about, image)' +
-        ' VALUES (?, ?, ?, ?, ?, ?)',
-      [
-        author.first,
-        author.middle || '',
-        author.last,
-        author.first + ' ' + author.last,
-        '',
-        '',
-      ],
+      'INSERT INTO authors (first, last, full, about, image)' +
+        ' VALUES (?, ?, ?, ?, ?)',
+      [author.first, author.last, author.first + ' ' + author.last, '', ''],
       (err: Error, result: ResultSetHeader) => {
         if (err) {
           reject(err);
         } else {
           resolve(result.insertId.toString());
-        }
-      }
-    );
-  });
-}
-
-function updateAuthorMiddleName(id: string, middle: string): Promise<boolean> {
-  return new Promise((resolve, reject) => {
-    pool.query(
-      "UPDATE authors SET middle='" +
-        middle.replace("'", "\\'") +
-        "' WHERE id=" +
-        id,
-      (err: Error, result: any[]) => {
-        if (err) {
-          console.error(err);
-          reject(err);
-        } else {
-          resolve(true);
         }
       }
     );
@@ -107,7 +74,7 @@ function updateBook(id: string, authorId: string): Promise<boolean> {
 async function getBooksToUpdate(): Promise<DBBook[]> {
   return new Promise((resolve, reject) => {
     pool.query(
-      'SELECT id, authorId, first, middle, last FROM books',
+      'SELECT id, authorId, first, last FROM books',
       (err: Error, result: any[]) => {
         if (err) {
           console.error(err);
