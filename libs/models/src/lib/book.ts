@@ -6,7 +6,6 @@ export interface DBBook {
   id: string;
   authorId: string;
   first: string;
-  middle?: string;
   last: string;
   name: string;
   annotation?: string;
@@ -51,6 +50,6 @@ export class Book {
   }
 
   public get hash(): string {
-    return `${this.author.first}${this.author.middle}${this.author.last}${this.name}${this.paragraphs.length}`;
+    return `${this.author.first}${this.author.last}${this.name}${this.paragraphs.length}`;
   }
 }

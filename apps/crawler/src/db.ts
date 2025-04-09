@@ -5,11 +5,10 @@ import { ResultSetHeader } from 'mysql2/typings/mysql/lib/protocol/packets/Resul
 export function saveToDataBase(pool: Pool, book: DBBook): Promise<string> {
   return new Promise((resolve, reject) => {
     pool.query(
-      'INSERT INTO books (first, middle, last, name, annotation, genres, date, full, cover)' +
-        ' VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
+      'INSERT INTO books (first, last, name, annotation, genres, date, full, cover)' +
+        ' VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
       [
         book.first,
-        book.middle || '',
         book.last,
         book.name,
         book.annotation || '',

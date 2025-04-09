@@ -14,7 +14,6 @@ export function DBBookToUIBook(input: Partial<DBBook>): Book {
     cover: ImageBase64Data.fromBase64String(input.cover || ''),
     author: new Author({
       id: input.authorId,
-      middle: input.middle,
       last: input?.last,
       first: input.first,
     }),
@@ -34,7 +33,6 @@ export function UIBookToDBBook(input: Book): DBBook {
     cover: input.cover?.toBase64String() || '',
     first: input.author.first,
     last: input.author.last,
-    middle: input.author.middle || '',
     full: input.full,
   };
 }

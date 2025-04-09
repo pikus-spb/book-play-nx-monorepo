@@ -25,8 +25,7 @@ export default class BooksAPIApp {
   async authorSummary(id: string): Promise<DBAuthorSummary> {
     return new Promise((resolve, reject) => {
       pool.query(
-        'SELECT first, middle, last, about, image FROM authors WHERE id = ' +
-          id,
+        'SELECT first, last, about, image FROM authors WHERE id = ' + id,
         async (err, result: DBAuthor[]) => {
           if (err) {
             console.error(err);
@@ -131,7 +130,7 @@ export default class BooksAPIApp {
         `SELECT
           books.id, books.name, books.annotation, books.genres, books.date,
             books.full, books.cover,
-          authors.first, authors.middle, authors.last, authors.id as authorId 
+          authors.first, authors.last, authors.id as authorId 
           FROM books
           CROSS JOIN authors
           WHERE authors.id = books.authorId
