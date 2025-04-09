@@ -8,7 +8,7 @@ import {
 } from '@angular/core';
 import { MatChipSet } from '@angular/material/chips';
 import { Author } from '@book-play/models';
-import { TagLinkComponent } from '@book-play/ui';
+import { ScrollbarDirective, TagLinkComponent } from '@book-play/ui';
 import { NgxVirtualScrollModule } from '@lithiumjs/ngx-virtual-scroll';
 import { LoadingThenShowDirective } from '../../../../shared/directives/loading-then-show/loading-then-show.directive';
 import { BooksApiService } from '../../../../shared/services/books-api.service';
@@ -25,6 +25,7 @@ import {
     NgxVirtualScrollModule,
     MatChipSet,
     TagLinkComponent,
+    ScrollbarDirective,
   ],
   templateUrl: './library.component.html',
   styleUrls: ['./library.component.scss'],

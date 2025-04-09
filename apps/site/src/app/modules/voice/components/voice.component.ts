@@ -8,6 +8,7 @@ import {
   ViewEncapsulation,
 } from '@angular/core';
 import { MatButton } from '@angular/material/button';
+import { ScrollbarDirective } from '@book-play/ui';
 import { blobToBase64 } from '@book-play/utils-browser';
 import {
   async,
@@ -28,7 +29,7 @@ import { TtsApiService } from '../../../shared/services/tts-api.service';
 
 @Component({
   selector: 'voice',
-  imports: [MatButton, AsyncPipe],
+  imports: [MatButton, AsyncPipe, ScrollbarDirective],
   templateUrl: './voice.component.html',
   styleUrls: ['./voice.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

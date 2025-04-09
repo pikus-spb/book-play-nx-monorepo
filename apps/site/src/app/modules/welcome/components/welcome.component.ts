@@ -2,13 +2,19 @@ import { CommonModule } from '@angular/common';
 import { Component, inject, resource } from '@angular/core';
 import { MatChipSet } from '@angular/material/chips';
 import { Author } from '@book-play/models';
-import { TagLinkComponent } from '@book-play/ui';
+import { ScrollbarDirective, TagLinkComponent } from '@book-play/ui';
 import { BooksApiService } from '../../../shared/services/books-api.service';
 import { BookComponent } from '../../book/components/book/book.component';
 
 @Component({
   selector: 'welcome',
-  imports: [CommonModule, BookComponent, MatChipSet, TagLinkComponent],
+  imports: [
+    CommonModule,
+    BookComponent,
+    MatChipSet,
+    TagLinkComponent,
+    ScrollbarDirective,
+  ],
   templateUrl: './welcome.component.html',
   styleUrls: ['./welcome.component.scss'],
 })

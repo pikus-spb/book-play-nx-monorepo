@@ -1,0 +1,9 @@
+/* Use this mixin CSS for scrollable container  */
+
+@mixin scrollable-container {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  position: relative;
+}

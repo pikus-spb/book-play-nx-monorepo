@@ -25,14 +25,6 @@
       href="https://fonts.googleapis.com/icon?family=Material+Icons"
       rel="stylesheet"
     />
-  </head>
-  <body
-    class="mat-body"
-    onresize="fitVH()"
-    onscroll="fitVH()"
-    onload="enableNoSleep()"
-  >
-    <root class="mat-typography"></root>
     <script>
       function enableNoSleep() {
         const noSleep = new NoSleep();
@@ -52,5 +44,13 @@
       }
       fitVH();
     </script>
+  </head>
+  <body
+    class="mat-body"
+    onresize="fitVH()"
+    onscroll="fitVH()"
+    onload="enableNoSleep()"
+  >
+    <root class="mat-typography"></root>
   </body>
 </html>

@@ -13,7 +13,7 @@ import {
 } from '@angular/material/sidenav';
 import { MatToolbar } from '@angular/material/toolbar';
 import { RouterModule } from '@angular/router';
-import { async } from 'rxjs';
+import { ScrollbarDirective } from '@book-play/ui';
 
 import { BookTitleComponent } from '../../../../shared/components/book-title/book-title.component';
 import { CopyrightOwnerComponent } from '../../../../shared/components/copyright-owner/copyright-owner.component';
@@ -43,6 +43,7 @@ import {
     MatSidenav,
     MatSidenavContent,
     MatSidenavContainer,
+    ScrollbarDirective,
   ],
 })
 export class MainComponent {
@@ -60,6 +61,4 @@ export class MainComponent {
       }
     });
   }
-
-  protected readonly async = async;
 }
