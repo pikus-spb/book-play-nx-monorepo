@@ -9,10 +9,7 @@
     <meta name="google" content="notranslate" />
     <meta http-equiv="Content-Language" content="ru_RU" />
     <base href="/" />
-    <meta
-      name="viewport"
-      content="width=530, initial-scale=0.9, maximum-scale=0.9"
-    />
+    <meta name="viewport" content="width=530, initial-scale=1.1" />
     <meta name="yandex-verification" content="3440eb5c63c623cf" />
     <link rel="icon" type="image/x-icon" href="favicon.ico" />
     <link rel="manifest" href="manifest.json" />
@@ -25,32 +22,8 @@
       href="https://fonts.googleapis.com/icon?family=Material+Icons"
       rel="stylesheet"
     />
-    <script>
-      function enableNoSleep() {
-        const noSleep = new NoSleep();
-        document.addEventListener(
-          'click',
-          function enableNoSleep() {
-            document.removeEventListener('click', enableNoSleep, false);
-            noSleep.enable();
-          },
-          false
-        );
-      }
-
-      function fitVH() {
-        let vh = window.innerHeight * 0.01;
-        document.documentElement.style.setProperty('--vh', `${vh}px`);
-      }
-      fitVH();
-    </script>
   </head>
-  <body
-    class="mat-body"
-    onresize="fitVH()"
-    onscroll="fitVH()"
-    onload="enableNoSleep()"
-  >
-    <root class="mat-typography"></root>
+  <body class="mat-body">
+    <main class="mat-typography"></main>
   </body>
 </html>

@@ -9,6 +9,7 @@ import {
 import PerfectScrollbar from 'perfect-scrollbar';
 
 const MIN_HEIGHT = 25;
+const SKIP_PX_OVERSIZE = 5;
 
 @Directive({
   selector: '[libPerfectScrollbar]',
@@ -34,6 +35,8 @@ export class ScrollbarDirective implements AfterViewInit {
   private createScrollBar(): void {
     this.ps = new PerfectScrollbar(this.el.nativeElement, {
       minScrollbarLength: this.minHeight() || MIN_HEIGHT,
+      scrollYMarginOffset: SKIP_PX_OVERSIZE,
+      scrollXMarginOffset: SKIP_PX_OVERSIZE,
       suppressScrollX: this.suppressScrollX(),
       suppressScrollY: this.suppressScrollY(),
     });

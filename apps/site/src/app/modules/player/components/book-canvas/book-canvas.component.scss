@@ -61,7 +61,7 @@ div {
   }
 }
 
-::ng-deep body {
+::ng-deep {
   book-canvas {
     p.active {
       &:before {
@@ -69,7 +69,8 @@ div {
       }
     }
   }
-  &.loading {
+
+  .loading {
     book-canvas {
       p.active {
         &:before {
