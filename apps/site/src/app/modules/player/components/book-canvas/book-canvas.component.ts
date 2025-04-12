@@ -15,7 +15,6 @@ import {
   Signal,
   ViewChild,
 } from '@angular/core';
-import { RouterLink } from '@angular/router';
 import {
   BOOK_IMAGE_HEIGHT,
   BOOK_IMAGE_WIDTH,
@@ -25,6 +24,7 @@ import { Book } from '@book-play/models';
 import {
   HeightCalculateComponent,
   HeightDelta,
+  LinkComponent,
   ScrollbarDirective,
 } from '@book-play/ui';
 import {
@@ -46,8 +46,8 @@ import { BookParagraphComponent } from '../book-paragraph/book-paragraph.compone
     ExperimentalScrollingModule,
     BookParagraphComponent,
     HeightCalculateComponent,
-    RouterLink,
     ScrollbarDirective,
+    LinkComponent,
   ],
 })
 export class BookCanvasComponent implements OnDestroy {
@@ -119,4 +119,5 @@ export class BookCanvasComponent implements OnDestroy {
   protected readonly BOOK_IMAGE_WIDTH = BOOK_IMAGE_WIDTH;
   protected readonly BOOK_IMAGE_HEIGHT = BOOK_IMAGE_HEIGHT;
   protected readonly showDefaultCoverImage = showDefaultCoverImage;
+  protected readonly Boolean = Boolean;
 }
