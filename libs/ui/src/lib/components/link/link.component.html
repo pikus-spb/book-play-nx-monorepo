@@ -1,0 +1,11 @@
+@if (enabled()) {
+<a [routerLink]="libRouterLink()" [title]="title()">
+  <ng-container *ngTemplateOutlet="content"></ng-container>
+</a>
+} @else {
+<ng-container *ngTemplateOutlet="content"></ng-container>
+}
+
+<ng-template #content>
+  <ng-content></ng-content>
+</ng-template>

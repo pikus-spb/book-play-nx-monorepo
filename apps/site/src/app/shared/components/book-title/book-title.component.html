@@ -1,7 +1,17 @@
 @if (book() !== null) { &nbsp;-&nbsp;
-<span title="{{ book()?.full }}">
-  <a [routerLink]="['/author', book()?.authorId]">{{ book()?.author?.full }}</a>
+<span>
+  <lib-link
+    [enabled]="book()?.authorId"
+    [title]="'Посмотреть описание автора'"
+    [libRouterLink]="['/author', book()?.authorId]"
+    >{{ book()?.author?.full }}</lib-link
+  >
   -
-  <a [routerLink]="['/book', book()?.id]">{{ book()?.name }}</a>
+  <lib-link
+    [enabled]="book()?.id"
+    [title]="'Посмотреть описание книги'"
+    [libRouterLink]="['/book', book()?.id]"
+    >{{ book()?.name }}</lib-link
+  >
 </span>
 }

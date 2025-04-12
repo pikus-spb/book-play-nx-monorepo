@@ -5,8 +5,9 @@ import {
   inject,
 } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 import { Book } from '@book-play/models';
+import { LinkComponent } from '@book-play/ui';
 import { ActiveBookService } from '../../services/active-book.service';
 
 @Component({
@@ -14,7 +15,7 @@ import { ActiveBookService } from '../../services/active-book.service';
   templateUrl: './book-title.component.html',
   styleUrls: ['./book-title.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [RouterLink],
+  imports: [LinkComponent],
 })
 export class BookTitleComponent {
   private activeBookService = inject(ActiveBookService);
