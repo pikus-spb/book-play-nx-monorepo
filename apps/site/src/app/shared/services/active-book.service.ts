@@ -1,6 +1,6 @@
 import { inject, Injectable, signal, WritableSignal } from '@angular/core';
 import { Book } from '@book-play/models';
-import { CursorPositionLocalStorageService } from './cursor-position-local-storage.service';
+import { CursorPositionService } from './cursor-position.service';
 
 @Injectable({
   providedIn: 'root',
@@ -8,7 +8,7 @@ import { CursorPositionLocalStorageService } from './cursor-position-local-stora
 export class ActiveBookService {
   public book: WritableSignal<Book | null> = signal(null);
 
-  private cursorService = inject(CursorPositionLocalStorageService);
+  private cursorService = inject(CursorPositionService);
 
   public cursorPositionIsValid(): boolean {
     const book = this.book();

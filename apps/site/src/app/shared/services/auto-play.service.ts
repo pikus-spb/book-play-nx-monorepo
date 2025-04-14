@@ -16,7 +16,7 @@ import {
   PRELOAD_EXTRA,
 } from './audio-preloading.service';
 import { AudioStorageService } from './audio-storage.service';
-import { CursorPositionLocalStorageService } from './cursor-position-local-storage.service';
+import { CursorPositionService } from './cursor-position.service';
 import { DomAudioHelperService } from './dom-audio-helper.service';
 import { DomHelperService } from './dom-helper.service';
 import { AppEventNames, EventsStateService } from './events-state.service';
@@ -40,7 +40,7 @@ export class AutoPlayService {
     private audioStorage: AudioStorageService,
     private eventStateService: EventsStateService,
     private preloadingService: AudioPreloadingService,
-    private cursorService: CursorPositionLocalStorageService,
+    private cursorService: CursorPositionService,
     private domHelper: DomHelperService,
     private preloadHelper: AudioPreloadingService
   ) {

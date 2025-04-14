@@ -1,9 +1,10 @@
 @if (isTextParagraph(text)) {
 <p
   tabindex="0"
-  class="{{ PARAGRAPH_CLASS_PREFIX }}{{ index }}"
-  (click)="activated.emit(index)"
-  (keydown.enter)="activated.emit(index)"
+  [ngClass]="PARAGRAPH_CLASS_PREFIX + index()"
+  [class.active]="isActive()"
+  (click)="activated.emit(index())"
+  (keydown.enter)="activated.emit(index())"
 >
   {{ text }}
 </p>
