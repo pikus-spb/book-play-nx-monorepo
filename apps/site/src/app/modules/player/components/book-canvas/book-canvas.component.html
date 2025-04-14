@@ -49,9 +49,9 @@
           index as index;
           trackBy: trackByFn
         "
-        [index]="toTextIndex(index)"
+        [index]="getTextIndex(index)"
         [text]="text"
-        (activated)="onParagraphClick(toTextIndex(index))"
+        (activated)="onParagraphClick(getTextIndex(index))"
         class="scroll-item"
       ></book-paragraph>
     </cdk-virtual-scroll-viewport>

@@ -9,6 +9,7 @@ import {
   computed,
   ElementRef,
   EventEmitter,
+  inject,
   Input,
   OnDestroy,
   Output,
@@ -27,12 +28,10 @@ import {
   LinkComponent,
   ScrollbarDirective,
 } from '@book-play/ui';
-import {
-  isTextParagraph,
-  showDefaultCoverImage,
-} from '@book-play/utils-browser';
+import { showDefaultCoverImage } from '@book-play/utils-browser';
 import { Subject } from 'rxjs';
 import { DomHelperService } from '../../../../shared/services/dom-helper.service';
+import { TextIndexMapperService } from '../../../../shared/services/text-index-mapper.service';
 import { setupViewportScrollerService } from '../../../../shared/services/viewport-scroller.service';
 import { BookParagraphComponent } from '../book-paragraph/book-paragraph.component';
 
@@ -52,29 +51,18 @@ import { BookParagraphComponent } from '../book-paragraph/book-paragraph.compone
 })
 export class BookCanvasComponent implements OnDestroy {
   @Input() set book(book: Signal<Book | null>) {
-    const paragraphs = book()?.paragraphs;
-    let textIndex = 0;
-    this.textIndexes = {};
-
-    paragraphs?.forEach((p, index) => {
-      this.textIndexes[index] = textIndex;
-
-      if (isTextParagraph(p)) {
-        textIndex++;
-      }
-    });
-
+    this.textIndexMapperService.setParagraphs(book()?.paragraphs || []);
     this._book = book;
   }
   get book(): Signal<Book | null> {
     return this._book;
   }
-
   @Output() paragraphClick: EventEmitter<number> = new EventEmitter<number>();
   @ViewChild('scrollViewport') viewport!: CdkVirtualScrollViewport;
 
+  public textIndexMapperService = inject(TextIndexMapperService);
+
   private _book!: Signal<Book | null>;
-  private textIndexes: Record<number, number> = {};
 
   constructor(private el: ElementRef, private domHelper: DomHelperService) {}
 
@@ -99,8 +87,8 @@ export class BookCanvasComponent implements OnDestroy {
     return item;
   }
 
-  public toTextIndex(index: number): number {
-    return this.textIndexes[index];
+  public getTextIndex(index: number): number {
+    return this.textIndexMapperService.getTextIndex(index);
   }
 
   public get bookData(): Book | null {
