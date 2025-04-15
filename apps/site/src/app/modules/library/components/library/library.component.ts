@@ -3,6 +3,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   effect,
+  inject,
   resource,
   signal,
 } from '@angular/core';
@@ -10,12 +11,13 @@ import { MatChipSet } from '@angular/material/chips';
 import { Author } from '@book-play/models';
 import { ScrollbarDirective, TagLinkComponent } from '@book-play/ui';
 import { NgxVirtualScrollModule } from '@lithiumjs/ngx-virtual-scroll';
+import { Store } from '@ngrx/store';
 import { LoadingThenShowDirective } from '../../../../shared/directives/loading-then-show/loading-then-show.directive';
 import { BooksApiService } from '../../../../shared/services/books-api.service';
 import {
-  AppEventNames,
-  EventsStateService,
-} from '../../../../shared/services/events-state.service';
+  loadingEndAction,
+  loadingStartAction,
+} from '../../../../shared/store/loading/loading.action';
 
 @Component({
   selector: 'library',
@@ -36,19 +38,18 @@ export class LibraryComponent {
     loader: () => this.booksApi.getAllAuthors(),
   });
 
+  public booksApi = inject(BooksApiService);
   protected viewData = signal<Author[]>([]);
+  private store = inject(Store);
 
-  constructor(
-    public booksApi: BooksApiService,
-    public eventStates: EventsStateService
-  ) {
+  constructor() {
     effect(() => {
       if (this.data.isLoading()) {
-        this.eventStates.add(AppEventNames.loading);
+        this.store.dispatch(loadingStartAction());
       } else {
         const data = this.data.value() ?? [];
         this.viewData.set(data);
-        this.eventStates.remove(AppEventNames.loading);
+        this.store.dispatch(loadingEndAction());
       }
     });
   }
