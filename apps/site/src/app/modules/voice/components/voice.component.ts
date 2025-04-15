@@ -4,12 +4,14 @@ import {
   ChangeDetectionStrategy,
   Component,
   ElementRef,
+  inject,
   ViewChild,
   ViewEncapsulation,
 } from '@angular/core';
 import { MatButton } from '@angular/material/button';
 import { ScrollbarDirective } from '@book-play/ui';
 import { blobToBase64 } from '@book-play/utils-browser';
+import { Store } from '@ngrx/store';
 import {
   async,
   BehaviorSubject,
@@ -21,11 +23,11 @@ import {
   switchMap,
   tap,
 } from 'rxjs';
-import {
-  AppEventNames,
-  EventsStateService,
-} from '../../../shared/services/events-state.service';
 import { TtsApiService } from '../../../shared/services/tts-api.service';
+import {
+  loadingEndAction,
+  loadingStartAction,
+} from '../../../shared/store/loading/loading.action';
 
 @Component({
   selector: 'voice',
@@ -41,11 +43,8 @@ export class VoiceComponent implements AfterViewInit {
 
   public text = '';
   public valid$: Subject<boolean> = new BehaviorSubject(false);
-
-  constructor(
-    private speechService: TtsApiService,
-    private eventsState: EventsStateService
-  ) {}
+  private store = inject(Store);
+  private speechService = inject(TtsApiService);
 
   private addAudioElement(base64Data: string, text: string): void {
     const audio = document.createElement('audio');
@@ -62,7 +61,7 @@ export class VoiceComponent implements AfterViewInit {
   }
 
   async voice() {
-    this.eventsState.add(AppEventNames.loading);
+    this.store.dispatch(loadingStartAction());
 
     const data = await firstValueFrom(
       this.speechService.textToSpeech(this.text).pipe(
@@ -73,7 +72,7 @@ export class VoiceComponent implements AfterViewInit {
     );
     this.addAudioElement(data, this.text);
 
-    this.eventsState.remove(AppEventNames.loading);
+    this.store.dispatch(loadingEndAction());
   }
 
   ngAfterViewInit() {
