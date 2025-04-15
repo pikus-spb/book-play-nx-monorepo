@@ -60,11 +60,11 @@ xdescribe('LibraryComponent', () => {
     fixture.detectChanges();
   });
 
-  test('should create', () => {
+  xtest('should create', () => {
     expect(component).toBeTruthy();
   });
 
-  describe('Loading state management', () => {
+  xdescribe('Loading state management', () => {
     test('should add loading event when data is being loaded', async () => {
       await fixture.whenStable();
       expect(eventStates.add).toHaveBeenCalledWith(AppEventNames.loading);
@@ -80,7 +80,7 @@ xdescribe('LibraryComponent', () => {
     });
   });
 
-  describe('Data handling', () => {
+  xdescribe('Data handling', () => {
     test('should handle empty data correctly', async () => {
       booksApi.getAllAuthors.mockResolvedValue([] as Author[]);
 
@@ -94,7 +94,7 @@ xdescribe('LibraryComponent', () => {
       expect(component.data.value()).toEqual([]);
     });
 
-    test('should fetch and display authors', async () => {
+    xtest('should fetch and display authors', async () => {
       const mockData: Author[] = [
         new Author({
           first: 'A',
@@ -119,7 +119,7 @@ xdescribe('LibraryComponent', () => {
     });
   });
 
-  describe('Error handling', () => {
+  xdescribe('Error handling', () => {
     test('should handle API errors gracefully', async () => {
       booksApi.getAllAuthors.mockRejectedValue(new Error('API error'));
 
