@@ -1,6 +1,6 @@
 import { createReducer, on } from '@ngrx/store';
-import { LoadingState } from './loading-state';
 import { loadingEndAction, loadingStartAction } from './loading.action';
+import { LoadingState } from './loading.state';
 
 export const initialState: LoadingState = false;
 
