@@ -23,7 +23,7 @@ import {
   switchMap,
   tap,
 } from 'rxjs';
-import { TtsApiService } from '../../../shared/services/tts-api.service';
+import { TtsApiService } from '../../../shared/services/tts/tts-api.service';
 import {
   loadingEndAction,
   loadingStartAction,

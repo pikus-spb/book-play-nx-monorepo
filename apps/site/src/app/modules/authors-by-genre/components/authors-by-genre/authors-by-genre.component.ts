@@ -18,7 +18,7 @@ import { NgxVirtualScrollModule } from '@lithiumjs/ngx-virtual-scroll';
 import { Store } from '@ngrx/store';
 import { firstValueFrom } from 'rxjs';
 import { LoadingThenShowDirective } from '../../../../shared/directives/loading-then-show/loading-then-show.directive';
-import { BooksApiService } from '../../../../shared/services/books-api.service';
+import { BooksApiService } from '../../../../shared/services/books/books-api.service';
 import {
   loadingEndAction,
   loadingStartAction,

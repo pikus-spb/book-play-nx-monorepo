@@ -10,22 +10,20 @@ import {
   shareReplay,
   tap,
 } from 'rxjs';
+import { AudioCacheHelperService } from '../../store/audio-cache/audio-cache-helper.service';
 import {
   loadingEndAction,
   loadingStartAction,
-} from '../store/loading/loading.action';
-
-import { ActiveBookService } from './active-book.service';
+} from '../../store/loading/loading.action';
+import { ActiveBookService } from '../books/active-book.service';
+import { DomAudioHelperService } from '../dom-audio-helper.service';
+import { AppEventNames, EventsStateService } from '../events-state.service';
+import { CursorPositionService } from '../player/cursor-position.service';
+import { DomHelperService } from '../player/dom-helper.service';
 import {
   AudioPreloadingService,
   PRELOAD_EXTRA,
 } from './audio-preloading.service';
-import { AudioStorageService } from './audio-storage.service';
-import { CursorPositionService } from './cursor-position.service';
-import { DomAudioHelperService } from './dom-audio-helper.service';
-import { DomHelperService } from './dom-helper.service';
-import { AppEventNames, EventsStateService } from './events-state.service';
-import { TtsApiService } from './tts-api.service';
 
 @Injectable({
   providedIn: 'root',
@@ -40,14 +38,12 @@ export class AutoPlayService {
   private router = inject(Router);
   private activeBookService = inject(ActiveBookService);
   private audioPlayer = inject(DomAudioHelperService);
-  private speechService = inject(TtsApiService);
-  private audioStorage = inject(AudioStorageService);
   private eventStateService = inject(EventsStateService);
-  private preloadingService = inject(AudioPreloadingService);
   private cursorService = inject(CursorPositionService);
   private domHelper = inject(DomHelperService);
   private preloadHelper = inject(AudioPreloadingService);
   private store = inject(Store);
+  private audioCacheHelperService = inject(AudioCacheHelperService);
 
   constructor() {
     this.router.events
@@ -102,7 +98,7 @@ export class AutoPlayService {
   }
 
   public async ensureAudioDataReady() {
-    if (!this.audioStorage.get(this.cursorService.position)) {
+    if (!(await this.audioCacheHelperService.getAudioPromise())) {
       this.store.dispatch(loadingStartAction());
 
       await this.preloadHelper.preloadParagraph(
@@ -132,9 +128,6 @@ export class AutoPlayService {
   }
 
   public async start(index = -1) {
-    if (this.preloadingService.initialized) {
-      this.speechService.cancelAllVoiceRequests();
-    }
     if (index >= 0) {
       this.cursorService.position = index;
     }
@@ -155,7 +148,7 @@ export class AutoPlayService {
       await this.ensureAudioDataReady();
 
       this.audioPlayer.setAudio(
-        this.audioStorage.get(this.cursorService.position)
+        await this.audioCacheHelperService.getAudioPromise()
       );
 
       if (await this.audioPlayer.play()) {

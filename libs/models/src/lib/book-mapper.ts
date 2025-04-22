@@ -1,6 +1,6 @@
 import { Author } from './author';
+import { ImageBase64Data } from './base64';
 import { Book, DBBook } from './book';
-import { ImageBase64Data } from './imageBase64Data';
 
 export function DBBookToUIBook(input: Partial<DBBook>): Book {
   const data = {

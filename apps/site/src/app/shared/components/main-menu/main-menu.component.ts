@@ -9,10 +9,10 @@ import { MatIcon } from '@angular/material/icon';
 import { MatListItem, MatNavList } from '@angular/material/list';
 import { RouterModule } from '@angular/router';
 import { UploadFileDirective } from '../../directives/file-upload/upload-file.directive';
-import { ActiveBookService } from '../../services/active-book.service';
+import { ActiveBookService } from '../../services/books/active-book.service';
+import { FileReaderService } from '../../services/books/file-reader.service';
+import { IndexedDbBookStorageService } from '../../services/books/indexed-db-book-storage.service';
 import { EventsStateService } from '../../services/events-state.service';
-import { FileReaderService } from '../../services/file-reader.service';
-import { IndexedDbBookStorageService } from '../../services/indexed-db-book-storage.service';
 
 @Component({
   selector: 'main-menu',

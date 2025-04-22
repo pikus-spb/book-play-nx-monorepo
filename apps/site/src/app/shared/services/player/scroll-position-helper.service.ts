@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AppEventNames, EventsStateService } from './events-state.service';
+import { AppEventNames, EventsStateService } from '../events-state.service';
 import { viewportScroller } from './viewport-scroller.service';
 
 @Injectable({
