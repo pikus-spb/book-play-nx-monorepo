@@ -16,7 +16,7 @@ import {
 } from '@book-play/constants';
 import { ImageBase64Data } from '@book-play/models';
 import { isTextParagraph } from '@book-play/utils-browser';
-import { CursorPositionService } from '../../../../shared/services/cursor-position.service';
+import { CursorPositionService } from '../../../../shared/services/player/cursor-position.service';
 
 @Component({
   selector: 'book-paragraph',

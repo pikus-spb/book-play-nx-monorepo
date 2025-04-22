@@ -1,13 +1,13 @@
-import { AsyncPipe } from '@angular/common';
 import {
   AfterViewInit,
   ChangeDetectionStrategy,
   Component,
-  effect,
   ElementRef,
+  HostBinding,
   inject,
   OnDestroy,
 } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { MatProgressBar } from '@angular/material/progress-bar';
 import {
   MatSidenav,
@@ -18,6 +18,7 @@ import { MatToolbar } from '@angular/material/toolbar';
 import { RouterModule } from '@angular/router';
 
 import { ScrollbarDirective } from '@book-play/ui';
+import { Store } from '@ngrx/store';
 import NoSleep from 'nosleep.js';
 import { fromEvent, merge, Subscription } from 'rxjs';
 import { BookTitleComponent } from '../../../shared/components/book-title/book-title.component';
@@ -25,10 +26,7 @@ import { CopyrightOwnerComponent } from '../../../shared/components/copyright-ow
 import { CopyrightComponent } from '../../../shared/components/copyright/copyright.component';
 import { MainHeaderComponent } from '../../../shared/components/main-header/main-header.component';
 import { MainMenuComponent } from '../../../shared/components/main-menu/main-menu.component';
-import {
-  AppEventNames,
-  EventsStateService,
-} from '../../../shared/services/events-state.service';
+import { selectLoading } from '../../../shared/store/loading/loading.selector';
 
 @Component({
   selector: 'main',
@@ -44,7 +42,6 @@ import {
     BookTitleComponent,
     MatToolbar,
     MatProgressBar,
-    AsyncPipe,
     MatSidenav,
     MatSidenavContent,
     MatSidenavContainer,
@@ -52,27 +49,19 @@ import {
   ],
 })
 export class MainComponent implements AfterViewInit, OnDestroy {
-  public AppEvents = AppEventNames;
-  public eventStatesService = inject(EventsStateService);
-
+  private store = inject(Store);
+  protected loading = toSignal(this.store.select(selectLoading));
   private el = inject(ElementRef);
   private noSleep!: NoSleep;
   private noSleepSubscription!: Subscription;
 
-  constructor() {
-    effect(() => {
-      const loading = this.eventStatesService.get(AppEventNames.loading)();
-
-      if (loading) {
-        this.el.nativeElement.classList.add('loading');
-      } else {
-        this.el.nativeElement.classList.remove('loading');
-      }
-    });
-  }
-
   public ngAfterViewInit() {
     this.addListeners();
+  }
+
+  @HostBinding('class.loading')
+  get loadingState() {
+    return this.loading();
   }
 
   private addListeners(): void {

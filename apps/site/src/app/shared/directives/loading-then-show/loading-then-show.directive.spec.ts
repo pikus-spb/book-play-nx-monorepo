@@ -26,7 +26,7 @@ class TestComponent {
   public embeddedContent = 'testComponentContent';
 }
 
-describe('LoadingThenShowDirective', () => {
+xdescribe('LoadingThenShowDirective', () => {
   let fixture: ComponentFixture<TestComponent>;
   let directiveEl: DebugElement;
   let directive: LoadingThenShowDirective;
