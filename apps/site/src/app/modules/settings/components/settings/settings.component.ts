@@ -1,12 +1,20 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  effect,
+  inject,
+  Signal,
+} from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatSlider, MatSliderThumb } from '@angular/material/slider';
+import { VoiceSettings } from '@book-play/models';
 import { ScrollbarDirective } from '@book-play/ui';
-import {
-  getVoiceSettings,
-  storeVoiceSettings,
-} from '../../../../shared/utils/voice-settings';
+import { Store } from '@ngrx/store';
+
+import { ttsVoiceSettingsUpdateAction } from '../../../../shared/store/tts/tts.actions';
+import { getVoiceSettings } from '../../../../shared/utils/voice-settings';
 
 @Component({
   selector: 'settings',
@@ -22,20 +30,33 @@ import {
   ],
 })
 export class SettingsComponent {
+  protected form!: FormGroup;
+
   private fb = inject(FormBuilder);
-  protected form: FormGroup;
+  private store = inject(Store);
+  private valueChanges!: Signal<VoiceSettings>;
 
   constructor() {
+    this.initializeValues();
+    this.addEventListeners();
+  }
+
+  private initializeValues(): void {
     const { voice, rate, pitch } = getVoiceSettings();
     this.form = this.fb.group({
       voice: [voice],
       rate: [rate],
       pitch: [pitch],
     });
+    this.valueChanges = toSignal(this.form.valueChanges);
   }
 
-  protected onSubmit() {
-    const { voice, rate, pitch } = this.form.value;
-    storeVoiceSettings({ voice, rate, pitch });
+  private addEventListeners(): void {
+    effect(() => {
+      const settings = this.valueChanges();
+      if (settings) {
+        this.store.dispatch(ttsVoiceSettingsUpdateAction({ voice: settings }));
+      }
+    });
   }
 }
