@@ -8,10 +8,8 @@ import {
 import { filter, firstValueFrom, Observable, Subject } from 'rxjs';
 
 export enum AppEventNames {
-  loading = 'loading',
   contentLoading = 'contentLoading',
   scrollingIntoView = 'scrollingIntoView',
-  runUploadFile = 'runUploadFile',
 }
 
 interface AppEvent {

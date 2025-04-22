@@ -3,7 +3,7 @@ import { Component, inject, resource } from '@angular/core';
 import { MatChipSet } from '@angular/material/chips';
 import { Author } from '@book-play/models';
 import { ScrollbarDirective, TagLinkComponent } from '@book-play/ui';
-import { BooksApiService } from '../../../shared/services/books-api.service';
+import { BooksApiService } from '../../../shared/services/books/books-api.service';
 import { BookComponent } from '../../book/components/book/book.component';
 
 @Component({

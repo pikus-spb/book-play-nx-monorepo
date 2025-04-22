@@ -9,16 +9,22 @@ import {
 import { ActivatedRoute, Router } from '@angular/router';
 import { Book } from '@book-play/models';
 import { setWindowsTitleWithContext } from '@book-play/utils-browser';
+import { Store } from '@ngrx/store';
 import { firstValueFrom } from 'rxjs';
-import { ActiveBookService } from '../../../../shared/services/active-book.service';
-import { AutoPlayService } from '../../../../shared/services/auto-play.service';
-import { BooksApiService } from '../../../../shared/services/books-api.service';
-import { DomHelperService } from '../../../../shared/services/dom-helper.service';
+
+import { ActiveBookService } from '../../../../shared/services/books/active-book.service';
+import { BooksApiService } from '../../../../shared/services/books/books-api.service';
+import { IndexedDbBookStorageService } from '../../../../shared/services/books/indexed-db-book-storage.service';
 import {
   AppEventNames,
   EventsStateService,
 } from '../../../../shared/services/events-state.service';
-import { IndexedDbBookStorageService } from '../../../../shared/services/indexed-db-book-storage.service';
+import { DomHelperService } from '../../../../shared/services/player/dom-helper.service';
+import { AutoPlayService } from '../../../../shared/services/tts/auto-play.service';
+import {
+  loadingEndAction,
+  loadingStartAction,
+} from '../../../../shared/store/loading/loading.action';
 import { BookCanvasComponent } from '../book-canvas/book-canvas.component';
 import { CanvasSkeletonComponent } from '../canvas-skeleton/canvas-skeleton.component';
 
@@ -39,6 +45,7 @@ export class PlayerComponent implements AfterViewInit {
   private indexedDbStorageService = inject(IndexedDbBookStorageService);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
+  private store = inject(Store);
 
   public get book(): Signal<Book | null> {
     return this.activeBookService.book;
@@ -93,14 +100,14 @@ export class PlayerComponent implements AfterViewInit {
 
   private async loadBookFromBE(id: string) {
     if (id) {
-      this.eventState.add(AppEventNames.loading);
+      this.store.dispatch(loadingStartAction());
       this.eventState.add(AppEventNames.contentLoading);
 
       const book = await this.booksApiService.getBookById(id);
       this.activeBookService.update(book || null);
 
       this.eventState.remove(AppEventNames.contentLoading);
-      this.eventState.remove(AppEventNames.loading);
+      this.store.dispatch(loadingEndAction());
     }
   }
 

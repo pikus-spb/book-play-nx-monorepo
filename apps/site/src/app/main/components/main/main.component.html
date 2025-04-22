@@ -5,11 +5,7 @@
   </mat-toolbar>
   <mat-progress-bar
     mode="indeterminate"
-    [style.visibility]="
-      (eventStatesService.get$(AppEvents.loading) | async)
-        ? 'visible'
-        : 'hidden'
-    "
+    [style.visibility]="loading() ? 'visible' : 'hidden'"
   ></mat-progress-bar>
   <mat-sidenav-container>
     <mat-sidenav #sidenav mode="side" opened="true" libPerfectScrollbar>

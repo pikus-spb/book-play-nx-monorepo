@@ -1,4 +1,4 @@
-import { TTSParams } from '@book-play/models';
+import { TtsParams } from '@book-play/models';
 import { spawn } from 'child_process';
 import fs from 'fs';
 
@@ -16,7 +16,7 @@ export default class BooksAPIApp {
     return `${param}`;
   }
 
-  private normalizeParams(params: TTSParams) {
+  private normalizeParams(params: TtsParams) {
     let { text, pitch, rate, voice } = params;
 
     text = text.replace(/([^.]+)\.$/, '$1');
@@ -27,7 +27,7 @@ export default class BooksAPIApp {
     return { text, rate, pitch, voice };
   }
 
-  runTts(params: TTSParams, fileName: string): Promise<string> {
+  runTts(params: TtsParams, fileName: string): Promise<string> {
     return new Promise((resolve) => {
       const { text, rate, pitch, voice } = this.normalizeParams(params);
 
@@ -68,7 +68,7 @@ export default class BooksAPIApp {
     });
   }
 
-  async tts(params: TTSParams): Promise<string> {
+  async tts(params: TtsParams): Promise<string> {
     const fileNamePrefix = __dirname + '/cache/part' + Date.now();
     try {
       return this.runTts(params, fileNamePrefix).then((filename) => {
