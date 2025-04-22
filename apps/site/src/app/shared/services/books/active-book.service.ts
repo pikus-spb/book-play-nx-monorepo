@@ -1,6 +1,6 @@
 import { inject, Injectable, signal, WritableSignal } from '@angular/core';
 import { Book } from '@book-play/models';
-import { CursorPositionService } from './cursor-position.service';
+import { CursorPositionService } from '../player/cursor-position.service';
 
 @Injectable({
   providedIn: 'root',
