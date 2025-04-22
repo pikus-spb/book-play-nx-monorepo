@@ -1,6 +1,7 @@
-import { effect, Injectable } from '@angular/core';
+import { effect, inject, Injectable } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NavigationEnd, Router } from '@angular/router';
+import { Store } from '@ngrx/store';
 import {
   BehaviorSubject,
   filter,
@@ -9,18 +10,20 @@ import {
   shareReplay,
   tap,
 } from 'rxjs';
-
-import { ActiveBookService } from './active-book.service';
+import { AudioCacheHelperService } from '../../store/audio-cache/audio-cache-helper.service';
+import {
+  loadingEndAction,
+  loadingStartAction,
+} from '../../store/loading/loading.action';
+import { ActiveBookService } from '../books/active-book.service';
+import { DomAudioHelperService } from '../dom-audio-helper.service';
+import { AppEventNames, EventsStateService } from '../events-state.service';
+import { CursorPositionService } from '../player/cursor-position.service';
+import { DomHelperService } from '../player/dom-helper.service';
 import {
   AudioPreloadingService,
   PRELOAD_EXTRA,
 } from './audio-preloading.service';
-import { AudioStorageService } from './audio-storage.service';
-import { CursorPositionService } from './cursor-position.service';
-import { DomAudioHelperService } from './dom-audio-helper.service';
-import { DomHelperService } from './dom-helper.service';
-import { AppEventNames, EventsStateService } from './events-state.service';
-import { TtsApiService } from './tts-api.service';
 
 @Injectable({
   providedIn: 'root',
@@ -32,18 +35,17 @@ export class AutoPlayService {
 
   public paused$: Observable<boolean> = this._paused$.pipe(shareReplay(1));
 
-  constructor(
-    private router: Router,
-    private activeBookService: ActiveBookService,
-    private audioPlayer: DomAudioHelperService,
-    private speechService: TtsApiService,
-    private audioStorage: AudioStorageService,
-    private eventStateService: EventsStateService,
-    private preloadingService: AudioPreloadingService,
-    private cursorService: CursorPositionService,
-    private domHelper: DomHelperService,
-    private preloadHelper: AudioPreloadingService
-  ) {
+  private router = inject(Router);
+  private activeBookService = inject(ActiveBookService);
+  private audioPlayer = inject(DomAudioHelperService);
+  private eventStateService = inject(EventsStateService);
+  private cursorService = inject(CursorPositionService);
+  private domHelper = inject(DomHelperService);
+  private preloadHelper = inject(AudioPreloadingService);
+  private store = inject(Store);
+  private audioCacheHelperService = inject(AudioCacheHelperService);
+
+  constructor() {
     this.router.events
       .pipe(
         takeUntilDestroyed(),
@@ -96,15 +98,15 @@ export class AutoPlayService {
   }
 
   public async ensureAudioDataReady() {
-    if (!this.audioStorage.get(this.cursorService.position)) {
-      this.eventStateService.add(AppEventNames.loading);
+    if (!(await this.audioCacheHelperService.getAudioPromise())) {
+      this.store.dispatch(loadingStartAction());
 
       await this.preloadHelper.preloadParagraph(
         this.cursorService.position,
         PRELOAD_EXTRA.min
       );
 
-      this.eventStateService.remove(AppEventNames.loading);
+      this.store.dispatch(loadingEndAction());
     }
   }
 
@@ -126,14 +128,11 @@ export class AutoPlayService {
   }
 
   public async start(index = -1) {
-    if (this.preloadingService.initialized) {
-      this.speechService.cancelAllVoiceRequests();
-    }
     if (index >= 0) {
       this.cursorService.position = index;
     }
     this._paused$.next(false);
-    this.eventStateService.remove(AppEventNames.loading, true);
+    this.store.dispatch(loadingEndAction());
 
     do {
       const isScrollingNow = this.eventStateService.get(
@@ -149,7 +148,7 @@ export class AutoPlayService {
       await this.ensureAudioDataReady();
 
       this.audioPlayer.setAudio(
-        this.audioStorage.get(this.cursorService.position)
+        await this.audioCacheHelperService.getAudioPromise()
       );
 
       if (await this.audioPlayer.play()) {

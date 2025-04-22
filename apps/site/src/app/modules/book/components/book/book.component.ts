@@ -23,7 +23,8 @@ import { Book } from '@book-play/models';
 import { AuthorGenresListComponent } from '@book-play/ui';
 import { showDefaultCoverImage } from '@book-play/utils-browser';
 import { firstValueFrom } from 'rxjs';
-import { BooksApiService } from '../../../../shared/services/books-api.service';
+
+import { BooksApiService } from '../../../../shared/services/books/books-api.service';
 
 @Component({
   selector: 'book',
