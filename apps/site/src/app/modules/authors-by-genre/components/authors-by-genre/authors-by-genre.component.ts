@@ -15,13 +15,14 @@ import { ActivatedRoute } from '@angular/router';
 import { AuthorByGenre } from '@book-play/models';
 import { GenrePipe, GenresPipe, TagLinkComponent } from '@book-play/ui';
 import { NgxVirtualScrollModule } from '@lithiumjs/ngx-virtual-scroll';
+import { Store } from '@ngrx/store';
 import { firstValueFrom } from 'rxjs';
 import { LoadingThenShowDirective } from '../../../../shared/directives/loading-then-show/loading-then-show.directive';
-import { BooksApiService } from '../../../../shared/services/books-api.service';
+import { BooksApiService } from '../../../../shared/services/books/books-api.service';
 import {
-  AppEventNames,
-  EventsStateService,
-} from '../../../../shared/services/events-state.service';
+  loadingEndAction,
+  loadingStartAction,
+} from '../../../../shared/store/loading/loading.action';
 
 @Component({
   selector: 'authors-by-genre',
@@ -41,6 +42,8 @@ import {
 })
 export class AuthorsByGenreComponent implements AfterViewInit {
   @Input() genre: string | null = null;
+
+  private store = inject(Store);
   private route = inject(ActivatedRoute);
   private booksApiService = inject(BooksApiService);
 
@@ -60,14 +63,14 @@ export class AuthorsByGenreComponent implements AfterViewInit {
     },
   });
 
-  constructor(public eventStatesService: EventsStateService) {
+  constructor() {
     effect(() => {
       if (this.authors.isLoading()) {
-        this.eventStatesService.add(AppEventNames.loading);
+        this.store.dispatch(loadingStartAction());
       } else {
         const data = this.authors.value() ?? [];
         this.viewAuthors.set(data);
-        this.eventStatesService.remove(AppEventNames.loading);
+        this.store.dispatch(loadingEndAction());
       }
     });
   }

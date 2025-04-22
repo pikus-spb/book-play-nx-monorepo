@@ -1,0 +1,40 @@
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { inject, Injectable } from '@angular/core';
+import { TTS_API_PORT, TTS_API_PORT_SECURE } from '@book-play/constants';
+import { TtsParams } from '@book-play/models';
+import { getCurrentProtocolUrl } from '@book-play/ui';
+import { createQueryString } from '@book-play/utils-common';
+import { environment } from 'environments/environment';
+import { Observable } from 'rxjs';
+import { getVoiceSettings } from '../../utils/voice-settings';
+
+const AUDIO_HEADERS = new HttpHeaders({
+  'Content-Type': 'application/x-www-form-urlencoded',
+});
+
+@Injectable({
+  providedIn: 'root',
+})
+export class TtsApiService {
+  private http = inject(HttpClient);
+
+  public textToSpeech(text: string): Observable<Blob> {
+    const url =
+      getCurrentProtocolUrl(
+        environment.API_HOST,
+        TTS_API_PORT,
+        TTS_API_PORT_SECURE
+      ) + '/tts';
+
+    text = encodeURIComponent(text);
+
+    const { pitch, rate, voice } = getVoiceSettings();
+    const options: TtsParams = { text, pitch, rate, voice };
+    const postParams = createQueryString(options);
+
+    return this.http.post(url, postParams, {
+      headers: AUDIO_HEADERS,
+      responseType: 'blob',
+    });
+  }
+}
