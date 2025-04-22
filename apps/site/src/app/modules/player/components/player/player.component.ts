@@ -11,15 +11,16 @@ import { Book } from '@book-play/models';
 import { setWindowsTitleWithContext } from '@book-play/utils-browser';
 import { Store } from '@ngrx/store';
 import { firstValueFrom } from 'rxjs';
-import { ActiveBookService } from '../../../../shared/services/active-book.service';
-import { AutoPlayService } from '../../../../shared/services/auto-play.service';
-import { BooksApiService } from '../../../../shared/services/books-api.service';
-import { DomHelperService } from '../../../../shared/services/dom-helper.service';
+
+import { ActiveBookService } from '../../../../shared/services/books/active-book.service';
+import { BooksApiService } from '../../../../shared/services/books/books-api.service';
+import { IndexedDbBookStorageService } from '../../../../shared/services/books/indexed-db-book-storage.service';
 import {
   AppEventNames,
   EventsStateService,
 } from '../../../../shared/services/events-state.service';
-import { IndexedDbBookStorageService } from '../../../../shared/services/indexed-db-book-storage.service';
+import { DomHelperService } from '../../../../shared/services/player/dom-helper.service';
+import { AutoPlayService } from '../../../../shared/services/tts/auto-play.service';
 import {
   loadingEndAction,
   loadingStartAction,

@@ -3,7 +3,10 @@ import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatSlider, MatSliderThumb } from '@angular/material/slider';
 import { ScrollbarDirective } from '@book-play/ui';
-import { SettingsService } from '../../../../shared/services/settings.service';
+import {
+  getVoiceSettings,
+  storeVoiceSettings,
+} from '../../../../shared/utils/voice-settings';
 
 @Component({
   selector: 'settings',
@@ -20,11 +23,10 @@ import { SettingsService } from '../../../../shared/services/settings.service';
 })
 export class SettingsComponent {
   private fb = inject(FormBuilder);
-  private settingsService = inject(SettingsService);
   protected form: FormGroup;
 
   constructor() {
-    const { voice, rate, pitch } = this.settingsService.getVoiceSettings();
+    const { voice, rate, pitch } = getVoiceSettings();
     this.form = this.fb.group({
       voice: [voice],
       rate: [rate],
@@ -34,6 +36,6 @@ export class SettingsComponent {
 
   protected onSubmit() {
     const { voice, rate, pitch } = this.form.value;
-    this.settingsService.setVoiceSettings({ voice, rate, pitch });
+    storeVoiceSettings({ voice, rate, pitch });
   }
 }
