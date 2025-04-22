@@ -12,7 +12,7 @@ import { MatIcon } from '@angular/material/icon';
 import { MatTooltip } from '@angular/material/tooltip';
 import { Router } from '@angular/router';
 import { merge, tap } from 'rxjs';
-import { ActiveBookService } from '../../services/active-book.service';
+import { ActiveBookService } from '../../services/books/active-book.service';
 import { PlayerButtonComponent } from '../player-button/player-button.component';
 
 @Component({

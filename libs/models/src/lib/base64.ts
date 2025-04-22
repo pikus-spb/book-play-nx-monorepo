@@ -23,3 +23,5 @@ export class ImageBase64Data {
     return undefined;
   }
 }
+
+export type Base64Data = string;

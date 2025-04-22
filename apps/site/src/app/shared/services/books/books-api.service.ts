@@ -29,8 +29,8 @@ export class BooksApiService {
   private requestCache: Map<string, Observable<unknown>> = new Map();
   private readonly apiUrlPrefix = getCurrentProtocolUrl(
     environment.API_HOST,
-    BOOKS_API_PORT.toString(),
-    BOOKS_API_PORT_SECURE.toString()
+    BOOKS_API_PORT,
+    BOOKS_API_PORT_SECURE
   );
 
   constructor(private http: HttpClient) {}

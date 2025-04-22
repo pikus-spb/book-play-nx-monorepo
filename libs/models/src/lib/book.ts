@@ -1,6 +1,6 @@
 import { filterTextParagraphs } from '@book-play/utils-browser';
 import { Author } from './author';
-import { ImageBase64Data } from './imageBase64Data';
+import { ImageBase64Data } from './base64';
 
 export interface DBBook {
   id: string;

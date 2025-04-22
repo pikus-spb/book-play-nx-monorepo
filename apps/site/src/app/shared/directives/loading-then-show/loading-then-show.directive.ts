@@ -4,15 +4,15 @@ import {
   Directive,
   effect,
   EmbeddedViewRef,
+  inject,
   Input,
   TemplateRef,
   ViewContainerRef,
 } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { Store } from '@ngrx/store';
 import { LoadingIndicatorComponent } from '../../components/loading-indicator/loading-indicator.component';
-import {
-  AppEventNames,
-  EventsStateService,
-} from '../../services/events-state.service';
+import { selectLoading } from '../../store/loading/loading.selector';
 
 @Directive({
   selector: '[loading]',
@@ -20,19 +20,19 @@ import {
 export class LoadingThenShowDirective {
   @Input() thenShow?: TemplateRef<unknown>;
 
+  private viewContainerRef = inject(ViewContainerRef);
+  private store = inject(Store);
+  private loading = toSignal(this.store.select(selectLoading));
   private placeHolder = contentChild('loading', {
     read: ViewContainerRef,
   });
   private loadingComponentRef?: ComponentRef<LoadingIndicatorComponent>;
   private embeddedViewRef?: EmbeddedViewRef<unknown>;
 
-  constructor(
-    private eventStates: EventsStateService,
-    private viewContainerRef: ViewContainerRef
-  ) {
+  constructor() {
     effect(() => {
       const viewContainerRef = this.placeHolder() || this.viewContainerRef;
-      if (this.eventStates.get(AppEventNames.loading)()) {
+      if (this.loading()) {
         this.loadingComponentRef = viewContainerRef.createComponent(
           LoadingIndicatorComponent
         );
@@ -41,7 +41,7 @@ export class LoadingThenShowDirective {
       }
 
       if (this.thenShow) {
-        if (this.eventStates.get(AppEventNames.loading)()) {
+        if (this.loading()) {
           this.embeddedViewRef?.destroy();
         } else {
           this.embeddedViewRef = this.viewContainerRef.createEmbeddedView(
