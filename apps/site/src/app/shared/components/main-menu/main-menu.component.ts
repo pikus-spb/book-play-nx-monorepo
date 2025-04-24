@@ -8,11 +8,11 @@ import {
 import { MatIcon } from '@angular/material/icon';
 import { MatListItem, MatNavList } from '@angular/material/list';
 import { RouterModule } from '@angular/router';
+import { Store } from '@ngrx/store';
 import { UploadFileDirective } from '../../directives/file-upload/upload-file.directive';
-import { ActiveBookService } from '../../services/books/active-book.service';
-import { FileReaderService } from '../../services/books/file-reader.service';
-import { IndexedDbBookStorageService } from '../../services/books/indexed-db-book-storage.service';
-import { EventsStateService } from '../../services/events-state.service';
+import { BookPersistenceStorageService } from '../../services/books/book-persistence-storage.service';
+import { activeBookImportFromFileAction } from '../../store/books-cache/active-book.actions';
+import { activeBookSelector } from '../../store/books-cache/active-book.selectors';
 
 @Component({
   selector: 'main-menu',
@@ -29,14 +29,15 @@ import { EventsStateService } from '../../services/events-state.service';
   ],
 })
 export class MainMenuComponent {
-  public activeBookService = inject(ActiveBookService);
-  public activeBookPresent = computed(async () => {
-    const book = this.activeBookService.book();
+  private store = inject(Store);
 
+  public activeBook = this.store.selectSignal(activeBookSelector);
+  public activeBookPresent = computed(async () => {
+    const book = this.activeBook();
     if (book) {
       return true;
     } else {
-      const data = await this.indexedDbStorageService.get();
+      const data = await this.bookPersistenceStorageService.get();
       if (data && data.content.length > 0) {
         return true;
       }
@@ -45,11 +46,11 @@ export class MainMenuComponent {
     return false;
   });
 
-  private indexedDbStorageService = inject(IndexedDbBookStorageService);
-  private fileReaderService = inject(FileReaderService);
-  private eventStates = inject(EventsStateService);
+  private bookPersistenceStorageService = inject(BookPersistenceStorageService);
 
   fileUploaded(files?: FileList) {
-    this.fileReaderService.parseNewFile(files);
+    if (files && files.length > 0) {
+      this.store.dispatch(activeBookImportFromFileAction({ file: files[0] }));
+    }
   }
 }

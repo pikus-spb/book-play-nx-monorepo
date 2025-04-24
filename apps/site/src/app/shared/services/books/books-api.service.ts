@@ -1,10 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import {
-  BOOKS_API_PORT,
-  BOOKS_API_PORT_SECURE,
-  HTTP_RETRY_NUMBER,
-} from '@book-play/constants';
+import { BOOKS_API_PORT, BOOKS_API_PORT_SECURE } from '@book-play/constants';
 
 import {
   Author,
@@ -20,13 +16,12 @@ import {
 } from '@book-play/models';
 import { getCurrentProtocolUrl } from '@book-play/ui';
 import { environment } from 'environments/environment';
-import { firstValueFrom, map, Observable, retry, shareReplay } from 'rxjs';
+import { firstValueFrom, map, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class BooksApiService {
-  private requestCache: Map<string, Observable<unknown>> = new Map();
   private readonly apiUrlPrefix = getCurrentProtocolUrl(
     environment.API_HOST,
     BOOKS_API_PORT,
@@ -38,8 +33,7 @@ export class BooksApiService {
   public getAllAuthors(): Promise<Author[]> {
     const url = this.apiUrlPrefix + '/author/all';
 
-    return this.fromCache<Author[]>(
-      url,
+    return firstValueFrom(
       this.http.get<DBAuthor[]>(url).pipe(
         map((data: DBAuthor[]): Author[] => {
           return data.map((dbAuthor: DBAuthor) => {
@@ -53,8 +47,7 @@ export class BooksApiService {
   public getRandomAuthors(number = 3): Promise<Author[]> {
     const url = this.apiUrlPrefix + `/author/random/${number}`;
 
-    return this.fromCache<Author[]>(
-      url,
+    return firstValueFrom(
       this.http.get<DBAuthor[]>(url).pipe(
         map((data: DBAuthor[]): Author[] => {
           return data.map((dbAuthor: DBAuthor) => {
@@ -68,14 +61,13 @@ export class BooksApiService {
   public getRandomIds(number = 3): Promise<string[]> {
     const url = this.apiUrlPrefix + `/book/random-id/${number}`;
 
-    return this.fromCache<string[]>(url, this.http.get<string[]>(url));
+    return firstValueFrom(this.http.get<string[]>(url));
   }
 
   public getAuthorBooks(id: string): Promise<Book[]> {
     const url = this.apiUrlPrefix + `/author/id/${id}/books`;
 
-    return this.fromCache<Book[]>(
-      url,
+    return firstValueFrom(
       this.http.get<DBBook[]>(url).pipe(
         map((data: DBBook[]): Book[] => {
           return data.map((book: DBBook) => {
@@ -92,8 +84,7 @@ export class BooksApiService {
   public getAuthorSummary(id: string): Promise<AuthorSummary> {
     const url = this.apiUrlPrefix + `/author/id/${id}/summary`;
 
-    return this.fromCache<AuthorSummary>(
-      url,
+    return firstValueFrom(
       this.http
         .get<DBAuthorSummary>(url)
         .pipe(
@@ -107,8 +98,7 @@ export class BooksApiService {
   public getAuthorsByGenre(genre: string): Promise<AuthorByGenre[]> {
     const url = this.apiUrlPrefix + `/author/genre/${genre}`;
 
-    return this.fromCache<AuthorByGenre[]>(
-      url,
+    return firstValueFrom(
       this.http.get<DBAuthorByGenre[]>(url).pipe(
         map((authors: DBAuthorByGenre[]): AuthorByGenre[] => {
           return authors.map((author) => DBAuthorByGenreToUI(author));
@@ -117,50 +107,25 @@ export class BooksApiService {
     );
   }
 
-  public getBookById(id: string): Promise<Book> {
+  public getBookById(id: string): Observable<Book> {
     const url = this.apiUrlPrefix + '/book/id/' + id;
 
-    return this.fromCache<Book>(
-      url,
-      this.http.get<DBBook>(url).pipe(
-        map((book: DBBook) => {
-          return DBBookToUIBook(book);
-        })
-      )
+    return this.http.get<DBBook>(url).pipe(
+      map((book: DBBook) => {
+        return DBBookToUIBook(book);
+      })
     );
   }
 
   public getBookSummaryById(id: string): Promise<Book> {
     const url = this.apiUrlPrefix + `/book/id/${id}/summary`;
 
-    return this.fromCache<Book>(
-      url,
+    return firstValueFrom(
       this.http.get<DBBook>(url).pipe(
         map((book: DBBook) => {
           return DBBookToUIBook(book);
         })
       )
     );
-  }
-
-  private fromCache<T>(url: string, observable: Observable<T>): Promise<T> {
-    this.putToRequestCache<T>(url, observable);
-    return this.getFromRequestCache<T>(url);
-  }
-
-  private putToRequestCache<T>(url: string, observable: Observable<T>) {
-    if (this.requestCache.get(url) === undefined) {
-      this.requestCache.set(
-        url,
-        observable.pipe(
-          retry(HTTP_RETRY_NUMBER),
-          shareReplay(1)
-        ) as Observable<T>
-      );
-    }
-  }
-
-  private getFromRequestCache<T>(url: string): Promise<T> {
-    return firstValueFrom<T>(this.requestCache.get(url) as Observable<T>);
   }
 }

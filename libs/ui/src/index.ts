@@ -7,3 +7,5 @@ export * from './lib/pipes/genre/genre.pipe';
 export * from './lib/pipes/genre/genres.pipe';
 export * from './lib/helpers/url';
 export * from './lib/directives/scrollbar/scrollbar.directive';
+export * from './lib/services/fb2-file-reader.service';
+export * from './lib/services/router-helper.service';
