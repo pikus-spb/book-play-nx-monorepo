@@ -4,8 +4,8 @@ import { filter, firstValueFrom, Observable } from 'rxjs';
 
 import { AudioCacheHelperService } from '../../store/audio-cache/audio-cache-helper.service';
 import { audioCacheRecordSelector } from '../../store/audio-cache/audio-cache.selectors';
+import { activeBookSelector } from '../../store/books-cache/active-book.selectors';
 import { ttsLoadSpeechAction } from '../../store/tts/tts.actions';
-import { ActiveBookService } from '../books/active-book.service';
 
 export const PRELOAD_EXTRA = Object.freeze({
   min: 0,
@@ -16,12 +16,12 @@ export const PRELOAD_EXTRA = Object.freeze({
   providedIn: 'root',
 })
 export class AudioPreloadingService {
-  private openedBook = inject(ActiveBookService);
   private store = inject(Store);
+  private activeBook = this.store.selectSignal(activeBookSelector);
   private audioCacheHelperService = inject(AudioCacheHelperService);
 
   private paragraphToSpeech(index: number): Observable<string> {
-    const text = this.openedBook.book()!.textParagraphs[index];
+    const text = this.activeBook()!.textParagraphs[index];
 
     this.store.dispatch(ttsLoadSpeechAction({ text }));
 
@@ -37,7 +37,7 @@ export class AudioPreloadingService {
     startIndex: number,
     extra: number = PRELOAD_EXTRA.default
   ): Promise<void> {
-    const textParagraphs = this.openedBook.book()?.textParagraphs;
+    const textParagraphs = this.activeBook()?.textParagraphs;
     const dataIsValid =
       textParagraphs &&
       textParagraphs.length > 0 &&

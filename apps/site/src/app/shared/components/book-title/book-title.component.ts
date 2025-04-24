@@ -8,7 +8,8 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
 import { Book } from '@book-play/models';
 import { LinkComponent } from '@book-play/ui';
-import { ActiveBookService } from '../../services/books/active-book.service';
+import { Store } from '@ngrx/store';
+import { activeBookSelector } from '../../store/books-cache/active-book.selectors';
 
 @Component({
   selector: 'book-title',
@@ -18,13 +19,14 @@ import { ActiveBookService } from '../../services/books/active-book.service';
   imports: [LinkComponent],
 })
 export class BookTitleComponent {
-  private activeBookService = inject(ActiveBookService);
+  private store = inject(Store);
+  private activeBook = this.store.selectSignal(activeBookSelector);
   private router = inject(Router);
 
   private routeChanged = toSignal(this.router.events);
 
   public book = computed<Book | null>(() => {
-    const book = this.activeBookService.book();
+    const book = this.activeBook();
 
     if (
       this.routeChanged() &&

@@ -1,8 +1,8 @@
 import { inject, Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { firstValueFrom } from 'rxjs';
-import { ActiveBookService } from '../../services/books/active-book.service';
 import { CursorPositionService } from '../../services/player/cursor-position.service';
+import { activeBookSelector } from '../books-cache/active-book.selectors';
 import { audioCacheRecordSelector } from './audio-cache.selectors';
 
 @Injectable({
@@ -10,13 +10,13 @@ import { audioCacheRecordSelector } from './audio-cache.selectors';
 })
 export class AudioCacheHelperService {
   private store = inject(Store);
-  private activeBookService = inject(ActiveBookService);
+  private activeBook = this.store.selectSignal(activeBookSelector);
   private cursorService = inject(CursorPositionService);
 
   public getAudioPromise(idx?: number): Promise<string> {
     return firstValueFrom(
       this.store.select(audioCacheRecordSelector, {
-        text: this.activeBookService.book()!.textParagraphs[
+        text: this.activeBook()!.textParagraphs[
           idx ?? this.cursorService.position
         ],
       })

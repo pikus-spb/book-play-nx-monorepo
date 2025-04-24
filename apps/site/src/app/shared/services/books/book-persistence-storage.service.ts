@@ -5,7 +5,7 @@ import { Dexie, Table } from 'dexie';
 @Injectable({
   providedIn: 'root',
 })
-export class IndexedDbBookStorageService extends Dexie {
+export class BookPersistenceStorageService extends Dexie {
   private dbTable!: Table<any, number>;
 
   constructor() {

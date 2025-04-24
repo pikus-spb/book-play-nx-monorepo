@@ -13,6 +13,8 @@ import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { AudioCacheEffects } from '../shared/store/audio-cache/audio-cache.effects';
 import { audioCacheReducers } from '../shared/store/audio-cache/audio-cache.reducers';
+import { ActiveBookEffects } from '../shared/store/books-cache/active-book.effects';
+import { activeBookReducers } from '../shared/store/books-cache/active-book.reducers';
 import { loadingReducer } from '../shared/store/loading/loading.reducer';
 import { TtsEffects } from '../shared/store/tts/tts.effects';
 import { ttsReducers } from '../shared/store/tts/tts.reducers';
@@ -29,9 +31,14 @@ bootstrapApplication(MainComponent, {
         loading: loadingReducer,
         tts: ttsReducers,
         audioCache: audioCacheReducers,
+        activeBook: activeBookReducers,
       }),
       EffectsModule.forRoot([]),
-      EffectsModule.forFeature([TtsEffects, AudioCacheEffects]),
+      EffectsModule.forFeature([
+        TtsEffects,
+        AudioCacheEffects,
+        ActiveBookEffects,
+      ]),
       StoreDevtoolsModule.instrument()
     ),
   ],
