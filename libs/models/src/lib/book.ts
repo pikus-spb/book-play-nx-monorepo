@@ -26,23 +26,19 @@ export class Book {
   public date?: string;
   public cover?: ImageBase64Data;
   public paragraphs!: string[];
-  public _textParagraphs: string[] = [];
+  public textParagraphs: string[] = [];
 
   constructor(obj: Partial<Book>) {
     Object.assign(this, obj, {});
+
+    this.textParagraphs = filterTextParagraphs(this.paragraphs);
+
     if (obj.author) {
       this.author = new Author(obj.author);
     }
     if (obj.cover) {
       this.cover = new ImageBase64Data(obj.cover);
     }
-  }
-
-  public get textParagraphs(): string[] {
-    if (this._textParagraphs.length === 0) {
-      this._textParagraphs = filterTextParagraphs(this.paragraphs);
-    }
-    return this._textParagraphs;
   }
 
   public get full(): string {

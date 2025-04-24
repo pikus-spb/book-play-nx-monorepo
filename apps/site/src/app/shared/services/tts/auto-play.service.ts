@@ -11,11 +11,11 @@ import {
   tap,
 } from 'rxjs';
 import { AudioCacheHelperService } from '../../store/audio-cache/audio-cache-helper.service';
+import { activeBookSelector } from '../../store/books-cache/active-book.selectors';
 import {
   loadingEndAction,
   loadingStartAction,
 } from '../../store/loading/loading.action';
-import { ActiveBookService } from '../books/active-book.service';
 import { DomAudioHelperService } from '../dom-audio-helper.service';
 import { AppEventNames, EventsStateService } from '../events-state.service';
 import { CursorPositionService } from '../player/cursor-position.service';
@@ -36,13 +36,13 @@ export class AutoPlayService {
   public paused$: Observable<boolean> = this._paused$.pipe(shareReplay(1));
 
   private router = inject(Router);
-  private activeBookService = inject(ActiveBookService);
+  private store = inject(Store);
+  private activeBook = this.store.selectSignal(activeBookSelector);
   private audioPlayer = inject(DomAudioHelperService);
   private eventStateService = inject(EventsStateService);
   private cursorService = inject(CursorPositionService);
   private domHelper = inject(DomHelperService);
   private preloadHelper = inject(AudioPreloadingService);
-  private store = inject(Store);
   private audioCacheHelperService = inject(AudioCacheHelperService);
 
   constructor() {
@@ -80,7 +80,7 @@ export class AutoPlayService {
       .subscribe();
 
     effect(() => {
-      if (this.activeBookService.book()) {
+      if (this.activeBook()) {
         this.stop();
         this.domHelper.showActiveParagraph();
       }
@@ -155,7 +155,7 @@ export class AutoPlayService {
         this.cursorService.position++;
       }
     } while (
-      this.activeBookService.cursorPositionIsValid() &&
+      this.cursorService.position < this.activeBook()!.textParagraphs.length &&
       !this.audioPlayer.stopped
     );
   }
