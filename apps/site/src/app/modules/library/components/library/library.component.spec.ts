@@ -68,7 +68,7 @@ xdescribe('LibraryComponent', () => {
     });
 
     test('should remove loading event after data is loaded', async () => {
-      booksApi.getAllAuthors.mockResolvedValue([] as Author[]);
+      // booksApi.AllAuthors.mockResolvedValue([] as Author[]);
 
       await fixture.whenStable();
       fixture.detectChanges();
@@ -79,7 +79,7 @@ xdescribe('LibraryComponent', () => {
 
   xdescribe('Data handling', () => {
     test('should handle empty data correctly', async () => {
-      booksApi.getAllAuthors.mockResolvedValue([] as Author[]);
+      // booksApi.getAllAuthors.mockResolvedValue([] as Author[]);
 
       await fixture.whenStable();
       // @ts-expect-error: data is protected
@@ -103,7 +103,7 @@ xdescribe('LibraryComponent', () => {
         }),
       ] as Author[];
 
-      booksApi.getAllAuthors.mockResolvedValue(mockData);
+      // booksApi.getAllAuthors.mockResolvedValue(mockData);
 
       await fixture.whenStable();
       // @ts-expect-error: data is protected
@@ -118,7 +118,7 @@ xdescribe('LibraryComponent', () => {
 
   xdescribe('Error handling', () => {
     test('should handle API errors gracefully', async () => {
-      booksApi.getAllAuthors.mockRejectedValue(new Error('API error'));
+      // booksApi.getAllAuthors.mockRejectedValue(new Error('API error'));
 
       await fixture.whenStable();
       // @ts-expect-error: data is protected
