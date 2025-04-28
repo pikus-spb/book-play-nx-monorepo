@@ -13,8 +13,8 @@ export const BOOK_IMAGE_HEIGHT = 300;
 export const BOOK_IMAGE_MARGIN = 32;
 export const DEFAULT_TITLE_PREFIX = 'Book-play.ru';
 export const DEFAULT_EMPTY_CONTEXT =
-  'Бесплатное проигрывание книг голосом в формате fb2 онлайн';
-export const DEFAULT_TITLE_CONTEXT = 'бесплатно слушать аудиокнигу онлайн';
+  'бесплатная платформа для прослушивания книг, озвученных нейросетью.';
+export const DEFAULT_TITLE_CONTEXT = 'бесплатно слушать книгу онлайн';
 export const DEFAULT_TITLE = [DEFAULT_TITLE_PREFIX, DEFAULT_EMPTY_CONTEXT].join(
   ' - '
 );

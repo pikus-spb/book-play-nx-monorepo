@@ -6,23 +6,19 @@ import {
   effect,
   inject,
   Input,
-  resource,
   signal,
   WritableSignal,
 } from '@angular/core';
 import { MatChipSet } from '@angular/material/chips';
 import { ActivatedRoute } from '@angular/router';
-import { AuthorByGenre } from '@book-play/models';
+import { GenreAuthor } from '@book-play/models';
 import { GenrePipe, GenresPipe, TagLinkComponent } from '@book-play/ui';
 import { NgxVirtualScrollModule } from '@lithiumjs/ngx-virtual-scroll';
 import { Store } from '@ngrx/store';
 import { firstValueFrom } from 'rxjs';
 import { LoadingThenShowDirective } from '../../../../shared/directives/loading-then-show/loading-then-show.directive';
-import { BooksApiService } from '../../../../shared/services/books/books-api.service';
-import {
-  loadingEndAction,
-  loadingStartAction,
-} from '../../../../shared/store/loading/loading.action';
+import { loadGenreAuthorsAction } from '../../../../shared/store/genre-authors/genre-authors.actions';
+import { genreAuthorsSelector } from '../../../../shared/store/genre-authors/genre-authors.selectors';
 
 @Component({
   selector: 'authors-by-genre',
@@ -42,35 +38,24 @@ import {
 })
 export class AuthorsByGenreComponent implements AfterViewInit {
   @Input() genre: string | null = null;
-
   private store = inject(Store);
   private route = inject(ActivatedRoute);
-  private booksApiService = inject(BooksApiService);
+  public authorsGenre: WritableSignal<string | null> = signal(null);
+  protected viewAuthors: WritableSignal<GenreAuthor[]> = signal<GenreAuthor[]>(
+    []
+  );
 
-  public genreSignal: WritableSignal<string | null> = signal(null);
-
-  protected viewAuthors: WritableSignal<AuthorByGenre[]> = signal<
-    AuthorByGenre[]
-  >([]);
-
-  protected authors = resource<AuthorByGenre[] | null, string | null>({
-    request: () => this.genreSignal(),
-    loader: ({ request }) => {
-      if (request !== null) {
-        return this.booksApiService.getAuthorsByGenre(request);
-      }
-      return Promise.resolve(null);
-    },
-  });
+  protected authors = this.store.selectSignal(genreAuthorsSelector);
 
   constructor() {
     effect(() => {
-      if (this.authors.isLoading()) {
-        this.store.dispatch(loadingStartAction());
-      } else {
-        const data = this.authors.value() ?? [];
-        this.viewAuthors.set(data);
-        this.store.dispatch(loadingEndAction());
+      const data = this.authors() ?? [];
+      this.viewAuthors.set(data);
+    });
+    effect(() => {
+      const genre = this.authorsGenre();
+      if (genre !== null) {
+        this.store.dispatch(loadGenreAuthorsAction({ genre }));
       }
     });
   }
@@ -81,16 +66,16 @@ export class AuthorsByGenreComponent implements AfterViewInit {
       genre = (await firstValueFrom(this.route.paramMap)).get('genre');
     }
 
-    this.genreSignal.set(genre);
+    this.authorsGenre.set(genre);
   }
 
-  protected trackByFn(index: number, item: AuthorByGenre): string {
+  protected trackByFn(index: number, item: GenreAuthor): string {
     return item.id;
   }
 
   protected inputFilter(event: Event): void {
     const value = (event.target as HTMLInputElement).value;
-    const data = (this.authors.value() ?? []).filter(
+    const data = (this.authors() ?? []).filter(
       (item) => item.full.toLowerCase().indexOf(value.toLowerCase()) > -1
     );
     this.viewAuthors.set(data);

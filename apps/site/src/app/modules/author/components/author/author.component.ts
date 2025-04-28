@@ -3,18 +3,19 @@ import {
   AfterViewInit,
   ChangeDetectionStrategy,
   Component,
+  effect,
   inject,
   Input,
-  resource,
   signal,
   WritableSignal,
 } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import { AuthorSummary } from '@book-play/models';
 import { AuthorGenresListComponent } from '@book-play/ui';
 import { hideImage } from '@book-play/utils-browser';
+import { Store } from '@ngrx/store';
 import { firstValueFrom } from 'rxjs';
-import { BooksApiService } from '../../../../shared/services/books/books-api.service';
+import { loadAuthorSummaryAction } from '../../../../shared/store/author-summary/author-summary.actions';
+import { authorSummarySelector } from '../../../../shared/store/author-summary/author-summary.selectors';
 
 @Component({
   selector: 'author',
@@ -26,19 +27,18 @@ import { BooksApiService } from '../../../../shared/services/books/books-api.ser
 export class AuthorComponent implements AfterViewInit {
   @Input() id: string | null = null;
   private route = inject(ActivatedRoute);
-  private booksApiService = inject(BooksApiService);
+  private store = inject(Store);
+  private authorId: WritableSignal<string | null> = signal(null);
+  protected authorSummary = this.store.selectSignal(authorSummarySelector);
 
-  private idSignal: WritableSignal<string | null> = signal(null);
-
-  protected authorSummary = resource<AuthorSummary | null, string | null>({
-    request: () => this.idSignal(),
-    loader: ({ request }) => {
-      if (request !== null) {
-        return this.booksApiService.getAuthorSummary(request);
+  constructor() {
+    effect(() => {
+      const authorId = this.authorId();
+      if (authorId !== null) {
+        this.store.dispatch(loadAuthorSummaryAction({ authorId }));
       }
-      return Promise.resolve(null);
-    },
-  });
+    });
+  }
 
   public async ngAfterViewInit() {
     let id = this.id;
@@ -46,7 +46,7 @@ export class AuthorComponent implements AfterViewInit {
       id = (await firstValueFrom(this.route.paramMap)).get('id');
     }
 
-    this.idSignal.set(id);
+    this.authorId.set(id);
   }
 
   protected readonly hideImage = hideImage;

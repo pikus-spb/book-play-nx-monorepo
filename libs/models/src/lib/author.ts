@@ -1,4 +1,4 @@
-import { Book, DBBook } from './book';
+import { Book, DBBook, Genre } from './book';
 import { DBBookToUIBook } from './book-mapper';
 
 export interface DBAuthor {
@@ -16,10 +16,10 @@ export interface DBAuthorByGenre {
   genres: string;
 }
 
-export interface AuthorByGenre {
+export interface GenreAuthor {
   id: string;
   full: string;
-  genres: string[];
+  genres: Genre[];
 }
 
 export interface DBAuthorSummary extends DBAuthor {
@@ -45,7 +45,7 @@ export class Author {
 
 export class AuthorSummary extends Author {
   books: Partial<Book>[] = [];
-  genres: string[] = [];
+  genres: Genre[] = [];
 
   constructor(obj: Partial<DBAuthorSummary>) {
     super(obj);

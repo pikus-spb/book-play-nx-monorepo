@@ -12,8 +12,8 @@ import { MatSlider, MatSliderThumb } from '@angular/material/slider';
 import { VoiceSettings } from '@book-play/models';
 import { ScrollbarDirective } from '@book-play/ui';
 import { Store } from '@ngrx/store';
+import { voiceSettingsUpdateAction } from '../../../../shared/store/voice-settings/voice-settings.actions';
 
-import { ttsVoiceSettingsUpdateAction } from '../../../../shared/store/tts/tts.actions';
 import { getVoiceSettings } from '../../../../shared/utils/voice-settings';
 
 @Component({
@@ -55,7 +55,7 @@ export class SettingsComponent {
     effect(() => {
       const settings = this.valueChanges();
       if (settings) {
-        this.store.dispatch(ttsVoiceSettingsUpdateAction({ voice: settings }));
+        this.store.dispatch(voiceSettingsUpdateAction({ settings }));
       }
     });
   }

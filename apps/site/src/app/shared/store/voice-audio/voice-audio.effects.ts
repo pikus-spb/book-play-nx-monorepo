@@ -6,54 +6,49 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 import { catchError, map, of, switchMap, withLatestFrom } from 'rxjs';
 import { TtsApiService } from '../../services/tts/tts-api.service';
-import { storeVoiceSettings } from '../../utils/voice-settings';
 import {
-  ttsVoiceCacheResetAction,
-  ttsVoiceCacheUpdateAction,
-} from '../audio-cache/audio-cache.actions';
-import { audioCacheSelector } from '../audio-cache/audio-cache.selectors';
-import {
-  TtsActions,
-  ttsLoadSpeechFailureAction,
-  ttsLoadSpeechSuccessAction,
-} from './tts.actions';
+  VoiceAudioActions,
+  voiceAudioLoadFailureAction,
+  voiceAudioLoadSuccessAction,
+  voiceCacheUpdateAction,
+} from './voice-audio.actions';
+import { voiceAudioSelector } from './voice-audio.selectors';
 
 @Injectable({
   providedIn: 'root',
 })
-export class TtsEffects {
+export class VoiceAudioEffects {
   private actions$ = inject(Actions);
   private store = inject(Store);
   private ttsApiService = inject(TtsApiService);
 
-  updateVoiceSettings$ = createEffect(() => {
+  voiceAudioCacheUpdate$ = createEffect(() => {
     return this.actions$.pipe(
-      ofType(TtsActions.TTsVoiceSettingsUpdate),
-      switchMap(({ voice }) => {
-        storeVoiceSettings(voice);
-        return of(ttsVoiceCacheResetAction());
+      ofType(VoiceAudioActions.VoiceAudioCacheUpdate),
+      switchMap(({ text, data }) => {
+        return of(voiceAudioLoadSuccessAction({ text, data }));
       })
     );
   });
 
   ttsSpeechLoad$ = createEffect(() => {
     return this.actions$.pipe(
-      ofType(TtsActions.TTSLoadSpeech),
-      withLatestFrom(this.store.select(audioCacheSelector)),
+      ofType(VoiceAudioActions.VoiceAudioLoad),
+      withLatestFrom(this.store.select(voiceAudioSelector)),
       switchMap(([{ text }, cache]) => {
         if (cache[text]) {
-          return of(ttsLoadSpeechSuccessAction({ text, data: cache[text] }));
+          return of(voiceAudioLoadSuccessAction({ text, data: cache[text] }));
         }
         return this.ttsApiService.textToSpeech(text).pipe(
           switchMap((data: Blob) => {
             return blobToBase64(data);
           }),
           map((data: Base64Data) => {
-            return ttsVoiceCacheUpdateAction({ text, data });
+            return voiceCacheUpdateAction({ text, data });
           }),
           catchError((errorResponse: HttpErrorResponse) => {
             return of(
-              ttsLoadSpeechFailureAction({ errors: [errorResponse.error] })
+              voiceAudioLoadFailureAction({ errors: [errorResponse.error] })
             );
           })
         );

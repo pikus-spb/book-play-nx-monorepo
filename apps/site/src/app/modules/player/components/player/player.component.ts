@@ -15,8 +15,8 @@ import { AutoPlayService } from '../../../../shared/services/tts/auto-play.servi
 import {
   activeBookImportFromPersistenceStorageAction,
   activeBookLoadByIdAction,
-} from '../../../../shared/store/books-cache/active-book.actions';
-import { activeBookSelector } from '../../../../shared/store/books-cache/active-book.selectors';
+} from '../../../../shared/store/active-book/active-book.actions';
+import { activeBookSelector } from '../../../../shared/store/active-book/active-book.selectors';
 import { BookCanvasComponent } from '../book-canvas/book-canvas.component';
 
 @Component({

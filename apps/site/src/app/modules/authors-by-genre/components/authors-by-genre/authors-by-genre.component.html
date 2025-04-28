@@ -1,6 +1,6 @@
 <div class="container">
   <h1 loading [thenShow]="result">
-    <span>Авторы, пишущие в жанре "{{ genreSignal() || '' | genre }}"</span>
+    <span>Авторы, пишущие в жанре "{{ authorsGenre() || '' | genre }}"</span>
     <input
       (input)="inputFilter($event)"
       placeholder="Поиск по имени автора..."
@@ -8,7 +8,7 @@
     <span #loading></span>
   </h1>
   <ng-template #result>
-    @if (authors.value()) {
+    @if (authors()) {
     <li-virtual-scroll
       [items]="viewAuthors()"
       [gridList]="true"

@@ -44,18 +44,6 @@
 
               .mdc-evolution-chip__text-label {
                 width: 100%;
-
-                a {
-                  width: 100%;
-                  display: block;
-                  text-decoration: none;
-                  color: $default-color;
-                  font-weight: normal;
-                  padding: 0 $default-padding;
-                  overflow: hidden;
-                  white-space: nowrap;
-                  text-overflow: ellipsis;
-                }
               }
             }
           }

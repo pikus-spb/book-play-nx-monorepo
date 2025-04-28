@@ -1,14 +1,11 @@
 import { CommonModule } from '@angular/common';
 import {
-  AfterViewInit,
   ChangeDetectionStrategy,
   Component,
   computed,
+  effect,
   inject,
-  Input,
-  resource,
-  signal,
-  WritableSignal,
+  input,
 } from '@angular/core';
 import { MatFabButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
@@ -22,9 +19,10 @@ import {
 import { Book } from '@book-play/models';
 import { AuthorGenresListComponent } from '@book-play/ui';
 import { showDefaultCoverImage } from '@book-play/utils-browser';
+import { Store } from '@ngrx/store';
 import { firstValueFrom } from 'rxjs';
-
-import { BooksApiService } from '../../../../shared/services/books/books-api.service';
+import { loadBookSummaryAction } from '../../../../shared/store/book-summary/book-summary.actions';
+import { bookSummarySelector } from '../../../../shared/store/book-summary/book-summary.selectors';
 
 @Component({
   selector: 'book',
@@ -40,40 +38,37 @@ import { BooksApiService } from '../../../../shared/services/books/books-api.ser
     AuthorGenresListComponent,
   ],
 })
-export class BookComponent implements AfterViewInit {
-  @Input() id: string | null = null;
+export class BookComponent {
+  public bookInput = input<Book | null>(null, { alias: 'book' });
+  private store = inject(Store);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
-  private booksApiService = inject(BooksApiService);
-
-  private idSignal: WritableSignal<string | null> = signal(null);
-
-  protected book = resource<Book | null, string | null>({
-    request: () => this.idSignal(),
-    loader: ({ request }) => {
-      if (request !== null) {
-        return this.booksApiService.getBookSummaryById(request);
-      }
-      return Promise.resolve(null);
-    },
+  protected bookLoaded = this.store.selectSignal<Book | null>(
+    bookSummarySelector
+  );
+  protected book = computed<Book | null>(() => {
+    return this.bookInput() || this.bookLoaded();
   });
 
+  constructor() {
+    effect(async () => {
+      const book = this.bookInput();
+      if (!book) {
+        const id = (await firstValueFrom(this.route.paramMap)).get('id');
+        if (id) {
+          this.store.dispatch(loadBookSummaryAction({ bookId: id }));
+        }
+      }
+    });
+  }
+
   public coverSrc = computed(() => {
-    const src = this.book.value()?.cover?.toBase64String();
+    const src = this.book()?.cover?.toBase64String();
     return src ?? DEFAULT_COVER_SRC;
   });
 
   public playBook(): void {
-    this.router.navigateByUrl('/player/' + this.idSignal());
-  }
-
-  public async ngAfterViewInit() {
-    let id = this.id;
-    if (!id) {
-      id = (await firstValueFrom(this.route.paramMap)).get('id');
-    }
-
-    this.idSignal.set(id);
+    this.router.navigateByUrl('/player/' + this.book()?.id);
   }
 
   protected readonly BOOK_IMAGE_WIDTH = BOOK_IMAGE_WIDTH;
