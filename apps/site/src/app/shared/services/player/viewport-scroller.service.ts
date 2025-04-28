@@ -64,22 +64,27 @@ class ViewportScrollerService {
     const firstParagraph = shownParagraphs[0] as HTMLElement;
     const lastParagraph = shownParagraphs.slice(-1)[0] as HTMLElement;
 
-    const start = Number(
-      firstParagraph.className.match(/book-paragraph-(\d+)$/)?.[1]
-    );
-    const end = Number(
-      lastParagraph.className.match(/book-paragraph-(\d+)$/)?.[1]
-    );
+    if (firstParagraph && lastParagraph) {
+      const start = Number(
+        firstParagraph.className.match(/book-paragraph-(\d+)$/)?.[1]
+      );
+      const end = Number(
+        lastParagraph.className.match(/book-paragraph-(\d+)$/)?.[1]
+      );
 
-    if (index >= start && index <= end) {
-      this.scrollToFoundParagraph(index);
-    } else {
-      if (index < start) {
-        guessOffset = this.scrollToOffset(guessOffset, -1);
-      } else if (index > end) {
-        guessOffset = this.scrollToOffset(guessOffset, 1);
+      if (index >= start && index <= end) {
+        this.scrollToFoundParagraph(index);
+      } else {
+        if (index < start) {
+          guessOffset = this.scrollToOffset(guessOffset, -1);
+        } else if (index > end) {
+          guessOffset = this.scrollToOffset(guessOffset, 1);
+        }
+
+        await firstValueFrom(timer(1));
+        await this.adjustOffset(index, guessOffset);
       }
-
+    } else {
       await firstValueFrom(timer(1));
       await this.adjustOffset(index, guessOffset);
     }
