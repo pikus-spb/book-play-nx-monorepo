@@ -10,12 +10,12 @@ import {
   shareReplay,
   tap,
 } from 'rxjs';
-import { AudioCacheHelperService } from '../../store/audio-cache/audio-cache-helper.service';
-import { activeBookSelector } from '../../store/books-cache/active-book.selectors';
+import { activeBookSelector } from '../../store/active-book/active-book.selectors';
 import {
   loadingEndAction,
   loadingStartAction,
 } from '../../store/loading/loading.action';
+import { VoiceAudioHelperService } from '../../store/voice-audio/voice-audio-helper.service';
 import { DomAudioHelperService } from '../dom-audio-helper.service';
 import { AppEventNames, EventsStateService } from '../events-state.service';
 import { CursorPositionService } from '../player/cursor-position.service';
@@ -43,7 +43,7 @@ export class AutoPlayService {
   private cursorService = inject(CursorPositionService);
   private domHelper = inject(DomHelperService);
   private preloadHelper = inject(AudioPreloadingService);
-  private audioCacheHelperService = inject(AudioCacheHelperService);
+  private audioCacheHelperService = inject(VoiceAudioHelperService);
 
   constructor() {
     this.router.events

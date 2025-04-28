@@ -19,4 +19,6 @@ export const environment = {
     password: '1414',
     database: 'books',
   }),
+  RANDOM_AUTHORS_COUNT: 3,
+  RANDOM_BOOKS_COUNT: 3,
 };

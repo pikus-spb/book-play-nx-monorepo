@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { MatChipSet } from '@angular/material/chips';
+import { Genre } from '@book-play/models';
 import { GenrePipe } from '../../pipes/genre/genre.pipe';
 import { TagLinkComponent } from '../tag-link/tag-link.component';
 
@@ -11,6 +12,6 @@ import { TagLinkComponent } from '../tag-link/tag-link.component';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AuthorGenresListComponent {
-  public genres = input<string[]>();
+  public genres = input<Genre[]>();
   public linkPrefix = input<string>('/author/genre');
 }

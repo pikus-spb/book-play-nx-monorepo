@@ -1,11 +1,11 @@
 import { inject, Injectable } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import { filter, firstValueFrom, Observable } from 'rxjs';
+import { activeBookSelector } from '../../store/active-book/active-book.selectors';
 
-import { AudioCacheHelperService } from '../../store/audio-cache/audio-cache-helper.service';
-import { audioCacheRecordSelector } from '../../store/audio-cache/audio-cache.selectors';
-import { activeBookSelector } from '../../store/books-cache/active-book.selectors';
-import { ttsLoadSpeechAction } from '../../store/tts/tts.actions';
+import { VoiceAudioHelperService } from '../../store/voice-audio/voice-audio-helper.service';
+import { voiceAudioLoadAction } from '../../store/voice-audio/voice-audio.actions';
+import { voiceAudioRecordSelector } from '../../store/voice-audio/voice-audio.selectors';
 
 export const PRELOAD_EXTRA = Object.freeze({
   min: 0,
@@ -18,15 +18,15 @@ export const PRELOAD_EXTRA = Object.freeze({
 export class AudioPreloadingService {
   private store = inject(Store);
   private activeBook = this.store.selectSignal(activeBookSelector);
-  private audioCacheHelperService = inject(AudioCacheHelperService);
+  private audioCacheHelperService = inject(VoiceAudioHelperService);
 
   private paragraphToSpeech(index: number): Observable<string> {
     const text = this.activeBook()!.textParagraphs[index];
 
-    this.store.dispatch(ttsLoadSpeechAction({ text }));
+    this.store.dispatch(voiceAudioLoadAction({ text }));
 
     return this.store.pipe(
-      select(audioCacheRecordSelector, { text }),
+      select(voiceAudioRecordSelector, { text }),
       filter((value) => {
         return Boolean(value);
       })

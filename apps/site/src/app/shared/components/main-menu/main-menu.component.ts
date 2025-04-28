@@ -11,8 +11,8 @@ import { RouterModule } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { UploadFileDirective } from '../../directives/file-upload/upload-file.directive';
 import { BookPersistenceStorageService } from '../../services/books/book-persistence-storage.service';
-import { activeBookImportFromFileAction } from '../../store/books-cache/active-book.actions';
-import { activeBookSelector } from '../../store/books-cache/active-book.selectors';
+import { activeBookImportFromFileAction } from '../../store/active-book/active-book.actions';
+import { activeBookSelector } from '../../store/active-book/active-book.selectors';
 
 @Component({
   selector: 'main-menu',

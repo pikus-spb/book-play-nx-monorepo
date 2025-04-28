@@ -4,18 +4,10 @@
       <b>BOOK-PLAY.RU</b> - платформа для прослушивания книг, озвученных
       нейросетью.
     </p>
-
-    <p>
-      Удобный сервис для тех, кто ценит время: выбирайте книги и слушайте их в
-      автоматическом исполнении.
-    </p>
-    <p>Наслаждайтесь любимыми произведениями в любом месте!</p>
   </section>
-
-  <p>&nbsp;</p>
-  <h2>3 случайных авторов дня:</h2>
+  <h2>{{ environment.RANDOM_AUTHORS_COUNT }} случайных авторов дня:</h2>
   <mat-chip-set aria-label="Авторы">
-    @for (author of authors.value(); track author.full) {
+    @for (author of authors(); track author.full) {
     <lib-tag-link [value]="author.id" linkPrefix="/author">{{
       author.full
     }}</lib-tag-link>
@@ -23,8 +15,8 @@
   </mat-chip-set>
 
   <p>&nbsp;</p>
-  <h2>3 случайных книги дня:</h2>
-  @for (id of ids.value(); track id) {
-  <book [id]="id"></book>
+  <h2>{{ environment.RANDOM_BOOKS_COUNT }} случайных книги дня:</h2>
+  @for (book of books(); track book.id) {
+  <book [book]="book"></book>
   }
 </div>

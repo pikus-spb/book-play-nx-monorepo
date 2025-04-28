@@ -1,4 +1,4 @@
-import { DBAuthor, DBAuthorSummary, DBBook } from '@book-play/models';
+import { DBAuthor, DBAuthorSummary, DBBook, Genre } from '@book-play/models';
 import { environment } from 'environments/environment.ts';
 import fs from 'fs';
 import mysql, { PoolOptions } from 'mysql2';
@@ -44,7 +44,7 @@ export default class BooksAPIApp {
     });
   }
 
-  async authorsByGenre(genre: string): Promise<Partial<DBAuthor>[]> {
+  async authorsByGenre(genre: Genre): Promise<Partial<DBAuthor>[]> {
     return new Promise((resolve, reject) => {
       pool.query(
         `SELECT DISTINCT

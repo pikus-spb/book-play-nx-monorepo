@@ -9,7 +9,7 @@ import { Router } from '@angular/router';
 import { Book } from '@book-play/models';
 import { LinkComponent } from '@book-play/ui';
 import { Store } from '@ngrx/store';
-import { activeBookSelector } from '../../store/books-cache/active-book.selectors';
+import { activeBookSelector } from '../../store/active-book/active-book.selectors';
 
 @Component({
   selector: 'book-title',

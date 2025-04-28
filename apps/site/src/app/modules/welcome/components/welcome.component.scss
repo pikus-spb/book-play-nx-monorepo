@@ -13,18 +13,6 @@
     }
   }
 
-  ::ng-deep mat-chip {
-    a {
-      text-decoration: none;
-      color: $default-color;
-      font-weight: normal;
-      padding: 0 $default-padding;
-      overflow: hidden;
-      white-space: nowrap;
-      text-overflow: ellipsis;
-    }
-  }
-
   book {
     border: $default-border;
     border-radius: $default-border-radius;

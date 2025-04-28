@@ -4,7 +4,6 @@ import {
   Component,
   effect,
   inject,
-  resource,
   signal,
 } from '@angular/core';
 import { MatChipSet } from '@angular/material/chips';
@@ -13,11 +12,8 @@ import { ScrollbarDirective, TagLinkComponent } from '@book-play/ui';
 import { NgxVirtualScrollModule } from '@lithiumjs/ngx-virtual-scroll';
 import { Store } from '@ngrx/store';
 import { LoadingThenShowDirective } from '../../../../shared/directives/loading-then-show/loading-then-show.directive';
-import { BooksApiService } from '../../../../shared/services/books/books-api.service';
-import {
-  loadingEndAction,
-  loadingStartAction,
-} from '../../../../shared/store/loading/loading.action';
+import { loadAllAuthorsAction } from '../../../../shared/store/all-authors/all-authors.actions';
+import { allAuthorsSelector } from '../../../../shared/store/all-authors/all-authors.selectors';
 
 @Component({
   selector: 'library',
@@ -34,29 +30,22 @@ import {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LibraryComponent {
-  protected data = resource<Author[], unknown>({
-    loader: () => this.booksApi.getAllAuthors(),
-  });
-
-  public booksApi = inject(BooksApiService);
-  protected viewData = signal<Author[]>([]);
   private store = inject(Store);
+  protected data = this.store.selectSignal(allAuthorsSelector);
+  protected viewData = signal<Author[]>([]);
 
   constructor() {
+    this.store.dispatch(loadAllAuthorsAction());
+
     effect(() => {
-      if (this.data.isLoading()) {
-        this.store.dispatch(loadingStartAction());
-      } else {
-        const data = this.data.value() ?? [];
-        this.viewData.set(data);
-        this.store.dispatch(loadingEndAction());
-      }
+      const data = this.data() ?? [];
+      this.viewData.set(data);
     });
   }
 
   protected inputFilter(event: Event): void {
     const value = (event.target as HTMLInputElement).value;
-    const data = (this.data.value() ?? []).filter(
+    const data = (this.data() ?? []).filter(
       (item) => item.full.toLowerCase().indexOf(value.toLowerCase()) > -1
     );
     this.viewData.set(data);

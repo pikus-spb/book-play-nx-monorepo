@@ -1,6 +1,6 @@
-import { AuthorByGenre, DBAuthorByGenre } from './author';
+import { DBAuthorByGenre, GenreAuthor } from './author';
 
-export function DBAuthorByGenreToUI(input: DBAuthorByGenre): AuthorByGenre {
+export function DBAuthorByGenreToUI(input: DBAuthorByGenre): GenreAuthor {
   return {
     id: input.id,
     full: input.full,
