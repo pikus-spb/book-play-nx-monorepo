@@ -8,7 +8,7 @@
     <span #loading></span>
   </h1>
   <ng-template #books>
-    @if (data.value()) {
+    @if (data()) {
     <li-virtual-scroll
       [items]="viewData()!"
       [gridList]="true"

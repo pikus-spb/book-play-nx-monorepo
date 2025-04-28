@@ -18,11 +18,18 @@ html {
   a:not(.underline, .mdc-list-item) {
     text-decoration: none;
     font-weight: normal;
-    color: $default-color;
+    color: $default-color !important;
 
     &:hover {
       text-decoration: underline;
     }
+  }
+
+  mat-chip a {
+    padding: 0 $default-padding;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
   }
 
   * {

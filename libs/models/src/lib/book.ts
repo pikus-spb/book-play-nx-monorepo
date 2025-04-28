@@ -9,7 +9,7 @@ export interface DBBook {
   last: string;
   name: string;
   annotation?: string;
-  genres?: string;
+  genres?: Genre;
   date?: string;
   full: string;
   cover?: string;
@@ -22,7 +22,7 @@ export class Book {
   public author!: Author;
   public name!: string;
   public annotation?: string;
-  public genres?: string[];
+  public genres?: Genre[];
   public date?: string;
   public cover?: ImageBase64Data;
   public paragraphs!: string[];
@@ -49,3 +49,5 @@ export class Book {
     return `${this.author.first}${this.author.last}${this.name}${this.paragraphs.length}`;
   }
 }
+
+export type Genre = string;

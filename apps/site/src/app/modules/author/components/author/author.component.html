@@ -1,4 +1,4 @@
-<div *ngIf="authorSummary.value() as author">
+<div *ngIf="authorSummary() as author">
   @if (author.image) {
   <img [src]="author.image" (error)="hideImage($event)" alt="Обложка книги" />
   }

@@ -1,9 +1,13 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, resource } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { MatChipSet } from '@angular/material/chips';
-import { Author } from '@book-play/models';
 import { ScrollbarDirective, TagLinkComponent } from '@book-play/ui';
-import { BooksApiService } from '../../../shared/services/books/books-api.service';
+import { Store } from '@ngrx/store';
+import { environment } from 'environments/environment';
+import { loadRandomAuthorsAction } from '../../../shared/store/random-authors/random-authors.actions';
+import { randomAuthorsSelector } from '../../../shared/store/random-authors/random-authors.selectors';
+import { loadRandomBooksAction } from '../../../shared/store/random-books/random-books.actions';
+import { randomBooksSelector } from '../../../shared/store/random-books/random-books.selectors';
 import { BookComponent } from '../../book/components/book/book.component';
 
 @Component({
@@ -18,13 +22,16 @@ import { BookComponent } from '../../book/components/book/book.component';
   templateUrl: './welcome.component.html',
   styleUrls: ['./welcome.component.scss'],
 })
-export class WelcomeComponent {
-  protected booksApiService = inject(BooksApiService);
+export class WelcomeComponent implements OnInit {
+  private store = inject(Store);
 
-  protected authors = resource<Author[], unknown>({
-    loader: () => this.booksApiService.getRandomAuthors(),
-  });
-  protected ids = resource<string[], unknown>({
-    loader: () => this.booksApiService.getRandomIds(),
-  });
+  protected authors = this.store.selectSignal(randomAuthorsSelector);
+  protected books = this.store.selectSignal(randomBooksSelector);
+
+  public ngOnInit(): void {
+    this.store.dispatch(loadRandomAuthorsAction());
+    this.store.dispatch(loadRandomBooksAction());
+  }
+
+  protected readonly environment = environment;
 }

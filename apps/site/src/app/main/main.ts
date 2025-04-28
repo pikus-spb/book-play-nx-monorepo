@@ -11,13 +11,27 @@ import { provideRouter } from '@angular/router';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
-import { AudioCacheEffects } from '../shared/store/audio-cache/audio-cache.effects';
-import { audioCacheReducers } from '../shared/store/audio-cache/audio-cache.reducers';
-import { ActiveBookEffects } from '../shared/store/books-cache/active-book.effects';
-import { activeBookReducers } from '../shared/store/books-cache/active-book.reducers';
+import { ActiveBookEffects } from '../shared/store/active-book/active-book.effects';
+import { activeBookReducers } from '../shared/store/active-book/active-book.reducers';
+import { AllAuthorsEffects } from '../shared/store/all-authors/all-authors.effects';
+import { allAuthorsReducers } from '../shared/store/all-authors/all-authors.reducers';
+import { AuthorBooksEffects } from '../shared/store/author-books/author-books.effects';
+import { authorBooksReducers } from '../shared/store/author-books/author-books.reducers';
+import { AuthorSummaryEffects } from '../shared/store/author-summary/author-summary.effects';
+import { authorSummaryReducers } from '../shared/store/author-summary/author-summary.reducers';
+import { BookSummaryEffects } from '../shared/store/book-summary/book-summary.effects';
+import { bookSummaryReducers } from '../shared/store/book-summary/book-summary.reducers';
+import { GenreAuthorsEffects } from '../shared/store/genre-authors/genre-authors.effects';
+import { genreAuthorsReducers } from '../shared/store/genre-authors/genre-authors.reducers';
 import { loadingReducer } from '../shared/store/loading/loading.reducer';
-import { TtsEffects } from '../shared/store/tts/tts.effects';
-import { ttsReducers } from '../shared/store/tts/tts.reducers';
+import { RandomAuthorsEffects } from '../shared/store/random-authors/random-authors.effects';
+import { randomAuthorsReducers } from '../shared/store/random-authors/random-authors.reducers';
+import { RandomBooksEffects } from '../shared/store/random-books/random-books.effects';
+import { randomBooksReducers } from '../shared/store/random-books/random-books.reducers';
+import { VoiceAudioEffects } from '../shared/store/voice-audio/voice-audio.effects';
+import { voiceAudioReducers } from '../shared/store/voice-audio/voice-audio.reducers';
+import { VoiceSettingsEffects } from '../shared/store/voice-settings/voice-settings.effects';
+import { voiceSettingsReducers } from '../shared/store/voice-settings/voice-settings.reducers';
 import { MainComponent } from './components/main/main.component';
 import { APP_ROUTES } from './model/app-routes';
 
@@ -29,15 +43,29 @@ bootstrapApplication(MainComponent, {
     importProvidersFrom(
       StoreModule.forRoot({
         loading: loadingReducer,
-        tts: ttsReducers,
-        audioCache: audioCacheReducers,
+        voiceSettings: voiceSettingsReducers,
+        voiceAudio: voiceAudioReducers,
         activeBook: activeBookReducers,
+        allAuthors: allAuthorsReducers,
+        randomAuthors: randomAuthorsReducers,
+        randomBooks: randomBooksReducers,
+        authorBooks: authorBooksReducers,
+        authorSummary: authorSummaryReducers,
+        genreAuthors: genreAuthorsReducers,
+        bookSummary: bookSummaryReducers,
       }),
       EffectsModule.forRoot([]),
       EffectsModule.forFeature([
-        TtsEffects,
-        AudioCacheEffects,
+        VoiceSettingsEffects,
+        VoiceAudioEffects,
         ActiveBookEffects,
+        AllAuthorsEffects,
+        RandomAuthorsEffects,
+        RandomBooksEffects,
+        AuthorBooksEffects,
+        AuthorSummaryEffects,
+        GenreAuthorsEffects,
+        BookSummaryEffects,
       ]),
       StoreDevtoolsModule.instrument()
     ),

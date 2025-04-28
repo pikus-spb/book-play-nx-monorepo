@@ -4,7 +4,6 @@ import { BOOKS_API_PORT, BOOKS_API_PORT_SECURE } from '@book-play/constants';
 
 import {
   Author,
-  AuthorByGenre,
   AuthorSummary,
   Book,
   DBAuthor,
@@ -13,10 +12,12 @@ import {
   DBAuthorSummary,
   DBBook,
   DBBookToUIBook,
+  Genre,
+  GenreAuthor,
 } from '@book-play/models';
 import { getCurrentProtocolUrl } from '@book-play/ui';
 import { environment } from 'environments/environment';
-import { firstValueFrom, map, Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -30,84 +31,77 @@ export class BooksApiService {
 
   constructor(private http: HttpClient) {}
 
-  public getAllAuthors(): Promise<Author[]> {
+  public loadAllAuthors(): Observable<Author[]> {
     const url = this.apiUrlPrefix + '/author/all';
 
-    return firstValueFrom(
-      this.http.get<DBAuthor[]>(url).pipe(
-        map((data: DBAuthor[]): Author[] => {
-          return data.map((dbAuthor: DBAuthor) => {
-            return new Author(dbAuthor);
-          });
-        })
-      ) as Observable<Author[]>
-    );
+    return this.http.get<DBAuthor[]>(url).pipe(
+      map((data: DBAuthor[]): Author[] => {
+        return data.map((dbAuthor: DBAuthor) => {
+          return new Author(dbAuthor);
+        });
+      })
+    ) as Observable<Author[]>;
   }
 
-  public getRandomAuthors(number = 3): Promise<Author[]> {
+  public loadRandomAuthors(
+    number = environment.RANDOM_AUTHORS_COUNT
+  ): Observable<Author[]> {
     const url = this.apiUrlPrefix + `/author/random/${number}`;
 
-    return firstValueFrom(
-      this.http.get<DBAuthor[]>(url).pipe(
-        map((data: DBAuthor[]): Author[] => {
-          return data.map((dbAuthor: DBAuthor) => {
-            return new Author(dbAuthor);
-          });
-        })
-      ) as Observable<Author[]>
-    );
+    return this.http.get<DBAuthor[]>(url).pipe(
+      map((data: DBAuthor[]): Author[] => {
+        return data.map((dbAuthor: DBAuthor) => {
+          return new Author(dbAuthor);
+        });
+      })
+    ) as Observable<Author[]>;
   }
 
-  public getRandomIds(number = 3): Promise<string[]> {
+  public loadRandomBookIds(
+    number = environment.RANDOM_BOOKS_COUNT
+  ): Observable<string[]> {
     const url = this.apiUrlPrefix + `/book/random-id/${number}`;
-
-    return firstValueFrom(this.http.get<string[]>(url));
+    return this.http.get<string[]>(url);
   }
 
-  public getAuthorBooks(id: string): Promise<Book[]> {
+  public loadAuthorBooks(id: string): Observable<Book[]> {
     const url = this.apiUrlPrefix + `/author/id/${id}/books`;
 
-    return firstValueFrom(
-      this.http.get<DBBook[]>(url).pipe(
-        map((data: DBBook[]): Book[] => {
-          return data.map((book: DBBook) => {
-            return new Book({
-              id: book.id,
-              name: book.name,
-            });
+    return this.http.get<DBBook[]>(url).pipe(
+      map((data: DBBook[]): Book[] => {
+        return data.map((book: DBBook) => {
+          return new Book({
+            id: book.id,
+            name: book.name,
           });
-        })
-      ) as Observable<Book[]>
-    );
+        });
+      })
+    ) as Observable<Book[]>;
   }
 
-  public getAuthorSummary(id: string): Promise<AuthorSummary> {
-    const url = this.apiUrlPrefix + `/author/id/${id}/summary`;
+  public loadAuthorSummary(authorId: string): Observable<AuthorSummary> {
+    const url = this.apiUrlPrefix + `/author/id/${authorId}/summary`;
 
-    return firstValueFrom(
-      this.http
-        .get<DBAuthorSummary>(url)
-        .pipe(
-          map(
-            (authorSummary: DBAuthorSummary) => new AuthorSummary(authorSummary)
-          )
+    return this.http
+      .get<DBAuthorSummary>(url)
+      .pipe(
+        map(
+          (authorSummary: DBAuthorSummary) => new AuthorSummary(authorSummary)
         )
-    );
+      );
   }
 
-  public getAuthorsByGenre(genre: string): Promise<AuthorByGenre[]> {
+  public loadAuthorsByGenre(genre: Genre): Observable<GenreAuthor[]> {
     const url = this.apiUrlPrefix + `/author/genre/${genre}`;
 
-    return firstValueFrom(
-      this.http.get<DBAuthorByGenre[]>(url).pipe(
-        map((authors: DBAuthorByGenre[]): AuthorByGenre[] => {
-          return authors.map((author) => DBAuthorByGenreToUI(author));
-        })
-      )
+    return this.http.get<DBAuthorByGenre[]>(url).pipe(
+      map((authors: DBAuthorByGenre[]): GenreAuthor[] => {
+        return authors.map((author) => DBAuthorByGenreToUI(author));
+      })
     );
   }
 
-  public getBookById(id: string): Observable<Book> {
+  public loadBookById(id: string): Observable<Book> {
     const url = this.apiUrlPrefix + '/book/id/' + id;
 
     return this.http.get<DBBook>(url).pipe(
@@ -117,15 +111,13 @@ export class BooksApiService {
     );
   }
 
-  public getBookSummaryById(id: string): Promise<Book> {
+  public loadBookSummaryById(id: string): Observable<Book> {
     const url = this.apiUrlPrefix + `/book/id/${id}/summary`;
 
-    return firstValueFrom(
-      this.http.get<DBBook>(url).pipe(
-        map((book: DBBook) => {
-          return DBBookToUIBook(book);
-        })
-      )
+    return this.http.get<DBBook>(url).pipe(
+      map((book: DBBook) => {
+        return DBBookToUIBook(book);
+      })
     );
   }
 }

@@ -14,7 +14,7 @@ import { MatTooltip } from '@angular/material/tooltip';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { merge, tap } from 'rxjs';
-import { activeBookSelector } from '../../store/books-cache/active-book.selectors';
+import { activeBookSelector } from '../../store/active-book/active-book.selectors';
 import { PlayerButtonComponent } from '../player-button/player-button.component';
 
 @Component({

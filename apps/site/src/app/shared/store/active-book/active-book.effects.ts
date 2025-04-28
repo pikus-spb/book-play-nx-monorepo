@@ -50,15 +50,15 @@ export class ActiveBookEffects {
       switchMap(([{ id }, activeBook]) => {
         if (!(activeBook?.id && activeBook.id == id)) {
           this.store.dispatch(loadingStartAction());
-          return this.booksApiService.getBookById(id).pipe(
+          return this.booksApiService.loadBookById(id).pipe(
+            tap(() => {
+              this.store.dispatch(loadingEndAction());
+            }),
             map((book) => {
               return activeBookSuccessAction({ book });
             }),
             catchError((error) => {
               return of(activeBookFailureAction({ errors: [error] }));
-            }),
-            tap(() => {
-              this.store.dispatch(loadingEndAction());
             })
           );
         } else {
