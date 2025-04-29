@@ -3,10 +3,10 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
-  effect,
   inject,
   input,
 } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { MatFabButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { MatTooltip } from '@angular/material/tooltip';
@@ -19,10 +19,7 @@ import {
 import { Book } from '@book-play/models';
 import { AuthorGenresListComponent } from '@book-play/ui';
 import { showDefaultCoverImage } from '@book-play/utils-browser';
-import { Store } from '@ngrx/store';
-import { firstValueFrom } from 'rxjs';
-import { loadBookSummaryAction } from '../../../../shared/store/book-summary/book-summary.actions';
-import { bookSummarySelector } from '../../../../shared/store/book-summary/book-summary.selectors';
+import { map } from 'rxjs';
 
 @Component({
   selector: 'book',
@@ -39,28 +36,15 @@ import { bookSummarySelector } from '../../../../shared/store/book-summary/book-
   ],
 })
 export class BookComponent {
-  public bookInput = input<Book | null>(null, { alias: 'book' });
-  private store = inject(Store);
+  public inputBook = input<Book | null>(null, { alias: 'book' });
   private route = inject(ActivatedRoute);
-  private router = inject(Router);
-  protected bookLoaded = this.store.selectSignal<Book | null>(
-    bookSummarySelector
+  private routeBook = toSignal(
+    this.route.data.pipe(map((data) => data['book']))
   );
+  private router = inject(Router);
   protected book = computed<Book | null>(() => {
-    return this.bookInput() || this.bookLoaded();
+    return this.inputBook() || this.routeBook();
   });
-
-  constructor() {
-    effect(async () => {
-      const book = this.bookInput();
-      if (!book) {
-        const id = (await firstValueFrom(this.route.paramMap)).get('id');
-        if (id) {
-          this.store.dispatch(loadBookSummaryAction({ bookId: id }));
-        }
-      }
-    });
-  }
 
   public coverSrc = computed(() => {
     const src = this.book()?.cover?.toBase64String();

@@ -52,7 +52,7 @@ export class PlayerComponent implements AfterViewInit {
     }
   }
 
-  public playParagraph(index: number): void {
+  public startPlayParagraph(index: number): void {
     this.autoPlay.stop();
     this.autoPlay.start(index);
   }
