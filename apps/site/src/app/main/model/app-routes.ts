@@ -1,5 +1,7 @@
 import { Route } from '@angular/router';
 import { DEFAULT_TITLE } from '@book-play/constants';
+import { StopBookPlayGuard } from '../guards/stop-book-play.guard';
+import { BookResolver } from '../resolvers/book.resolver';
 
 export const APP_ROUTES: Route[] = [
   {
@@ -14,9 +16,12 @@ export const APP_ROUTES: Route[] = [
   {
     path: 'book/:id',
     loadComponent() {
-      return import('../../modules//book/components/book/book.component').then(
+      return import('../../modules/book/components/book/book.component').then(
         (imported) => imported.BookComponent
       );
+    },
+    resolve: {
+      book: BookResolver,
     },
   },
   {
@@ -26,6 +31,7 @@ export const APP_ROUTES: Route[] = [
         '../../modules/player/components/player/player.component'
       ).then((imported) => imported.PlayerComponent);
     },
+    canDeactivate: [StopBookPlayGuard],
   },
   {
     path: 'player/:id',
@@ -34,6 +40,7 @@ export const APP_ROUTES: Route[] = [
         '../../modules/player/components/player/player.component'
       ).then((imported) => imported.PlayerComponent);
     },
+    canDeactivate: [StopBookPlayGuard],
   },
   {
     path: 'author/:id',
