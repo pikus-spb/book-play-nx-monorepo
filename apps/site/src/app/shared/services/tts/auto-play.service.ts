@@ -1,15 +1,8 @@
 import { effect, inject, Injectable } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { NavigationEnd, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import {
-  BehaviorSubject,
-  filter,
-  fromEvent,
-  Observable,
-  shareReplay,
-  tap,
-} from 'rxjs';
+import { BehaviorSubject, fromEvent, Observable, shareReplay, tap } from 'rxjs';
 import { activeBookSelector } from '../../store/active-book/active-book.selectors';
 import {
   loadingEndAction,
@@ -46,20 +39,6 @@ export class AutoPlayService {
   private audioCacheHelperService = inject(VoiceAudioHelperService);
 
   constructor() {
-    this.router.events
-      .pipe(
-        takeUntilDestroyed(),
-        filter((event) => {
-          return event instanceof NavigationEnd;
-        }),
-        tap(async () => {
-          if (!this.router.url.match('player')) {
-            this.stop();
-          }
-        })
-      )
-      .subscribe();
-
     this.cursorService.position$
       .pipe(
         takeUntilDestroyed(),
