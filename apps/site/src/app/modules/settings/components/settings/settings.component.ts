@@ -9,6 +9,10 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatSlider, MatSliderThumb } from '@angular/material/slider';
+import {
+  SETTINGS_VOICE_PITCH_DELTA,
+  SETTINGS_VOICE_RATE_DELTA,
+} from '@book-play/constants';
 import { VoiceSettings } from '@book-play/models';
 import { ScrollbarDirective } from '@book-play/ui';
 import { Store } from '@ngrx/store';
@@ -41,6 +45,12 @@ export class SettingsComponent {
     this.addEventListeners();
   }
 
+  protected mouseWheel(fieldName: string, event: WheelEvent): void {
+    let value = Number(this.form.get(fieldName)!.value) || 0;
+    value += event.deltaY > 0 ? -1 : 1;
+    this.form.patchValue({ [fieldName]: value });
+  }
+
   private initializeValues(): void {
     const { voice, rate, pitch } = getVoiceSettings();
     this.form = this.fb.group({
@@ -59,4 +69,7 @@ export class SettingsComponent {
       }
     });
   }
+
+  protected readonly SETTINGS_VOICE_RATE_DELTA = SETTINGS_VOICE_RATE_DELTA;
+  protected readonly SETTINGS_VOICE_PITCH_DELTA = SETTINGS_VOICE_PITCH_DELTA;
 }
