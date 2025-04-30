@@ -5,7 +5,7 @@ import { AutoPlayService } from '../../shared/services/tts/auto-play.service';
 @Injectable({
   providedIn: 'root',
 })
-export class StopBookPlayGuard implements CanDeactivate<unknown> {
+export class StopBookPlayGuard implements CanDeactivate<boolean> {
   private autoPlayService = inject(AutoPlayService);
 
   canDeactivate(): MaybeAsync<GuardResult> {

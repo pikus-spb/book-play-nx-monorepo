@@ -35,6 +35,10 @@
     }
 
     ::ng-deep {
+      .mdc-slider:hover .mdc-slider__value-indicator {
+        transform: scale(1);
+      }
+
       .mat-button-toggle-appearance-standard .mat-button-toggle-label-content {
         line-height: normal;
       }
