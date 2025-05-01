@@ -16,7 +16,7 @@ import {
 export class DomAudioHelperService implements OnDestroy {
   private audio!: HTMLAudioElement;
   private destroyed$ = new Subject<void>();
-  public stopped$ = new BehaviorSubject<boolean>(false);
+  public stopped$ = new BehaviorSubject<boolean>(true);
 
   public get stopped(): boolean {
     return this.stopped$.value;
