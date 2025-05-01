@@ -27,6 +27,9 @@ export default [
   },
   {
     files: ['**/*.html'],
+    rules: {
+      '@angular-eslint/template/interactive-supports-focus': 'off',
+    },
     ignores: ['*inline-template-*.component.html'],
   },
 ];

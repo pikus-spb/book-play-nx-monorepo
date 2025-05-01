@@ -34,6 +34,7 @@ export class ScrollbarDirective implements AfterViewInit {
 
   private createScrollBar(): void {
     this.ps = new PerfectScrollbar(this.el.nativeElement, {
+      handlers: ['click-rail', 'drag-thumb', 'wheel', 'touch'],
       minScrollbarLength: this.minHeight() || MIN_HEIGHT,
       scrollYMarginOffset: SKIP_PX_OVERSIZE,
       scrollXMarginOffset: SKIP_PX_OVERSIZE,
