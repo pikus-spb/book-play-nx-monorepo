@@ -27,11 +27,3 @@ export function getParagraphNode(
 ): HTMLElement | null {
   return element.querySelector(`.${PARAGRAPH_CLASS_PREFIX}${index}`);
 }
-
-export function filterTextParagraphs(paragraphs: string[]): string[] {
-  return paragraphs.filter((item) => isTextParagraph(item));
-}
-
-export function isTextParagraph(paragraph: string): boolean {
-  return !paragraph.startsWith('{');
-}

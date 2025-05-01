@@ -1,8 +1,15 @@
 import { effect, inject, Injectable } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { Router } from '@angular/router';
+import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
+import { Book } from '@book-play/models';
 import { Store } from '@ngrx/store';
-import { BehaviorSubject, fromEvent, Observable, shareReplay, tap } from 'rxjs';
+import {
+  distinctUntilKeyChanged,
+  filter,
+  fromEvent,
+  Observable,
+  skip,
+  tap,
+} from 'rxjs';
 import { activeBookSelector } from '../../store/active-book/active-book.selectors';
 import {
   loadingEndAction,
@@ -22,15 +29,15 @@ import {
   providedIn: 'root',
 })
 export class AutoPlayService {
-  private _paused$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(
-    true
-  );
-
-  public paused$: Observable<boolean> = this._paused$.pipe(shareReplay(1));
-
-  private router = inject(Router);
   private store = inject(Store);
   private activeBook = this.store.selectSignal(activeBookSelector);
+  private activeBookChanged = toSignal(
+    this.store.select(activeBookSelector).pipe(
+      filter((value) => value !== null),
+      distinctUntilKeyChanged<Book>('hash'),
+      skip(1)
+    )
+  );
   private audioPlayer = inject(DomAudioHelperService);
   private eventStateService = inject(EventsStateService);
   private cursorService = inject(CursorPositionService);
@@ -41,43 +48,33 @@ export class AutoPlayService {
   constructor() {
     this.cursorService.position$
       .pipe(
-        takeUntilDestroyed(),
-        tap(async () => {
+        tap(() => {
           this.domHelper.showActiveParagraph();
           this.preloadHelper.preloadParagraph(this.cursorService.position);
-        })
+        }),
+        takeUntilDestroyed()
       )
       .subscribe();
 
     fromEvent(window, 'resize')
       .pipe(
-        takeUntilDestroyed(),
         tap(() => {
           this.domHelper.showActiveParagraph();
-        })
+        }),
+        takeUntilDestroyed()
       )
       .subscribe();
 
     effect(() => {
-      if (this.activeBook()) {
+      if (this.activeBookChanged()) {
         this.stop();
         this.domHelper.showActiveParagraph();
       }
     });
   }
 
-  private resume(): void {
-    this.audioPlayer.play();
-    this._paused$.next(false);
-  }
-
-  private pause(): void {
-    this.audioPlayer.pause();
-    this._paused$.next(true);
-  }
-
   public async ensureAudioDataReady() {
-    if (!(await this.audioCacheHelperService.getAudioPromise())) {
+    if (!(await this.audioCacheHelperService.getAudio())) {
       this.store.dispatch(loadingStartAction());
 
       await this.preloadHelper.preloadParagraph(
@@ -91,51 +88,58 @@ export class AutoPlayService {
 
   public stop(): void {
     this.audioPlayer.stop();
-    this._paused$.next(true);
+  }
+  public get stopped$(): Observable<boolean> {
+    return this.audioPlayer.stopped$;
   }
 
   public toggle(): void {
-    if (this.audioPlayer.paused) {
-      if (this.audioPlayer.stopped) {
-        this.start();
-      } else {
-        this.resume();
-      }
+    if (this.audioPlayer.stopped) {
+      this.start();
     } else {
-      this.pause();
+      this.stop();
     }
   }
 
   public async start(index = -1) {
-    if (index >= 0) {
+    if (index >= 0 && index < this.bookLength) {
       this.cursorService.position = index;
     }
-    this._paused$.next(false);
     this.store.dispatch(loadingEndAction());
 
-    do {
-      const isScrollingNow = this.eventStateService.get(
-        AppEventNames.scrollingIntoView
-      )();
-      if (isScrollingNow) {
-        await this.eventStateService.waitUntil(
-          AppEventNames.scrollingIntoView,
-          false
-        );
-      }
-
+    while (true) {
+      await this.autoScrollingEnd();
       await this.ensureAudioDataReady();
 
-      this.audioPlayer.setAudio(
-        await this.audioCacheHelperService.getAudioPromise()
-      );
+      this.audioPlayer.setAudio(await this.audioCacheHelperService.getAudio());
 
-      if (await this.audioPlayer.play()) {
+      await this.audioPlayer.play();
+
+      if (
+        !this.audioPlayer.stopped &&
+        this.cursorService.position + 1 < this.bookLength
+      ) {
         this.cursorService.position++;
+      } else {
+        break;
       }
-    } while (
-      this.cursorService.position < this.activeBook()!.textParagraphs.length &&
-      !this.audioPlayer.stopped
-    );
+    }
+  }
+
+  private autoScrollingEnd(): Promise<void> {
+    const isScrollingNow = this.eventStateService.get(
+      AppEventNames.scrollingIntoView
+    )();
+    if (isScrollingNow) {
+      return this.eventStateService.waitUntil(
+        AppEventNames.scrollingIntoView,
+        false
+      );
+    }
+    return Promise.resolve();
+  }
+
+  private get bookLength(): number {
+    return this.activeBook()!.textParagraphs.length;
   }
 }

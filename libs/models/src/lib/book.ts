@@ -1,4 +1,3 @@
-import { filterTextParagraphs } from '@book-play/utils-browser';
 import { Author } from './author';
 import { ImageBase64Data } from './base64';
 
@@ -51,3 +50,11 @@ export class Book {
 }
 
 export type Genre = string;
+
+export function filterTextParagraphs(paragraphs: string[]): string[] {
+  return paragraphs.filter((item) => isTextParagraph(item));
+}
+
+export function isTextParagraph(paragraph: string): boolean {
+  return !paragraph.startsWith('{');
+}

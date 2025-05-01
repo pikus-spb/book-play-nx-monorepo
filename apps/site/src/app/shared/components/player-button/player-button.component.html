@@ -4,7 +4,7 @@
   matTooltip="Играть"
   matTooltipPosition="below"
   matTooltipShowDelay="1500"
-  [disabled]="(autoPlay.paused$ | async) === false"
+  [disabled]="(autoPlayService.stopped$ | async) === false"
   (click)="click($event, true)"
 >
   <mat-icon>play_arrow</mat-icon>
@@ -15,7 +15,7 @@
   matTooltip="Пауза"
   matTooltipPosition="below"
   matTooltipShowDelay="1500"
-  [disabled]="autoPlay.paused$ | async"
+  [disabled]="autoPlayService.stopped$ | async"
   (click)="click($event, false)"
 >
   <mat-icon>pause</mat-icon>

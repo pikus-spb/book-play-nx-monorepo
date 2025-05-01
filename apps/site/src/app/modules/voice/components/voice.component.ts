@@ -3,17 +3,18 @@ import {
   AfterViewInit,
   ChangeDetectionStrategy,
   Component,
+  DestroyRef,
   ElementRef,
   inject,
   ViewChild,
   ViewEncapsulation,
 } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatButton } from '@angular/material/button';
 import { ScrollbarDirective } from '@book-play/ui';
 import { blobToBase64 } from '@book-play/utils-browser';
 import { Store } from '@ngrx/store';
 import {
-  async,
   BehaviorSubject,
   distinctUntilChanged,
   firstValueFrom,
@@ -45,6 +46,7 @@ export class VoiceComponent implements AfterViewInit {
   public valid$: Subject<boolean> = new BehaviorSubject(false);
   private store = inject(Store);
   private speechService = inject(TtsApiService);
+  private destroyRef = inject(DestroyRef);
 
   private addAudioElement(base64Data: string, text: string): void {
     const audio = document.createElement('audio');
@@ -84,10 +86,9 @@ export class VoiceComponent implements AfterViewInit {
           value = value.trim();
           this.text = value;
           this.valid$.next(value.length > 0);
-        })
+        }),
+        takeUntilDestroyed(this.destroyRef)
       )
       .subscribe();
   }
-
-  protected readonly async = async;
 }
