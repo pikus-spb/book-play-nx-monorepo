@@ -1,22 +1,25 @@
 import { Injectable, OnDestroy } from '@angular/core';
-// import { EqualizerService } from 'services';
-import { firstValueFrom, fromEvent, merge, Subject } from 'rxjs';
+import {
+  BehaviorSubject,
+  filter,
+  firstValueFrom,
+  fromEvent,
+  merge,
+  Subject,
+  take,
+  takeUntil,
+} from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class DomAudioHelperService implements OnDestroy {
   private audio!: HTMLAudioElement;
-  private destroyed$: Subject<void> = new Subject<void>();
-  private _ended$: Subject<boolean> = new Subject<boolean>();
-  private _stopped = true;
-
-  public get paused(): boolean {
-    return this.audio.paused;
-  }
+  private destroyed$ = new Subject<void>();
+  public stopped$ = new BehaviorSubject<boolean>(false);
 
   public get stopped(): boolean {
-    return this._stopped;
+    return this.stopped$.value;
   }
 
   constructor() {
@@ -38,25 +41,23 @@ export class DomAudioHelperService implements OnDestroy {
   }
 
   public async play(): Promise<boolean | Event> {
-    const reallyEnded$ = fromEvent(this.audio, 'ended');
-
-    // if (!this.equalizer.applied) {
-    //   this.equalizer.equalize(this.audio);
-    // }
+    const voiceAudioEnded = fromEvent(this.audio, 'ended').pipe(
+      take(1),
+      takeUntil(this.destroyed$)
+    );
 
     await this.audio.play();
-    this._stopped = false;
-    return await firstValueFrom(merge(this._ended$, reallyEnded$));
+
+    this.stopped$.next(false);
+
+    return await firstValueFrom(
+      merge(this.stopped$.pipe(filter((value) => value)), voiceAudioEnded)
+    );
   }
 
   public stop() {
     this.audio.pause();
-    this._ended$.next(false);
-    this._stopped = true;
-  }
-
-  public pause(): void {
-    this.audio.pause();
+    this.stopped$.next(true);
   }
 
   ngOnDestroy() {

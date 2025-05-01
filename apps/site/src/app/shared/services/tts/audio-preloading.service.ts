@@ -20,7 +20,7 @@ export class AudioPreloadingService {
   private activeBook = this.store.selectSignal(activeBookSelector);
   private audioCacheHelperService = inject(VoiceAudioHelperService);
 
-  private paragraphToSpeech(index: number): Observable<string> {
+  private loadParagraphVoiceAudio(index: number): Observable<string> {
     const text = this.activeBook()!.textParagraphs[index];
 
     this.store.dispatch(voiceAudioLoadAction({ text }));
@@ -51,11 +51,9 @@ export class AudioPreloadingService {
           : textParagraphs?.length - 1;
 
       for (let i = startIndex; i <= endIndex; i++) {
-        const savedAudio = await this.audioCacheHelperService.getAudioPromise(
-          i
-        );
+        const savedAudio = await this.audioCacheHelperService.getAudio(i);
         if (!savedAudio) {
-          await firstValueFrom(this.paragraphToSpeech(i));
+          await firstValueFrom(this.loadParagraphVoiceAudio(i));
         }
       }
     }

@@ -27,7 +27,7 @@ import { BookCanvasComponent } from '../book-canvas/book-canvas.component';
   imports: [BookCanvasComponent],
 })
 export class PlayerComponent implements AfterViewInit {
-  private autoPlay = inject(AutoPlayService);
+  private autoPlayService = inject(AutoPlayService);
   private route = inject(ActivatedRoute);
   private routerHelperService = inject(RouterHelperService);
   private store = inject(Store);
@@ -53,7 +53,7 @@ export class PlayerComponent implements AfterViewInit {
   }
 
   public startPlayParagraph(index: number): void {
-    this.autoPlay.stop();
-    this.autoPlay.start(index);
+    this.autoPlayService.stop();
+    this.autoPlayService.start(index);
   }
 }

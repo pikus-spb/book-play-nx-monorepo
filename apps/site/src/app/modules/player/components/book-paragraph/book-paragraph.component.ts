@@ -14,8 +14,7 @@ import {
   BOOK_IMAGE_HEIGHT,
   PARAGRAPH_CLASS_PREFIX,
 } from '@book-play/constants';
-import { ImageBase64Data } from '@book-play/models';
-import { isTextParagraph } from '@book-play/utils-browser';
+import { ImageBase64Data, isTextParagraph } from '@book-play/models';
 import { CursorPositionService } from '../../../../shared/services/player/cursor-position.service';
 
 @Component({

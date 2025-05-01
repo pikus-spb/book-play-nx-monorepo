@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { isTextParagraph } from '@book-play/utils-browser';
+import { isTextParagraph } from '@book-play/models';
 
 @Injectable({
   providedIn: 'root',
