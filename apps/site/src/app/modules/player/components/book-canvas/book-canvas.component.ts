@@ -57,7 +57,7 @@ export class BookCanvasComponent implements OnDestroy {
   get book(): Signal<Book | null> {
     return this._book;
   }
-  @Output() paragraphClick: EventEmitter<number> = new EventEmitter<number>();
+  @Output() paragraphClick = new EventEmitter<number>();
   @ViewChild('scrollViewport') viewport!: CdkVirtualScrollViewport;
 
   public textIndexMapperService = inject(TextIndexMapperService);

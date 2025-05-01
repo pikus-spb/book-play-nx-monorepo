@@ -6,7 +6,6 @@
   "main": "./src/index.js",
   "types": "./src/index.d.ts",
   "dependencies": {
-    "tslib": "^2.3.0",
-    "@book-play/utils-browser": "0.0.1"
+    "tslib": "^2.3.0"
   }
 }

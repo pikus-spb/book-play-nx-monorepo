@@ -13,7 +13,7 @@ export class VoiceAudioHelperService {
   private activeBook = this.store.selectSignal(activeBookSelector);
   private cursorService = inject(CursorPositionService);
 
-  public getAudioPromise(idx?: number): Promise<string> {
+  public getAudio(idx?: number): Promise<string> {
     return firstValueFrom(
       this.store.select(voiceAudioRecordSelector, {
         text: this.activeBook()!.textParagraphs[

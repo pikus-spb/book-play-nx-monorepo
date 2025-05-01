@@ -18,7 +18,7 @@ import { AutoPlayService } from '../../services/tts/auto-play.service';
   imports: [MatMiniFabButton, MatTooltip, MatIcon, AsyncPipe],
 })
 export class PlayerButtonComponent {
-  constructor(public autoPlay: AutoPlayService) {}
+  constructor(public autoPlayService: AutoPlayService) {}
 
   @HostListener('document:keydown.Space', ['$event'])
   public click(event: Event, start?: boolean) {
@@ -27,11 +27,11 @@ export class PlayerButtonComponent {
       if (!['input', 'textarea'].includes(node.nodeName.toLowerCase())) {
         event.preventDefault();
         if (start === undefined) {
-          this.autoPlay.toggle();
+          this.autoPlayService.toggle();
         } else if (start) {
-          this.autoPlay.start();
+          this.autoPlayService.start();
         } else {
-          this.autoPlay.stop();
+          this.autoPlayService.stop();
         }
       }
     }
