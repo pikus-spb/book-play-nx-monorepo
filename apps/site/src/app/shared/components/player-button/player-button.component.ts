@@ -20,19 +20,16 @@ import { AutoPlayService } from '../../services/tts/auto-play.service';
 export class PlayerButtonComponent {
   constructor(public autoPlayService: AutoPlayService) {}
 
-  @HostListener('document:keydown.Space', ['$event'])
-  public click(event: Event, start?: boolean) {
+  @HostListener('document:keydown.space', ['$event'])
+  public click(event: Event, forceStart?: boolean) {
     const node = event.target as HTMLElement;
     if (node) {
-      if (!['input', 'textarea'].includes(node.nodeName.toLowerCase())) {
-        event.preventDefault();
-        if (start === undefined) {
-          this.autoPlayService.toggle();
-        } else if (start) {
-          this.autoPlayService.start();
-        } else {
-          this.autoPlayService.stop();
-        }
+      if (forceStart === undefined) {
+        this.autoPlayService.toggle();
+      } else if (forceStart) {
+        this.autoPlayService.start();
+      } else {
+        this.autoPlayService.stop();
       }
     }
   }

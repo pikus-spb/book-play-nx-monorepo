@@ -1,6 +1,5 @@
 @if (isTextParagraph(text)) {
 <p
-  tabindex="0"
   [ngClass]="PARAGRAPH_CLASS_PREFIX + index()"
   [class.active]="isActive()"
   (click)="activated.emit(index())"
