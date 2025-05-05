@@ -46,7 +46,11 @@ expressApp.post(
 
     let mp3Data = null;
     try {
-      if ([Voices.Ermil, Voices.Jane].includes(params.voice)) {
+      if (
+        [Voices.Ermil, Voices.Jane, Voices.Omazh, Voices.Zahar].includes(
+          params.voice
+        )
+      ) {
         mp3Data = await new YandexTtsApp().runTts(params);
       }
       if ([Voices.Dmitry, Voices.Svetlana].includes(params.voice)) {

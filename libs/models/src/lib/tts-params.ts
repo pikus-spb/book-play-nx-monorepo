@@ -3,6 +3,8 @@ export enum Voices {
   Dmitry = 'ru-RU-DmitryNeural',
   Ermil = 'ermil',
   Jane = 'jane',
+  Zahar = 'zahar',
+  Omazh = 'omazh',
 }
 
 export interface TtsParams {

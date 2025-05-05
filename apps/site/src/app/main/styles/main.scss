@@ -1,35 +1,92 @@
 @use 'vars' as *;
 @use 'sass:color' as color;
+@use '@angular/material' as mat;
 
-:root {
-  color-scheme: dark;
+$theme: mat.define-theme(
+  (
+    typography: (
+      plain-family: Roboto,
+      brand-family: Roboto,
+      bold-weight: 900,
+      medium-weight: 400,
+      regular-weight: 400,
+    ),
+    density: (
+      scale: 0,
+    ),
+  )
+);
+$light-theme: mat.define-theme(
+  (
+    color: (
+      theme-type: light,
+      primary: mat.$azure-palette,
+    ),
+  )
+);
+$dark-theme: mat.define-theme(
+  (
+    color: (
+      theme-type: dark,
+      primary: mat.$azure-palette,
+    ),
+  )
+);
+$typography-config: mat.m2-define-typography-config(
+  $font-family: 'Roboto, "Helvetica Neue", sans-serif',
+  $body-1: mat.m2-define-typography-level(14px, 20px, 400),
+);
+body {
+  @include mat.all-component-themes($theme);
+  @include mat.typography-hierarchy($typography-config);
+}
+body.light {
+  @include mat.all-component-colors($light-theme);
+}
+
+body.dark {
+  @include mat.all-component-colors($dark-theme);
 }
 
 html,
 body {
+  @include mat.core();
+  background: var(--mat-sys-surface);
+  color: var(--mat-sys-on-surface);
   margin: 0;
   width: 100%;
   height: 100%;
 }
 
 html {
-  color: $default-color;
-
   a:not(.underline, .mdc-list-item) {
-    text-decoration: none;
+    color: var(
+      --mdc-list-list-item-label-text-color,
+      var(--mat-sys-on-surface)
+    );
     font-weight: normal;
-    color: $default-color !important;
-
-    &:hover {
-      text-decoration: underline;
-    }
   }
 
-  mat-chip a {
-    padding: 0 $default-padding;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
+  mat-chip {
+    .mdc-evolution-chip__cell {
+      display: flex;
+      width: 100%;
+
+      .mdc-evolution-chip__action {
+        width: calc(100% - $default-padding) !important;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        a {
+          display: inherit;
+          width: inherit;
+          overflow: hidden !important;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+        }
+      }
+    }
   }
 
   * {
