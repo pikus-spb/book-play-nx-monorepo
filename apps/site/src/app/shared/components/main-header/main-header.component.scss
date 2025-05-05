@@ -26,3 +26,10 @@
     }
   }
 }
+
+body.light :host img {
+  content: url('/assets/images/book-play.ru.light.png');
+}
+body.dark :host img {
+  content: url('/assets/images/book-play.ru.png');
+}

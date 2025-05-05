@@ -60,7 +60,6 @@
           }
         ],
         "styles": [
-          "@angular/material/prebuilt-themes/pink-bluegrey.css",
           "perfect-scrollbar/css/perfect-scrollbar.css",
           "apps/site/src/app/main/styles/main.scss"
         ]

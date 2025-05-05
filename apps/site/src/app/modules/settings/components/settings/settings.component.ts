@@ -81,7 +81,11 @@ export class SettingsComponent {
   }
 
   private updateDisabledState(settings: VoiceSettings): void {
-    if ([Voices.Jane, Voices.Ermil].includes(settings.voice)) {
+    if (
+      [Voices.Jane, Voices.Ermil, Voices.Zahar, Voices.Omazh].includes(
+        settings.voice
+      )
+    ) {
       this.form.controls['pitch'].disable();
     } else {
       this.form.controls['pitch'].enable();
