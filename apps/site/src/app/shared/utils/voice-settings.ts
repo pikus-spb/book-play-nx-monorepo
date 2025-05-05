@@ -12,7 +12,7 @@ export function storeVoiceSettings({
   rate,
   pitch,
 }: VoiceSettings): void {
-  localStorage.setItem('voice', voice);
-  localStorage.setItem('rate', rate);
-  localStorage.setItem('pitch', pitch);
+  localStorage.setItem('voice', voice || DefaultVoiceSettings.voice);
+  localStorage.setItem('rate', rate || DefaultVoiceSettings.rate);
+  localStorage.setItem('pitch', pitch || DefaultVoiceSettings.pitch);
 }
