@@ -1,12 +1,13 @@
 import { TtsParams } from '@book-play/models';
+import { Blob } from 'buffer';
 import { spawn } from 'child_process';
 import fs from 'fs';
 
 const TMP_FILE_EXTENSION = '.tmp.mp3';
 const MP3_FILE_EXTENSION = '.mp3';
 
-export default class BooksAPIApp {
-  private normalizeParam(param: string): string {
+export default class EdgeTtsApp {
+  private normalizeEdgeParam(param: string): string {
     if (param === '0') {
       return null;
     }
@@ -16,21 +17,20 @@ export default class BooksAPIApp {
     return `${param}`;
   }
 
-  private normalizeParams(params: TtsParams) {
-    let { text, pitch, rate, voice } = params;
+  private normalizeEdgeParams(params: TtsParams): TtsParams {
+    let { text, pitch, rate } = params;
 
     text = text.replace(/([^.]+)\.$/, '$1');
-    pitch = this.normalizeParam(pitch);
-    rate = this.normalizeParam(rate);
-    voice = voice === 'female' ? 'ru-RU-SvetlanaNeural' : 'ru-RU-DmitryNeural';
+    pitch = this.normalizeEdgeParam(pitch);
+    rate = this.normalizeEdgeParam(rate);
 
-    return { text, rate, pitch, voice };
+    return { text, rate, pitch, voice: params.voice };
   }
 
-  runTts(params: TtsParams, fileName: string): Promise<string> {
+  public runTts(params: TtsParams): Promise<Blob> {
     return new Promise((resolve) => {
-      const { text, rate, pitch, voice } = this.normalizeParams(params);
-
+      const fileName = __dirname + '/cache/part' + Date.now();
+      const { text, rate, pitch, voice } = this.normalizeEdgeParams(params);
       const args = [];
 
       args.push(`--text="${text}"`);
@@ -62,22 +62,18 @@ export default class BooksAPIApp {
         ];
         const removeSilenceProc = spawn('sox', args, { detached: true });
         removeSilenceProc.on('close', () => {
-          setTimeout(() => resolve(fileName + MP3_FILE_EXTENSION), 200);
+          setTimeout(() => {
+            fs.unlinkSync(fileName + TMP_FILE_EXTENSION);
+
+            const buffer = fs.readFileSync(fileName + MP3_FILE_EXTENSION);
+            const blob = new Blob([buffer]);
+
+            resolve(blob);
+
+            fs.unlinkSync(fileName + MP3_FILE_EXTENSION);
+          }, 200);
         });
       });
     });
-  }
-
-  async tts(params: TtsParams): Promise<string> {
-    const fileNamePrefix = __dirname + '/cache/part' + Date.now();
-    try {
-      return this.runTts(params, fileNamePrefix).then((filename) => {
-        fs.unlinkSync(fileNamePrefix + TMP_FILE_EXTENSION);
-        return filename;
-      });
-    } catch (e) {
-      console.error(e);
-      return '';
-    }
   }
 }

@@ -1,15 +1,17 @@
+import { Voices } from './tts-params';
+
 export interface Settings {
   voice: VoiceSettings;
 }
 
 export interface VoiceSettings {
-  voice: string;
+  voice: Voices;
   rate: string;
   pitch: string;
 }
 
 export const DefaultVoiceSettings: VoiceSettings = {
-  voice: 'male',
+  voice: Voices.Dmitry,
   rate: '0',
   pitch: '0',
 };
