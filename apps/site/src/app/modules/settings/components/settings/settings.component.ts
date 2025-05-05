@@ -1,11 +1,10 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  effect,
+  DestroyRef,
   inject,
-  Signal,
 } from '@angular/core';
-import { toSignal } from '@angular/core/rxjs-interop';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatSlider, MatSliderThumb } from '@angular/material/slider';
@@ -16,6 +15,7 @@ import {
 import { Voices, VoiceSettings } from '@book-play/models';
 import { ScrollbarDirective } from '@book-play/ui';
 import { Store } from '@ngrx/store';
+import { distinctUntilChanged, Observable, tap } from 'rxjs';
 import { voiceSettingsUpdateAction } from '../../../../shared/store/voice-settings/voice-settings.actions';
 
 import { getVoiceSettings } from '../../../../shared/utils/voice-settings';
@@ -38,11 +38,13 @@ export class SettingsComponent {
 
   private fb = inject(FormBuilder);
   private store = inject(Store);
-  private valueChanges!: Signal<VoiceSettings>;
+  private valueChanges$!: Observable<VoiceSettings>;
+  private destroyRef = inject(DestroyRef);
 
   constructor() {
     this.initializeValues();
     this.addEventListeners();
+    this.updateDisabledState(this.form.value);
   }
 
   protected mouseWheel(fieldName: string, event: WheelEvent): void {
@@ -58,16 +60,32 @@ export class SettingsComponent {
       rate: [rate],
       pitch: [pitch],
     });
-    this.valueChanges = toSignal(this.form.valueChanges);
+    this.valueChanges$ = this.form.valueChanges;
   }
 
   private addEventListeners(): void {
-    effect(() => {
-      const settings = this.valueChanges();
-      if (settings) {
-        this.store.dispatch(voiceSettingsUpdateAction({ settings }));
-      }
-    });
+    this.valueChanges$
+      .pipe(
+        distinctUntilChanged(
+          (previous: VoiceSettings, current: VoiceSettings) => {
+            return JSON.stringify(previous) === JSON.stringify(current);
+          }
+        ),
+        tap((settings) => this.updateDisabledState(settings)),
+        tap((settings) => {
+          this.store.dispatch(voiceSettingsUpdateAction({ settings }));
+        }),
+        takeUntilDestroyed(this.destroyRef)
+      )
+      .subscribe();
+  }
+
+  private updateDisabledState(settings: VoiceSettings): void {
+    if ([Voices.Jane, Voices.Ermil].includes(settings.voice)) {
+      this.form.controls['pitch'].disable();
+    } else {
+      this.form.controls['pitch'].enable();
+    }
   }
 
   protected readonly SETTINGS_VOICE_RATE_DELTA = SETTINGS_VOICE_RATE_DELTA;
