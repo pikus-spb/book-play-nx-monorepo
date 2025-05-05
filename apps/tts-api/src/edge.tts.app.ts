@@ -70,10 +70,8 @@ export default class EdgeTtsApp {
 
             resolve(blob);
 
-            setTimeout(() => {
-              fs.unlinkSync(fileNameTmp);
-              fs.unlinkSync(fileNameFinal);
-            }, 500);
+            fs.unlinkSync(fileNameTmp);
+            fs.unlinkSync(fileNameFinal);
           }, 100);
         });
       });
