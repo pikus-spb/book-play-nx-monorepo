@@ -25,7 +25,6 @@ import { Book } from '@book-play/models';
 import {
   HeightCalculateComponent,
   HeightDelta,
-  LinkComponent,
   ScrollbarDirective,
 } from '@book-play/ui';
 import { showDefaultCoverImage } from '@book-play/utils-browser';
@@ -46,7 +45,6 @@ import { BookParagraphComponent } from '../book-paragraph/book-paragraph.compone
     BookParagraphComponent,
     HeightCalculateComponent,
     ScrollbarDirective,
-    LinkComponent,
   ],
 })
 export class BookCanvasComponent implements OnDestroy {

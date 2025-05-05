@@ -6,6 +6,7 @@ import {
   HostBinding,
   inject,
   OnDestroy,
+  Renderer2,
 } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { MatProgressBar } from '@angular/material/progress-bar';
@@ -50,18 +51,29 @@ import { selectLoading } from '../../../shared/store/loading/loading.selector';
 })
 export class MainComponent implements AfterViewInit, OnDestroy {
   private store = inject(Store);
+  private renderer = inject(Renderer2);
   protected loading = toSignal(this.store.select(selectLoading));
   private el = inject(ElementRef);
   private noSleep!: NoSleep;
   private noSleepSubscription!: Subscription;
 
   public ngAfterViewInit() {
+    this.detectColorScheme();
     this.addListeners();
   }
 
   @HostBinding('class.loading')
   get loadingState() {
     return this.loading();
+  }
+
+  private detectColorScheme(): void {
+    const isDarkMode = window.matchMedia(
+      '(prefers-color-scheme: dark)'
+    ).matches;
+
+    this.renderer.removeClass(document.body, isDarkMode ? 'light' : 'dark');
+    this.renderer.addClass(document.body, isDarkMode ? 'dark' : 'light');
   }
 
   private addListeners(): void {
@@ -76,6 +88,12 @@ export class MainComponent implements AfterViewInit, OnDestroy {
       this.noSleep.enable();
       this.noSleepSubscription.unsubscribe();
     });
+
+    window
+      .matchMedia('(prefers-color-scheme: dark)')
+      .addEventListener('change', () => {
+        this.detectColorScheme();
+      });
   }
 
   public ngOnDestroy() {

@@ -1,37 +1,15 @@
 <div #container>
   @if (bookData !== null) {
   <div class="scrollable-canvas" libPerfectScrollbar cdkVirtualScrollingElement>
-    <h1>
-      <lib-link
-        [enabled]="bookData.authorId"
-        [libRouterLink]="['/author', bookData.authorId]"
-        [title]="'Посмотреть описание автора'"
-      >
-        {{ bookData.author.full }}
-      </lib-link>
-      -
-      <lib-link
-        [enabled]="bookData.id"
-        [libRouterLink]="['/book', bookData.id]"
-        [title]="'Посмотреть описание книги'"
-      >
-        {{ bookData.name }}
-      </lib-link>
-    </h1>
+    <h1>{{ bookData.author.full }} - {{ bookData.name }}</h1>
     <section class="title-picture-container">
-      <lib-link
-        [enabled]="bookData.id"
-        [libRouterLink]="['/book', bookData.id]"
-        [title]="'Посмотреть описание книги'"
-      >
-        <img
-          [src]="coverSrc()"
-          [width]="BOOK_IMAGE_WIDTH"
-          [height]="BOOK_IMAGE_HEIGHT"
-          alt="Обложка книги"
-          (error)="showDefaultCoverImage($event)"
-        />
-      </lib-link>
+      <img
+        [src]="coverSrc()"
+        [width]="BOOK_IMAGE_WIDTH"
+        [height]="BOOK_IMAGE_HEIGHT"
+        alt="Обложка книги"
+        (error)="showDefaultCoverImage($event)"
+      />
     </section>
 
     <cdk-virtual-scroll-viewport
