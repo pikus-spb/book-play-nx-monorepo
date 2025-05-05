@@ -29,7 +29,9 @@ export default class EdgeTtsApp {
 
   public runTts(params: TtsParams): Promise<Blob> {
     return new Promise((resolve) => {
-      const fileName = __dirname + '/cache/part' + Date.now();
+      const fileName = __dirname + '/cache/audio-' + Date.now();
+      const fileNameTmp = fileName + TMP_FILE_EXTENSION;
+      const fileNameFinal = fileName + MP3_FILE_EXTENSION;
       const { text, rate, pitch, voice } = this.normalizeEdgeParams(params);
       const args = [];
 
@@ -41,16 +43,16 @@ export default class EdgeTtsApp {
       if (rate !== null) {
         args.push(`--rate=${rate}%`);
       }
-      args.push(`--write-media=${fileName + TMP_FILE_EXTENSION}`);
+      args.push(`--write-media=${fileNameTmp}`);
 
       const ttsProc = spawn('edge-tts', args, { detached: true });
 
       ttsProc.on('close', () => {
         const args = [
-          fileName + TMP_FILE_EXTENSION,
+          fileNameTmp,
           '-C',
           '48',
-          fileName + MP3_FILE_EXTENSION,
+          fileNameFinal,
           'silence',
           '-l',
           '1',
@@ -63,15 +65,16 @@ export default class EdgeTtsApp {
         const removeSilenceProc = spawn('sox', args, { detached: true });
         removeSilenceProc.on('close', () => {
           setTimeout(() => {
-            fs.unlinkSync(fileName + TMP_FILE_EXTENSION);
-
-            const buffer = fs.readFileSync(fileName + MP3_FILE_EXTENSION);
+            const buffer = fs.readFileSync(fileNameFinal);
             const blob = new Blob([buffer]);
 
             resolve(blob);
 
-            fs.unlinkSync(fileName + MP3_FILE_EXTENSION);
-          }, 200);
+            setTimeout(() => {
+              fs.unlinkSync(fileNameTmp);
+              fs.unlinkSync(fileNameFinal);
+            }, 500);
+          }, 100);
         });
       });
     });
