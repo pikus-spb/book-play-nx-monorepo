@@ -24,6 +24,6 @@ export default class YandexTtsApp {
   }
 
   private normalizeSpeed(speed: string): number {
-    return Number(speed) * 0.05 + 1;
+    return Number(speed) * 0.02 + 1;
   }
 }
