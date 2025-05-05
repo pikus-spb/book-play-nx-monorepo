@@ -18,7 +18,18 @@ export const DEFAULT_TITLE_CONTEXT = 'бесплатно слушать книг
 export const DEFAULT_TITLE = [DEFAULT_TITLE_PREFIX, DEFAULT_EMPTY_CONTEXT].join(
   ' - '
 );
-export const SETTINGS_VOICE_RATE_DELTA = 5;
-export const SETTINGS_VOICE_PITCH_DELTA = 12;
+export const SETTINGS_VOICE_RATE_DELTA = 10;
+export const SETTINGS_VOICE_PITCH_DELTA = 15;
 // BOOKS CRAWLER
 export const MAX_IMAGE_DATA_LENGTH = 1000000;
+// TTS API
+export const YANDEX_TTS_API_URL = 'https://tts.voicetech.yandex.net/generate';
+export const YANDEX_TTS_API_DEFAULT_OPTIONS = Object.freeze({
+  key: '069b6659-984b-4c5f-880e-aaedcfd84102',
+  format: 'mp3',
+  lang: 'ru-RU',
+  speed: '1.0',
+  emotion: 'neutral',
+  quality: 'hi',
+  speaker: 'ermil',
+});

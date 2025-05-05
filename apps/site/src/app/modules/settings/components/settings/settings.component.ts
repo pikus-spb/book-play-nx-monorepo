@@ -13,7 +13,7 @@ import {
   SETTINGS_VOICE_PITCH_DELTA,
   SETTINGS_VOICE_RATE_DELTA,
 } from '@book-play/constants';
-import { VoiceSettings } from '@book-play/models';
+import { Voices, VoiceSettings } from '@book-play/models';
 import { ScrollbarDirective } from '@book-play/ui';
 import { Store } from '@ngrx/store';
 import { voiceSettingsUpdateAction } from '../../../../shared/store/voice-settings/voice-settings.actions';
@@ -72,4 +72,5 @@ export class SettingsComponent {
 
   protected readonly SETTINGS_VOICE_RATE_DELTA = SETTINGS_VOICE_RATE_DELTA;
   protected readonly SETTINGS_VOICE_PITCH_DELTA = SETTINGS_VOICE_PITCH_DELTA;
+  protected readonly Voices = Voices;
 }

@@ -1,4 +1,5 @@
 import { TTS_API_PORT, TTS_API_PORT_SECURE } from '@book-play/constants';
+import { TtsParams, Voices } from '@book-play/models';
 import bodyParser from 'body-parser';
 import cors from 'cors';
 import { environment } from 'environments/environment.ts';
@@ -6,7 +7,8 @@ import express from 'express';
 import fs from 'fs';
 import http from 'http';
 import * as https from 'node:https';
-import BooksAPIApp from './app';
+import EdgeTtsApp from './edge.tts.app.ts';
+import YandexTtsApp from './yandex.tts.app.ts';
 
 const privateKey = fs.readFileSync(environment.HTTPS_PRIVATE_KEY, 'utf8');
 const certificate = fs.readFileSync(environment.HTTPS_CERTIFICATE, 'utf8');
@@ -28,8 +30,6 @@ expressApp.use(bodyParser.json());
 const httpServer = http.createServer(expressApp);
 const httpsServer = https.createServer(credentials, expressApp);
 
-const app = new BooksAPIApp();
-
 httpServer.listen(TTS_API_PORT, () => {
   console.log(`Web server is listening on port ${TTS_API_PORT}`);
 });
@@ -41,22 +41,32 @@ httpsServer.listen(TTS_API_PORT_SECURE, () => {
 expressApp.post(
   '/tts',
   cors(corsOptionsDelegate),
-  (req: express.Request, res: express.Response) => {
-    app.tts(req.body).then((filePath) => {
-      const stat = fs.statSync(filePath);
+  async (req: express.Request, res: express.Response) => {
+    const params = req.body as TtsParams;
 
-      res.writeHead(200, {
-        'Content-Type': 'audio/mpeg',
-        'Content-Length': stat.size,
+    let mp3Data = null;
+    try {
+      if ([Voices.Ermil, Voices.Jane].includes(params.voice)) {
+        mp3Data = await new YandexTtsApp().runTts(params);
+      }
+      if ([Voices.Dmitry, Voices.Svetlana].includes(params.voice)) {
+        mp3Data = await new EdgeTtsApp().runTts(params);
+      }
+    } catch (e) {
+      console.error(e);
+      res.status(500).send({
+        message: String(e),
       });
+      return;
+    }
 
-      const readStream = fs.createReadStream(filePath);
+    if (mp3Data !== null) {
+      res.setHeader('Content-Type', 'audio/mpeg');
+      res.setHeader('Content-Length', mp3Data.size);
 
-      readStream.pipe(res);
-
-      setTimeout(() => {
-        fs.unlinkSync(filePath);
-      }, 1000);
-    });
+      mp3Data.arrayBuffer().then((buffer) => {
+        res.end(Buffer.from(buffer));
+      });
+    }
   }
 );

@@ -4,8 +4,12 @@
     <h3>Голос</h3>
     <section>
       <mat-button-toggle-group formControlName="voice" aria-label="Тип голоса">
-        <mat-button-toggle [value]="'female'">Женский</mat-button-toggle>
-        <mat-button-toggle [value]="'male'">Мужской</mat-button-toggle>
+        <mat-button-toggle [value]="Voices.Dmitry">Дмитрий</mat-button-toggle>
+        <mat-button-toggle [value]="Voices.Svetlana"
+          >Светлана</mat-button-toggle
+        >
+        <mat-button-toggle [value]="Voices.Ermil">Ермил</mat-button-toggle>
+        <mat-button-toggle [value]="Voices.Jane">Жанна</mat-button-toggle>
       </mat-button-toggle-group>
     </section>
 
