@@ -35,7 +35,8 @@
     }
 
     ::ng-deep {
-      .mdc-slider:hover .mdc-slider__value-indicator {
+      .mdc-slider:not(.mdc-slider--disabled):hover
+        .mdc-slider__value-indicator {
         transform: scale(1);
       }
 
