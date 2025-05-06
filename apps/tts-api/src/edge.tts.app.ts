@@ -2,9 +2,7 @@ import { TtsParams } from '@book-play/models';
 import { Blob } from 'buffer';
 import { spawn } from 'child_process';
 import fs from 'fs';
-
-const TMP_FILE_EXTENSION = '.tmp.mp3';
-const MP3_FILE_EXTENSION = '.mp3';
+import { MP3_FILE_EXTENSION, TMP_FILE_EXTENSION } from './main.ts';
 
 export default class EdgeTtsApp {
   private normalizeEdgeParam(param: string): string {
@@ -29,9 +27,9 @@ export default class EdgeTtsApp {
 
   public runTts(params: TtsParams): Promise<Blob> {
     return new Promise((resolve) => {
-      const fileName = __dirname + '/cache/audio-' + Date.now();
-      const fileNameTmp = fileName + TMP_FILE_EXTENSION;
-      const fileNameFinal = fileName + MP3_FILE_EXTENSION;
+      const randomName = __dirname + '/cache/audio-' + Date.now();
+      const fileNameTmp = randomName + TMP_FILE_EXTENSION;
+      const fileNameFinal = randomName + MP3_FILE_EXTENSION;
       const { text, rate, pitch, voice } = this.normalizeEdgeParams(params);
       const args = [];
 

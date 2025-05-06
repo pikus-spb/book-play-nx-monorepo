@@ -10,6 +10,9 @@ import * as https from 'node:https';
 import EdgeTtsApp from './edge.tts.app.ts';
 import YandexTtsApp from './yandex.tts.app.ts';
 
+export const TMP_FILE_EXTENSION = '.tmp.mp3';
+export const MP3_FILE_EXTENSION = '.mp3';
+
 const privateKey = fs.readFileSync(environment.HTTPS_PRIVATE_KEY, 'utf8');
 const certificate = fs.readFileSync(environment.HTTPS_CERTIFICATE, 'utf8');
 const credentials = { key: privateKey, cert: certificate };
