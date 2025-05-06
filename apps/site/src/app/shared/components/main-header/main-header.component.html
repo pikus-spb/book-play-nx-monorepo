@@ -2,12 +2,12 @@
   <button
     mat-fab
     extended
-    color="success"
     class="menu"
     matTooltip="Показать/спрятать главное меню"
     matTooltipPosition="below"
     matTooltipShowDelay="1500"
-    (click)="menuClick.emit()"
+    (click)="showMenu.emit()"
+    (mouseenter)="showMenu.emit()"
   >
     <mat-icon>menu</mat-icon>
     Меню
