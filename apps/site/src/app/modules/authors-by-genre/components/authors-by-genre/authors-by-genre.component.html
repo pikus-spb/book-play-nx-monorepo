@@ -1,12 +1,9 @@
 <div class="container">
-  <h1 loading [thenShow]="result">
+  <h5 loading [thenShow]="result">
     <span>Авторы, пишущие в жанре "{{ authorsGenre() || '' | genre }}"</span>
-    <input
-      (input)="inputFilter($event)"
-      placeholder="Поиск по имени автора..."
-    />
+    <input (input)="inputFilter($event)" placeholder="Поиск..." />
     <span #loading></span>
-  </h1>
+  </h5>
   <ng-template #result>
     @if (authors()) {
     <li-virtual-scroll

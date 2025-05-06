@@ -1,6 +1,6 @@
 <ng-container>
   <mat-toolbar>
-    <main-header (menuClick)="sidenav.toggle()"></main-header>
+    <main-header (showMenu)="sidenav.open()"></main-header>
     <book-title></book-title>
   </mat-toolbar>
   <mat-progress-bar
@@ -8,7 +8,12 @@
     [style.visibility]="loading() ? 'visible' : 'hidden'"
   ></mat-progress-bar>
   <mat-sidenav-container>
-    <mat-sidenav #sidenav mode="side" opened="true" libPerfectScrollbar>
+    <mat-sidenav
+      #sidenav
+      mode="over"
+      libPerfectScrollbar
+      (click)="sidenav.close()"
+    >
       <main-menu></main-menu>
       <copyright-owner></copyright-owner>
       <copyright></copyright>
