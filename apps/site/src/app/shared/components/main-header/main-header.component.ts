@@ -25,7 +25,7 @@ import { PlayerButtonComponent } from '../player-button/player-button.component'
   imports: [PlayerButtonComponent, MatIcon, MatFabButton, MatTooltip],
 })
 export class MainHeaderComponent {
-  @Output() menuClick = new EventEmitter<void>();
+  @Output() showMenu = new EventEmitter<void>();
   public showPlayerButton: WritableSignal<boolean> = signal(false);
   private store = inject(Store);
   private activeBook = this.store.selectSignal(activeBookSelector);

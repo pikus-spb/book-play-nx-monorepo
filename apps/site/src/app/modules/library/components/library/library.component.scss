@@ -13,7 +13,7 @@
     height: 100%;
     padding: 2 * $default-padding;
 
-    h1 {
+    h5 {
       display: flex;
       flex: 0 0;
       gap: 0;
@@ -23,7 +23,7 @@
       }
 
       input {
-        height: 100%;
+        font-size: 1em;
         max-width: 400px;
         margin-left: $default-padding;
         flex: 1;
