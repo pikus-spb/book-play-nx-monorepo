@@ -45,7 +45,7 @@ export default class YandexTtsApp {
           'equalizer=f=2000:width_type=h:width=2000:g=5,equalizer=f=12000:width_type=h:width=3000:g=10';
       } else if (voice == Voices.Ermil) {
         equalizer =
-          'equalizer=f=2000:width_type=h:width=2000:g=12,equalizer=f=12000:width_type=h:width=3000:g=-5,equalizer=f=80:width_type=h:width=150:g=-10';
+          'equalizer=f=2000:width_type=h:width=2000:g=14,equalizer=f=12000:width_type=h:width=3000:g=-3,equalizer=f=80:width_type=h:width=150:g=-10';
       }
       args.push(equalizer);
 
