@@ -7,68 +7,61 @@ import {
   saveContentsToZipFile,
 } from '@book-play/utils-node';
 import { environment } from 'environments/environment.ts';
-
-import fs from 'fs';
 import mysql, { PoolOptions } from 'mysql2';
-import path from 'path';
 import { saveToDataBase } from './db';
+import { deleteFiles, getFilesNames } from './files.ts';
+import { unzipFile } from './zip.ts';
 
-export function run() {
-  console.log('Start looking for books....');
-  getFilesNames(
-    __dirname + '/' + process.argv[2],
-    (err: Error, results: string[]) => {
-      if (err) {
-        throw err;
-      }
-      console.log(`Found ${results.length} files.`);
-      parseFiles(results).then(() => {
-        console.log('All done!');
-      });
+const workingDirectory = __dirname + '/' + process.argv[2];
+const pool = mysql.createPool(environment.DB_CONFIG as unknown as PoolOptions);
+const parser = new Fb2Parser();
+
+export async function run(): Promise<void> {
+  const zipFiles = await findZipFiles();
+  for (const zipFile of zipFiles) {
+    if (await unzipFile(zipFile, workingDirectory)) {
+      const fb2Files = await findFb2Files();
+      await parseFb2Files(fb2Files);
+      deleteFiles(fb2Files);
+      deleteFiles([zipFile]);
     }
-  );
+  }
+
+  pool.end();
+  console.log('All done!');
 }
 
-function getFilesNames(
-  dir: string,
-  done: (err: Error, results: string[]) => void
-) {
-  let results = [];
-  fs.readdir(dir, (err, list) => {
-    const next = () => {
-      let file = list[i++];
-      if (!file) return done(null, results);
-      file = path.resolve(dir, file);
-      fs.stat(file, (err, stat) => {
-        if (stat && stat.isDirectory()) {
-          getFilesNames(file, (err, res) => {
-            results = results.concat(res);
-            next();
-          });
-        } else {
-          if (file.endsWith('.fb2')) {
-            console.log('Found: ' + file + '...');
-            results.push(file);
-          }
-          next();
-        }
-      });
-    };
-
-    if (err) {
-      return done(err, []);
-    }
-    let i = 0;
-    next();
+export function findFb2Files(): Promise<string[]> {
+  console.log('Start parsing fb2 books....');
+  return new Promise((resolve, reject) => {
+    getFilesNames(workingDirectory, '.fb2', (err: Error, results: string[]) => {
+      if (err) {
+        console.error(err);
+        reject(err);
+        return;
+      }
+      console.log(`Found ${results.length} .fb2 files.`);
+      resolve(results);
+    });
   });
 }
 
-async function parseFiles(results: string[]) {
-  const pool = mysql.createPool(
-    environment.DB_CONFIG as unknown as PoolOptions
-  );
-  const parser = new Fb2Parser();
+export function findZipFiles(): Promise<string[]> {
+  console.log('Start looking for zips....');
+  return new Promise((resolve, reject) => {
+    getFilesNames(workingDirectory, '.zip', (err: Error, results: string[]) => {
+      if (err) {
+        console.error(err);
+        reject(err);
+        return;
+      }
+      console.log(`Found ${results.length} zip archives.`);
+      resolve(results);
+    });
+  });
+}
 
+async function parseFb2Files(results: string[]) {
   for (const file of results) {
     try {
       console.log('Working on ' + file + '...');
@@ -128,6 +121,4 @@ async function parseFiles(results: string[]) {
       console.error(e);
     }
   }
-
-  pool.end();
 }
