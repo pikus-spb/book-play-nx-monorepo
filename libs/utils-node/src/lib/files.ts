@@ -29,14 +29,14 @@ export function readFile(file: string, detectEncoding = true): Promise<string> {
   });
 }
 
-export function writeToFile(text: string, file: string): Promise<string> {
+export function writeToFile(text: string, file: string): Promise<boolean> {
   return new Promise((resolve, reject) => {
     fs.writeFile(file, text, (err: Error) => {
       if (err) {
         console.error(err);
         reject(err);
       } else {
-        resolve(file);
+        resolve(true);
       }
     });
   });

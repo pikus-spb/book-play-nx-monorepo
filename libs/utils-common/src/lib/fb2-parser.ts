@@ -121,7 +121,7 @@ export class Fb2Parser {
     );
   }
 
-  public load(text: string): CheerioAPI {
+  public loadCheeroApi(text: string): CheerioAPI {
     return load(text);
   }
 

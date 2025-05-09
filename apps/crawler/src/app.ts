@@ -1,7 +1,12 @@
-import { DB_CONFIG } from '@book-play/constants';
-import { UIBookToDBBook } from '@book-play/models';
+import { UIAuthorToDBAuthor, UIBookToDBBook } from '@book-play/models';
+import { searchAuthor } from '@book-play/scraper';
 import { containsLetters, Fb2Parser } from '@book-play/utils-common';
-import { readFile, writeToFile } from '@book-play/utils-node';
+import {
+  getJsonGzFileName,
+  readFile,
+  saveContentsToZipFile,
+} from '@book-play/utils-node';
+import { environment } from 'environments/environment.ts';
 
 import fs from 'fs';
 import mysql, { PoolOptions } from 'mysql2';
@@ -59,15 +64,18 @@ function getFilesNames(
 }
 
 async function parseFiles(results: string[]) {
-  const pool = mysql.createPool(DB_CONFIG as unknown as PoolOptions);
+  const pool = mysql.createPool(
+    environment.DB_CONFIG as unknown as PoolOptions
+  );
   const parser = new Fb2Parser();
 
   for (const file of results) {
     try {
+      console.log('Working on ' + file + '...');
       const text = await readFile(file);
-      const loaded = parser.load(text);
-      const lang = parser.parseLanguage(loaded);
-      const book = parser.parseBookFromLoaded(loaded);
+      const cheeroApi = parser.loadCheeroApi(text);
+      const lang = parser.parseLanguage(cheeroApi);
+      const book = parser.parseBookFromLoaded(cheeroApi);
       if (lang.toLowerCase() === 'ru') {
         if (
           [book.name, book.author.first, book.author.last].every((item) =>
@@ -76,22 +84,37 @@ async function parseFiles(results: string[]) {
           book.paragraphs.length > 0
         ) {
           const dbBook = UIBookToDBBook(book);
-          const insertedId = await saveToDataBase(pool, dbBook).catch((err) => {
-            console.error(err.message);
-          });
+          const dbAuthor = UIAuthorToDBAuthor(book.author);
+
+          const authorInfo = await searchAuthor(dbAuthor.first, dbAuthor.last);
+
+          if (authorInfo) {
+            dbAuthor.image = authorInfo.imageUrl || '';
+            dbAuthor.about = authorInfo.about || '';
+          }
+
+          const insertedId = await saveToDataBase(pool, dbBook, dbAuthor).catch(
+            (err) => {
+              console.error(err.message);
+            }
+          );
 
           if (insertedId) {
             console.log('Added to database: ' + book.name);
 
             dbBook.id = insertedId;
-            const fileName = await writeToFile(
-              JSON.stringify(dbBook),
-              __dirname + '/books-json/' + insertedId + '.json'
-            ).catch((err) => console.error(err.message));
+            const fileName = getJsonGzFileName(
+              environment.BOOKS_JSON_PATH + insertedId
+            );
 
-            if (fileName) {
-              console.log('Saved json file: ' + insertedId + '.json\n');
-            }
+            const paragraphs = JSON.stringify(dbBook.paragraphs);
+            saveContentsToZipFile(paragraphs, fileName);
+
+            console.log(
+              'Compressed json to gzip file: ' +
+                getJsonGzFileName(insertedId) +
+                '\n'
+            );
           }
         }
       } else {
