@@ -27,7 +27,7 @@ export async function searchAuthor(
     await page.goto(searchAuthorInfoUrl, { waitUntil: 'domcontentloaded' });
   } catch (e) {
     console.error(e);
-    return;
+    return Promise.reject(e);
   }
 
   const linkData = await page.evaluate(() => {
@@ -41,6 +41,7 @@ export async function searchAuthor(
       };
     }
   });
+
   let authorInfo;
 
   if (linkData) {

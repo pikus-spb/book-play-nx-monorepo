@@ -1,6 +1,6 @@
 import { DBAuthor, DBAuthorSummary, DBBook, Genre } from '@book-play/models';
+import { getJsonGzFileName, readZippedFile } from '@book-play/utils-node';
 import { environment } from 'environments/environment.ts';
-import fs from 'fs';
 import mysql, { PoolOptions } from 'mysql2';
 
 const pool = mysql.createPool(environment.DB_CONFIG as unknown as PoolOptions);
@@ -116,12 +116,17 @@ export default class BooksAPIApp {
   }
 
   async bookById(id: string): Promise<Partial<DBBook>> {
-    const book = await this.bookSummaryById(id);
-    book.paragraphs = JSON.parse(
-      fs.readFileSync(environment.BOOKS_JSON_PATH + id + '.json').toString()
-    ).paragraphs;
+    try {
+      const book = await this.bookSummaryById(id);
+      book.paragraphs = JSON.parse(
+        readZippedFile(getJsonGzFileName(environment.BOOKS_JSON_PATH + id))
+      );
 
-    return book;
+      return book;
+    } catch (err) {
+      console.error(err);
+      return Promise.reject(err);
+    }
   }
 
   bookSummaryById(id: string): Promise<Partial<DBBook>> {

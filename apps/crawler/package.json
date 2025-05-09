@@ -2,10 +2,10 @@
   "name": "@book-play/book-files-crawler",
   "version": "0.0.1",
   "dependencies": {
-    "@book-play/constants": "0.0.1",
     "@book-play/utils-common": "0.0.1",
     "@book-play/utils-node": "0.0.1",
     "@book-play/models": "0.0.1",
+    "@book-play/scraper": "0.0.1",
     "mysql2": "^3.12.0"
   }
 }
