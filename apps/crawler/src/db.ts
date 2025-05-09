@@ -12,11 +12,30 @@ export function saveToDataBase(
       'INSERT INTO authors (first, last, full, about, image)' +
         ' VALUES (?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE id=id',
       [author.first, author.last, author.full, author.about, author.image],
-      (err: Error, result: ResultSetHeader) => {
+      async (err: Error, result: ResultSetHeader) => {
         if (err) {
           reject(err);
         } else {
-          const authorId = result.insertId.toString();
+          let authorId = result.insertId;
+          if (authorId === 0) {
+            authorId = await new Promise((resolve, reject) => {
+              pool.query(
+                `SELECT id FROM authors WHERE first = '${author.first}' AND last = '${author.last}' LIMIT 1`,
+                (err: Error, result: { id: number }[]) => {
+                  if (err) {
+                    console.error(err);
+                    reject(err);
+                  } else if (result.length === 0) {
+                    console.error('Author not found ' + author.full);
+                    reject('Author not found');
+                  } else {
+                    resolve(Number(result[0].id));
+                  }
+                }
+              );
+            });
+          }
+
           pool.query(
             'INSERT INTO books (authorId, name, annotation, genres, date, full, cover)' +
               ' VALUES (?, ?, ?, ?, ?, ?, ?)',
