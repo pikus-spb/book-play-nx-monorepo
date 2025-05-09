@@ -1,21 +1,21 @@
-import { Author } from './author';
+import { Author, DBAuthor } from './author';
 import { ImageBase64Data } from './base64';
 import { Book, DBBook } from './book';
 
-export function DBBookToUIBook(input: Partial<DBBook>): Book {
+export function DBBookToUIBook(book: Partial<DBBook>): Book {
   const data = {
-    id: input.id,
-    authorId: input.authorId,
-    name: input.name,
-    annotation: (input.annotation || '').replace('\n', '<br><br>'),
-    genres: JSON.parse(input.genres || '[]'),
-    date: input.date,
-    paragraphs: JSON.parse(input.paragraphs || '[]'),
-    cover: ImageBase64Data.fromBase64String(input.cover || ''),
+    id: book.id,
+    authorId: book.authorId,
+    name: book.name,
+    annotation: (book.annotation || '').replace('\n', '<br><br>'),
+    genres: JSON.parse(book.genres || '[]'),
+    date: book.date,
+    paragraphs: JSON.parse(book.paragraphs || '[]'),
+    cover: ImageBase64Data.fromBase64String(book.cover || ''),
     author: new Author({
-      id: input.authorId,
-      last: input?.last,
-      first: input.first,
+      id: book.authorId,
+      first: book.first,
+      last: book.last,
     }),
   };
   return new Book(data);
@@ -24,6 +24,8 @@ export function DBBookToUIBook(input: Partial<DBBook>): Book {
 export function UIBookToDBBook(input: Book): DBBook {
   return {
     id: input.id || '',
+    first: input.author.first,
+    last: input.author.last,
     authorId: input.authorId || '',
     name: input.name,
     annotation: input.annotation,
@@ -31,8 +33,17 @@ export function UIBookToDBBook(input: Book): DBBook {
     date: input.date,
     paragraphs: JSON.stringify(input.paragraphs),
     cover: input.cover?.toBase64String() || '',
-    first: input.author.first,
-    last: input.author.last,
     full: input.full,
+  };
+}
+
+export function UIAuthorToDBAuthor(input: Author): DBAuthor {
+  return {
+    id: input.id || '',
+    first: input.first,
+    last: input.last,
+    full: input.full,
+    about: input.about ?? '',
+    image: input.image ?? '',
   };
 }

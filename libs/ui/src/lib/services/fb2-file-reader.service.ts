@@ -41,6 +41,8 @@ export class Fb2FileReaderService {
 
   public async parseFb2File(file: File): Promise<Book> {
     const text = await this.readBlobFromFile(file);
-    return this.fb2Parser.parseBookFromLoaded(this.fb2Parser.load(text));
+    return this.fb2Parser.parseBookFromLoaded(
+      this.fb2Parser.loadCheeroApi(text)
+    );
   }
 }
