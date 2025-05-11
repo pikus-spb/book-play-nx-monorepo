@@ -1,9 +1,9 @@
 import { DBAuthor, DBBook } from '@book-play/models';
-import { Pool } from 'mysql2';
+import { escape } from 'mysql2';
 import { ResultSetHeader } from 'mysql2/typings/mysql/lib/protocol/packets/ResultSetHeader';
+import { pool } from './app.ts';
 
 export function saveToDataBase(
-  pool: Pool,
   book: DBBook,
   author: DBAuthor
 ): Promise<string> {
@@ -20,14 +20,14 @@ export function saveToDataBase(
           if (authorId === 0) {
             authorId = await new Promise((resolve, reject) => {
               pool.query(
-                `SELECT id FROM authors WHERE first = '${author.first}' AND last = '${author.last}' LIMIT 1`,
+                `SELECT id FROM authors WHERE first = ${escape(
+                  author.first
+                )} AND last = ${escape(author.last)} LIMIT 1`,
                 (err: Error, result: { id: number }[]) => {
                   if (err) {
-                    console.error(err);
                     reject(err);
                   } else if (result.length === 0) {
-                    console.error('Author not found ' + author.full);
-                    reject('Author not found');
+                    reject('Author not found ' + author.full);
                   } else {
                     resolve(Number(result[0].id));
                   }

@@ -125,7 +125,7 @@ export class Fb2Parser {
     return load(text);
   }
 
-  public parseLanguage($: CheerioAPI): string {
+  public getLanguage($: CheerioAPI): string {
     const langElement = $('lang');
 
     let result = '';
@@ -136,7 +136,7 @@ export class Fb2Parser {
     return result;
   }
 
-  public parseBookFromLoaded($: CheerioAPI): Book {
+  public getBook($: CheerioAPI): Book {
     const cover = this.getCoverPicture($);
     const author = this.getAuthor($);
     const name = this.getBookName($);

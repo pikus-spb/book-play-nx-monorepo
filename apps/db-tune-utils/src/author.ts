@@ -1,6 +1,6 @@
 import { DB_CONFIG } from '@book-play/constants';
 import { DBBook } from '@book-play/models';
-import mysql, { PoolOptions } from 'mysql2';
+import mysql, { escape, PoolOptions } from 'mysql2';
 import { ResultSetHeader } from 'mysql2/typings/mysql/lib/protocol/packets/ResultSetHeader';
 
 const pool = mysql.createPool(DB_CONFIG as unknown as PoolOptions);
@@ -74,7 +74,7 @@ function updateBook(id: string, authorId: string): Promise<boolean> {
 async function getBooksToUpdate(): Promise<DBBook[]> {
   return new Promise((resolve, reject) => {
     pool.query(
-      'SELECT id, authorId, first, last FROM books',
+      'SELECT id, authorId FROM books',
       (err: Error, result: any[]) => {
         if (err) {
           console.error(err);
@@ -93,11 +93,9 @@ async function searchAuthor(
 ): Promise<string | undefined> {
   return new Promise((resolve, reject) => {
     pool.query(
-      "SELECT id FROM authors WHERE first = '" +
-        first.replace("'", "\\'") +
-        "' AND last = '" +
-        last.replace("'", "\\'") +
-        "' LIMIT 1",
+      `SELECT id FROM authors WHERE first = ${escape(
+        first
+      )} AND last = ${escape(last)} LIMIT 1`,
       (err: Error, result: any[]) => {
         if (err) {
           console.error(err);

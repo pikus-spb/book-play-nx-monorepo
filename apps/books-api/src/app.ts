@@ -1,7 +1,7 @@
 import { DBAuthor, DBAuthorSummary, DBBook, Genre } from '@book-play/models';
 import { getJsonGzFileName, readZippedFile } from '@book-play/utils-node';
 import { environment } from 'environments/environment.ts';
-import mysql, { PoolOptions } from 'mysql2';
+import mysql, { escape, PoolOptions } from 'mysql2';
 
 const pool = mysql.createPool(environment.DB_CONFIG as unknown as PoolOptions);
 
@@ -52,7 +52,7 @@ export default class BooksAPIApp {
           FROM books
           CROSS JOIN authors
           WHERE authors.id = books.authorId
-          AND books.genres REGEXP "${genre}" ORDER BY authors.full`,
+          AND books.genres REGEXP ${escape(genre)} ORDER BY authors.full`,
         (err, result: Partial<DBAuthor>[]) => {
           if (err) {
             console.error(err);
