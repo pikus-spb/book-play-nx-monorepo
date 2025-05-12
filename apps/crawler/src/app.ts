@@ -3,16 +3,15 @@ import { Fb2Parser } from '@book-play/utils-common';
 import {
   getJsonGzFileName,
   saveContentsToZipFile,
+  unzipFile,
 } from '@book-play/utils-node';
 import { environment } from 'environments/environment.ts';
 import mysql, { PoolOptions } from 'mysql2';
-import { addAdditionalDataToAuthor } from './author.ts';
+import { addAdditionalDataToAuthor } from './author-info.ts';
 import { saveToDataBase } from './db';
-import { deleteFiles } from './files.ts';
-import { findFiles } from './find.ts';
-import { jquery } from './parse.ts';
+import { deleteFiles, findFiles } from './files.ts';
+import { getBookData } from './parse.ts';
 import { checkBookDataIsValid } from './validation.ts';
-import { unzipFile } from './zip.ts';
 
 export const workingDirectory = __dirname + '/' + process.argv[2];
 export const parser = new Fb2Parser();
@@ -38,15 +37,11 @@ export async function run(): Promise<void> {
 async function parseFb2Files(results: string[]) {
   for (const file of results) {
     try {
-      const $ = await jquery(file);
-      const lang = parser.getLanguage($);
-      const book = parser.getBook($);
-
+      const { lang, book } = await getBookData(file);
       if (lang.toLowerCase() === 'ru') {
         if (checkBookDataIsValid(book)) {
           const dbBook = UIBookToDBBook(book);
           const dbAuthor = UIAuthorToDBAuthor(book.author);
-
           await addAdditionalDataToAuthor(dbAuthor);
 
           const insertedId = await saveToDataBase(dbBook, dbAuthor).catch(
@@ -59,7 +54,6 @@ async function parseFb2Files(results: string[]) {
             const fileName = getJsonGzFileName(
               environment.BOOKS_JSON_PATH + insertedId
             );
-
             saveContentsToZipFile(JSON.stringify(dbBook.paragraphs), fileName);
             console.log('Compressed json to gzip file: ' + fileName + '\n');
           }
