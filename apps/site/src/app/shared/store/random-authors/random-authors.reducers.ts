@@ -1,3 +1,4 @@
+import { routerNavigationAction } from '@ngrx/router-store';
 import { createReducer, on } from '@ngrx/store';
 import {
   loadRandomAuthorsActionFailure,
@@ -20,5 +21,7 @@ export const randomAuthorsReducers = createReducer(
       ...state,
       errors: action.errors,
     };
-  })
+  }),
+
+  on(routerNavigationAction, () => initialState)
 );

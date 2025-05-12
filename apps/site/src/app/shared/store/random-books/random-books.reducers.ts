@@ -1,3 +1,4 @@
+import { routerNavigationAction } from '@ngrx/router-store';
 import { createReducer, on } from '@ngrx/store';
 import { initialState } from './random-books';
 import {
@@ -20,5 +21,7 @@ export const randomBooksReducers = createReducer(
       ...state,
       errors: action.errors,
     };
-  })
+  }),
+
+  on(routerNavigationAction, () => initialState)
 );

@@ -1,3 +1,4 @@
+import { routerNavigationAction } from '@ngrx/router-store';
 import { createReducer, on } from '@ngrx/store';
 import {
   loadBookSummaryFailureAction,
@@ -20,5 +21,7 @@ export const bookSummaryReducers = createReducer(
       ...state,
       errors: action.errors,
     };
-  })
+  }),
+
+  on(routerNavigationAction, () => initialState)
 );
