@@ -17,11 +17,12 @@ import {
 } from '@angular/material/sidenav';
 import { MatToolbar } from '@angular/material/toolbar';
 import { RouterModule } from '@angular/router';
-
-import { ScrollbarDirective } from '@book-play/ui';
+import { DarkModeSwitcherComponent, ScrollbarDirective } from '@book-play/ui';
+import { isDarkMode, listenDarkModeChange } from '@book-play/utils-browser';
 import { Store } from '@ngrx/store';
 import NoSleep from 'nosleep.js';
 import { fromEvent, merge, Subscription } from 'rxjs';
+
 import { BookTitleComponent } from '../../../shared/components/book-title/book-title.component';
 import { CopyrightOwnerComponent } from '../../../shared/components/copyright-owner/copyright-owner.component';
 import { CopyrightComponent } from '../../../shared/components/copyright/copyright.component';
@@ -47,6 +48,7 @@ import { selectLoading } from '../../../shared/store/loading/loading.selector';
     MatSidenavContent,
     MatSidenavContainer,
     ScrollbarDirective,
+    DarkModeSwitcherComponent,
   ],
 })
 export class MainComponent implements AfterViewInit, OnDestroy {
@@ -58,7 +60,7 @@ export class MainComponent implements AfterViewInit, OnDestroy {
   private noSleepSubscription!: Subscription;
 
   public ngAfterViewInit() {
-    this.detectColorScheme();
+    this.detectColorScheme(isDarkMode());
     this.addListeners();
   }
 
@@ -67,13 +69,9 @@ export class MainComponent implements AfterViewInit, OnDestroy {
     return this.loading();
   }
 
-  private detectColorScheme(): void {
-    const isDarkMode = window.matchMedia(
-      '(prefers-color-scheme: dark)'
-    ).matches;
-
-    this.renderer.removeClass(document.body, isDarkMode ? 'light' : 'dark');
-    this.renderer.addClass(document.body, isDarkMode ? 'dark' : 'light');
+  private detectColorScheme(darkMode: boolean): void {
+    this.renderer.removeClass(document.body, darkMode ? 'light' : 'dark');
+    this.renderer.addClass(document.body, darkMode ? 'dark' : 'light');
   }
 
   private addListeners(): void {
@@ -89,11 +87,7 @@ export class MainComponent implements AfterViewInit, OnDestroy {
       this.noSleepSubscription.unsubscribe();
     });
 
-    window
-      .matchMedia('(prefers-color-scheme: dark)')
-      .addEventListener('change', () => {
-        this.detectColorScheme();
-      });
+    listenDarkModeChange((isDarkMode) => this.detectColorScheme(isDarkMode));
   }
 
   public ngOnDestroy() {

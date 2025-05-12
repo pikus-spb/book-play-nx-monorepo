@@ -1,8 +1,5 @@
 @use 'vars' as *;
 
 :host {
-  position: absolute;
-  bottom: 2rem;
-  left: $default-padding;
   color: gray;
 }

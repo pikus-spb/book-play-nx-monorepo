@@ -15,13 +15,7 @@ export default [
           style: 'camelCase',
         },
       ],
-      '@angular-eslint/component-selector': [
-        'error',
-        {
-          type: 'element',
-          style: 'kebab-case',
-        },
-      ],
+      '@angular-eslint/component-selector': 'off',
       '@angular-eslint/prefer-standalone': 'off',
     },
   },
