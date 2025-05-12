@@ -1,0 +1,10 @@
+<mat-icon>light_mode</mat-icon>
+<mat-slide-toggle
+  aria-label="Изменить ночную тему"
+  title="Изменить на ночную/дневую тему"
+  [checked]="isDarkMode()"
+  [hideIcon]="true"
+  (change)="toggleDarkMode()"
+>
+</mat-slide-toggle>
+<mat-icon>dark_mode</mat-icon>

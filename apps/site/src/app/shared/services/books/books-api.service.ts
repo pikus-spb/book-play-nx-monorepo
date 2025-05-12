@@ -15,7 +15,7 @@ import {
   Genre,
   GenreAuthor,
 } from '@book-play/models';
-import { getCurrentProtocolUrl } from '@book-play/ui';
+import { getCurrentProtocolUrl } from '@book-play/utils-browser';
 import { environment } from 'environments/environment';
 import { map, Observable } from 'rxjs';
 
