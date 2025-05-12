@@ -19,7 +19,7 @@
           <lib-tag-link
             [value]="item.id"
             linkPrefix="/author"
-            [title]="'Пишет в жанрах: ' + (item.genres | genres)"
+            [title]="item.genres | genres"
           >
             {{ item.full }}
           </lib-tag-link>

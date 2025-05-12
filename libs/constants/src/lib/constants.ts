@@ -18,7 +18,7 @@ export const DEFAULT_TITLE_CONTEXT = 'бесплатно слушать книг
 export const DEFAULT_TITLE = [DEFAULT_TITLE_PREFIX, DEFAULT_EMPTY_CONTEXT].join(
   ' - '
 );
-export const SETTINGS_VOICE_RATE_DELTA = 10;
+export const SETTINGS_VOICE_RATE_DELTA = 20;
 export const SETTINGS_VOICE_PITCH_DELTA = 15;
 // BOOKS CRAWLER
 export const MAX_IMAGE_DATA_LENGTH = 1000000;
