@@ -14,12 +14,15 @@ export class VoiceAudioHelperService {
   private cursorService = inject(CursorPositionService);
 
   public getAudio(idx?: number): Promise<string> {
-    return firstValueFrom(
-      this.store.select(voiceAudioRecordSelector, {
-        text: this.activeBook()!.textParagraphs[
-          idx ?? this.cursorService.position
-        ],
-      })
-    );
+    if (this.activeBook() !== null) {
+      return firstValueFrom(
+        this.store.select(voiceAudioRecordSelector, {
+          text: this.activeBook()!.textParagraphs[
+            idx ?? this.cursorService.position
+          ],
+        })
+      );
+    }
+    return Promise.resolve('');
   }
 }

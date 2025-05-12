@@ -9,8 +9,10 @@ import {
 import { bootstrapApplication } from '@angular/platform-browser';
 import { provideRouter } from '@angular/router';
 import { EffectsModule } from '@ngrx/effects';
+import { routerReducer, StoreRouterConnectingModule } from '@ngrx/router-store';
 import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+
 import { ActiveBookEffects } from '../shared/store/active-book/active-book.effects';
 import { activeBookReducers } from '../shared/store/active-book/active-book.reducers';
 import { AllAuthorsEffects } from '../shared/store/all-authors/all-authors.effects';
@@ -32,6 +34,7 @@ import { VoiceAudioEffects } from '../shared/store/voice-audio/voice-audio.effec
 import { voiceAudioReducers } from '../shared/store/voice-audio/voice-audio.reducers';
 import { VoiceSettingsEffects } from '../shared/store/voice-settings/voice-settings.effects';
 import { voiceSettingsReducers } from '../shared/store/voice-settings/voice-settings.reducers';
+
 import { MainComponent } from './components/main/main.component';
 import { APP_ROUTES } from './model/app-routes';
 
@@ -42,6 +45,7 @@ bootstrapApplication(MainComponent, {
     provideExperimentalZonelessChangeDetection(),
     importProvidersFrom(
       StoreModule.forRoot({
+        router: routerReducer,
         loading: loadingReducer,
         voiceSettings: voiceSettingsReducers,
         voiceAudio: voiceAudioReducers,
@@ -67,7 +71,8 @@ bootstrapApplication(MainComponent, {
         GenreAuthorsEffects,
         BookSummaryEffects,
       ]),
-      StoreDevtoolsModule.instrument()
+      StoreDevtoolsModule.instrument(),
+      StoreRouterConnectingModule.forRoot()
     ),
   ],
 }).catch((err) => console.error(err));

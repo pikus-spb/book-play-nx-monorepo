@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { select, Store } from '@ngrx/store';
-import { filter, firstValueFrom, Observable } from 'rxjs';
+import { filter, firstValueFrom, Observable, of } from 'rxjs';
 import { activeBookSelector } from '../../store/active-book/active-book.selectors';
 
 import { VoiceAudioHelperService } from '../../store/voice-audio/voice-audio-helper.service';
@@ -21,16 +21,19 @@ export class AudioPreloadingService {
   private audioCacheHelperService = inject(VoiceAudioHelperService);
 
   private loadParagraphVoiceAudio(index: number): Observable<string> {
-    const text = this.activeBook()!.textParagraphs[index];
+    if (this.activeBook() !== null) {
+      const text = this.activeBook()!.textParagraphs[index];
 
-    this.store.dispatch(voiceAudioLoadAction({ text }));
+      this.store.dispatch(voiceAudioLoadAction({ text }));
 
-    return this.store.pipe(
-      select(voiceAudioRecordSelector, { text }),
-      filter((value) => {
-        return Boolean(value);
-      })
-    );
+      return this.store.pipe(
+        select(voiceAudioRecordSelector, { text }),
+        filter((value) => {
+          return Boolean(value);
+        })
+      );
+    }
+    return of('');
   }
 
   public async preloadParagraph(
