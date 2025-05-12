@@ -1,7 +1,27 @@
 import fs from 'fs';
 import path from 'path';
+import { workingDirectory } from './app.ts';
 
-export function getFilesNames(
+export function findFiles(ext: string): Promise<string[]> {
+  console.log(`Start looking for ${ext} files....`);
+  return new Promise((resolve, reject) => {
+    getDirectoryListing(
+      workingDirectory,
+      ext,
+      (err: Error, results: string[]) => {
+        if (err) {
+          console.error(err);
+          reject(err);
+          return;
+        }
+        console.log(`Found ${results.length} ${ext} files.`);
+        resolve(results);
+      }
+    );
+  });
+}
+
+export function getDirectoryListing(
   dir: string,
   extension: string,
   done: (err: Error, results: string[]) => void
@@ -14,7 +34,7 @@ export function getFilesNames(
       file = path.resolve(dir, file);
       fs.stat(file, (err, stat) => {
         if (stat && stat.isDirectory()) {
-          getFilesNames(file, extension, (err, res) => {
+          getDirectoryListing(file, extension, (err, res) => {
             results = results.concat(res);
             next();
           });
