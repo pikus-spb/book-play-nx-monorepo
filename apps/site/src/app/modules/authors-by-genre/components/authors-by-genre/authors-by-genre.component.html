@@ -1,6 +1,6 @@
 <div class="container">
   <h5 loading [thenShow]="result">
-    <span>Авторы, пишущие в жанре "{{ authorsGenre() || '' | genre }}"</span>
+    <span>"{{ authorsGenre() || '' | genre }}", авторы</span>
     <input (input)="inputFilter($event)" placeholder="Поиск..." />
     <span #loading></span>
   </h5>
