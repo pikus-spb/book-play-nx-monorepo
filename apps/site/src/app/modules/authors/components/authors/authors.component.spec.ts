@@ -12,7 +12,7 @@ import {
 import { Author } from '@book-play/models';
 import { BooksApiService } from '../../../../shared/services/books/books-api.service';
 import { EventsStateService } from '../../../../shared/services/events-state.service';
-import { LibraryComponent } from './library.component';
+import { AuthorsComponent } from './authors.component';
 
 @Directive({
   selector: '[loading]',
@@ -22,8 +22,8 @@ export class StubLoadingThenShowDirective {
 }
 
 xdescribe('LibraryComponent', () => {
-  let component: LibraryComponent;
-  let fixture: ComponentFixture<LibraryComponent>;
+  let component: AuthorsComponent;
+  let fixture: ComponentFixture<AuthorsComponent>;
   let booksApi: jest.Mocked<BooksApiService>;
   let eventStates: jest.Mocked<EventsStateService>;
 
@@ -52,7 +52,7 @@ xdescribe('LibraryComponent', () => {
       ],
     });
 
-    fixture = TestBed.createComponent(LibraryComponent);
+    fixture = TestBed.createComponent(AuthorsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
