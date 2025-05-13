@@ -68,11 +68,20 @@ export const APP_ROUTES: Route[] = [
     title: DEFAULT_TITLE,
   },
   {
-    path: 'library',
+    path: 'authors',
     loadComponent() {
       return import(
-        '../../modules/library/components/library/library.component'
-      ).then((imported) => imported.LibraryComponent);
+        '../../modules/authors/components/authors/authors.component'
+      ).then((imported) => imported.AuthorsComponent);
+    },
+    title: DEFAULT_TITLE,
+  },
+  {
+    path: 'genres',
+    loadComponent() {
+      return import(
+        '../../modules/genres/components/genres/genres.component'
+      ).then((imported) => imported.GenresComponent);
     },
     title: DEFAULT_TITLE,
   },

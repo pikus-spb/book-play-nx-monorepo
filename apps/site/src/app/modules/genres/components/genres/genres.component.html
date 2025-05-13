@@ -1,0 +1,11 @@
+<div class="container">
+  @for (genre of genres; track genre) {
+  <lib-tag-link
+    [value]="genre"
+    linkPrefix="/author/genre/"
+    [title]="allGenres[genre]"
+  >
+    {{ allGenres[genre] }}
+  </lib-tag-link>
+  }
+</div>

@@ -8,7 +8,7 @@ import {
 } from '@angular/core';
 import { MatChipSet } from '@angular/material/chips';
 import { Author } from '@book-play/models';
-import { ScrollbarDirective, TagLinkComponent } from '@book-play/ui';
+import { TagLinkComponent } from '@book-play/ui';
 import { NgxVirtualScrollModule } from '@lithiumjs/ngx-virtual-scroll';
 import { Store } from '@ngrx/store';
 import { LoadingThenShowDirective } from '../../../../shared/directives/loading-then-show/loading-then-show.directive';
@@ -16,20 +16,19 @@ import { loadAllAuthorsAction } from '../../../../shared/store/all-authors/all-a
 import { allAuthorsSelector } from '../../../../shared/store/all-authors/all-authors.selectors';
 
 @Component({
-  selector: 'library',
+  selector: 'authors',
   imports: [
     CommonModule,
-    LoadingThenShowDirective,
     NgxVirtualScrollModule,
-    MatChipSet,
+    LoadingThenShowDirective,
     TagLinkComponent,
-    ScrollbarDirective,
+    MatChipSet,
   ],
-  templateUrl: './library.component.html',
-  styleUrls: ['./library.component.scss'],
+  templateUrl: './authors.component.html',
+  styleUrls: ['./authors.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class LibraryComponent {
+export class AuthorsComponent {
   private store = inject(Store);
   protected data = this.store.selectSignal(allAuthorsSelector);
   protected viewData = signal<Author[]>([]);

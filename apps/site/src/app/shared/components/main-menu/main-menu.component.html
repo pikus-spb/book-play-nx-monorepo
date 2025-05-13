@@ -1,25 +1,33 @@
 <mat-nav-list>
-  <a mat-list-item [routerLink]="['welcome']">
+  <a mat-list-item [routerLink]="['welcome']" routerLinkActive="active">
     <mat-icon>home</mat-icon>
     Главная
   </a>
-  <a mat-list-item (uploadFile)="fileUploaded($event)" [accept]="'.fb2'"
-    ><mat-icon>upload</mat-icon>Загрузить
+  <a
+    mat-list-item
+    (uploadFile)="fileUploaded($event)"
+    [accept]="'.fb2'"
+    routerLinkActive="active"
+    ><mat-icon>cloud_upload</mat-icon>Загрузить
   </a>
   @if (activeBookPresent() | async) {
   <a mat-list-item [routerLink]="['player']" routerLinkActive="active">
     <mat-icon>play_arrow</mat-icon>Плеер
   </a>
   }
-  <a mat-list-item [routerLink]="['library']">
-    <mat-icon>menu_book</mat-icon>
-    Книги
+  <a mat-list-item [routerLink]="['authors']" routerLinkActive="active">
+    <mat-icon>person</mat-icon>
+    Авторы
   </a>
-  <a mat-list-item [routerLink]="['voice']">
+  <a mat-list-item [routerLink]="['genres']" routerLinkActive="active">
+    <mat-icon>theater_comedy</mat-icon>
+    Жанры
+  </a>
+  <a mat-list-item [routerLink]="['voice']" routerLinkActive="active">
     <mat-icon>volume_up</mat-icon>
     Озвучить
   </a>
-  <a mat-list-item [routerLink]="['settings']">
+  <a mat-list-item [routerLink]="['settings']" routerLinkActive="active">
     <mat-icon>settings</mat-icon>
     Настройки
   </a>

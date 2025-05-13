@@ -119,3 +119,7 @@ export const FB2_GENRES: Record<string, string> = {
   home_sex: 'Эротика, Секс',
   home: 'Дом и Семья: Прочее',
 };
+
+export const FB2_GENRES_KEYS_SORTED = Object.keys(FB2_GENRES).sort((a, b) => {
+  return FB2_GENRES[a].localeCompare(FB2_GENRES[b]);
+});
