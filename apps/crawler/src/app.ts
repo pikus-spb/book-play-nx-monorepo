@@ -9,6 +9,7 @@ import { environment } from 'environments/environment.ts';
 import mysql, { PoolOptions } from 'mysql2';
 import { addAdditionalDataToAuthor } from './author-info.ts';
 import { saveToDataBase } from './db';
+import { queryAuthorId } from './db.ts';
 import { deleteFiles, findFiles } from './files.ts';
 import { getBookData } from './parse.ts';
 import { checkBookDataIsValid } from './validation.ts';
@@ -42,21 +43,37 @@ async function parseFb2Files(results: string[]) {
         if (checkBookDataIsValid(book)) {
           const dbBook = UIBookToDBBook(book);
           const dbAuthor = UIAuthorToDBAuthor(book.author);
-          await addAdditionalDataToAuthor(dbAuthor);
+          const authorId = await queryAuthorId(dbAuthor.full);
 
-          const insertedId = await saveToDataBase(dbBook, dbAuthor).catch(
-            (err) => console.error((err.sqlMessage || err.message) + '\n')
-          );
-          if (insertedId) {
-            console.log('Added to database: ' + book.name);
-
-            dbBook.id = insertedId;
-            const fileName = getJsonGzFileName(
-              environment.BOOKS_JSON_PATH + insertedId
-            );
-            saveContentsToZipFile(JSON.stringify(dbBook.paragraphs), fileName);
-            console.log('Compressed json to gzip file: ' + fileName + '\n');
+          if (authorId !== -1) {
+            dbBook.authorId = String(authorId);
+          } else {
+            await addAdditionalDataToAuthor(dbAuthor);
           }
+
+          saveToDataBase(dbBook, dbAuthor)
+            .then((insertedId) => {
+              if (insertedId) {
+                console.log('Added to database: ' + book.name);
+
+                dbBook.id = insertedId;
+                const fileName = getJsonGzFileName(
+                  environment.BOOKS_JSON_PATH + insertedId
+                );
+                saveContentsToZipFile(
+                  JSON.stringify(dbBook.paragraphs),
+                  fileName
+                );
+                console.log('Compressed json to gzip file: ' + fileName + '\n');
+              }
+            })
+            .catch((err) =>
+              console.error((err.sqlMessage || err.message || err) + '\n')
+            );
+        } else {
+          console.log(
+            `Skipping "${book.name}" because book data is not valid "${book.full}". \n`
+          );
         }
       } else {
         console.log(
