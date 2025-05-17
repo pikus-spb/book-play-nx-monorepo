@@ -3,7 +3,6 @@ export const BOOKS_API_PORT = 8282;
 export const BOOKS_API_PORT_SECURE = 8443;
 export const TTS_API_PORT = 8181;
 export const TTS_API_PORT_SECURE = 8143;
-export const HTTP_RETRY_NUMBER = 3;
 // LIBRARY
 export const PARAGRAPH_CLASS_PREFIX = 'book-paragraph-';
 // SITE

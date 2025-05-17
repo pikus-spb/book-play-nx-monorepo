@@ -15,7 +15,7 @@ import {
 import { Voices, VoiceSettings } from '@book-play/models';
 import { ScrollbarDirective } from '@book-play/ui';
 import { Store } from '@ngrx/store';
-import { distinctUntilChanged, Observable, tap } from 'rxjs';
+import { debounceTime, distinctUntilChanged, tap } from 'rxjs';
 import { voiceSettingsUpdateAction } from '../../../../shared/store/voice-settings/voice-settings.actions';
 
 import { getVoiceSettings } from '../../../../shared/utils/voice-settings';
@@ -38,7 +38,6 @@ export class SettingsComponent {
 
   private fb = inject(FormBuilder);
   private store = inject(Store);
-  private valueChanges$!: Observable<VoiceSettings>;
   private destroyRef = inject(DestroyRef);
 
   constructor() {
@@ -60,17 +59,20 @@ export class SettingsComponent {
       rate: [rate],
       pitch: [pitch],
     });
-    this.valueChanges$ = this.form.valueChanges;
   }
 
   private addEventListeners(): void {
-    this.valueChanges$
+    this.form.valueChanges
       .pipe(
         distinctUntilChanged(
           (previous: VoiceSettings, current: VoiceSettings) => {
-            return JSON.stringify(previous) === JSON.stringify(current);
+            return (
+              `${previous.voice}${previous.rate}${previous.pitch}` ===
+              `${current.voice}${current.rate}${current.pitch}`
+            );
           }
         ),
+        debounceTime(100),
         tap((settings) => this.updateDisabledState(settings)),
         tap((settings) => {
           this.store.dispatch(voiceSettingsUpdateAction({ settings }));
@@ -89,6 +91,12 @@ export class SettingsComponent {
       this.form.controls['pitch'].disable();
     } else {
       this.form.controls['pitch'].enable();
+    }
+    if (settings.voice === Voices.Piper) {
+      this.form.controls['pitch'].disable();
+      this.form.controls['rate'].disable();
+    } else {
+      this.form.controls['rate'].enable();
     }
   }
 

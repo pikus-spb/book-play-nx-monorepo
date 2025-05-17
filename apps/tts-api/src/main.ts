@@ -8,6 +8,7 @@ import fs from 'fs';
 import http from 'http';
 import * as https from 'node:https';
 import EdgeTtsApp from './edge.tts.app.ts';
+import PiperTtsApp from './piper.tts.app.ts';
 import YandexTtsApp from './yandex.tts.app.ts';
 
 export const TMP_FILE_EXTENSION = '.tmp.mp3';
@@ -55,8 +56,9 @@ expressApp.post(
         )
       ) {
         mp3Data = await new YandexTtsApp().runTts(params);
-      }
-      if ([Voices.Dmitry, Voices.Svetlana].includes(params.voice)) {
+      } else if (params.voice === Voices.Piper) {
+        mp3Data = await new PiperTtsApp(req).runTts(params);
+      } else if ([Voices.Dmitry, Voices.Svetlana].includes(params.voice)) {
         mp3Data = await new EdgeTtsApp().runTts(params);
       }
     } catch (e) {
