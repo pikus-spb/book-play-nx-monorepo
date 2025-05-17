@@ -92,7 +92,7 @@ export class SettingsComponent {
     } else {
       this.form.controls['pitch'].enable();
     }
-    if (settings.voice === Voices.Piper) {
+    if ([Voices.Tamara, Voices.Kirill].includes(settings.voice)) {
       this.form.controls['pitch'].disable();
       this.form.controls['rate'].disable();
     } else {
