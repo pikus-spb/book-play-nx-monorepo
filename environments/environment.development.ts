@@ -21,4 +21,7 @@ export const environment = {
   }),
   RANDOM_AUTHORS_COUNT: 3,
   RANDOM_BOOKS_COUNT: 3,
+  // PIPER TTS API
+  PIPER_TTS_MODEL_PATH: '/home/petr/piper/model.onnx',
+  PIPER_TTS_PIPER_PATH: '/home/petr/piper/piper',
 };
