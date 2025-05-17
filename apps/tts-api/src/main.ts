@@ -56,7 +56,7 @@ expressApp.post(
         )
       ) {
         mp3Data = await new YandexTtsApp().runTts(params);
-      } else if (params.voice === Voices.Piper) {
+      } else if ([Voices.Tamara, Voices.Kirill].includes(params.voice)) {
         mp3Data = await new PiperTtsApp(req).runTts(params);
       } else if ([Voices.Dmitry, Voices.Svetlana].includes(params.voice)) {
         mp3Data = await new EdgeTtsApp().runTts(params);
