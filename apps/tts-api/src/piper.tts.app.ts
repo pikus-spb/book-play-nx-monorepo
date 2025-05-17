@@ -1,4 +1,4 @@
-import { TtsParams } from '@book-play/models';
+import { TtsParams, Voices } from '@book-play/models';
 import { ChildProcess, spawn } from 'child_process';
 import { environment } from 'environments/environment';
 import express from 'express';
@@ -15,10 +15,11 @@ export default class PiperTtsApp {
     return new Promise((resolve, reject) => {
       const args1 = [
         '--model',
-        environment.PIPER_TTS_MODEL_PATH,
+        environment.PIPER_TTS_PATH + '/model.' + params.voice + '.onnx',
         '--output-raw',
       ];
-      const child1 = spawn(environment.PIPER_TTS_PIPER_PATH, args1, {
+
+      const child1 = spawn(environment.PIPER_TTS_PATH + '/piper', args1, {
         detached: true,
       });
       const prefix = __dirname + '/cache/audio-' + Date.now();
@@ -47,7 +48,7 @@ export default class PiperTtsApp {
       this.killProcessOnConnectionClose(child1, reject);
 
       child2.on('close', async () => {
-        await this.equalize(fileName, fileNameFinal);
+        await this.equalize(params.voice, fileName, fileNameFinal);
 
         const buffer = fs.readFileSync(fileNameFinal);
         const blob = new Blob([buffer]);
@@ -55,14 +56,18 @@ export default class PiperTtsApp {
         setTimeout(() => {
           fs.unlinkSync(fileName);
           fs.unlinkSync(fileNameFinal);
-        }, 100);
+        }, 300);
 
         resolve(blob);
       });
     });
   }
 
-  private equalize(fileName: string, fileNameOut: string): Promise<string> {
+  private equalize(
+    voice: Voices,
+    fileName: string,
+    fileNameOut: string
+  ): Promise<string> {
     return new Promise((resolve, reject) => {
       const args = [];
 
@@ -70,12 +75,22 @@ export default class PiperTtsApp {
       args.push(fileName);
       args.push('-af');
 
-      const equalizer = [
-        'equalizer=f=80:width_type=h:width=50:g=5',
-        'equalizer=f=2000:width_type=h:width=2000:g=15',
-        'equalizer=f=2600:width_type=h:width=3500:g=-12',
-        'equalizer=f=14000:width_type=h:width=3000:g=4',
-      ];
+      let equalizer;
+      if (voice === Voices.Tamara) {
+        equalizer = [
+          'equalizer=f=80:width_type=h:width=50:g=5',
+          'equalizer=f=2000:width_type=h:width=2000:g=15',
+          'equalizer=f=2600:width_type=h:width=3500:g=-12',
+          'equalizer=f=14000:width_type=h:width=3000:g=4',
+        ];
+      } else if (voice === Voices.Kirill) {
+        equalizer = [
+          'equalizer=f=80:width_type=h:width=50:g=7',
+          'equalizer=f=2000:width_type=h:width=2000:g=15',
+          'equalizer=f=2600:width_type=h:width=3500:g=-10',
+          'equalizer=f=14000:width_type=h:width=3000:g=5',
+        ];
+      }
 
       args.push(equalizer.join(','));
 

@@ -5,7 +5,8 @@ export enum Voices {
   Jane = 'jane',
   Zahar = 'zahar',
   Omazh = 'omazh',
-  Piper = 'piper',
+  Tamara = 'tamara',
+  Kirill = 'kirill',
 }
 
 export interface TtsParams {
