@@ -41,3 +41,10 @@ export function writeToFile(text: string, file: string): Promise<boolean> {
     });
   });
 }
+
+export function getRandomFileName(
+  extension: string,
+  additionalPath = ''
+): string {
+  return __dirname + additionalPath + 'file-' + Math.random() + extension;
+}

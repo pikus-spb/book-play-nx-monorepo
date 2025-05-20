@@ -4,7 +4,7 @@ import { Base64Data } from '@book-play/models';
 import { blobToBase64 } from '@book-play/utils-browser';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
-import { catchError, map, of, switchMap, withLatestFrom } from 'rxjs';
+import { catchError, map, mergeMap, of, switchMap, withLatestFrom } from 'rxjs';
 import { TtsApiService } from '../../services/tts/tts-api.service';
 import {
   VoiceAudioActions,
@@ -35,7 +35,7 @@ export class VoiceAudioEffects {
     return this.actions$.pipe(
       ofType(VoiceAudioActions.VoiceAudioLoad),
       withLatestFrom(this.store.select(voiceAudioSelector)),
-      switchMap(([{ text }, cache]) => {
+      mergeMap(([{ text }, cache]) => {
         if (cache[text]) {
           return of(voiceAudioLoadSuccessAction({ text, data: cache[text] }));
         }
