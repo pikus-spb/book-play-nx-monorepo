@@ -43,7 +43,6 @@ export class SettingsComponent {
   constructor() {
     this.initializeValues();
     this.addEventListeners();
-    this.updateDisabledState(this.form.value);
   }
 
   protected mouseWheel(fieldName: string, event: WheelEvent): void {
@@ -73,31 +72,12 @@ export class SettingsComponent {
           }
         ),
         debounceTime(100),
-        tap((settings) => this.updateDisabledState(settings)),
         tap((settings) => {
           this.store.dispatch(voiceSettingsUpdateAction({ settings }));
         }),
         takeUntilDestroyed(this.destroyRef)
       )
       .subscribe();
-  }
-
-  private updateDisabledState(settings: VoiceSettings): void {
-    if (
-      [Voices.Jane, Voices.Ermil, Voices.Zahar, Voices.Omazh].includes(
-        settings.voice
-      )
-    ) {
-      this.form.controls['pitch'].disable();
-    } else {
-      this.form.controls['pitch'].enable();
-    }
-    if ([Voices.Tamara, Voices.Kirill].includes(settings.voice)) {
-      this.form.controls['pitch'].disable();
-      this.form.controls['rate'].disable();
-    } else {
-      this.form.controls['rate'].enable();
-    }
   }
 
   protected readonly SETTINGS_VOICE_RATE_DELTA = SETTINGS_VOICE_RATE_DELTA;

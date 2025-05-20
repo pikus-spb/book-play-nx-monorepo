@@ -4,9 +4,9 @@ import {
 } from '@book-play/constants';
 import { TtsParams, Voices } from '@book-play/models';
 import { createQueryString } from '@book-play/utils-common';
+import { getRandomFileName, pitch } from '@book-play/utils-node';
 import { spawn } from 'child_process';
 import fs from 'fs';
-import { MP3_FILE_EXTENSION, TMP_FILE_EXTENSION } from './main.ts';
 
 export default class YandexTtsApp {
   public tts(params: TtsParams): Promise<Blob> {
@@ -68,20 +68,22 @@ export default class YandexTtsApp {
     let blob = await this.tts(params);
     let buffer = Buffer.from(await blob.arrayBuffer());
 
-    const randomName = __dirname + '/cache/audio-' + Date.now();
-    const fileNameTmp = randomName + TMP_FILE_EXTENSION;
-    const fileNameFinal = randomName + MP3_FILE_EXTENSION;
+    const files = new Array(3)
+      .fill(null)
+      .map(() => getRandomFileName('.mp3', '/cache/'));
 
-    fs.writeFileSync(fileNameTmp, buffer);
+    fs.writeFileSync(files[0], buffer);
 
-    await this.equalize(params.voice, fileNameTmp, fileNameFinal);
+    await this.equalize(params.voice, files[0], files[1]);
+    await pitch(params.pitch, '48000', files[1], files[2]);
 
-    buffer = fs.readFileSync(fileNameFinal);
+    buffer = fs.readFileSync(files[2]);
     blob = new Blob([buffer]);
 
     setTimeout(() => {
-      fs.unlinkSync(fileNameTmp);
-      fs.unlinkSync(fileNameFinal);
+      files.forEach((file) => {
+        fs.unlinkSync(file);
+      });
     }, 100);
 
     return blob;
