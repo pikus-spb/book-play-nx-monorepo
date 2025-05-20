@@ -1,4 +1,5 @@
 import { TtsParams, Voices } from '@book-play/models';
+import { getRandomFileName, pitch, rate } from '@book-play/utils-node';
 import { ChildProcess, spawn } from 'child_process';
 import { environment } from 'environments/environment';
 import express from 'express';
@@ -22,9 +23,11 @@ export default class PiperTtsApp {
       const child1 = spawn(environment.PIPER_TTS_PATH + '/piper', args1, {
         detached: true,
       });
-      const prefix = __dirname + '/cache/audio-' + Date.now();
-      const fileName = prefix + '.tmp.mp3';
-      const fileNameFinal = prefix + '.mp3';
+
+      const files = new Array(4)
+        .fill(null)
+        .map(() => getRandomFileName('.mp3', '/cache/'));
+
       const args2 = [
         '-f',
         's16le',
@@ -36,7 +39,7 @@ export default class PiperTtsApp {
         'pipe:',
         '-f',
         'mp3',
-        fileName,
+        files[0],
       ];
       const child2 = spawn('/usr/bin/ffmpeg', args2, { detached: true });
 
@@ -48,14 +51,17 @@ export default class PiperTtsApp {
       this.killProcessOnConnectionClose(child1, reject);
 
       child2.on('close', async () => {
-        await this.equalize(params.voice, fileName, fileNameFinal);
+        await this.equalize(params.voice, files[0], files[1]);
+        await rate(params.rate, files[1], files[2]);
+        await pitch(params.pitch, '22050', files[2], files[3]);
 
-        const buffer = fs.readFileSync(fileNameFinal);
+        const buffer = fs.readFileSync(files[3]);
         const blob = new Blob([buffer]);
 
         setTimeout(() => {
-          fs.unlinkSync(fileName);
-          fs.unlinkSync(fileNameFinal);
+          files.forEach((file) => {
+            fs.unlinkSync(file);
+          });
         }, 300);
 
         resolve(blob);
@@ -79,13 +85,16 @@ export default class PiperTtsApp {
       if (voice === Voices.Tamara) {
         equalizer = [
           'equalizer=f=80:width_type=h:width=50:g=5',
+          'equalizer=f=600:width_type=h:width=50:g=-2',
+          'equalizer=f=1250:width_type=h:width=1000:g=-10',
           'equalizer=f=2000:width_type=h:width=2000:g=15',
           'equalizer=f=2600:width_type=h:width=3500:g=-12',
+          'equalizer=f=5000:width_type=h:width=200:g=2',
           'equalizer=f=14000:width_type=h:width=3000:g=4',
         ];
       } else if (voice === Voices.Kirill) {
         equalizer = [
-          'equalizer=f=80:width_type=h:width=50:g=7',
+          'equalizer=f=60:width_type=h:width=150:g=11',
           'equalizer=f=2000:width_type=h:width=2000:g=15',
           'equalizer=f=2600:width_type=h:width=3500:g=-10',
           'equalizer=f=14000:width_type=h:width=3000:g=5',
@@ -111,7 +120,6 @@ export default class PiperTtsApp {
 
   private killTtsProcess(process: ChildProcess) {
     // TODO: create logger
-    console.log('Request cancelled. Killing ' + process.pid + '...');
     try {
       process.kill(process.pid);
       console.log('Successfully killed process ' + process.pid + '.');
