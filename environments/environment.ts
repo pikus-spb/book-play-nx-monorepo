@@ -10,7 +10,7 @@ export const environment = {
   DB_CONFIG: Object.freeze({
     connectionLimit: 20,
     connectTimeout: 60000,
-    host: '81.90.181.235',
+    host: 'localhost',
     port: '3306',
     user: 'root',
     password: '1414',
@@ -19,5 +19,5 @@ export const environment = {
   RANDOM_AUTHORS_COUNT: 3,
   RANDOM_BOOKS_COUNT: 3,
   // PIPER TTS API
-  PIPER_TTS_PATH: '/home/petr/piper',
+  PIPER_TTS_PATH: '/var/piper',
 };

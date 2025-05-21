@@ -14,7 +14,11 @@ export async function searchAuthor(
     setTimeout(() => resolve(true), randomSleepAmount)
   );
 
-  const browser = await puppeteer.launch();
+  const browser = await puppeteer.launch({
+    executablePath: '/usr/bin/google-chrome',
+    headless: true,
+    args: ['--no-sandbox'],
+  });
   const page = await browser.newPage();
   // Prevent blocking via random user agent
   const userAgent = randomUseragent.getRandom();
