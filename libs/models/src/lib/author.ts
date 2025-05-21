@@ -10,12 +10,6 @@ export interface DBAuthor {
   image?: string;
 }
 
-export interface DBAuthorByGenre {
-  id: string;
-  full: string;
-  genres: string;
-}
-
 export interface GenreAuthor {
   id: string;
   full: string;

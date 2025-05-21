@@ -23,8 +23,6 @@ import { AuthorSummaryEffects } from '../shared/store/author-summary/author-summ
 import { authorSummaryReducers } from '../shared/store/author-summary/author-summary.reducers';
 import { BookSummaryEffects } from '../shared/store/book-summary/book-summary.effects';
 import { bookSummaryReducers } from '../shared/store/book-summary/book-summary.reducers';
-import { GenreAuthorsEffects } from '../shared/store/genre-authors/genre-authors.effects';
-import { genreAuthorsReducers } from '../shared/store/genre-authors/genre-authors.reducers';
 import { loadingReducer } from '../shared/store/loading/loading.reducer';
 import { RandomAuthorsEffects } from '../shared/store/random-authors/random-authors.effects';
 import { randomAuthorsReducers } from '../shared/store/random-authors/random-authors.reducers';
@@ -55,7 +53,6 @@ bootstrapApplication(MainComponent, {
         randomBooks: randomBooksReducers,
         authorBooks: authorBooksReducers,
         authorSummary: authorSummaryReducers,
-        genreAuthors: genreAuthorsReducers,
         bookSummary: bookSummaryReducers,
       }),
       EffectsModule.forRoot([]),
@@ -68,7 +65,6 @@ bootstrapApplication(MainComponent, {
         RandomBooksEffects,
         AuthorBooksEffects,
         AuthorSummaryEffects,
-        GenreAuthorsEffects,
         BookSummaryEffects,
       ]),
       StoreDevtoolsModule.instrument(),

@@ -7,13 +7,9 @@ import {
   AuthorSummary,
   Book,
   DBAuthor,
-  DBAuthorByGenre,
-  DBAuthorByGenreToUI,
   DBAuthorSummary,
   DBBook,
   DBBookToUIBook,
-  Genre,
-  GenreAuthor,
 } from '@book-play/models';
 import { getCurrentProtocolUrl } from '@book-play/utils-browser';
 import { environment } from 'environments/environment';
@@ -89,16 +85,6 @@ export class BooksApiService {
           (authorSummary: DBAuthorSummary) => new AuthorSummary(authorSummary)
         )
       );
-  }
-
-  public loadAuthorsByGenre(genre: Genre): Observable<GenreAuthor[]> {
-    const url = this.apiUrlPrefix + `/author/genre/${genre}`;
-
-    return this.http.get<DBAuthorByGenre[]>(url).pipe(
-      map((authors: DBAuthorByGenre[]): GenreAuthor[] => {
-        return authors.map((author) => DBAuthorByGenreToUI(author));
-      })
-    );
   }
 
   public loadBookById(id: string): Observable<Book> {
