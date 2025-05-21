@@ -51,14 +51,6 @@ export const APP_ROUTES: Route[] = [
     },
   },
   {
-    path: 'author/genre/:genre',
-    loadComponent() {
-      return import(
-        '../../modules/authors-by-genre/components/authors-by-genre/authors-by-genre.component'
-      ).then((imported) => imported.AuthorsByGenreComponent);
-    },
-  },
-  {
     path: 'voice',
     loadComponent() {
       return import('../../modules/voice/components/voice.component').then(
@@ -73,15 +65,6 @@ export const APP_ROUTES: Route[] = [
       return import(
         '../../modules/authors/components/authors/authors.component'
       ).then((imported) => imported.AuthorsComponent);
-    },
-    title: DEFAULT_TITLE,
-  },
-  {
-    path: 'genres',
-    loadComponent() {
-      return import(
-        '../../modules/genres/components/genres/genres.component'
-      ).then((imported) => imported.GenresComponent);
     },
     title: DEFAULT_TITLE,
   },
