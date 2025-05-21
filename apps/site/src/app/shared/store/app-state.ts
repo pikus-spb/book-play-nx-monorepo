@@ -3,7 +3,6 @@ import { AllAuthorsState } from './all-authors/all-authors.state';
 import { AuthorBooksState } from './author-books/author-books.state';
 import { AuthorSummaryState } from './author-summary/author-summary.state';
 import { BookSummaryState } from './book-summary/book-summary.state';
-import { GenreAuthorsState } from './genre-authors/genre-authors.state';
 import { LoadingState } from './loading/loading.state';
 import { RandomAuthorsState } from './random-authors/random-authors.state';
 import { RandomBooks } from './random-books/random-books';
@@ -20,6 +19,5 @@ export interface AppState {
   randomBooks: RandomBooks;
   authorBooks: AuthorBooksState;
   authorSummary: AuthorSummaryState;
-  genreAuthors: GenreAuthorsState;
   bookSummary: BookSummaryState;
 }
