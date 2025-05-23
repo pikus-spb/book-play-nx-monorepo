@@ -5,7 +5,7 @@ import { TtsParams } from '@book-play/models';
 import { getCurrentProtocolUrl } from '@book-play/utils-browser';
 import { createQueryString } from '@book-play/utils-common';
 import { environment } from 'environments/environment';
-import { Observable } from 'rxjs';
+import { first, Observable, shareReplay } from 'rxjs';
 import { getVoiceSettings } from '../../utils/voice-settings';
 
 const AUDIO_HEADERS = new HttpHeaders({
@@ -17,8 +17,13 @@ const AUDIO_HEADERS = new HttpHeaders({
 })
 export class TtsApiService {
   private http = inject(HttpClient);
+  private requestCache = new Map<string, Observable<Blob>>();
 
   public textToSpeech(text: string): Observable<Blob> {
+    if (this.requestCache.has(text)) {
+      return this.requestCache.get(text) as Observable<Blob>;
+    }
+
     const url =
       getCurrentProtocolUrl(
         environment.API_HOST,
@@ -26,15 +31,18 @@ export class TtsApiService {
         TTS_API_PORT_SECURE
       ) + '/tts';
 
-    text = encodeURIComponent(text);
-
+    const safeText = encodeURIComponent(text);
     const { pitch, rate, voice } = getVoiceSettings();
-    const options: TtsParams = { text, pitch, rate, voice };
+    const options: TtsParams = { text: safeText, pitch, rate, voice };
     const postParams = createQueryString(options);
 
-    return this.http.post(url, postParams, {
-      headers: AUDIO_HEADERS,
-      responseType: 'blob',
-    });
+    const request = this.http
+      .post(url, postParams, {
+        headers: AUDIO_HEADERS,
+        responseType: 'blob',
+      })
+      .pipe(first(), shareReplay(1));
+    this.requestCache.set(text, request);
+    return request;
   }
 }
