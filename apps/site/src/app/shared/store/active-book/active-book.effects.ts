@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { Book } from '@book-play/models';
 import { Fb2FileReaderService, RouterHelperService } from '@book-play/ui';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
+import { ROUTER_REQUEST } from '@ngrx/router-store';
 import { Store } from '@ngrx/store';
 import {
   catchError,
@@ -10,6 +11,7 @@ import {
   map,
   of,
   switchMap,
+  takeUntil,
   tap,
   withLatestFrom,
 } from 'rxjs';
@@ -51,6 +53,7 @@ export class ActiveBookEffects {
         if (!(activeBook?.id && activeBook.id == id)) {
           this.store.dispatch(loadingStartAction());
           return this.booksApiService.loadBookById(id).pipe(
+            takeUntil(this.actions$.pipe(ofType(ROUTER_REQUEST))),
             tap(() => {
               this.store.dispatch(loadingEndAction());
             }),
