@@ -1,11 +1,15 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { TTS_API_PORT, TTS_API_PORT_SECURE } from '@book-play/constants';
+import {
+  TTS_API_PORT,
+  TTS_API_PORT_SECURE,
+  TTS_REQUEST_CACHE_LIVE_TIME,
+} from '@book-play/constants';
 import { TtsParams } from '@book-play/models';
 import { getCurrentProtocolUrl } from '@book-play/utils-browser';
 import { createQueryString } from '@book-play/utils-common';
 import { environment } from 'environments/environment';
-import { first, Observable, shareReplay } from 'rxjs';
+import { first, Observable, shareReplay, tap } from 'rxjs';
 import { getVoiceSettings } from '../../utils/voice-settings';
 
 const AUDIO_HEADERS = new HttpHeaders({
@@ -41,7 +45,15 @@ export class TtsApiService {
         headers: AUDIO_HEADERS,
         responseType: 'blob',
       })
-      .pipe(first(), shareReplay(1));
+      .pipe(
+        tap(() =>
+          setTimeout(() => {
+            this.requestCache.delete(text);
+          }, TTS_REQUEST_CACHE_LIVE_TIME)
+        ),
+        first(),
+        shareReplay(1)
+      );
     this.requestCache.set(text, request);
     return request;
   }
