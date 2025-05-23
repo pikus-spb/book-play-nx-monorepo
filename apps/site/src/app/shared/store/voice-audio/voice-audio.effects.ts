@@ -3,8 +3,17 @@ import { inject, Injectable } from '@angular/core';
 import { Base64Data } from '@book-play/models';
 import { blobToBase64 } from '@book-play/utils-browser';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
+import { ROUTER_REQUEST } from '@ngrx/router-store';
 import { Store } from '@ngrx/store';
-import { catchError, map, mergeMap, of, switchMap, withLatestFrom } from 'rxjs';
+import {
+  catchError,
+  map,
+  mergeMap,
+  of,
+  switchMap,
+  takeUntil,
+  withLatestFrom,
+} from 'rxjs';
 import { TtsApiService } from '../../services/tts/tts-api.service';
 import {
   VoiceAudioActions,
@@ -40,6 +49,7 @@ export class VoiceAudioEffects {
           return of(voiceAudioLoadSuccessAction({ text, data: cache[text] }));
         }
         return this.ttsApiService.textToSpeech(text).pipe(
+          takeUntil(this.actions$.pipe(ofType(ROUTER_REQUEST))),
           switchMap((data: Blob) => {
             return blobToBase64(data);
           }),
