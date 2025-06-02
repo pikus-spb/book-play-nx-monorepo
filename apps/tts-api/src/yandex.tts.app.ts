@@ -4,7 +4,7 @@ import {
 } from '@book-play/constants';
 import { TtsParams, Voices } from '@book-play/models';
 import { createQueryString } from '@book-play/utils-common';
-import { getRandomFileName, pitch } from '@book-play/utils-node';
+import { getRandomFileNames, pitch, rate } from '@book-play/utils-node';
 import { spawn } from 'child_process';
 import fs from 'fs';
 
@@ -12,7 +12,7 @@ export default class YandexTtsApp {
   public tts(params: TtsParams): Promise<Blob> {
     const postParams = {
       ...YANDEX_TTS_API_DEFAULT_OPTIONS,
-      speed: this.normalizeSpeed(params.rate),
+      speed: '1.0',
       speaker: params.voice,
       text: encodeURIComponent(params.text),
     };
@@ -68,16 +68,15 @@ export default class YandexTtsApp {
     let blob = await this.tts(params);
     let buffer = Buffer.from(await blob.arrayBuffer());
 
-    const files = new Array(3)
-      .fill(null)
-      .map(() => getRandomFileName('.mp3', '/cache/'));
+    const files = getRandomFileNames(4, '.mp3', '/cache/');
 
     fs.writeFileSync(files[0], buffer);
 
     await this.equalize(params.voice, files[0], files[1]);
     await pitch(params.pitch, '48000', files[1], files[2]);
+    await rate(params.rate, files[2], files[3]);
 
-    buffer = fs.readFileSync(files[2]);
+    buffer = fs.readFileSync(files[3]);
     blob = new Blob([buffer]);
 
     setTimeout(() => {
@@ -87,9 +86,5 @@ export default class YandexTtsApp {
     }, 100);
 
     return blob;
-  }
-
-  private normalizeSpeed(speed: string): number {
-    return Number(speed) * 0.01 + 1;
   }
 }

@@ -1,77 +1,67 @@
 import { TtsParams } from '@book-play/models';
+import { getRandomFileNames, pitch, rate } from '@book-play/utils-node';
 import { Blob } from 'buffer';
 import { spawn } from 'child_process';
 import fs from 'fs';
-import { MP3_FILE_EXTENSION, TMP_FILE_EXTENSION } from './main.ts';
 
 export default class EdgeTtsApp {
-  private normalizeEdgeParam(param: string): string {
-    if (param === '0') {
-      return null;
-    }
-    if (Number(param) > 0) {
-      return `+${param}`;
-    }
-    return `${param}`;
+  private normalizeText(text: string): string {
+    return text.replace(/([^.]+)\.$/, '$1');
   }
 
-  private normalizeEdgeParams(params: TtsParams): TtsParams {
-    let { text, pitch, rate } = params;
-
-    text = text.replace(/([^.]+)\.$/, '$1');
-    pitch = this.normalizeEdgeParam(pitch);
-    rate = this.normalizeEdgeParam(rate);
-
-    return { text, rate, pitch, voice: params.voice };
+  private removeSilence(
+    fileName: string,
+    fileNameOut: string
+  ): Promise<string> {
+    const args = [
+      fileName,
+      '-C',
+      '48',
+      fileNameOut,
+      'silence',
+      '-l',
+      '1',
+      '0.001',
+      '1%',
+      '-1',
+      '0.6',
+      '1%',
+    ];
+    const removeSilenceProc = spawn('sox', args, { detached: true });
+    return new Promise((resolve) => {
+      removeSilenceProc.on('close', () => {
+        resolve(fileNameOut);
+      });
+    });
   }
 
   public runTts(params: TtsParams): Promise<Blob> {
+    const { text, voice } = params;
+    const files = getRandomFileNames(4, '.mp3', '/cache/');
+
+    const args = [];
+    args.push(`--text="${this.normalizeText(text)}"`);
+    args.push(`--voice=${voice}`);
+    args.push(`--write-media=${files[0]}`);
+
+    const ttsProc = spawn('edge-tts', args, { detached: true });
+
     return new Promise((resolve) => {
-      const randomName = __dirname + '/cache/audio-' + Date.now();
-      const fileNameTmp = randomName + TMP_FILE_EXTENSION;
-      const fileNameFinal = randomName + MP3_FILE_EXTENSION;
-      const { text, rate, pitch, voice } = this.normalizeEdgeParams(params);
-      const args = [];
+      ttsProc.on('close', async () => {
+        await this.removeSilence(files[0], files[1]);
+        await pitch(params.pitch, '24000', files[1], files[2]);
+        await rate(params.rate, files[2], files[3]);
 
-      args.push(`--text="${text}"`);
-      args.push(`--voice=${voice}`);
-      if (pitch !== null) {
-        args.push(`--pitch=${pitch}Hz`);
-      }
-      if (rate !== null) {
-        args.push(`--rate=${rate}%`);
-      }
-      args.push(`--write-media=${fileNameTmp}`);
+        const buffer = fs.readFileSync(files[3]);
+        const blob = new Blob([buffer]);
 
-      const ttsProc = spawn('edge-tts', args, { detached: true });
+        resolve(blob);
 
-      ttsProc.on('close', () => {
-        const args = [
-          fileNameTmp,
-          '-C',
-          '48',
-          fileNameFinal,
-          'silence',
-          '-l',
-          '1',
-          '0.001',
-          '1%',
-          '-1',
-          '0.6',
-          '1%',
-        ];
-        const removeSilenceProc = spawn('sox', args, { detached: true });
-        removeSilenceProc.on('close', () => {
-          setTimeout(() => {
-            const buffer = fs.readFileSync(fileNameFinal);
-            const blob = new Blob([buffer]);
-
-            resolve(blob);
-
-            fs.unlinkSync(fileNameTmp);
-            fs.unlinkSync(fileNameFinal);
-          }, 100);
-        });
+        setTimeout(() => {
+          files.forEach((file) => {
+            fs.unlinkSync(file);
+          });
+        }, 100);
       });
     });
   }
