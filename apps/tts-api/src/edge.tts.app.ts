@@ -37,7 +37,7 @@ export default class EdgeTtsApp {
 
   public runTts(params: TtsParams): Promise<Blob> {
     const { text, voice } = params;
-    const files = getRandomFileNames(4, '.mp3', '/cache/');
+    const files = getRandomFileNames(4, '.mp3');
 
     const args = [];
     args.push(`--text="${this.normalizeText(text)}"`);

@@ -68,7 +68,7 @@ export default class YandexTtsApp {
     let blob = await this.tts(params);
     let buffer = Buffer.from(await blob.arrayBuffer());
 
-    const files = getRandomFileNames(4, '.mp3', '/cache/');
+    const files = getRandomFileNames(4, '.mp3');
 
     fs.writeFileSync(files[0], buffer);
 
