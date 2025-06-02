@@ -24,7 +24,7 @@ export default class PiperTtsApp {
         detached: true,
       });
 
-      const files = getRandomFileNames(4, '.mp3', '/cache/');
+      const files = getRandomFileNames(4, '.mp3');
 
       const args2 = [
         '-f',
