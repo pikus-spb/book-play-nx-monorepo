@@ -1,5 +1,5 @@
 import { TtsParams, Voices } from '@book-play/models';
-import { getRandomFileName, pitch, rate } from '@book-play/utils-node';
+import { getRandomFileNames, pitch, rate } from '@book-play/utils-node';
 import { ChildProcess, spawn } from 'child_process';
 import { environment } from 'environments/environment';
 import express from 'express';
@@ -24,9 +24,7 @@ export default class PiperTtsApp {
         detached: true,
       });
 
-      const files = new Array(4)
-        .fill(null)
-        .map(() => getRandomFileName('.mp3', '/cache/'));
+      const files = getRandomFileNames(4, '.mp3', '/cache/');
 
       const args2 = [
         '-f',

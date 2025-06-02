@@ -48,3 +48,13 @@ export function getRandomFileName(
 ): string {
   return __dirname + additionalPath + 'file-' + Math.random() + extension;
 }
+
+export function getRandomFileNames(
+  count: number,
+  extension: string,
+  additionalPath = ''
+): string[] {
+  return Array(count)
+    .fill(null)
+    .map(() => getRandomFileName(extension, additionalPath));
+}
