@@ -27,6 +27,8 @@ export function pitch(
         `atempo=1/${pitchNormalized}`,
       ].join(',')
     );
+    args.push('-b:a');
+    args.push('96k');
     args.push(fileNameOut);
 
     let process;
@@ -59,6 +61,8 @@ export function rate(
     args.push(fileName);
     args.push('-filter:a');
     args.push(`atempo=${rateNormalized}`);
+    args.push('-b:a');
+    args.push('96k');
     args.push(fileNameOut);
 
     let process;

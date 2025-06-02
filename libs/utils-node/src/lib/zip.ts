@@ -23,7 +23,9 @@ export async function unzipFile(
   outputPath: string
 ): Promise<boolean> {
   try {
-    await exec(`unzip ${fileName} -d ${outputPath}`);
+    await exec(`unzip ${fileName} -d ${outputPath}`, {
+      maxBuffer: 1024 * 5000,
+    });
     console.log('Unzipped ' + fileName + '...');
     return true;
   } catch (err) {
