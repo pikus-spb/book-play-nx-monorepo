@@ -23,5 +23,5 @@ export const randomAuthorsReducers = createReducer(
     };
   }),
 
-  on(routerNavigationAction, () => initialState)
+  on(routerNavigationAction, () => ({ ...initialState }))
 );

@@ -7,7 +7,7 @@ export interface VoiceAudioState {
   errors: Errors;
 }
 
-export const initialState: VoiceAudioState = {
+export const initialState: VoiceAudioState = Object.freeze({
   cache: {},
   errors: [],
-};
+});

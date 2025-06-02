@@ -23,5 +23,5 @@ export const authorBooksReducers = createReducer(
     };
   }),
 
-  on(routerNavigationAction, () => initialState)
+  on(routerNavigationAction, () => ({ ...initialState }))
 );
