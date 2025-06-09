@@ -44,25 +44,35 @@ export default class BooksAPIApp {
     });
   }
 
-  randomAuthors(number = '3'): Promise<Partial<DBAuthor>[]> {
+  randomAuthors(
+    number: string | number = environment.RANDOM_AUTHORS_COUNT
+  ): Promise<DBAuthorSummary[]> {
     return new Promise((resolve, reject) => {
       pool.query(
-        `SELECT id, first, last FROM authors ORDER BY RAND() LIMIT ${number}`,
-        (err, result: Partial<DBAuthor>[]) => {
+        `SELECT id FROM authors WHERE about != '' AND image != '' ORDER BY RAND() LIMIT ${number}`,
+        (err, authors: Partial<DBAuthor>[]) => {
           if (err) {
             console.error(err);
             reject(err);
           } else {
-            resolve(result);
+            resolve(
+              Promise.all(
+                authors.map((author) => {
+                  return this.authorSummary(author.id);
+                })
+              )
+            );
           }
         }
       );
     });
   }
-  randomBookIds(number = '3'): Promise<string[]> {
+  randomBookIds(
+    number: string | number = environment.RANDOM_BOOKS_COUNT
+  ): Promise<string[]> {
     return new Promise((resolve, reject) => {
       pool.query(
-        `SELECT id FROM books ORDER BY RAND() LIMIT ${number}`,
+        `SELECT id FROM books/* WHERE annotation != '' AND cover != ''*/ ORDER BY RAND() LIMIT ${number}`,
         (err, result: { id: string }[]) => {
           if (err) {
             console.error(err);

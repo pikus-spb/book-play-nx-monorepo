@@ -1,20 +1,20 @@
-import { Author, Errors } from '@book-play/models';
+import { Author, AuthorSummary, Errors } from '@book-play/models';
 import { createAction, props } from '@ngrx/store';
 
-export enum RandomAuthorsActions {
+export enum RandomAuthorSummaryActions {
   LoadRandomAuthors = '[RandomAuthors] Load authors',
   LoadRandomAuthorsActionSuccess = '[RandomAuthors] Load authors success',
   LoadRandomAuthorsActionFailure = '[RandomAuthors] Load authors failure',
 }
 
 export const loadRandomAuthorsAction = createAction(
-  RandomAuthorsActions.LoadRandomAuthors
+  RandomAuthorSummaryActions.LoadRandomAuthors
 );
 export const loadRandomAuthorsActionSuccess = createAction(
-  RandomAuthorsActions.LoadRandomAuthorsActionSuccess,
-  props<{ authors: Author[] }>()
+  RandomAuthorSummaryActions.LoadRandomAuthorsActionSuccess,
+  props<{ authors: AuthorSummary[] }>()
 );
 export const loadRandomAuthorsActionFailure = createAction(
-  RandomAuthorsActions.LoadRandomAuthorsActionFailure,
+  RandomAuthorSummaryActions.LoadRandomAuthorsActionFailure,
   props<{ errors: Errors }>()
 );

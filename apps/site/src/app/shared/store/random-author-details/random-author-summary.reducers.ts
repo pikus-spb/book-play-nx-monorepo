@@ -3,10 +3,10 @@ import { createReducer, on } from '@ngrx/store';
 import {
   loadRandomAuthorsActionFailure,
   loadRandomAuthorsActionSuccess,
-} from './random-authors.actions';
-import { initialState } from './random-authors.state';
+} from './random-author-summary.actions';
+import { initialState } from './random-author-summary.state';
 
-export const randomAuthorsReducers = createReducer(
+export const randomAuthorSummaryReducers = createReducer(
   initialState,
 
   on(loadRandomAuthorsActionSuccess, (state, action) => {

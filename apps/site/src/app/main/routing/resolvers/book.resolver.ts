@@ -4,8 +4,8 @@ import { Book } from '@book-play/models';
 import { Store } from '@ngrx/store';
 import { filter, Observable } from 'rxjs';
 
-import { loadBookSummaryAction } from '../../shared/store/book-summary/book-summary.actions';
-import { bookSummarySelector } from '../../shared/store/book-summary/book-summary.selectors';
+import { loadBookSummaryAction } from '../../../shared/store/book-summary/book-summary.actions';
+import { bookSummarySelector } from '../../../shared/store/book-summary/book-summary.selectors';
 
 @Injectable({
   providedIn: 'root',
