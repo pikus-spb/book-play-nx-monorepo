@@ -1,6 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { Author } from '@book-play/models';
+import { AuthorSummary } from '@book-play/models';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 import { catchError, map, of, switchMap, tap } from 'rxjs';
@@ -12,25 +12,25 @@ import {
 import {
   loadRandomAuthorsActionFailure,
   loadRandomAuthorsActionSuccess,
-  RandomAuthorsActions,
-} from './random-authors.actions';
+  RandomAuthorSummaryActions,
+} from './random-author-summary.actions';
 
 @Injectable({
   providedIn: 'root',
 })
-export class RandomAuthorsEffects {
+export class RandomAuthorSummaryEffects {
   private actions$ = inject(Actions);
   private store = inject(Store);
   private booksApiService = inject(BooksApiService);
 
   loadRandomAuthors$ = createEffect(() => {
     return this.actions$.pipe(
-      ofType(RandomAuthorsActions.LoadRandomAuthors),
+      ofType(RandomAuthorSummaryActions.LoadRandomAuthors),
       switchMap(() => {
         this.store.dispatch(loadingStartAction());
         return this.booksApiService.loadRandomAuthors().pipe(
           tap(() => this.store.dispatch(loadingEndAction())),
-          map((authors: Author[]) => {
+          map((authors: AuthorSummary[]) => {
             return loadRandomAuthorsActionSuccess({ authors });
           }),
           catchError((errorResponse: HttpErrorResponse) => {

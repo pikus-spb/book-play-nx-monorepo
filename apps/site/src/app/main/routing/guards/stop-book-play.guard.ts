@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { CanDeactivate, GuardResult, MaybeAsync } from '@angular/router';
-import { AutoPlayService } from '../../shared/services/tts/auto-play.service';
+import { AutoPlayService } from '../../../shared/services/tts/auto-play.service';
 
 @Injectable({
   providedIn: 'root',

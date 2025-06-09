@@ -24,8 +24,8 @@ import { authorSummaryReducers } from '../shared/store/author-summary/author-sum
 import { BookSummaryEffects } from '../shared/store/book-summary/book-summary.effects';
 import { bookSummaryReducers } from '../shared/store/book-summary/book-summary.reducers';
 import { loadingReducer } from '../shared/store/loading/loading.reducer';
-import { RandomAuthorsEffects } from '../shared/store/random-authors/random-authors.effects';
-import { randomAuthorsReducers } from '../shared/store/random-authors/random-authors.reducers';
+import { RandomAuthorSummaryEffects } from '../shared/store/random-author-details/random-author-summary.effects';
+import { randomAuthorSummaryReducers } from '../shared/store/random-author-details/random-author-summary.reducers';
 import { RandomBooksEffects } from '../shared/store/random-books/random-books.effects';
 import { randomBooksReducers } from '../shared/store/random-books/random-books.reducers';
 import { VoiceAudioEffects } from '../shared/store/voice-audio/voice-audio.effects';
@@ -34,7 +34,7 @@ import { VoiceSettingsEffects } from '../shared/store/voice-settings/voice-setti
 import { voiceSettingsReducers } from '../shared/store/voice-settings/voice-settings.reducers';
 
 import { MainComponent } from './components/main/main.component';
-import { APP_ROUTES } from './model/app-routes';
+import { APP_ROUTES } from './routing/app-routes';
 
 bootstrapApplication(MainComponent, {
   providers: [
@@ -49,7 +49,7 @@ bootstrapApplication(MainComponent, {
         voiceAudio: voiceAudioReducers,
         activeBook: activeBookReducers,
         allAuthors: allAuthorsReducers,
-        randomAuthors: randomAuthorsReducers,
+        randomAuthors: randomAuthorSummaryReducers,
         randomBooks: randomBooksReducers,
         authorBooks: authorBooksReducers,
         authorSummary: authorSummaryReducers,
@@ -61,7 +61,7 @@ bootstrapApplication(MainComponent, {
         VoiceAudioEffects,
         ActiveBookEffects,
         AllAuthorsEffects,
-        RandomAuthorsEffects,
+        RandomAuthorSummaryEffects,
         RandomBooksEffects,
         AuthorBooksEffects,
         AuthorSummaryEffects,

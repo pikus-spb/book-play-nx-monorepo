@@ -3,18 +3,20 @@
     <b>BOOK-PLAY.RU</b>
     - платформа для прослушивания книг, озвученных нейросетью.
   </p>
+  @if (environment.RANDOM_AUTHORS_COUNT > 1) {
   <h2>{{ environment.RANDOM_AUTHORS_COUNT }} случайных авторов дня:</h2>
-  <mat-chip-set aria-label="Авторы">
-    @for (author of authors(); track author.full) {
-    <lib-tag-link [value]="author.id" linkPrefix="/author">{{
-      author.full
-    }}</lib-tag-link>
-    }
-  </mat-chip-set>
+  } @else {
+  <h2>Cлучайный автор дня:</h2>
+  } @for (author of authorSummary(); track author.full) {
+  <author [author]="author"></author>
+  }
 
   <p>&nbsp;</p>
+  @if (environment.RANDOM_BOOKS_COUNT > 1) {
   <h2>{{ environment.RANDOM_BOOKS_COUNT }} случайных книги дня:</h2>
-  @for (book of books(); track book.id) {
+  } @else if (environment.RANDOM_BOOKS_COUNT === 1) {
+  <h2>Случайная книга дня:</h2>
+  } @for (book of books(); track book.id) {
   <book [book]="book"></book>
   }
 </div>

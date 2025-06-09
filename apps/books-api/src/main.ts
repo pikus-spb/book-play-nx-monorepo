@@ -67,8 +67,8 @@ expressApp.get(
     const number = req.params.number;
     app
       .randomAuthors(number)
-      .then((book) => {
-        res.json(book);
+      .then((authors) => {
+        res.json(authors);
       })
       .catch((err) => {
         res.json(err);
