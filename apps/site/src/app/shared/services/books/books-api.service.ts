@@ -41,16 +41,16 @@ export class BooksApiService {
 
   public loadRandomAuthors(
     number = environment.RANDOM_AUTHORS_COUNT
-  ): Observable<Author[]> {
+  ): Observable<AuthorSummary[]> {
     const url = this.apiUrlPrefix + `/author/random/${number}`;
 
-    return this.http.get<DBAuthor[]>(url).pipe(
-      map((data: DBAuthor[]): Author[] => {
-        return data.map((dbAuthor: DBAuthor) => {
-          return new Author(dbAuthor);
+    return this.http.get<DBAuthorSummary[]>(url).pipe(
+      map((data: DBAuthorSummary[]): AuthorSummary[] => {
+        return data.map((dbAuthor: DBAuthorSummary) => {
+          return new AuthorSummary(dbAuthor);
         });
       })
-    ) as Observable<Author[]>;
+    ) as Observable<AuthorSummary[]>;
   }
 
   public loadRandomBookIds(

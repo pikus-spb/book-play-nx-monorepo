@@ -1,7 +1,8 @@
 import { Route } from '@angular/router';
 import { DEFAULT_TITLE } from '@book-play/constants';
-import { StopBookPlayGuard } from '../guards/stop-book-play.guard';
-import { BookResolver } from '../resolvers/book.resolver';
+import { StopBookPlayGuard } from './guards/stop-book-play.guard';
+import { AuthorSummaryResolver } from './resolvers/author-summary.resolver';
+import { BookResolver } from './resolvers/book.resolver';
 
 export const APP_ROUTES: Route[] = [
   {
@@ -48,6 +49,9 @@ export const APP_ROUTES: Route[] = [
       return import(
         '../../modules/author/components/author/author.component'
       ).then((imported) => imported.AuthorComponent);
+    },
+    resolve: {
+      author: AuthorSummaryResolver,
     },
   },
   {

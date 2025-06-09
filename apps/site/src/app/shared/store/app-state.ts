@@ -4,7 +4,7 @@ import { AuthorBooksState } from './author-books/author-books.state';
 import { AuthorSummaryState } from './author-summary/author-summary.state';
 import { BookSummaryState } from './book-summary/book-summary.state';
 import { LoadingState } from './loading/loading.state';
-import { RandomAuthorsState } from './random-authors/random-authors.state';
+import { RandomAuthorSummaryState } from './random-author-details/random-author-summary.state';
 import { RandomBooks } from './random-books/random-books';
 import { VoiceAudioState } from './voice-audio/voice-audio.state';
 import { VoiceSettingsState } from './voice-settings/voice-settings.state';
@@ -15,7 +15,7 @@ export interface AppState {
   voiceAudio: VoiceAudioState;
   activeBook: ActiveBookState;
   allAuthors: AllAuthorsState;
-  randomAuthors: RandomAuthorsState;
+  randomAuthors: RandomAuthorSummaryState;
   randomBooks: RandomBooks;
   authorBooks: AuthorBooksState;
   authorSummary: AuthorSummaryState;
