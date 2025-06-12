@@ -5,6 +5,7 @@ import { BOOKS_API_PORT, BOOKS_API_PORT_SECURE } from '@book-play/constants';
 import {
   Author,
   AuthorSummary,
+  BasicBookData,
   Book,
   DBAuthor,
   DBAuthorSummary,
@@ -105,5 +106,11 @@ export class BooksApiService {
         return DBBookToUIBook(book);
       })
     );
+  }
+
+  public bookSearch(query: string): Observable<BasicBookData[]> {
+    const url = this.apiUrlPrefix + `/book/search/${query}`;
+
+    return this.http.get<BasicBookData[]>(url);
   }
 }

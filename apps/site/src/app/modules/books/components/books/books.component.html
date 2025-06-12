@@ -1,0 +1,39 @@
+<div class="container">
+  <h5 loading [thenShow]="books">
+    <span>Поиск по книгам</span>
+    <form (submit)="search()">
+      <input (input)="updateQuery($event)" placeholder="Введите название..." />
+      <button mat-fab extended="true" color="success" type="submit">
+        <mat-icon>search</mat-icon>
+        Искать
+      </button>
+    </form>
+    <span #loading></span>
+  </h5>
+  <ng-template #books>
+    @if (data()) { @if (data()!.length === 0) {
+    <span>Книги не найдены</span>
+    }
+    <li-virtual-scroll
+      [items]="data()!"
+      [gridList]="true"
+      [itemWidth]="250"
+      [itemHeight]="50"
+      [trackBy]="trackByFn"
+      libPerfectScrollbar
+      class="books-grid"
+    >
+      <mat-chip-set aria-label="Книги">
+        <nav *liVirtualItem="let item">
+          <lib-tag-link [value]="item.id" linkPrefix="/book">{{
+            item.full
+          }}</lib-tag-link>
+        </nav>
+      </mat-chip-set>
+    </li-virtual-scroll>
+    }
+  </ng-template>
+  @if (errors() && errors().length > 0) {
+  <span>Ошибка: {{ errors().join(' ') }}</span>
+  }
+</div>

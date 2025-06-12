@@ -60,6 +60,18 @@ expressApp.get(
   }
 );
 
+expressApp.get('/book/search/:query', cors(corsOptionsDelegate), (req, res) => {
+  const query = req.params.query;
+  app
+    .bookSearch(query)
+    .then((books) => {
+      res.json(books);
+    })
+    .catch((err) => {
+      res.json(err);
+    });
+});
+
 expressApp.get(
   '/author/random/:number?',
   cors(corsOptionsDelegate),
