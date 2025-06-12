@@ -54,7 +54,12 @@ export default class BooksAPIApp {
   ): Promise<DBAuthorSummary[]> {
     return new Promise((resolve, reject) => {
       pool.query(
-        `SELECT id FROM authors WHERE about != '' AND image != '' ORDER BY RAND() LIMIT ${number}`,
+        `WITH RandomRows AS (
+          SELECT id FROM authors ORDER BY RAND() LIMIT 50
+        )
+         SELECT RandomRows.id
+         FROM RandomRows
+                JOIN authors WHERE RandomRows.id = authors.id AND authors.image != '' AND authors.about != '' LIMIT ${number};`,
         (err, authors: Partial<DBAuthor>[]) => {
           if (err) {
             console.error(err);
@@ -77,7 +82,12 @@ export default class BooksAPIApp {
   ): Promise<string[]> {
     return new Promise((resolve, reject) => {
       pool.query(
-        `SELECT id FROM books/* WHERE annotation != '' AND cover != ''*/ ORDER BY RAND() LIMIT ${number}`,
+        `WITH RandomRows AS (
+          SELECT id FROM books ORDER BY RAND() LIMIT 50
+        )
+        SELECT RandomRows.id
+        FROM RandomRows
+        JOIN books WHERE RandomRows.id = books.id AND books.cover != '' AND books.annotation != '' LIMIT ${number};`,
         (err, result: { id: string }[]) => {
           if (err) {
             console.error(err);
