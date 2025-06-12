@@ -64,6 +64,15 @@ export const APP_ROUTES: Route[] = [
     title: DEFAULT_TITLE,
   },
   {
+    path: 'books',
+    loadComponent() {
+      return import(
+        '../../modules/books/components/books/books.component'
+      ).then((imported) => imported.BooksComponent);
+    },
+    title: DEFAULT_TITLE,
+  },
+  {
     path: 'authors',
     loadComponent() {
       return import(

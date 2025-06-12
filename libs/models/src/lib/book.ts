@@ -15,6 +15,11 @@ export interface DBBook {
   paragraphs: string;
 }
 
+export interface BasicBookData {
+  id: string;
+  full: string;
+}
+
 export class Book {
   public id?: string;
   public authorId?: string;

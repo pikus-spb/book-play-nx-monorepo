@@ -1,6 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { Author } from '@book-play/models';
+import { BasicBookData } from '@book-play/models';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { ROUTER_REQUEST } from '@ngrx/router-store';
 import { Store } from '@ngrx/store';
@@ -11,33 +11,34 @@ import {
   loadingStartAction,
 } from '../loading/loading.action';
 import {
-  AllAuthorsActions,
-  loadAllAuthorsFailureAction,
-  loadAllAuthorsSuccessAction,
-} from './all-authors.actions';
+  BookSearchActions,
+  bookSearchFailureAction,
+  bookSearchSuccessAction,
+} from './book-search.actions';
 
 @Injectable({
   providedIn: 'root',
 })
-export class AllAuthorsEffects {
+export class BookSearchEffects {
   private actions$ = inject(Actions);
   private store = inject(Store);
   private booksApiService = inject(BooksApiService);
 
-  loadAllAuthors$ = createEffect(() => {
+  bookSearch$ = createEffect(() => {
     return this.actions$.pipe(
-      ofType(AllAuthorsActions.LoadAllAuthors),
-      switchMap(() => {
+      ofType(BookSearchActions.BookSearch),
+      switchMap(({ query }) => {
         this.store.dispatch(loadingStartAction());
-        return this.booksApiService.loadAllAuthors().pipe(
+        return this.booksApiService.bookSearch(query).pipe(
           takeUntil(this.actions$.pipe(ofType(ROUTER_REQUEST))),
           tap(() => this.store.dispatch(loadingEndAction())),
-          map((authors: Author[]) => {
-            return loadAllAuthorsSuccessAction({ authors });
+          map((books: BasicBookData[]) => {
+            return bookSearchSuccessAction({ books });
           }),
           catchError((errorResponse: HttpErrorResponse) => {
+            this.store.dispatch(loadingEndAction());
             return of(
-              loadAllAuthorsFailureAction({ errors: [errorResponse.message] })
+              bookSearchFailureAction({ errors: [errorResponse.message] })
             );
           })
         );
