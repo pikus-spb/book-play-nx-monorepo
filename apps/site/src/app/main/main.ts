@@ -21,6 +21,8 @@ import { AuthorBooksEffects } from '../shared/store/author-books/author-books.ef
 import { authorBooksReducers } from '../shared/store/author-books/author-books.reducers';
 import { AuthorSummaryEffects } from '../shared/store/author-summary/author-summary.effects';
 import { authorSummaryReducers } from '../shared/store/author-summary/author-summary.reducers';
+import { BookSearchEffects } from '../shared/store/book-search/book-search.effects';
+import { bookSearchReducers } from '../shared/store/book-search/book-search.reducers';
 import { BookSummaryEffects } from '../shared/store/book-summary/book-summary.effects';
 import { bookSummaryReducers } from '../shared/store/book-summary/book-summary.reducers';
 import { loadingReducer } from '../shared/store/loading/loading.reducer';
@@ -54,6 +56,7 @@ bootstrapApplication(MainComponent, {
         authorBooks: authorBooksReducers,
         authorSummary: authorSummaryReducers,
         bookSummary: bookSummaryReducers,
+        bookSearch: bookSearchReducers,
       }),
       EffectsModule.forRoot([]),
       EffectsModule.forFeature([
@@ -66,6 +69,7 @@ bootstrapApplication(MainComponent, {
         AuthorBooksEffects,
         AuthorSummaryEffects,
         BookSummaryEffects,
+        BookSearchEffects,
       ]),
       StoreDevtoolsModule.instrument(),
       StoreRouterConnectingModule.forRoot()

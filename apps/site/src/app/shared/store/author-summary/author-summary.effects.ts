@@ -37,7 +37,9 @@ export class AuthorSummaryEffects {
           }),
           catchError((errorResponse: HttpErrorResponse) => {
             return of(
-              loadAuthorSummaryFailureAction({ errors: [errorResponse.error] })
+              loadAuthorSummaryFailureAction({
+                errors: [errorResponse.message],
+              })
             );
           })
         );

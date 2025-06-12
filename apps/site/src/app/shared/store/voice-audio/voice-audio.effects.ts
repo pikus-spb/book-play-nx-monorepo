@@ -58,7 +58,7 @@ export class VoiceAudioEffects {
           }),
           catchError((errorResponse: HttpErrorResponse) => {
             return of(
-              voiceAudioLoadFailureAction({ errors: [errorResponse.error] })
+              voiceAudioLoadFailureAction({ errors: [errorResponse.message] })
             );
           })
         );

@@ -35,7 +35,9 @@ export class RandomAuthorSummaryEffects {
           }),
           catchError((errorResponse: HttpErrorResponse) => {
             return of(
-              loadRandomAuthorsActionFailure({ errors: [errorResponse.error] })
+              loadRandomAuthorsActionFailure({
+                errors: [errorResponse.message],
+              })
             );
           })
         );

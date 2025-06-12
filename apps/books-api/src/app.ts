@@ -1,4 +1,9 @@
-import { DBAuthor, DBAuthorSummary, DBBook } from '@book-play/models';
+import {
+  BasicBookData,
+  DBAuthor,
+  DBAuthorSummary,
+  DBBook,
+} from '@book-play/models';
 import { getJsonGzFileName, readZippedFile } from '@book-play/utils-node';
 import { environment } from 'environments/environment.ts';
 import mysql, { PoolOptions } from 'mysql2';
@@ -86,10 +91,25 @@ export default class BooksAPIApp {
   }
 
   authorBooks(authorId: string): Promise<Partial<DBBook>[]> {
-    const query = `SELECT id, name, genres FROM books WHERE authorId = "${authorId}"`;
+    const query = `SELECT id, name, genres FROM books WHERE authorId = "${authorId}" ORDER BY name`;
 
     return new Promise((resolve, reject) => {
       pool.query(query, (err, result: Partial<DBBook>[]) => {
+        if (err) {
+          console.error(err);
+          reject(err);
+        } else {
+          resolve(result);
+        }
+      });
+    });
+  }
+
+  bookSearch(query: string): Promise<BasicBookData[]> {
+    const sqlQuery = `SELECT books.id, books.full FROM books WHERE MATCH (full) AGAINST ('${query}')`;
+
+    return new Promise((resolve, reject) => {
+      pool.query(sqlQuery, (err, result: BasicBookData[]) => {
         if (err) {
           console.error(err);
           reject(err);

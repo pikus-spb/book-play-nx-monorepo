@@ -37,7 +37,7 @@ export class AuthorBooksEffects {
           }),
           catchError((errorResponse: HttpErrorResponse) => {
             return of(
-              loadAuthorBooksFailureAction({ errors: [errorResponse.error] })
+              loadAuthorBooksFailureAction({ errors: [errorResponse.message] })
             );
           })
         );
