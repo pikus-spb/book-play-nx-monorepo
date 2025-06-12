@@ -4,7 +4,7 @@
     - платформа для прослушивания книг, озвученных нейросетью.
   </p>
   @if (environment.RANDOM_AUTHORS_COUNT > 1) {
-  <h2>{{ environment.RANDOM_AUTHORS_COUNT }} случайных авторов дня:</h2>
+  <h2>Случайные авторы дня:</h2>
   } @else {
   <h2>Cлучайный автор дня:</h2>
   } @for (author of authorSummary(); track author.full) {
@@ -13,7 +13,7 @@
 
   <p>&nbsp;</p>
   @if (environment.RANDOM_BOOKS_COUNT > 1) {
-  <h2>{{ environment.RANDOM_BOOKS_COUNT }} случайных книги дня:</h2>
+  <h2>Случайные книги дня:</h2>
   } @else if (environment.RANDOM_BOOKS_COUNT === 1) {
   <h2>Случайная книга дня:</h2>
   } @for (book of books(); track book.id) {
