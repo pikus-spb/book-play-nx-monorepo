@@ -1,0 +1,10 @@
+@use 'vars' as *;
+
+:host {
+  countdown-timer {
+    position: absolute;
+    right: $default-padding;
+    top: $default-padding;
+    z-index: 2;
+  }
+}

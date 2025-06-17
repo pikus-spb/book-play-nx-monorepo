@@ -1,5 +1,8 @@
 @if (book()) {
-<ng-container>
+<ng-container class="container">
+  @if (countDownEnabled()) {
+  <countdown-timer></countdown-timer>
+  }
   <book-canvas
     [book]="book"
     (paragraphClick)="startPlayParagraph($event)"

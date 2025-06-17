@@ -8,7 +8,7 @@ export const APP_ROUTES: Route[] = [
   {
     path: 'welcome',
     loadComponent() {
-      return import('../../modules/welcome/components/welcome.component').then(
+      return import('../../features/welcome/components/welcome.component').then(
         (imported) => imported.WelcomeComponent
       );
     },
@@ -17,7 +17,7 @@ export const APP_ROUTES: Route[] = [
   {
     path: 'book/:id',
     loadComponent() {
-      return import('../../modules/book/components/book/book.component').then(
+      return import('../../features/book/components/book/book.component').then(
         (imported) => imported.BookComponent
       );
     },
@@ -29,7 +29,7 @@ export const APP_ROUTES: Route[] = [
     path: 'player',
     loadComponent() {
       return import(
-        '../../modules/player/components/player/player.component'
+        '../../features/player/components/player/player.component'
       ).then((imported) => imported.PlayerComponent);
     },
     canDeactivate: [StopBookPlayGuard],
@@ -38,7 +38,7 @@ export const APP_ROUTES: Route[] = [
     path: 'player/:id',
     loadComponent() {
       return import(
-        '../../modules/player/components/player/player.component'
+        '../../features/player/components/player/player.component'
       ).then((imported) => imported.PlayerComponent);
     },
     canDeactivate: [StopBookPlayGuard],
@@ -47,7 +47,7 @@ export const APP_ROUTES: Route[] = [
     path: 'author/:id',
     loadComponent() {
       return import(
-        '../../modules/author/components/author/author.component'
+        '../../features/author/components/author/author.component'
       ).then((imported) => imported.AuthorComponent);
     },
     resolve: {
@@ -57,7 +57,7 @@ export const APP_ROUTES: Route[] = [
   {
     path: 'voice',
     loadComponent() {
-      return import('../../modules/voice/components/voice.component').then(
+      return import('../../features/voice/components/voice.component').then(
         (imported) => imported.VoiceComponent
       );
     },
@@ -67,7 +67,7 @@ export const APP_ROUTES: Route[] = [
     path: 'books',
     loadComponent() {
       return import(
-        '../../modules/books/components/books/books.component'
+        '../../features/books/components/books/books.component'
       ).then((imported) => imported.BooksComponent);
     },
     title: DEFAULT_TITLE,
@@ -76,7 +76,7 @@ export const APP_ROUTES: Route[] = [
     path: 'authors',
     loadComponent() {
       return import(
-        '../../modules/authors/components/authors/authors.component'
+        '../../features/authors/components/authors/authors.component'
       ).then((imported) => imported.AuthorsComponent);
     },
     title: DEFAULT_TITLE,
@@ -84,7 +84,7 @@ export const APP_ROUTES: Route[] = [
   {
     path: '404',
     loadComponent() {
-      return import('../../modules/404/components/not-found.component').then(
+      return import('../../features/404/components/not-found.component').then(
         (imported) => imported.NotFoundComponent
       );
     },
@@ -94,7 +94,7 @@ export const APP_ROUTES: Route[] = [
     path: 'for-right-holders',
     loadComponent() {
       return import(
-        '../../modules/for-right-holders/components/for-right-holders.component'
+        '../../features/for-right-holders/components/for-right-holders.component'
       ).then((imported) => imported.ForRightHoldersComponent);
     },
     title: DEFAULT_TITLE,
@@ -103,7 +103,7 @@ export const APP_ROUTES: Route[] = [
     path: 'settings',
     loadComponent() {
       return import(
-        '../../modules/settings/components/settings/settings.component'
+        '../../features/settings/components/settings/settings.component'
       ).then((imported) => imported.SettingsComponent);
     },
     title: DEFAULT_TITLE,
