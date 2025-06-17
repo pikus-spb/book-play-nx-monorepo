@@ -1,0 +1,5 @@
+<span (click)="togglePlay()" title="Остановить/Запустить" class="button">{{
+  stopped() ? '▶️' : '⏸️'
+}}</span>
+<countdown [config]="countdownConfig" (event)="trigger($event)"></countdown>
+<span (click)="resetTimer()" title="Перезапустить" class="button">🔃</span>
