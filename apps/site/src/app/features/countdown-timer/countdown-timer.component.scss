@@ -1,0 +1,22 @@
+@use 'vars' as *;
+
+:host {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: $default-padding;
+  background-color: rgba(212 213 206 / 0.75);
+  font-family: 'Orbitron', sans-serif;
+  padding: 0 $default-padding;
+  width: auto;
+  color: black;
+  border-radius: $default-border-radius;
+
+  countdown {
+    min-width: 85px;
+  }
+
+  .button {
+    cursor: pointer;
+  }
+}

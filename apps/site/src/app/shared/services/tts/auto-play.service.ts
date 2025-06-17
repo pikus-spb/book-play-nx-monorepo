@@ -89,6 +89,7 @@ export class AutoPlayService {
   public stop(): void {
     this.audioPlayer.stop();
   }
+
   public get stopped$(): Observable<boolean> {
     return this.audioPlayer.stopped$;
   }
