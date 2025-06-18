@@ -16,12 +16,13 @@ describe('DarkModeSwitcherComponent', () => {
   let fixture: ComponentFixture<DarkModeSwitcherComponent>;
 
   beforeEach(async () => {
-    TestBed.configureTestingModule({
-      providers: [provideZonelessChangeDetection()],
-    });
-
     await TestBed.configureTestingModule({
-      imports: [DarkModeSwitcherComponent, MatSlideToggleModule, MatIconModule],
+      imports: [
+        provideZonelessChangeDetection(),
+        DarkModeSwitcherComponent,
+        MatSlideToggleModule,
+        MatIconModule,
+      ],
     }).compileComponents();
   });
 
