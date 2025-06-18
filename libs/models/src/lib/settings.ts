@@ -1,7 +1,7 @@
 import { Voices } from './tts-params';
 
-export interface Settings {
-  voice: VoiceSettings;
+export interface Settings extends VoiceSettings {
+  timer: number;
 }
 
 export interface VoiceSettings {

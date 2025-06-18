@@ -1,21 +1,21 @@
 import { inject, Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { of, switchMap } from 'rxjs';
-import { storeVoiceSettings } from '../../utils/voice-settings';
+import { storeSettings } from '../../utils/settings';
 import { voiceCacheResetAction } from '../voice-audio/voice-audio.actions';
-import { VoiceSettingsActions } from './voice-settings.actions';
+import { SettingsActions } from './settings.actions';
 
 @Injectable({
   providedIn: 'root',
 })
-export class VoiceSettingsEffects {
+export class SettingsEffects {
   private actions$ = inject(Actions);
 
-  voiceSettingsUpdate$ = createEffect(() => {
+  settingsUpdate$ = createEffect(() => {
     return this.actions$.pipe(
-      ofType(VoiceSettingsActions.VoiceSettingsUpdate),
+      ofType(SettingsActions.SettingsUpdate),
       switchMap(({ settings }) => {
-        storeVoiceSettings(settings);
+        storeSettings(settings);
         return of(voiceCacheResetAction());
       })
     );
