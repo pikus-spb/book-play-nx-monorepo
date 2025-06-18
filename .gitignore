@@ -46,3 +46,4 @@ Thumbs.db
 /.github/
 /.nx/
 /patches/
+.cursor/rules/nx-rules.mdc

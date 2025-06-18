@@ -1,4 +1,4 @@
-import { Injectable, OnDestroy } from '@angular/core';
+import { Injectable, OnDestroy, inject } from '@angular/core';
 import { PARAGRAPH_CLASS_PREFIX } from '@book-play/constants';
 import { Subject } from 'rxjs';
 import { CursorPositionService } from './cursor-position.service';
@@ -8,12 +8,10 @@ import { ScrollPositionHelperService } from './scroll-position-helper.service';
   providedIn: 'root',
 })
 export class DomHelperService implements OnDestroy {
-  private viewportScrolledDestroy$: Subject<void> = new Subject();
+  private cursorService = inject(CursorPositionService);
+  private scrollPositionHelper = inject(ScrollPositionHelperService);
 
-  constructor(
-    private cursorService: CursorPositionService,
-    private scrollPositionHelper: ScrollPositionHelperService
-  ) {}
+  private viewportScrolledDestroy$: Subject<void> = new Subject();
 
   public getParagraphNode(index: number): HTMLElement | null {
     return document.body.querySelector(`.${PARAGRAPH_CLASS_PREFIX}${index}`);

@@ -1,5 +1,4 @@
 import { ActiveBookState } from './active-book/active-book.state';
-import { AllAuthorsState } from './all-authors/all-authors.state';
 import { AuthorBooksState } from './author-books/author-books.state';
 import { AuthorSummaryState } from './author-summary/author-summary.state';
 import { BookSearchState } from './book-search/book-search.state';
@@ -15,7 +14,6 @@ export interface AppState {
   settings: SettingsState;
   voiceAudio: VoiceAudioState;
   activeBook: ActiveBookState;
-  allAuthors: AllAuthorsState;
   randomAuthors: RandomAuthorSummaryState;
   randomBooks: RandomBooks;
   authorBooks: AuthorBooksState;

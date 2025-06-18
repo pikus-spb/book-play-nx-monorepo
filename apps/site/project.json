@@ -4,7 +4,6 @@
   "projectType": "application",
   "prefix": "book-play",
   "sourceRoot": "apps/site/src",
-  "implicitDependencies": [],
   "schematics": {
     "@schematics/angular:component": {
       "style": "scss",
@@ -18,6 +17,18 @@
     }
   },
   "tags": [],
+  "generators": {
+    "@schematics/angular:component": {
+      "style": "scss",
+      "standalone": true,
+      "skipImport": true,
+      "changeDetection": "OnPush"
+    },
+    "@schematics/angular:pipe": {
+      "standalone": true,
+      "skipImport": true
+    }
+  },
   "targets": {
     "build": {
       "executor": "@angular-devkit/build-angular:application",
@@ -104,7 +115,8 @@
           "buildTarget": "site:build:development"
         }
       },
-      "defaultConfiguration": "development"
+      "defaultConfiguration": "development",
+      "continuous": true
     },
     "extract-i18n": {
       "executor": "@angular-devkit/build-angular:extract-i18n",
@@ -137,18 +149,6 @@
         "staticFilePath": "dist/apps/site/browser",
         "spa": true
       }
-    }
-  },
-  "generators": {
-    "@schematics/angular:component": {
-      "style": "scss",
-      "standalone": true,
-      "skipImport": true,
-      "changeDetection": "OnPush"
-    },
-    "@schematics/angular:pipe": {
-      "standalone": true,
-      "skipImport": true
     }
   }
 }

@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { BOOKS_API_PORT, BOOKS_API_PORT_SECURE } from '@book-play/constants';
 
 import {
@@ -20,13 +20,13 @@ import { map, Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class BooksApiService {
+  private http = inject(HttpClient);
+
   private readonly apiUrlPrefix = getCurrentProtocolUrl(
     environment.API_HOST,
     BOOKS_API_PORT,
     BOOKS_API_PORT_SECURE
   );
-
-  constructor(private http: HttpClient) {}
 
   public loadAllAuthors(): Observable<Author[]> {
     const url = this.apiUrlPrefix + '/author/all';

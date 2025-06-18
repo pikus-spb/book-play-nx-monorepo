@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -18,7 +17,7 @@ import { map } from 'rxjs';
   templateUrl: './author.component.html',
   styleUrls: ['./author.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [CommonModule, RouterLink, AuthorGenresListComponent],
+  imports: [RouterLink, AuthorGenresListComponent],
 })
 export class AuthorComponent {
   private route = inject(ActivatedRoute);
