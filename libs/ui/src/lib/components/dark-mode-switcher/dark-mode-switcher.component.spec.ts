@@ -15,16 +15,10 @@ describe('DarkModeSwitcherComponent', () => {
   let component: DarkModeSwitcherComponent;
   let fixture: ComponentFixture<DarkModeSwitcherComponent>;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [
-        provideZonelessChangeDetection(),
-        DarkModeSwitcherComponent,
-        MatSlideToggleModule,
-        MatIconModule,
-      ],
-    }).compileComponents();
-  });
+  TestBed.configureTestingModule({
+    providers: [provideZonelessChangeDetection()],
+    imports: [DarkModeSwitcherComponent, MatSlideToggleModule, MatIconModule],
+  }).compileComponents();
 
   beforeEach(() => {
     fixture = TestBed.createComponent(DarkModeSwitcherComponent);
