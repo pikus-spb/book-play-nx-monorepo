@@ -1,4 +1,4 @@
-import { provideExperimentalZonelessChangeDetection } from '@angular/core';
+import { provideZonelessChangeDetection } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { CalculateComponent } from './calculate.component';
 import { HeightCalculateComponent } from './height-calculate.component';
@@ -9,10 +9,7 @@ describe('HeightCalculateComponentComponent', () => {
 
   TestBed.configureTestingModule({
     imports: [HeightCalculateComponent],
-    providers: [
-      CalculateComponent,
-      provideExperimentalZonelessChangeDetection(),
-    ],
+    providers: [CalculateComponent, provideZonelessChangeDetection()],
   });
 
   beforeEach(async () => {
