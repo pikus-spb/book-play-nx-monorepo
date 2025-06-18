@@ -1,7 +1,7 @@
 import {
   Component,
   DebugElement,
-  provideExperimentalZonelessChangeDetection,
+  provideZonelessChangeDetection,
   Signal,
   TemplateRef,
   ViewContainerRef,
@@ -45,7 +45,7 @@ xdescribe('LoadingThenShowDirective', () => {
     TestBed.configureTestingModule({
       imports: [LoadingThenShowDirective, TestComponent],
       providers: [
-        provideExperimentalZonelessChangeDetection(),
+        provideZonelessChangeDetection(),
         ViewContainerRef,
         { provide: TemplateRef, useValue: {} as TemplateRef<unknown> },
         { provide: EventsStateService, useValue: eventsStateServiceMock },
