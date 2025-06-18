@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
 import { ScrollbarDirective } from '@book-play/ui';
 import { Store } from '@ngrx/store';
@@ -12,7 +11,7 @@ import { BookComponent } from '../../book/components/book/book.component';
 
 @Component({
   selector: 'welcome',
-  imports: [CommonModule, BookComponent, ScrollbarDirective, AuthorComponent],
+  imports: [BookComponent, ScrollbarDirective, AuthorComponent],
   templateUrl: './welcome.component.html',
   styleUrls: ['./welcome.component.scss'],
 })

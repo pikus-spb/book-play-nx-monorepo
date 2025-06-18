@@ -11,22 +11,6 @@ import mysql, { PoolOptions } from 'mysql2';
 const pool = mysql.createPool(environment.DB_CONFIG as unknown as PoolOptions);
 
 export default class BooksAPIApp {
-  authors(): Promise<Partial<DBAuthor>[]> {
-    return new Promise((resolve, reject) => {
-      pool.query(
-        'SELECT id, first, last FROM authors ORDER BY full',
-        (err, result: Partial<DBAuthor>[]) => {
-          if (err) {
-            console.error(err);
-            reject(err);
-          } else {
-            resolve(result);
-          }
-        }
-      );
-    });
-  }
-
   async authorSummary(id: string): Promise<DBAuthorSummary> {
     return new Promise((resolve, reject) => {
       pool.query(

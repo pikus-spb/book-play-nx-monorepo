@@ -48,6 +48,9 @@ import { BookParagraphComponent } from '../book-paragraph/book-paragraph.compone
   ],
 })
 export class BookCanvasComponent implements OnDestroy {
+  private el = inject(ElementRef);
+  private domHelper = inject(DomHelperService);
+
   @Input() set book(book: Signal<Book | null>) {
     this.textIndexMapperService.setParagraphs(book()?.paragraphs || []);
     this._book = book;
@@ -61,8 +64,6 @@ export class BookCanvasComponent implements OnDestroy {
   public textIndexMapperService = inject(TextIndexMapperService);
 
   private _book!: Signal<Book | null>;
-
-  constructor(private el: ElementRef, private domHelper: DomHelperService) {}
 
   public heightCalculated(delta: HeightDelta) {
     setupViewportScrollerService(

@@ -73,15 +73,6 @@ export const APP_ROUTES: Route[] = [
     title: DEFAULT_TITLE,
   },
   {
-    path: 'authors',
-    loadComponent() {
-      return import(
-        '../../features/authors/components/authors/authors.component'
-      ).then((imported) => imported.AuthorsComponent);
-    },
-    title: DEFAULT_TITLE,
-  },
-  {
     path: '404',
     loadComponent() {
       return import('../../features/404/components/not-found.component').then(

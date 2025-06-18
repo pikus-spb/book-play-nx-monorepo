@@ -33,17 +33,6 @@ httpsServer.listen(BOOKS_API_PORT_SECURE, () => {
   console.log(`Web server is listening on port ${BOOKS_API_PORT_SECURE}`);
 });
 
-expressApp.get('/author/all', cors(corsOptionsDelegate), (req, res) => {
-  app
-    .authors()
-    .then((books) => {
-      res.json(books);
-    })
-    .catch((err) => {
-      res.json(err);
-    });
-});
-
 expressApp.get(
   '/author/id/:id/summary',
   cors(corsOptionsDelegate),

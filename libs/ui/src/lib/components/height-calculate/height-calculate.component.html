@@ -1,5 +1,3 @@
-<lib-calculate
-  *ngIf="run()"
-  #child
-  (done)="calculationDone($event)"
-></lib-calculate>
+@if (run()) {
+<lib-calculate #child (done)="calculationDone($event)"></lib-calculate>
+}
