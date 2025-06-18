@@ -1,4 +1,4 @@
-import { provideExperimentalZonelessChangeDetection } from '@angular/core';
+import { provideZonelessChangeDetection } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatProgressBar } from '@angular/material/progress-bar';
 import {
@@ -19,7 +19,7 @@ describe('LoadingIndicatorComponent', () => {
   beforeEach(async () => {
     TestBed.configureTestingModule({
       imports: [MatProgressBar],
-      providers: [provideExperimentalZonelessChangeDetection()],
+      providers: [provideZonelessChangeDetection()],
     });
 
     fixture = TestBed.createComponent(LoadingIndicatorComponent);
