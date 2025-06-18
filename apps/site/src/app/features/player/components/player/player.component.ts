@@ -2,9 +2,9 @@ import {
   AfterViewInit,
   ChangeDetectionStrategy,
   Component,
-  computed,
   effect,
   inject,
+  linkedSignal,
 } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { RouterHelperService } from '@book-play/ui';
@@ -18,6 +18,7 @@ import {
   activeBookLoadByIdAction,
 } from '../../../../shared/store/active-book/active-book.actions';
 import { activeBookSelector } from '../../../../shared/store/active-book/active-book.selectors';
+import { settingsSelector } from '../../../../shared/store/settings/settings.selectors';
 import { CountdownTimerComponent } from '../../../countdown-timer/countdown-timer.component';
 import { BookCanvasComponent } from '../book-canvas/book-canvas.component';
 
@@ -34,8 +35,9 @@ export class PlayerComponent implements AfterViewInit {
   private routerHelperService = inject(RouterHelperService);
   private store = inject(Store);
   public book = this.store.selectSignal(activeBookSelector);
-  protected countDownEnabled = computed(() => {
-    return localStorage.getItem('countdownTimerEnabled') !== null;
+  private settings = this.store.selectSignal(settingsSelector);
+  protected countDownEnabled = linkedSignal(() => {
+    return this.settings().timer > 0;
   });
 
   constructor() {
