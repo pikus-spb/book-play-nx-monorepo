@@ -46,7 +46,8 @@ body.dark {
 
 html,
 body {
-  @include mat.core();
+  @include mat.elevation-classes();
+  @include mat.app-background();
   background: var(--mat-sys-surface);
   color: var(--mat-sys-on-surface);
   margin: 0;
@@ -57,7 +58,7 @@ body {
 html {
   a:not(.underline, .mdc-list-item) {
     color: var(
-      --mdc-list-list-item-label-text-color,
+      --mat-list-list-item-label-text-color,
       var(--mat-sys-on-surface)
     );
     font-weight: normal;
@@ -65,7 +66,7 @@ html {
 
   mat-chip {
     background-color: var(
-      --mdc-fab-container-color,
+      --mat-fab-container-color,
       var(--mat-sys-primary-container)
     ) !important;
 

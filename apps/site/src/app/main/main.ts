@@ -4,7 +4,7 @@ import {
 } from '@angular/common/http';
 import {
   importProvidersFrom,
-  provideExperimentalZonelessChangeDetection,
+  provideZonelessChangeDetection,
 } from '@angular/core';
 import { bootstrapApplication } from '@angular/platform-browser';
 import { provideAnimations } from '@angular/platform-browser/animations';
@@ -16,8 +16,6 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 
 import { ActiveBookEffects } from '../shared/store/active-book/active-book.effects';
 import { activeBookReducers } from '../shared/store/active-book/active-book.reducers';
-import { AllAuthorsEffects } from '../shared/store/all-authors/all-authors.effects';
-import { allAuthorsReducers } from '../shared/store/all-authors/all-authors.reducers';
 import { AuthorBooksEffects } from '../shared/store/author-books/author-books.effects';
 import { authorBooksReducers } from '../shared/store/author-books/author-books.reducers';
 import { AuthorSummaryEffects } from '../shared/store/author-summary/author-summary.effects';
@@ -43,7 +41,7 @@ bootstrapApplication(MainComponent, {
   providers: [
     provideHttpClient(withInterceptorsFromDi()),
     provideRouter(APP_ROUTES),
-    provideExperimentalZonelessChangeDetection(),
+    provideZonelessChangeDetection(),
     provideAnimations(),
     importProvidersFrom(
       StoreModule.forRoot({
@@ -52,7 +50,6 @@ bootstrapApplication(MainComponent, {
         settings: settingsReducers,
         voiceAudio: voiceAudioReducers,
         activeBook: activeBookReducers,
-        allAuthors: allAuthorsReducers,
         randomAuthors: randomAuthorSummaryReducers,
         randomBooks: randomBooksReducers,
         authorBooks: authorBooksReducers,
@@ -65,7 +62,6 @@ bootstrapApplication(MainComponent, {
         SettingsEffects,
         VoiceAudioEffects,
         ActiveBookEffects,
-        AllAuthorsEffects,
         RandomAuthorSummaryEffects,
         RandomBooksEffects,
         AuthorBooksEffects,

@@ -1,4 +1,5 @@
-<div *ngIf="book() as book">
+@if (book(); as book) {
+<div>
   <img
     [src]="coverSrc()"
     [width]="BOOK_IMAGE_WIDTH"
@@ -11,15 +12,12 @@
       <a [routerLink]="['/author', book.author.id]">{{ book.author.full }}</a>
     </h4>
     <h2>{{ book.name }}</h2>
-
     <lib-author-genres-list [genres]="book.genres">
       @if (book.date) {
       <span class="date">{{ book.date }}г.</span>
       }
     </lib-author-genres-list>
-
     <span class="annotation" [innerHTML]="book.annotation"></span>
-
     <div class="action-panel">
       <button
         mat-fab
@@ -36,3 +34,4 @@
     </div>
   </div>
 </div>
+}

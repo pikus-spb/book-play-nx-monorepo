@@ -7,6 +7,7 @@ import {
   HostListener,
   AfterViewInit,
   OnDestroy,
+  inject,
 } from '@angular/core';
 import { fromEvent, Subject, takeUntil, tap } from 'rxjs';
 
@@ -15,13 +16,13 @@ import { fromEvent, Subject, takeUntil, tap } from 'rxjs';
   standalone: true,
 })
 export class UploadFileDirective implements AfterViewInit, OnDestroy {
+  private el = inject(ElementRef);
+
   @Input() accept?: string;
   @Output() uploadFile = new EventEmitter<FileList>();
 
   private fileInput: HTMLInputElement | null = null;
   private destroyed$ = new Subject<boolean>();
-
-  constructor(private el: ElementRef) {}
 
   ngAfterViewInit() {
     this.createFileInput();

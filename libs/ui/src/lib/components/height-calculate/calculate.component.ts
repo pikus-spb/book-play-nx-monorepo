@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import {
   AfterViewInit,
   ChangeDetectionStrategy,
@@ -17,7 +16,6 @@ const SAMPLE = `Участвовавшая в беседе Нэнси Уайт �
 
 @Component({
   selector: 'lib-calculate',
-  imports: [CommonModule],
   templateUrl: './calculate.component.html',
   styles: [
     `

@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -10,13 +9,14 @@ import {
   Output,
   signal,
   ViewChild,
+  inject,
 } from '@angular/core';
 import { HeightDelta } from '../../model/delta';
 import { CalculateComponent } from './calculate.component';
 
 @Component({
   selector: 'lib-height-calculate',
-  imports: [CommonModule, CalculateComponent],
+  imports: [CalculateComponent],
   templateUrl: './height-calculate.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -27,7 +27,9 @@ export class HeightCalculateComponent implements OnInit {
 
   public run = signal<boolean>(false);
 
-  constructor(el: ElementRef) {
+  constructor() {
+    const el = inject(ElementRef);
+
     effect(() => {
       el.nativeElement.style.display = this.run() ? '' : 'none';
     });

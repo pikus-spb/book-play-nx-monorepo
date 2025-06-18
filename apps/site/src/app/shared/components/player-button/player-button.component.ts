@@ -3,6 +3,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   HostListener,
+  inject,
 } from '@angular/core';
 import { MatMiniFabButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
@@ -18,7 +19,7 @@ import { AutoPlayService } from '../../services/tts/auto-play.service';
   imports: [MatMiniFabButton, MatTooltip, MatIcon, AsyncPipe],
 })
 export class PlayerButtonComponent {
-  constructor(public autoPlayService: AutoPlayService) {}
+  autoPlayService = inject(AutoPlayService);
 
   @HostListener('document:keydown.space', ['$event'])
   public click(event: Event, forceStart?: boolean) {

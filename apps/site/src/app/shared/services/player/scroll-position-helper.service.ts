@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { AppEventNames, EventsStateService } from '../events-state.service';
 import { viewportScroller } from './viewport-scroller.service';
 
@@ -6,7 +6,7 @@ import { viewportScroller } from './viewport-scroller.service';
   providedIn: 'root',
 })
 export class ScrollPositionHelperService {
-  constructor(private eventStateService: EventsStateService) {}
+  private eventStateService = inject(EventsStateService);
 
   public async scrollToIndex(cursorIndex: number): Promise<void> {
     if (viewportScroller) {
