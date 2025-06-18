@@ -1,4 +1,4 @@
-import { Renderer2 } from '@angular/core';
+import { provideZonelessChangeDetection, Renderer2 } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
@@ -16,6 +16,10 @@ describe('DarkModeSwitcherComponent', () => {
   let fixture: ComponentFixture<DarkModeSwitcherComponent>;
 
   beforeEach(async () => {
+    TestBed.configureTestingModule({
+      providers: [provideZonelessChangeDetection()],
+    });
+
     await TestBed.configureTestingModule({
       imports: [DarkModeSwitcherComponent, MatSlideToggleModule, MatIconModule],
     }).compileComponents();
