@@ -3,17 +3,18 @@ import {
   Component,
   effect,
   inject,
-  OnInit,
   viewChild,
 } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { DEFAULT_COUNTDOWN_TIMER_VALUE } from '@book-play/constants';
+import { Store } from '@ngrx/store';
 import {
   CountdownComponent,
   CountdownConfig,
   CountdownEvent,
 } from 'ngx-countdown';
 import { AutoPlayService } from '../../shared/services/tts/auto-play.service';
+import { settingsSelector } from '../../shared/store/settings/settings.selectors';
 
 @Component({
   selector: 'countdown-timer',
@@ -22,7 +23,7 @@ import { AutoPlayService } from '../../shared/services/tts/auto-play.service';
   styleUrl: './countdown-timer.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CountdownTimerComponent implements OnInit {
+export class CountdownTimerComponent {
   private autoPlayService = inject(AutoPlayService);
   protected stopped = toSignal(this.autoPlayService.stopped$);
   protected countdownConfig: CountdownConfig = {
@@ -32,17 +33,17 @@ export class CountdownTimerComponent implements OnInit {
     notify: 1,
   };
   private countDownComponent = viewChild(CountdownComponent);
+  private store = inject(Store);
+  private settings = this.store.selectSignal(settingsSelector);
 
   constructor() {
     effect(() => {
       this.checkStopped();
     });
-  }
 
-  public ngOnInit() {
-    this.countdownConfig.leftTime =
-      Number(localStorage.getItem('countdownTimerValue')) ||
-      DEFAULT_COUNTDOWN_TIMER_VALUE;
+    effect(() => {
+      this.countdownConfig.leftTime = this.settings().timer;
+    });
   }
 
   protected togglePlay() {

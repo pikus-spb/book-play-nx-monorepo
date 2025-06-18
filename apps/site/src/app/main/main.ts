@@ -7,6 +7,7 @@ import {
   provideExperimentalZonelessChangeDetection,
 } from '@angular/core';
 import { bootstrapApplication } from '@angular/platform-browser';
+import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideRouter } from '@angular/router';
 import { EffectsModule } from '@ngrx/effects';
 import { routerReducer, StoreRouterConnectingModule } from '@ngrx/router-store';
@@ -30,10 +31,10 @@ import { RandomAuthorSummaryEffects } from '../shared/store/random-author-detail
 import { randomAuthorSummaryReducers } from '../shared/store/random-author-details/random-author-summary.reducers';
 import { RandomBooksEffects } from '../shared/store/random-books/random-books.effects';
 import { randomBooksReducers } from '../shared/store/random-books/random-books.reducers';
+import { SettingsEffects } from '../shared/store/settings/settings.effects';
+import { settingsReducers } from '../shared/store/settings/settings.reducers';
 import { VoiceAudioEffects } from '../shared/store/voice-audio/voice-audio.effects';
 import { voiceAudioReducers } from '../shared/store/voice-audio/voice-audio.reducers';
-import { VoiceSettingsEffects } from '../shared/store/voice-settings/voice-settings.effects';
-import { voiceSettingsReducers } from '../shared/store/voice-settings/voice-settings.reducers';
 
 import { MainComponent } from './components/main/main.component';
 import { APP_ROUTES } from './routing/app-routes';
@@ -43,11 +44,12 @@ bootstrapApplication(MainComponent, {
     provideHttpClient(withInterceptorsFromDi()),
     provideRouter(APP_ROUTES),
     provideExperimentalZonelessChangeDetection(),
+    provideAnimations(),
     importProvidersFrom(
       StoreModule.forRoot({
         router: routerReducer,
         loading: loadingReducer,
-        voiceSettings: voiceSettingsReducers,
+        settings: settingsReducers,
         voiceAudio: voiceAudioReducers,
         activeBook: activeBookReducers,
         allAuthors: allAuthorsReducers,
@@ -60,7 +62,7 @@ bootstrapApplication(MainComponent, {
       }),
       EffectsModule.forRoot([]),
       EffectsModule.forFeature([
-        VoiceSettingsEffects,
+        SettingsEffects,
         VoiceAudioEffects,
         ActiveBookEffects,
         AllAuthorsEffects,

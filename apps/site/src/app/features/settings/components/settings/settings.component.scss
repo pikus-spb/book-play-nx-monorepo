@@ -2,6 +2,14 @@
 @use 'mixins' as *;
 @use '@angular/material' as mat;
 
+::ng-deep .cdk-global-overlay-wrapper {
+  mat-toolbar {
+    .timepicker-period {
+      display: none;
+    }
+  }
+}
+
 .container {
   @include scrollable-container;
   padding: $default-padding * 2;
@@ -32,6 +40,33 @@
       border-radius: $default-border-radius;
       align-items: center;
       gap: $default-padding;
+
+      &.timer {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        ::ng-deep {
+          .period-select {
+            display: none;
+          }
+
+          .mdc-line-ripple {
+            display: none;
+          }
+
+          .mdc-text-field--filled {
+            background-color: transparent;
+          }
+
+          .mat-mdc-form-field-subscript-wrapper {
+            display: none;
+          }
+          .ngx-mat-timepicker__toggle {
+            margin-bottom: 0;
+          }
+        }
+      }
     }
 
     ::ng-deep {

@@ -7,12 +7,12 @@ import { BookSummaryState } from './book-summary/book-summary.state';
 import { LoadingState } from './loading/loading.state';
 import { RandomAuthorSummaryState } from './random-author-details/random-author-summary.state';
 import { RandomBooks } from './random-books/random-books';
+import { SettingsState } from './settings/settings.state';
 import { VoiceAudioState } from './voice-audio/voice-audio.state';
-import { VoiceSettingsState } from './voice-settings/voice-settings.state';
 
 export interface AppState {
   loading: LoadingState;
-  voiceSettings: VoiceSettingsState;
+  settings: SettingsState;
   voiceAudio: VoiceAudioState;
   activeBook: ActiveBookState;
   allAuthors: AllAuthorsState;

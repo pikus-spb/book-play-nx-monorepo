@@ -10,7 +10,7 @@ import { getCurrentProtocolUrl } from '@book-play/utils-browser';
 import { createQueryString } from '@book-play/utils-common';
 import { environment } from 'environments/environment';
 import { first, Observable, shareReplay, tap } from 'rxjs';
-import { getVoiceSettings } from '../../utils/voice-settings';
+import { getSettings } from '../../utils/settings';
 
 const AUDIO_HEADERS = new HttpHeaders({
   'Content-Type': 'application/x-www-form-urlencoded',
@@ -36,7 +36,7 @@ export class TtsApiService {
       ) + '/tts';
 
     const safeText = encodeURIComponent(text);
-    const { pitch, rate, voice } = getVoiceSettings();
+    const { pitch, rate, voice } = getSettings();
     const options: TtsParams = { text: safeText, pitch, rate, voice };
     const postParams = createQueryString(options);
 

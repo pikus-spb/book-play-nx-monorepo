@@ -48,5 +48,15 @@
       </mat-slider>
       <span>Высокая</span>
     </fieldset>
+
+    <h3>Таймер выключения</h3>
+    <fieldset class="timer">
+      <ngx-mat-timepicker-field
+        formControlName="timer"
+        [min]="'0:00'"
+        [max]="'23:59'"
+        [format]="24"
+      ></ngx-mat-timepicker-field>
+    </fieldset>
   </form>
 </div>

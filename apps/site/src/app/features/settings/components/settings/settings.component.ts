@@ -12,13 +12,17 @@ import {
   SETTINGS_VOICE_PITCH_DELTA,
   SETTINGS_VOICE_RATE_DELTA,
 } from '@book-play/constants';
-import { Voices, VoiceSettings } from '@book-play/models';
+import { Settings, Voices } from '@book-play/models';
 import { ScrollbarDirective } from '@book-play/ui';
+import {
+  secondsToTimeString,
+  timeStringToSeconds,
+} from '@book-play/utils-common';
 import { Store } from '@ngrx/store';
-import { debounceTime, distinctUntilChanged, tap } from 'rxjs';
-import { voiceSettingsUpdateAction } from '../../../../shared/store/voice-settings/voice-settings.actions';
-
-import { getVoiceSettings } from '../../../../shared/utils/voice-settings';
+import { NgxMatTimepickerFieldComponent } from 'ngx-mat-timepicker';
+import { debounceTime, distinctUntilChanged, map, tap } from 'rxjs';
+import { settingsUpdateAction } from '../../../../shared/store/settings/settings.actions';
+import { settingsSelector } from '../../../../shared/store/settings/settings.selectors';
 
 @Component({
   selector: 'settings',
@@ -31,6 +35,7 @@ import { getVoiceSettings } from '../../../../shared/utils/voice-settings';
     MatSlider,
     MatSliderThumb,
     ScrollbarDirective,
+    NgxMatTimepickerFieldComponent,
   ],
 })
 export class SettingsComponent {
@@ -38,6 +43,7 @@ export class SettingsComponent {
 
   private fb = inject(FormBuilder);
   private store = inject(Store);
+  private settings = this.store.selectSignal(settingsSelector);
   private destroyRef = inject(DestroyRef);
 
   constructor() {
@@ -52,28 +58,36 @@ export class SettingsComponent {
   }
 
   private initializeValues(): void {
-    const { voice, rate, pitch } = getVoiceSettings();
+    const { voice, rate, pitch, timer } = this.settings();
     this.form = this.fb.group({
       voice: [voice],
       rate: [rate],
       pitch: [pitch],
+      timer: [secondsToTimeString(timer)],
     });
   }
 
   private addEventListeners(): void {
     this.form.valueChanges
       .pipe(
-        distinctUntilChanged(
-          (previous: VoiceSettings, current: VoiceSettings) => {
-            return (
-              `${previous.voice}${previous.rate}${previous.pitch}` ===
-              `${current.voice}${current.rate}${current.pitch}`
-            );
-          }
-        ),
+        distinctUntilChanged((previous: Settings, current: Settings) => {
+          return (
+            `${previous.voice}${previous.rate}${previous.pitch}${previous.timer}` ===
+            `${current.voice}${current.rate}${current.pitch}${current.timer}`
+          );
+        }),
         debounceTime(100),
+        map((valueChanges) => {
+          const { voice, rate, pitch, timer } = valueChanges;
+          return {
+            voice,
+            rate,
+            pitch,
+            timer: timeStringToSeconds(String(timer)),
+          };
+        }),
         tap((settings) => {
-          this.store.dispatch(voiceSettingsUpdateAction({ settings }));
+          this.store.dispatch(settingsUpdateAction({ settings }));
         }),
         takeUntilDestroyed(this.destroyRef)
       )
