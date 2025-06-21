@@ -33,4 +33,8 @@ export const YANDEX_TTS_API_DEFAULT_OPTIONS = Object.freeze({
   quality: 'hi',
   speaker: 'ermil',
 });
-export const TTS_REQUEST_CACHE_LIVE_TIME = 1000;
+export const VOICE_CACHE_PRELOAD_EXTRA = Object.freeze({
+  min: 0,
+  default: 10,
+  max: 50,
+});

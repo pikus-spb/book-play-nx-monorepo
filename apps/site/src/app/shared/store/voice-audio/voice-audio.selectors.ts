@@ -7,7 +7,8 @@ export const selectFeature = (state: AppState) => state.voiceAudio;
 export const voiceAudioRecordSelector = createSelector(
   selectFeature,
   (state: VoiceAudioState, props: { text: string }) => {
-    return state.cache[props.text];
+    const record = state.cache.get(props.text);
+    return record ? record.data : '';
   }
 );
 

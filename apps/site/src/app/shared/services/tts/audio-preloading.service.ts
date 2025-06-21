@@ -1,16 +1,12 @@
 import { inject, Injectable } from '@angular/core';
+import { VOICE_CACHE_PRELOAD_EXTRA } from '@book-play/constants';
 import { select, Store } from '@ngrx/store';
 import { filter, firstValueFrom, Observable, of } from 'rxjs';
 import { activeBookSelector } from '../../store/active-book/active-book.selectors';
 
-import { VoiceAudioHelperService } from '../../store/voice-audio/voice-audio-helper.service';
+import { VoiceAudioHelperService } from '../../store/voice-audio/voice-audio-helpers';
 import { voiceAudioLoadAction } from '../../store/voice-audio/voice-audio.actions';
 import { voiceAudioRecordSelector } from '../../store/voice-audio/voice-audio.selectors';
-
-export const PRELOAD_EXTRA = Object.freeze({
-  min: 0,
-  default: 10,
-});
 
 @Injectable({
   providedIn: 'root',
@@ -38,7 +34,7 @@ export class AudioPreloadingService {
 
   public async preloadParagraph(
     startIndex: number,
-    extra: number = PRELOAD_EXTRA.default
+    extra: number = VOICE_CACHE_PRELOAD_EXTRA.default
   ): Promise<void> {
     const textParagraphs = this.activeBook()?.textParagraphs;
     const dataIsValid =

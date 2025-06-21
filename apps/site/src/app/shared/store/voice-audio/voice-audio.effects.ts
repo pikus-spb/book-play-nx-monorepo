@@ -34,8 +34,8 @@ export class VoiceAudioEffects {
   voiceAudioCacheUpdate$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(VoiceAudioActions.VoiceAudioCacheUpdate),
-      switchMap(({ text, data }) => {
-        return of(voiceAudioLoadSuccessAction({ text, data }));
+      switchMap(({ text, record }) => {
+        return of(voiceAudioLoadSuccessAction({ text, data: record.data }));
       })
     );
   });
@@ -45,22 +45,29 @@ export class VoiceAudioEffects {
       ofType(VoiceAudioActions.VoiceAudioLoad),
       withLatestFrom(this.store.select(voiceAudioSelector)),
       mergeMap(([{ text }, cache]) => {
-        if (cache[text]) {
-          return of(voiceAudioLoadSuccessAction({ text, data: cache[text] }));
+        if (cache.has(text)) {
+          return of(
+            voiceAudioLoadSuccessAction({ text, data: cache.get(text)!.data })
+          );
         }
+
+        const timestamp = Date.now();
         return this.ttsApiService.textToSpeech(text).pipe(
-          takeUntil(this.actions$.pipe(ofType(ROUTER_REQUEST))),
           switchMap((data: Blob) => {
             return blobToBase64(data);
           }),
           map((data: Base64Data) => {
-            return voiceCacheUpdateAction({ text, data });
+            return voiceCacheUpdateAction({
+              text,
+              record: { timestamp, data },
+            });
           }),
           catchError((errorResponse: HttpErrorResponse) => {
             return of(
               voiceAudioLoadFailureAction({ errors: [errorResponse.message] })
             );
-          })
+          }),
+          takeUntil(this.actions$.pipe(ofType(ROUTER_REQUEST)))
         );
       })
     );
