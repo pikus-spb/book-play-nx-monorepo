@@ -1,5 +1,6 @@
 import { effect, inject, Injectable } from '@angular/core';
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
+import { VOICE_CACHE_PRELOAD_EXTRA } from '@book-play/constants';
 import { Book } from '@book-play/models';
 import { Store } from '@ngrx/store';
 import {
@@ -15,15 +16,12 @@ import {
   loadingEndAction,
   loadingStartAction,
 } from '../../store/loading/loading.action';
-import { VoiceAudioHelperService } from '../../store/voice-audio/voice-audio-helper.service';
+import { VoiceAudioHelperService } from '../../store/voice-audio/voice-audio-helpers';
 import { DomAudioHelperService } from '../dom-audio-helper.service';
 import { AppEventNames, EventsStateService } from '../events-state.service';
 import { CursorPositionService } from '../player/cursor-position.service';
 import { DomHelperService } from '../player/dom-helper.service';
-import {
-  AudioPreloadingService,
-  PRELOAD_EXTRA,
-} from './audio-preloading.service';
+import { AudioPreloadingService } from './audio-preloading.service';
 
 @Injectable({
   providedIn: 'root',
@@ -79,7 +77,7 @@ export class AutoPlayService {
 
       await this.preloadHelper.preloadParagraph(
         this.cursorService.position,
-        PRELOAD_EXTRA.min
+        VOICE_CACHE_PRELOAD_EXTRA.min
       );
 
       this.store.dispatch(loadingEndAction());

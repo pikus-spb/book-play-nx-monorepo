@@ -1,6 +1,11 @@
 import { Base64Data, Errors } from '@book-play/models';
 
-export type AudioCache = Record<string, Base64Data>;
+export interface AudioCacheRecord {
+  data: Base64Data;
+  timestamp: number;
+}
+
+export type AudioCache = Map<string, AudioCacheRecord>;
 
 export interface VoiceAudioState {
   cache: AudioCache;
@@ -8,6 +13,6 @@ export interface VoiceAudioState {
 }
 
 export const initialState: VoiceAudioState = Object.freeze({
-  cache: {},
+  cache: new Map() as AudioCache,
   errors: [],
 });
