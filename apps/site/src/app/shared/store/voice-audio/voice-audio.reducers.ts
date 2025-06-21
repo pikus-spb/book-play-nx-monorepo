@@ -1,5 +1,6 @@
 import { routerNavigationAction } from '@ngrx/router-store';
 import { createReducer, on } from '@ngrx/store';
+import { cleanUpCache } from './voice-audio-helpers';
 import {
   voiceAudioLoadFailureAction,
   voiceAudioLoadSuccessAction,
@@ -13,16 +14,15 @@ export const voiceAudioReducers = createReducer(
 
   on(voiceCacheResetAction, (state) => ({
     ...state,
-    cache: {},
+    cache: new Map(),
   })),
 
   on(voiceCacheUpdateAction, (state, action) => {
+    const cache = cleanUpCache(state.cache);
+    cache.set(action.text, action.record);
     return {
       ...state,
-      cache: {
-        ...state.cache,
-        [action.text]: action.data,
-      },
+      cache,
     };
   }),
 

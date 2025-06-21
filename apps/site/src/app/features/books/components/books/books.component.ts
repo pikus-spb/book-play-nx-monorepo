@@ -8,7 +8,6 @@ import {
 } from '@angular/core';
 import { MatFabButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
-import { BasicBookData } from '@book-play/models';
 import { ScrollbarDirective, TagLinkComponent } from '@book-play/ui';
 import { Store } from '@ngrx/store';
 import { LoadingThenShowDirective } from '../../../../shared/directives/loading-then-show/loading-then-show.directive';
@@ -46,10 +45,6 @@ export class BooksComponent {
     );
 
     event.preventDefault();
-  }
-
-  protected trackByFn(index: number, item: BasicBookData): string {
-    return item.full;
   }
 
   protected updateQuery(event: Event): void {

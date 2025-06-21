@@ -1,5 +1,6 @@
 import { Base64Data } from '@book-play/models';
 import { createAction, props } from '@ngrx/store';
+import { AudioCacheRecord } from './voice-audio.state';
 
 export enum VoiceAudioActions {
   VoiceAudioCacheReset = '[VoiceAudio] cache reset',
@@ -14,7 +15,7 @@ export const voiceCacheResetAction = createAction(
 );
 export const voiceCacheUpdateAction = createAction(
   VoiceAudioActions.VoiceAudioCacheUpdate,
-  props<{ text: string; data: Base64Data }>()
+  props<{ text: string; record: AudioCacheRecord }>()
 );
 export const voiceAudioLoadAction = createAction(
   VoiceAudioActions.VoiceAudioLoad,
