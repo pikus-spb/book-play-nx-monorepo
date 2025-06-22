@@ -97,6 +97,8 @@ export default class PiperTtsApp {
           'equalizer=f=2600:width_type=h:width=3500:g=-10',
           'equalizer=f=14000:width_type=h:width=3000:g=5',
         ];
+      } else if (voice === Voices.Irina) {
+        equalizer = ['equalizer=f=150:width_type=h:width=150:g=5'];
       }
 
       args.push(equalizer.join(','));
