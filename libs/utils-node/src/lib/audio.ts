@@ -28,7 +28,7 @@ export function pitch(
       ].join(',')
     );
     args.push('-b:a');
-    args.push('96k');
+    args.push('128k');
     args.push(fileNameOut);
 
     let process;
@@ -62,8 +62,55 @@ export function rate(
     args.push('-filter:a');
     args.push(`atempo=${rateNormalized}`);
     args.push('-b:a');
-    args.push('96k');
+    args.push('128k');
     args.push(fileNameOut);
+
+    let process;
+    try {
+      process = spawn('ffmpeg', args, { detached: true });
+    } catch (e) {
+      console.error(e);
+      reject(e);
+    }
+    process.on('close', () => {
+      resolve(fileNameOut);
+    });
+  });
+}
+
+export function removeSilence(
+  fileName: string,
+  fileNameOut: string
+): Promise<string> {
+  const args = [
+    fileName,
+    '-C',
+    '128',
+    fileNameOut,
+    'silence',
+    '-l',
+    '1',
+    '0.001',
+    '1%',
+    '-1',
+    '0.6',
+    '1%',
+  ];
+  const removeSilenceProc = spawn('sox', args, { detached: true });
+  return new Promise((resolve) => {
+    removeSilenceProc.on('close', () => {
+      resolve(fileNameOut);
+    });
+  });
+}
+
+export function equalize(
+  equalizer: string[],
+  fileName: string,
+  fileNameOut: string
+): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const args = ['-i', fileName, '-af', equalizer.join(','), fileNameOut];
 
     let process;
     try {
