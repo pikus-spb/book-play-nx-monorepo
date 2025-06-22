@@ -4,8 +4,12 @@ import {
 } from '@book-play/constants';
 import { TtsParams, Voices } from '@book-play/models';
 import { createQueryString } from '@book-play/utils-common';
-import { getRandomFileNames, pitch, rate } from '@book-play/utils-node';
-import { spawn } from 'child_process';
+import {
+  equalize,
+  getRandomFileNames,
+  pitch,
+  rate,
+} from '@book-play/utils-node';
 import fs from 'fs';
 
 export default class YandexTtsApp {
@@ -31,37 +35,24 @@ export default class YandexTtsApp {
     fileName: string,
     fileNameOut: string
   ): Promise<string> {
-    return new Promise((resolve, reject) => {
-      const args = [];
+    let equalizer = [
+      'equalizer=f=2000:width_type=h:width=2000:g=8',
+      'equalizer=f=12000:width_type=h:width=3000:g=10',
+      'equalizer=f=80:width_type=h:width=150:g=5',
+    ];
+    if (voice == Voices.Zahar) {
+      equalizer = [
+        'equalizer=f=2000:width_type=h:width=2000:g=5',
+        'equalizer=f=12000:width_type=h:width=3000:g=10',
+      ];
+    } else if (voice == Voices.Ermil) {
+      equalizer = [
+        'equalizer=f=2000:width_type=h:width=2000:g=17',
+        'equalizer=f=80:width_type=h:width=150:g=-9',
+      ];
+    }
 
-      args.push('-i');
-      args.push(fileName);
-      args.push('-af');
-
-      let equalizer =
-        'equalizer=f=2000:width_type=h:width=2000:g=8,equalizer=f=12000:width_type=h:width=3000:g=10,equalizer=f=80:width_type=h:width=150:g=5';
-      if (voice == Voices.Zahar) {
-        equalizer =
-          'equalizer=f=2000:width_type=h:width=2000:g=5,equalizer=f=12000:width_type=h:width=3000:g=10';
-      } else if (voice == Voices.Ermil) {
-        equalizer =
-          'equalizer=f=2000:width_type=h:width=2000:g=17,equalizer=f=80:width_type=h:width=150:g=-9';
-      }
-      args.push(equalizer);
-
-      args.push(fileNameOut);
-
-      let process;
-      try {
-        process = spawn('ffmpeg', args, { detached: true });
-      } catch (e) {
-        console.error(e);
-        reject(e);
-      }
-      process.on('close', () => {
-        resolve(fileNameOut);
-      });
-    });
+    return equalize(equalizer, fileName, fileNameOut);
   }
 
   public async runTts(params: TtsParams): Promise<Blob> {

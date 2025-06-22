@@ -1,5 +1,11 @@
 import { TtsParams, Voices } from '@book-play/models';
-import { getRandomFileNames, pitch, rate } from '@book-play/utils-node';
+import {
+  equalize,
+  getRandomFileNames,
+  pitch,
+  rate,
+  removeSilence,
+} from '@book-play/utils-node';
 import { ChildProcess, spawn } from 'child_process';
 import { environment } from 'environments/environment';
 import express from 'express';
@@ -24,7 +30,7 @@ export default class PiperTtsApp {
         detached: true,
       });
 
-      const files = getRandomFileNames(4, '.mp3');
+      const files = getRandomFileNames(5, '.mp3');
 
       const args2 = [
         '-f',
@@ -49,11 +55,12 @@ export default class PiperTtsApp {
       this.killProcessOnConnectionClose(child1, reject);
 
       child2.on('close', async () => {
-        await this.equalize(params.voice, files[0], files[1]);
-        await rate(params.rate, files[1], files[2]);
-        await pitch(params.pitch, '22050', files[2], files[3]);
+        await removeSilence(files[0], files[1]);
+        await this.equalize(params.voice, files[1], files[2]);
+        await rate(params.rate, files[2], files[3]);
+        await pitch(params.pitch, '22050', files[3], files[4]);
 
-        const buffer = fs.readFileSync(files[3]);
+        const buffer = fs.readFileSync(files[4]);
         const blob = new Blob([buffer]);
 
         setTimeout(() => {
@@ -72,50 +79,32 @@ export default class PiperTtsApp {
     fileName: string,
     fileNameOut: string
   ): Promise<string> {
-    return new Promise((resolve, reject) => {
-      const args = [];
+    let equalizer: string[];
+    if (voice === Voices.Tamara) {
+      equalizer = [
+        'equalizer=f=80:width_type=h:width=50:g=5',
+        'equalizer=f=600:width_type=h:width=50:g=-2',
+        'equalizer=f=1250:width_type=h:width=1000:g=-10',
+        'equalizer=f=2000:width_type=h:width=2000:g=15',
+        'equalizer=f=2600:width_type=h:width=3500:g=-12',
+        'equalizer=f=5000:width_type=h:width=200:g=2',
+        'equalizer=f=14000:width_type=h:width=3000:g=4',
+      ];
+    } else if (voice === Voices.Kirill) {
+      equalizer = [
+        'equalizer=f=60:width_type=h:width=150:g=11',
+        'equalizer=f=2000:width_type=h:width=2000:g=15',
+        'equalizer=f=2600:width_type=h:width=3500:g=-10',
+        'equalizer=f=14000:width_type=h:width=3000:g=5',
+      ];
+    } else if (voice === Voices.Irina) {
+      equalizer = [
+        'equalizer=f=150:width_type=h:width=150:g=5',
+        'equalizer=f=14000:width_type=h:width=3000:g=4',
+      ];
+    }
 
-      args.push('-i');
-      args.push(fileName);
-      args.push('-af');
-
-      let equalizer;
-      if (voice === Voices.Tamara) {
-        equalizer = [
-          'equalizer=f=80:width_type=h:width=50:g=5',
-          'equalizer=f=600:width_type=h:width=50:g=-2',
-          'equalizer=f=1250:width_type=h:width=1000:g=-10',
-          'equalizer=f=2000:width_type=h:width=2000:g=15',
-          'equalizer=f=2600:width_type=h:width=3500:g=-12',
-          'equalizer=f=5000:width_type=h:width=200:g=2',
-          'equalizer=f=14000:width_type=h:width=3000:g=4',
-        ];
-      } else if (voice === Voices.Kirill) {
-        equalizer = [
-          'equalizer=f=60:width_type=h:width=150:g=11',
-          'equalizer=f=2000:width_type=h:width=2000:g=15',
-          'equalizer=f=2600:width_type=h:width=3500:g=-10',
-          'equalizer=f=14000:width_type=h:width=3000:g=5',
-        ];
-      } else if (voice === Voices.Irina) {
-        equalizer = ['equalizer=f=150:width_type=h:width=150:g=5'];
-      }
-
-      args.push(equalizer.join(','));
-
-      args.push(fileNameOut);
-
-      let process;
-      try {
-        process = spawn('ffmpeg', args, { detached: true });
-      } catch (e) {
-        console.error(e);
-        reject(e);
-      }
-      process.on('close', () => {
-        resolve(fileNameOut);
-      });
-    });
+    return equalize(equalizer, fileName, fileNameOut);
   }
 
   private killTtsProcess(process: ChildProcess) {
