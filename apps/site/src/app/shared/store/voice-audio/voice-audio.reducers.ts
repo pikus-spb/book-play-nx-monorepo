@@ -12,10 +12,14 @@ import { initialState } from './voice-audio.state';
 export const voiceAudioReducers = createReducer(
   initialState,
 
-  on(voiceCacheResetAction, (state) => ({
-    ...state,
-    cache: new Map(),
-  })),
+  on(voiceCacheResetAction, (state) => {
+    const cache = state.cache;
+    cache.clear();
+    return {
+      ...state,
+      cache,
+    };
+  }),
 
   on(voiceCacheUpdateAction, (state, action) => {
     const cache = cleanUpCache(state.cache);
