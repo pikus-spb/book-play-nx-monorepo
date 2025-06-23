@@ -1,6 +1,5 @@
 import { TtsParams } from '@book-play/models';
 import {
-  equalize,
   getRandomFileNames,
   pitch,
   rate,
@@ -17,7 +16,7 @@ export default class EdgeTtsApp {
 
   public runTts(params: TtsParams): Promise<Blob> {
     const { text, voice } = params;
-    const files = getRandomFileNames(5, '.mp3');
+    const files = getRandomFileNames(4, '.mp3');
 
     const args = [];
     args.push(`--text="${this.normalizeText(text)}"`);
@@ -31,13 +30,8 @@ export default class EdgeTtsApp {
         await removeSilence(files[0], files[1]);
         await pitch(params.pitch, '24000', files[1], files[2]);
         await rate(params.rate, files[2], files[3]);
-        await equalize(
-          ['equalizer=f=7500:width_type=h:width=3500:g=-10'],
-          files[3],
-          files[4]
-        );
 
-        const buffer = fs.readFileSync(files[4]);
+        const buffer = fs.readFileSync(files[3]);
         const blob = new Blob([buffer]);
 
         resolve(blob);
