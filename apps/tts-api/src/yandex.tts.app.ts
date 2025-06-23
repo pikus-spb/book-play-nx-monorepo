@@ -48,7 +48,7 @@ export default class YandexTtsApp {
     } else if (voice == Voices.Ermil) {
       equalizer = [
         'equalizer=f=2000:width_type=h:width=2000:g=17',
-        'equalizer=f=80:width_type=h:width=150:g=-9',
+        'equalizer=f=60:width_type=h:width=150:g=-10',
       ];
     }
 
