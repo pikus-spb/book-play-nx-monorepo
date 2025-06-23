@@ -1,6 +1,5 @@
-import { TtsParams, Voices } from '@book-play/models';
+import { TtsParams } from '@book-play/models';
 import {
-  equalize,
   getRandomFileNames,
   pitch,
   rate,
@@ -30,7 +29,7 @@ export default class PiperTtsApp {
         detached: true,
       });
 
-      const files = getRandomFileNames(5, '.mp3');
+      const files = getRandomFileNames(4, '.mp3');
 
       const args2 = [
         '-f',
@@ -56,11 +55,10 @@ export default class PiperTtsApp {
 
       child2.on('close', async () => {
         await removeSilence(files[0], files[1]);
-        await this.equalize(params.voice, files[1], files[2]);
-        await rate(params.rate, files[2], files[3]);
-        await pitch(params.pitch, '22050', files[3], files[4]);
+        await rate(params.rate, files[1], files[2]);
+        await pitch(params.pitch, '22050', files[2], files[3]);
 
-        const buffer = fs.readFileSync(files[4]);
+        const buffer = fs.readFileSync(files[3]);
         const blob = new Blob([buffer]);
 
         setTimeout(() => {
@@ -72,34 +70,6 @@ export default class PiperTtsApp {
         resolve(blob);
       });
     });
-  }
-
-  private equalize(
-    voice: Voices,
-    fileName: string,
-    fileNameOut: string
-  ): Promise<string> {
-    let equalizer: string[];
-    if (voice === Voices.Tamara) {
-      equalizer = [
-        'equalizer=f=80:width_type=h:width=50:g=5',
-        'equalizer=f=3500:width_type=h:width=5000:g=-5',
-      ];
-    } else if (voice === Voices.Kirill) {
-      equalizer = [
-        'equalizer=f=60:width_type=h:width=150:g=11',
-        'equalizer=f=2000:width_type=h:width=2000:g=15',
-        'equalizer=f=2600:width_type=h:width=3500:g=-10',
-        'equalizer=f=14000:width_type=h:width=3000:g=5',
-      ];
-    } else if (voice === Voices.Irina) {
-      equalizer = [
-        'equalizer=f=150:width_type=h:width=150:g=5',
-        'equalizer=f=14000:width_type=h:width=3000:g=4',
-      ];
-    }
-
-    return equalize(equalizer, fileName, fileNameOut);
   }
 
   private killTtsProcess(process: ChildProcess) {
