@@ -16,8 +16,8 @@ export const environment = {
     password: '1414',
     database: 'books',
   }),
-  RANDOM_AUTHORS_COUNT: 3,
-  RANDOM_BOOKS_COUNT: 3,
+  RANDOM_AUTHORS_COUNT: 1,
+  RANDOM_BOOKS_COUNT: 0,
   // PIPER TTS API
   PIPER_TTS_PATH: '/var/piper',
 };

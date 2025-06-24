@@ -54,8 +54,7 @@
     <fieldset class="timer">
       <ngx-mat-timepicker-field
         formControlName="timer"
-        [min]="'0:00'"
-        [max]="'23:59'"
+        [controlOnly]="true"
         [format]="24"
       ></ngx-mat-timepicker-field>
     </fieldset>
