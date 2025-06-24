@@ -1,7 +1,8 @@
 import { inject, Injectable } from '@angular/core';
+import { Settings } from '@book-play/models';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { of, switchMap } from 'rxjs';
-import { storeSettings } from '../../utils/settings';
+import { filter, of, switchMap, tap } from 'rxjs';
+import { getSettings, storeSettings } from '../../utils/settings';
 import { voiceCacheResetAction } from '../voice-audio/voice-audio.actions';
 import { SettingsActions } from './settings.actions';
 
@@ -12,10 +13,21 @@ export class SettingsEffects {
   private actions$ = inject(Actions);
 
   settingsUpdate$ = createEffect(() => {
+    let oldSettings: Settings;
     return this.actions$.pipe(
       ofType(SettingsActions.SettingsUpdate),
-      switchMap(({ settings }) => {
+      tap(({ settings }) => {
+        oldSettings = getSettings();
         storeSettings(settings);
+      }),
+      filter(({ settings }) => {
+        // Exclude timer changes
+        return (
+          `${settings.voice}${settings.rate}${settings.pitch}` !==
+          `${oldSettings.voice}${oldSettings.rate}${oldSettings.pitch}`
+        );
+      }),
+      switchMap(() => {
         return of(voiceCacheResetAction());
       })
     );
