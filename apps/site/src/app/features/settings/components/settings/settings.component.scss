@@ -47,12 +47,19 @@
         justify-content: center;
 
         ::ng-deep {
-          .period-select {
+          .mdc-line-ripple {
             display: none;
           }
 
-          .mdc-line-ripple {
-            display: none;
+          .mat-mdc-form-field-icon-suffix {
+            svg {
+              path:last-child {
+                fill: var(
+                  --mat-sidenav-content-text-color,
+                  var(--mat-sys-on-background)
+                );
+              }
+            }
           }
 
           .mdc-text-field--filled {
@@ -61,9 +68,6 @@
 
           .mat-mdc-form-field-subscript-wrapper {
             display: none;
-          }
-          .ngx-mat-timepicker__toggle {
-            margin-bottom: 0;
           }
         }
       }
