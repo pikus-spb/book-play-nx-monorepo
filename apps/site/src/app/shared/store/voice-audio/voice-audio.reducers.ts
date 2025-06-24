@@ -1,4 +1,3 @@
-import { routerNavigationAction } from '@ngrx/router-store';
 import { createReducer, on } from '@ngrx/store';
 import { cleanUpCache } from './voice-audio-helpers';
 import {
@@ -40,7 +39,5 @@ export const voiceAudioReducers = createReducer(
   on(voiceAudioLoadFailureAction, (state, action) => ({
     ...state,
     errors: action.errors,
-  })),
-
-  on(routerNavigationAction, () => ({ ...initialState }))
+  }))
 );

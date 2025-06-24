@@ -55,6 +55,7 @@ export class SettingsComponent {
     let value = Number(this.form.get(fieldName)!.value) || 0;
     value += event.deltaY > 0 ? -1 : 1;
     this.form.patchValue({ [fieldName]: value });
+    event.stopPropagation();
   }
 
   private initializeValues(): void {
