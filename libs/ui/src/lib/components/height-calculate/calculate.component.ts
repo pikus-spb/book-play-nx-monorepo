@@ -1,12 +1,9 @@
 import {
-  AfterViewInit,
   ChangeDetectionStrategy,
   Component,
   ElementRef,
-  EventEmitter,
-  Output,
   signal,
-  ViewChild,
+  viewChild,
   WritableSignal,
 } from '@angular/core';
 import { getOuterHeight } from '@book-play/utils-browser';
@@ -26,48 +23,49 @@ const SAMPLE = `Участвовавшая в беседе Нэнси Уайт �
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CalculateComponent implements AfterViewInit {
-  @ViewChild('sample') sample!: ElementRef<HTMLElement>;
-  @Output() done = new EventEmitter<HeightDelta>();
-
+export class CalculateComponent {
   protected text: WritableSignal<string> = signal<string>('');
-
   private readonly textSample = SAMPLE;
+  private sample = viewChild<ElementRef>('sample');
 
-  async ngAfterViewInit() {
-    let height;
-    let prevHeight = 0;
-    let outerHeight = 0;
+  public async calculate(): Promise<HeightDelta> {
+    if (this.sample()) {
+      let height;
+      let prevHeight = 0;
+      let outerHeight = 0;
 
-    const result: HeightDelta = {
-      height: 0,
-      length: 0,
-      margin: 0,
-    };
+      const result: HeightDelta = {
+        height: 0,
+        length: 0,
+        margin: 0,
+      };
 
-    for (let i = 1; i < this.textSample.length; i++) {
-      this.text.set(this.textSample.substring(0, i));
+      for (let i = 1; i < this.textSample.length; i++) {
+        this.text.set(this.textSample.substring(0, i));
 
-      await new Promise((resolve) => setTimeout(() => resolve({})));
+        await new Promise((resolve) => setTimeout(() => resolve(null)));
 
-      height = this.sample.nativeElement.clientHeight;
-      if (outerHeight === 0) {
-        outerHeight = getOuterHeight(this.sample.nativeElement);
+        height = this.sample()!.nativeElement.clientHeight;
+        if (outerHeight === 0) {
+          outerHeight = getOuterHeight(this.sample()!.nativeElement);
+        }
+
+        if (height > prevHeight) {
+          if (prevHeight === 0) {
+            result.height = height;
+            result.margin = outerHeight - height;
+          }
+          if (prevHeight > 0) {
+            result.length = i - 1;
+            break;
+          }
+          prevHeight = height;
+        }
       }
 
-      if (height > prevHeight) {
-        if (prevHeight === 0) {
-          result.height = height;
-          result.margin = outerHeight - height;
-        }
-        if (prevHeight > 0) {
-          result.length = i - 1;
-          break;
-        }
-        prevHeight = height;
-      }
+      return Promise.resolve(result);
     }
 
-    this.done.emit(result);
+    return Promise.reject();
   }
 }
