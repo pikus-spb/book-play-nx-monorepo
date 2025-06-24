@@ -1,49 +1,38 @@
 import {
-  ChangeDetectionStrategy,
   Component,
-  effect,
-  ElementRef,
-  EventEmitter,
-  Input,
-  OnInit,
-  Output,
-  signal,
-  ViewChild,
+  ComponentRef,
   inject,
+  input,
+  OnDestroy,
+  OnInit,
+  output,
+  ViewContainerRef,
 } from '@angular/core';
 import { HeightDelta } from '../../model/delta';
 import { CalculateComponent } from './calculate.component';
 
 @Component({
   selector: 'lib-height-calculate',
-  imports: [CalculateComponent],
-  templateUrl: './height-calculate.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  template: '',
 })
-export class HeightCalculateComponent implements OnInit {
-  @Input() resizable!: HTMLElement;
-  @Output() done = new EventEmitter<HeightDelta>();
-  @ViewChild('child') child!: CalculateComponent;
-
-  public run = signal<boolean>(false);
-
-  constructor() {
-    const el = inject(ElementRef);
-
-    effect(() => {
-      el.nativeElement.style.display = this.run() ? '' : 'none';
-    });
-  }
+export class HeightCalculateComponent implements OnInit, OnDestroy {
+  public resizable = input.required<HTMLDivElement>();
+  public done = output<HeightDelta>();
+  private child: ComponentRef<CalculateComponent> | null = null;
+  private vcr = inject(ViewContainerRef);
 
   public ngOnInit() {
-    const resizeObserver = new ResizeObserver(() => {
-      this.run.set(true);
+    this.child = this.vcr.createComponent(CalculateComponent);
+
+    const resizeObserver = new ResizeObserver(async () => {
+      const heightDelta = await this.child!.instance.calculate();
+      this.done.emit(heightDelta);
     });
-    resizeObserver.observe(this.resizable);
+    resizeObserver.observe(this.resizable());
   }
 
-  public calculationDone(delta: HeightDelta): void {
-    this.done.emit(delta);
-    this.run.set(false);
+  public ngOnDestroy() {
+    this.child?.destroy();
+    this.child = null;
   }
 }
