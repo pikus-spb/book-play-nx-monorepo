@@ -57,7 +57,7 @@ class ViewportScrollerService {
 
   private async adjustOffset(index: number, guessOffset: number) {
     const shownParagraphs = Array.from(
-      this.el?.nativeElement.querySelectorAll('p')
+      this.el?.nativeElement.querySelectorAll('book-paragraph > p')
     );
     const firstParagraph = shownParagraphs[0] as HTMLElement;
     const lastParagraph = shownParagraphs.slice(-1)[0] as HTMLElement;
