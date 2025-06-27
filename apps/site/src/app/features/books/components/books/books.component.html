@@ -1,8 +1,10 @@
 <div class="container">
   <h5 loading [thenShow]="books">
-    <span>Поиск по книгам</span>
     <form (submit)="search($event)">
-      <input (input)="updateQuery($event)" placeholder="Введите название..." />
+      <input
+        (input)="updateQuery($event)"
+        placeholder="Название книги или имя автора"
+      />
       <button mat-fab extended="true" color="success" type="submit">
         <mat-icon>search</mat-icon>
         Искать
