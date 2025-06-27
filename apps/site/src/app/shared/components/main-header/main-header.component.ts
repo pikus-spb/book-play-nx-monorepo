@@ -1,19 +1,16 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  computed,
   EventEmitter,
   inject,
   Output,
-  signal,
-  WritableSignal,
 } from '@angular/core';
-import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 import { MatFabButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { MatTooltip } from '@angular/material/tooltip';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { merge, tap } from 'rxjs';
 import { activeBookSelector } from '../../store/active-book/active-book.selectors';
 import { PlayerButtonComponent } from '../player-button/player-button.component';
 
@@ -26,22 +23,10 @@ import { PlayerButtonComponent } from '../player-button/player-button.component'
 })
 export class MainHeaderComponent {
   @Output() showMenu = new EventEmitter<void>();
-  public showPlayerButton: WritableSignal<boolean> = signal(false);
+  public playerIsActive = computed(() => {
+    return this.activeBook() && this.router.url.indexOf('/player') !== -1;
+  });
   private store = inject(Store);
   private activeBook = this.store.selectSignal(activeBookSelector);
   private router = inject(Router);
-
-  constructor() {
-    merge(toObservable(this.activeBook), this.router.events)
-      .pipe(
-        takeUntilDestroyed(),
-        tap(() => {
-          this.showPlayerButton.set(
-            this.activeBook() !== null &&
-              this.router.url.indexOf('/player') !== -1
-          );
-        })
-      )
-      .subscribe();
-  }
 }

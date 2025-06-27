@@ -25,8 +25,10 @@ export class HeightCalculateComponent implements OnInit, OnDestroy {
     this.child = this.vcr.createComponent(CalculateComponent);
 
     const resizeObserver = new ResizeObserver(async () => {
-      const heightDelta = await this.child!.instance.calculate();
-      this.done.emit(heightDelta);
+      const heightDelta = await this.child?.instance.calculate();
+      if (heightDelta) {
+        this.done.emit(heightDelta);
+      }
     });
     resizeObserver.observe(this.resizable());
   }
