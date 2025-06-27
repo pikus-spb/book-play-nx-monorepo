@@ -25,6 +25,12 @@
       height: $header-height - $default-padding;
     }
   }
+
+  span.title {
+    text-wrap: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
 }
 
 body.light :host img {

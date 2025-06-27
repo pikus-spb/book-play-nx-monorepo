@@ -11,8 +11,15 @@
     <mat-icon>menu</mat-icon>
     Меню
   </button>
-  @if (showPlayerButton()) {
+  @if (playerIsActive()) {
   <player-button></player-button>
-  }
+  } @else {
   <a href="/"><img alt="Book-play.ru" /></a>
+  <span
+    class="title"
+    title="платформа для прослушивания книг, озвученных нейросетью"
+  >
+    - платформа для прослушивания книг, озвученных нейросетью.</span
+  >
+  }
 </ng-container>
