@@ -13,6 +13,7 @@
     background-color: var(--mat-app-background-color);
     display: flex;
     overflow: hidden;
+    gap: $default-padding;
 
     main-header {
       flex: 0 0;

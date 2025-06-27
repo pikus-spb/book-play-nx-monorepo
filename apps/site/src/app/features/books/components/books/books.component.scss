@@ -28,8 +28,10 @@
 
         input {
           font-size: 1em;
-          max-width: 400px;
-          flex: 1;
+          min-width: 200px;
+          max-width: 500px;
+          flex-shrink: 1;
+          flex-grow: 1;
         }
 
         button {
