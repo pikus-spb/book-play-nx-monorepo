@@ -15,6 +15,7 @@ describe('HeightCalculateComponentComponent', () => {
   beforeEach(async () => {
     fixture = TestBed.createComponent(HeightCalculateComponent);
     component = fixture.componentInstance;
+    fixture.componentRef.setInput('resizable', 'body');
     fixture.detectChanges();
   });
 
