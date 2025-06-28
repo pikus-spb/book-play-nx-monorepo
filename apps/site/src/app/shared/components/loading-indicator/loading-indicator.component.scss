@@ -5,10 +5,4 @@ mat-progress-bar {
   display: inline-block;
   width: 2 * $default-padding;
   margin-left: $default-padding;
-
-  @include mat.progress-bar-overrides(
-    (
-      track-color: $default-color,
-    )
-  );
 }
