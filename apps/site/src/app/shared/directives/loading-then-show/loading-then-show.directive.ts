@@ -19,7 +19,6 @@ import { selectLoading } from '../../store/loading/loading.selector';
 })
 export class LoadingThenShowDirective {
   @Input() thenShow?: TemplateRef<unknown>;
-
   private viewContainerRef = inject(ViewContainerRef);
   private store = inject(Store);
   private loading = toSignal(this.store.select(selectLoading));
