@@ -1,0 +1,9 @@
+@if (enabled()) {
+<video
+  #video
+  [src]="mp4Data"
+  playsinline
+  loop
+  (timeupdate)="update($event)"
+></video>
+}

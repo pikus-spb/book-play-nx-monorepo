@@ -2,10 +2,8 @@ import {
   AfterViewInit,
   ChangeDetectionStrategy,
   Component,
-  ElementRef,
   HostBinding,
   inject,
-  OnDestroy,
   Renderer2,
 } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
@@ -17,11 +15,13 @@ import {
 } from '@angular/material/sidenav';
 import { MatToolbar } from '@angular/material/toolbar';
 import { RouterModule } from '@angular/router';
-import { DarkModeSwitcherComponent, ScrollbarDirective } from '@book-play/ui';
+import {
+  DarkModeSwitcherComponent,
+  KeepScreenOnComponent,
+  ScrollbarDirective,
+} from '@book-play/ui';
 import { isDarkMode, listenDarkModeChange } from '@book-play/utils-browser';
 import { Store } from '@ngrx/store';
-import NoSleep from 'nosleep.js';
-import { fromEvent, merge, Subscription } from 'rxjs';
 
 import { BookTitleComponent } from '../../../shared/components/book-title/book-title.component';
 import { CopyrightOwnerComponent } from '../../../shared/components/copyright-owner/copyright-owner.component';
@@ -49,15 +49,13 @@ import { selectLoading } from '../../../shared/store/loading/loading.selector';
     MatSidenavContainer,
     ScrollbarDirective,
     DarkModeSwitcherComponent,
+    KeepScreenOnComponent,
   ],
 })
-export class MainComponent implements AfterViewInit, OnDestroy {
+export class MainComponent implements AfterViewInit {
   private store = inject(Store);
   private renderer = inject(Renderer2);
   protected loading = toSignal(this.store.select(selectLoading));
-  private el = inject(ElementRef);
-  private noSleep!: NoSleep;
-  private noSleepSubscription!: Subscription;
 
   public ngAfterViewInit() {
     this.detectColorScheme(isDarkMode());
@@ -75,23 +73,6 @@ export class MainComponent implements AfterViewInit, OnDestroy {
   }
 
   private addListeners(): void {
-    // Touch enables no sleep
-    if (!this.noSleep) {
-      this.noSleep = new NoSleep();
-    }
-    this.noSleepSubscription = merge(
-      fromEvent(this.el.nativeElement, 'click'),
-      fromEvent(this.el.nativeElement, 'touchend')
-    ).subscribe(() => {
-      this.noSleep.enable();
-      this.noSleepSubscription.unsubscribe();
-    });
-
     listenDarkModeChange((isDarkMode) => this.detectColorScheme(isDarkMode));
-  }
-
-  public ngOnDestroy() {
-    this.noSleep.disable();
-    this.noSleepSubscription.unsubscribe();
   }
 }
