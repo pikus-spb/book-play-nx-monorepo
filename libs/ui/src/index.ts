@@ -4,6 +4,7 @@ export * from './lib/components/height-calculate/height-calculate.component';
 export * from './lib/components/tag-link/tag-link.component';
 export * from './lib/components/author-genres-list/author-genres-list.component';
 export * from './lib/components/dark-mode-switcher/dark-mode-switcher.component';
+export * from './lib/components/keep-screen-on/keep-screen-on.component';
 export * from './lib/pipes/genre/genre.pipe';
 export * from './lib/pipes/genre/genres.pipe';
 export * from './lib/directives/scrollbar/scrollbar.directive';
