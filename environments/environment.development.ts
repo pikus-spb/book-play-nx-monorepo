@@ -1,4 +1,5 @@
 export const environment = {
+  production: false,
   // HTTP
   API_HOST: '192.168.31.200',
   CORS_ALLOWED_LIST: [

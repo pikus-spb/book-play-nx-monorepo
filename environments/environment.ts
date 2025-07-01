@@ -1,4 +1,5 @@
 export const environment = {
+  production: true,
   // HTTP
   API_HOST: 'book-play.ru',
   CORS_ALLOWED_LIST: ['http://book-play.ru', 'https://book-play.ru'],
