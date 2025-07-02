@@ -52,8 +52,13 @@
 
     <h3>Таймер выключения</h3>
     <fieldset class="timer">
+      <label
+        ><input type="checkbox" formControlName="timerEnabled" />
+        Включить</label
+      >
       <ngx-mat-timepicker-field
         formControlName="timer"
+        [disabled]="settings().timer === 0"
         [controlOnly]="true"
         [format]="24"
       ></ngx-mat-timepicker-field>

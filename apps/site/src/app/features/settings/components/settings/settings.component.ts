@@ -9,10 +9,11 @@ import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatSlider, MatSliderThumb } from '@angular/material/slider';
 import {
+  DEFAULT_COUNTDOWN_TIMER_VALUE,
   SETTINGS_VOICE_PITCH_DELTA,
   SETTINGS_VOICE_RATE_DELTA,
 } from '@book-play/constants';
-import { Settings, Voices } from '@book-play/models';
+import { Voices } from '@book-play/models';
 import { ScrollbarDirective } from '@book-play/ui';
 import {
   secondsToTimeString,
@@ -20,7 +21,7 @@ import {
 } from '@book-play/utils-common';
 import { Store } from '@ngrx/store';
 import { NgxMatTimepickerFieldComponent } from 'ngx-mat-timepicker';
-import { debounceTime, distinctUntilChanged, map, tap } from 'rxjs';
+import { debounceTime, map, tap } from 'rxjs';
 import { settingsUpdateAction } from '../../../../shared/store/settings/settings.actions';
 import { settingsSelector } from '../../../../shared/store/settings/settings.selectors';
 
@@ -43,7 +44,7 @@ export class SettingsComponent {
 
   private fb = inject(FormBuilder);
   private store = inject(Store);
-  private settings = this.store.selectSignal(settingsSelector);
+  protected settings = this.store.selectSignal(settingsSelector);
   private destroyRef = inject(DestroyRef);
 
   constructor() {
@@ -65,18 +66,13 @@ export class SettingsComponent {
       rate: [rate],
       pitch: [pitch],
       timer: [secondsToTimeString(timer)],
+      timerEnabled: [timer > 0],
     });
   }
 
   private addEventListeners(): void {
     this.form.valueChanges
       .pipe(
-        distinctUntilChanged((previous: Settings, current: Settings) => {
-          return (
-            `${previous.voice}${previous.rate}${previous.pitch}${previous.timer}` ===
-            `${current.voice}${current.rate}${current.pitch}${current.timer}`
-          );
-        }),
         debounceTime(100),
         map((valueChanges) => {
           const { voice, rate, pitch, timer } = valueChanges;
@@ -89,6 +85,20 @@ export class SettingsComponent {
         }),
         tap((settings) => {
           this.store.dispatch(settingsUpdateAction({ settings }));
+        }),
+        takeUntilDestroyed(this.destroyRef)
+      )
+      .subscribe();
+
+    this.form
+      .get('timerEnabled')
+      ?.valueChanges.pipe(
+        tap((enabled) => {
+          this.form.patchValue({
+            timer: enabled
+              ? secondsToTimeString(DEFAULT_COUNTDOWN_TIMER_VALUE)
+              : '0:00',
+          });
         }),
         takeUntilDestroyed(this.destroyRef)
       )
