@@ -1,4 +1,4 @@
-@if (enabled()) {
+@if ((disabled() | async) === false) {
 <video
   #video
   [src]="mp4Data"
