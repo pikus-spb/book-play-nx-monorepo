@@ -21,7 +21,7 @@
       <copyright></copyright>
     </mat-sidenav>
     <mat-sidenav-content>
-      <keep-screen-on></keep-screen-on>
+      <keep-screen-on [disabled]="autoPlayService.stopped$"></keep-screen-on>
       <router-outlet></router-outlet>
     </mat-sidenav-content>
   </mat-sidenav-container>
