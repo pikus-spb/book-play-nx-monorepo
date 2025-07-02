@@ -44,7 +44,11 @@
       &.timer {
         display: flex;
         align-items: center;
-        justify-content: center;
+        justify-content: space-between;
+
+        ngx-mat-timepicker-field {
+          margin: 0 auto;
+        }
 
         ::ng-deep {
           .mdc-line-ripple {
