@@ -4,5 +4,5 @@ export function log(message: string, ...args: any[]): void {
   if (environment.production) {
     return;
   }
-  console.log(message, ...args);
+  console.log('DEV: ' + message, ...args);
 }
