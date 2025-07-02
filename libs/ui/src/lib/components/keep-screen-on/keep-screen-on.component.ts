@@ -11,7 +11,15 @@ import {
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { log } from '@book-play/utils-common';
-import { filter, fromEvent, merge, mergeMap, Observable, of } from 'rxjs';
+import {
+  distinctUntilChanged,
+  filter,
+  fromEvent,
+  merge,
+  mergeMap,
+  Observable,
+  of,
+} from 'rxjs';
 
 @Component({
   selector: 'keep-screen-on',
@@ -32,6 +40,7 @@ export class KeepScreenOnComponent implements OnInit {
       .pipe(
         mergeMap(() => this.disabled()),
         filter((disabled) => !disabled),
+        distinctUntilChanged(),
         takeUntilDestroyed(this.destroyRef)
       )
       .subscribe(() => {
@@ -42,6 +51,7 @@ export class KeepScreenOnComponent implements OnInit {
     this.disabled()
       .pipe(
         filter((disabled) => disabled),
+        distinctUntilChanged(),
         takeUntilDestroyed(this.destroyRef)
       )
       .subscribe(() => {
