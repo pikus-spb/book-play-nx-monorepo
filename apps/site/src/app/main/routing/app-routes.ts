@@ -73,6 +73,15 @@ export const APP_ROUTES: Route[] = [
     title: DEFAULT_TITLE,
   },
   {
+    path: 'books/:search',
+    loadComponent() {
+      return import(
+        '../../features/books/components/books/books.component'
+      ).then((imported) => imported.BooksComponent);
+    },
+    title: DEFAULT_TITLE,
+  },
+  {
     path: '404',
     loadComponent() {
       return import('../../features/404/components/not-found.component').then(
