@@ -1,8 +1,9 @@
 <div class="container">
   <h5 loading [thenShow]="books">
-    <form (submit)="search($event)">
+    <form (submit)="submit($event)">
       <input
-        (input)="updateQuery($event)"
+        [(ngModel)]="query"
+        [ngModelOptions]="{ standalone: true }"
         placeholder="Название книги или имя автора"
       />
       <button mat-fab extended="true" color="success" type="submit">
