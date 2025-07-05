@@ -26,12 +26,17 @@ export class SearchBook {
   public async searchBook(query: string): Promise<BookInfo | undefined> {
     // Prevent blocking via random user agent
     await this.page.setUserAgent(randomUseragent.getRandom());
-
     const searchBookInfoUrl = `https://fantlab.ru/searchmain?searchstr=${encodeURIComponent(
       query
     )}`;
-
     log(searchBookInfoUrl);
+
+    await new Promise((resolve) => {
+      setTimeout(() => {
+        resolve(true);
+      }, Math.round(Math.random() * 500));
+    });
+
     try {
       await this.page.goto(searchBookInfoUrl, {
         waitUntil: 'domcontentloaded',
