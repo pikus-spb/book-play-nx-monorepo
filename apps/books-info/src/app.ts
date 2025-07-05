@@ -26,6 +26,7 @@ export async function run() {
       bookInfo = await scrapper.searchBook(book.full);
     } catch (e) {
       log(e);
+      continue;
     }
 
     if (!bookInfo || !bookInfo.rating) {
