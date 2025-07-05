@@ -15,6 +15,9 @@ export async function run() {
 
   for (let i = 0; i < count; i++) {
     const book = await getBookByIndex(i);
+    if (!book) {
+      continue;
+    }
 
     log('Searching book: ' + book.full + ' ...\n\r');
 
@@ -23,11 +26,12 @@ export async function run() {
       bookInfo = await scrapper.searchBook(book.full);
     } catch (e) {
       log(e);
-      continue;
     }
 
     if (!bookInfo || !bookInfo.rating) {
-      continue;
+      bookInfo = {
+        rating: 0,
+      };
     }
 
     console.log('Adding info about ' + book.full + '\n' + bookInfo.rating);
@@ -75,13 +79,13 @@ async function countBooksToUpdate(): Promise<number> {
 async function getBookByIndex(index: number): Promise<DBBook> {
   return new Promise((resolve, reject) => {
     pool.query(
-      `select id, full from books limit ${index}, 1;`,
+      `SELECT id, full FROM books WHERE rating IS NULL LIMIT ${index}, 1;`,
       (err: Error, result: DBBook[]) => {
         if (err) {
           console.error(err);
           reject(err);
         } else {
-          resolve(result[0]);
+          resolve(result?.[0]);
         }
       }
     );
