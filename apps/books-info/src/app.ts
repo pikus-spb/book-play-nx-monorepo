@@ -19,13 +19,15 @@ export async function run() {
       continue;
     }
 
-    log('Searching book: ' + book.full + ' ...\n\r');
+    log('Searching book: ' + book.full + ' ...');
 
     let bookInfo: BookInfo;
     try {
       bookInfo = await scrapper.searchBook(book.full);
     } catch (e) {
       log(e);
+      await scrapper.finalize();
+      await scrapper.init();
       continue;
     }
 
