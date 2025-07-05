@@ -34,7 +34,7 @@ export class SearchBook {
     await new Promise((resolve) => {
       setTimeout(() => {
         resolve(true);
-      }, Math.round(Math.random() * 500));
+      }, Math.round(Math.random() * 10000));
     });
 
     try {
