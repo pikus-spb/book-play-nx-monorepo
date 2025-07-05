@@ -67,11 +67,11 @@ export default class BooksAPIApp {
     return new Promise((resolve, reject) => {
       pool.query(
         `WITH RandomRows AS (
-          SELECT id FROM books ORDER BY RAND() LIMIT 50
+          SELECT id FROM books ORDER BY RAND() LIMIT 200
         )
         SELECT RandomRows.id
         FROM RandomRows
-        JOIN books WHERE RandomRows.id = books.id AND books.cover != '' AND books.annotation != '' LIMIT ${number};`,
+        JOIN books WHERE RandomRows.id = books.id AND books.cover != '' AND books.annotation != '' AND books.rating IS NOT NULL LIMIT ${number};`,
         (err, result: { id: string }[]) => {
           if (err) {
             console.error(err);
