@@ -59,11 +59,13 @@ export class BooksComponent implements OnInit {
 
   protected initSearch(): void {
     this.query.set(this.route.snapshot.paramMap.get('search'));
-    this.store.dispatch(
-      bookSearchAction({
-        query: this.query() ?? '',
-      })
-    );
+    if (this.query()) {
+      this.store.dispatch(
+        bookSearchAction({
+          query: this.query()!,
+        })
+      );
+    }
   }
 
   protected submit(event: Event): void {
