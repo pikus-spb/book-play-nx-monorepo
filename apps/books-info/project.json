@@ -1,0 +1,49 @@
+{
+  "name": "books-info",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/books-info/src",
+  "projectType": "application",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@nx/esbuild:esbuild",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "development",
+      "options": {
+        "outputFileName": "books-info.js",
+        "thirdParty": true,
+        "platform": "node",
+        "outputPath": "dist/apps/books-info",
+        "format": ["cjs"],
+        "bundle": true,
+        "main": "apps/books-info/src/main.ts",
+        "tsConfig": "apps/books-info/tsconfig.app.json",
+        "esbuildConfig": "environments/esbuild.config.ts",
+        "externalDependencies": false,
+        "generatePackageJson": false
+      },
+      "configurations": {
+        "development": {},
+        "production": {}
+      }
+    },
+    "serve": {
+      "continuous": true,
+      "executor": "@nx/js:node",
+      "defaultConfiguration": "development",
+      "dependsOn": ["build"],
+      "options": {
+        "buildTarget": "books-info:build",
+        "runBuildTargetDependencies": false
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "books-info:build:development"
+        },
+        "production": {
+          "buildTarget": "books-info:build:production"
+        }
+      }
+    }
+  }
+}

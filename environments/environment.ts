@@ -19,6 +19,8 @@ export const environment = {
   }),
   RANDOM_AUTHORS_COUNT: 1,
   RANDOM_BOOKS_COUNT: 0,
+  // SCRAPER
+  chromeExecutablePath: '/usr/bin/google-chrome',
   // PIPER TTS API
   PIPER_TTS_PATH: '/var/piper',
 };
