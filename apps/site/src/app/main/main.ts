@@ -13,6 +13,7 @@ import { EffectsModule } from '@ngrx/effects';
 import { routerReducer, StoreRouterConnectingModule } from '@ngrx/router-store';
 import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { StarRatingModule } from 'angular-star-rating';
 
 import { ActiveBookEffects } from '../shared/store/active-book/active-book.effects';
 import { activeBookReducers } from '../shared/store/active-book/active-book.reducers';
@@ -43,6 +44,7 @@ bootstrapApplication(MainComponent, {
     provideRouter(APP_ROUTES),
     provideZonelessChangeDetection(),
     provideAnimations(),
+    importProvidersFrom(StarRatingModule.forRoot()),
     importProvidersFrom(
       StoreModule.forRoot({
         router: routerReducer,

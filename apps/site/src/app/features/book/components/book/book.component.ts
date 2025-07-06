@@ -2,6 +2,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
+  effect,
   inject,
   input,
 } from '@angular/core';
@@ -17,7 +18,11 @@ import {
 } from '@book-play/constants';
 import { Book } from '@book-play/models';
 import { AuthorGenresListComponent } from '@book-play/ui';
-import { showDefaultCoverImage } from '@book-play/utils-browser';
+import {
+  setDocumentTitleWithContext,
+  showDefaultCoverImage,
+} from '@book-play/utils-browser';
+import { StarRatingModule } from 'angular-star-rating';
 import { map } from 'rxjs';
 
 @Component({
@@ -31,6 +36,7 @@ import { map } from 'rxjs';
     MatTooltip,
     RouterLink,
     AuthorGenresListComponent,
+    StarRatingModule,
   ],
 })
 export class BookComponent {
@@ -48,6 +54,16 @@ export class BookComponent {
     const src = this.book()?.cover?.toBase64String();
     return src ?? DEFAULT_COVER_SRC;
   });
+
+  constructor() {
+    // Effect to update window title
+    effect(() => {
+      const book = this.book();
+      if (book !== null) {
+        setDocumentTitleWithContext(book.full);
+      }
+    });
+  }
 
   public playBook(): void {
     this.router.navigateByUrl('/player/' + this.book()?.id);

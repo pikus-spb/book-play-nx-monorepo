@@ -10,6 +10,7 @@ export function DBBookToUIBook(book: Partial<DBBook>): Book {
     annotation: (book.annotation || '').replace('\n', '<br><br>'),
     genres: JSON.parse(book.genres || '[]'),
     date: book.date,
+    rating: book.rating,
     paragraphs: JSON.parse(book.paragraphs || '[]'),
     cover: ImageBase64Data.fromBase64String(book.cover || ''),
     author: new Author({
@@ -34,6 +35,7 @@ export function UIBookToDBBook(input: Book): DBBook {
     paragraphs: JSON.stringify(input.paragraphs),
     cover: input.cover?.toBase64String() || '',
     full: input.full,
+    rating: input.rating,
   };
 }
 

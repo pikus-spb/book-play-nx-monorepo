@@ -39,18 +39,33 @@
         text-align: justify;
       }
 
-      ::ng-deep mat-chip-set {
-        margin-bottom: $default-padding;
+      ::ng-deep lib-author-genres-list {
+        mat-chip-set {
+          margin-bottom: $default-padding;
 
-        & > div {
-          align-items: center;
-          row-gap: $default-padding;
-          column-gap: calc($default-padding / 2);
+          > div {
+            align-items: center;
+            row-gap: $default-padding;
+            column-gap: calc($default-padding / 2);
+
+            > span {
+              padding: calc($default-padding / 2);
+            }
+
+            .book-rating {
+              display: flex;
+              justify-content: center;
+
+              star-rating-control {
+                display: flex;
+              }
+            }
+          }
         }
       }
 
       .date {
-        padding: calc($default-padding / 2);
+        padding-left: calc($default-padding / 2);
       }
 
       .action-panel {
