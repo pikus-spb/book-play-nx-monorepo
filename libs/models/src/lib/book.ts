@@ -12,6 +12,7 @@ export interface DBBook {
   date?: string;
   full: string;
   cover?: string;
+  rating?: number;
   paragraphs: string;
 }
 
@@ -29,6 +30,7 @@ export class Book {
   public genres?: Genre[];
   public date?: string;
   public cover?: ImageBase64Data;
+  public rating?: number;
   public paragraphs!: string[];
   public textParagraphs: string[] = [];
 

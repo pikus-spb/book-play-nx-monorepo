@@ -1,6 +1,6 @@
 import { environment } from 'environments/environment';
 
-export function log(message: string, ...args: any[]): void {
+export function log(message: any, ...args: any[]): void {
   if (environment.production) {
     return;
   }

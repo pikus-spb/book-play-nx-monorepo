@@ -26,8 +26,10 @@ export async function run() {
       bookInfo = await scrapper.searchBook(book.full);
     } catch (e) {
       log(e);
+      log('Reinit browser and retry...');
       await scrapper.finalize();
       await scrapper.init();
+      i--;
       continue;
     }
 

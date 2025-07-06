@@ -11,12 +11,26 @@
     <h4>
       <a [routerLink]="['/author', book.author.id]">{{ book.author.full }}</a>
     </h4>
-    <h2>{{ book.name }}</h2>
+    <h2>
+      {{ book.name }}
+    </h2>
     <lib-author-genres-list [genres]="book.genres">
-      @if (book.date) {
-      <span class="date">{{ book.date }}г.</span>
+      @if (book.rating) {
+      <span class="book-rating">
+        <span>{{ book.rating }}</span>
+        <star-rating-control
+          [readOnly]="true"
+          [staticColor]="'ok'"
+          [starType]="'svg'"
+          [rating]="book.rating / 2"
+          [showHalfStars]="true"
+        ></star-rating-control>
+      </span>
       }
     </lib-author-genres-list>
+    @if (book.date) {
+    <span class="date">{{ book.date }}г.</span>
+    }
     <span class="annotation" [innerHTML]="book.annotation"></span>
     <div class="action-panel">
       <button
