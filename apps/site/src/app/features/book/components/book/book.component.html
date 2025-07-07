@@ -12,7 +12,7 @@
       <a [routerLink]="['/author', book.author.id]">{{ book.author.full }}</a>
     </h4>
     <h2>
-      {{ book.name }}
+      <a [routerLink]="['/book', book.id]">{{ book.name }}</a>
     </h2>
     <lib-author-genres-list [genres]="book.genres">
       @if (book.rating) {

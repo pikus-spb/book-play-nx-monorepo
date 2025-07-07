@@ -1,16 +1,16 @@
 <div class="container" libPerfectScrollbar>
-  @if (environment.RANDOM_AUTHORS_COUNT > 1) {
+  @if (authorSummary().length > 1) {
   <h2>Случайные авторы дня:</h2>
-  } @else {
+  } @else if (authorSummary().length === 1) {
   <h2>Cлучайный автор дня:</h2>
   } @for (author of authorSummary(); track author.full) {
   <author [author]="author"></author>
   }
 
   <p>&nbsp;</p>
-  @if (environment.RANDOM_BOOKS_COUNT > 1) {
+  @if (books().length > 1) {
   <h2>Случайные книги дня:</h2>
-  } @else if (environment.RANDOM_BOOKS_COUNT === 1) {
+  } @else if (books().length === 1) {
   <h2>Случайная книга дня:</h2>
   } @for (book of books(); track book.id) {
   <book [book]="book"></book>

@@ -4,7 +4,9 @@
   <img [src]="author.image" (error)="hideImage($event)" alt="Обложка книги" />
   }
   <div class="content">
-    <h3>{{ author.full }}</h3>
+    <h3>
+      <a [routerLink]="['/author', author.id]">{{ author.full }}</a>
+    </h3>
     <lib-author-genres-list [genres]="author.genres"> </lib-author-genres-list>
     <span class="annotation" [innerHTML]="author.about"></span>
     <div class="books">

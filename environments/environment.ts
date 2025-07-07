@@ -2,7 +2,12 @@ export const environment = {
   production: true,
   // HTTP
   API_HOST: 'book-play.ru',
-  CORS_ALLOWED_LIST: ['http://book-play.ru', 'https://book-play.ru'],
+  CORS_ALLOWED_LIST: [
+    'http://book-play.ru',
+    'https://book-play.ru',
+    'http://176.99.67.42',
+    'https://176.99.67.42',
+  ],
   // SITE
   HTTPS_PRIVATE_KEY: '/etc/letsencrypt/live/book-play.ru/privkey.pem',
   HTTPS_CERTIFICATE: '/etc/letsencrypt/live/book-play.ru/cert.pem',
