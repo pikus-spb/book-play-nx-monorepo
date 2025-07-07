@@ -6,7 +6,7 @@ import { BookResolver } from './resolvers/book.resolver';
 
 export const APP_ROUTES: Route[] = [
   {
-    path: 'welcome',
+    path: 'index',
     loadComponent() {
       return import('../../features/welcome/components/welcome.component').then(
         (imported) => imported.WelcomeComponent
@@ -108,6 +108,6 @@ export const APP_ROUTES: Route[] = [
     },
     title: DEFAULT_TITLE,
   },
-  { path: '', redirectTo: '/welcome', pathMatch: 'full' },
+  { path: '', redirectTo: '/index', pathMatch: 'full' },
   { path: '**', redirectTo: '404' },
 ];

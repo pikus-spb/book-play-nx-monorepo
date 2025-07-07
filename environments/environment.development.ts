@@ -6,6 +6,8 @@ export const environment = {
     'http://localhost:4200',
     'http://192.168.31.200',
     'https://192.168.31.200',
+    'http://176.99.67.42',
+    'https://176.99.67.42',
   ],
   // SITE
   HTTPS_PRIVATE_KEY: '/etc/letsencrypt/live/book-play.ru/name.key',

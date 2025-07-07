@@ -14,7 +14,7 @@ export default class BooksAPIApp {
   async authorSummary(id: string): Promise<DBAuthorSummary> {
     return new Promise((resolve, reject) => {
       pool.query(
-        'SELECT first, last, about, image FROM authors WHERE id = ' + id,
+        'SELECT id, first, last, about, image FROM authors WHERE id = ' + id,
         async (err, result: DBAuthor[]) => {
           if (err) {
             console.error(err);
@@ -67,7 +67,7 @@ export default class BooksAPIApp {
     return new Promise((resolve, reject) => {
       pool.query(
         `WITH RandomRows AS (
-          SELECT id FROM books ORDER BY RAND() LIMIT 400
+          SELECT id FROM books ORDER BY RAND() LIMIT 50
         )
         SELECT RandomRows.id
         FROM RandomRows
