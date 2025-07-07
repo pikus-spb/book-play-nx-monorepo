@@ -24,12 +24,6 @@
     .content {
       display: block;
 
-      h4 {
-        a:hover {
-          text-decoration: underline;
-        }
-      }
-
       button {
         border-radius: $default-border-radius;
       }
