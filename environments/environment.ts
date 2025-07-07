@@ -16,14 +16,14 @@ export const environment = {
   DB_CONFIG: Object.freeze({
     connectionLimit: 20,
     connectTimeout: 60000,
-    host: 'localhost',
+    host: '176.99.67.42',
     port: '3306',
-    user: 'root',
-    password: '1414',
+    user: 'bookplay',
+    password: 'Gremlin10Ekib725',
     database: 'books',
   }),
-  RANDOM_AUTHORS_COUNT: 1,
-  RANDOM_BOOKS_COUNT: 0,
+  RANDOM_AUTHORS_COUNT: 3,
+  RANDOM_BOOKS_COUNT: 3,
   // SCRAPER
   chromeExecutablePath: '/usr/bin/google-chrome',
   // PIPER TTS API
