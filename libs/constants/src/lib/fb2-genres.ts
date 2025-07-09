@@ -1,4 +1,5 @@
 export const FB2_GENRES: Record<string, string> = {
+  architecture_book: 'Архитектура',
   adventure_fantasy: 'Приключения: Фэнтези',
   aphorisms: 'Афоризмы',
   adv_western: 'Вестерны',
@@ -36,6 +37,7 @@ export const FB2_GENRES: Record<string, string> = {
   city_fantasy: 'Городское Фэнтези',
   child_det: 'Детские Остросюжетные',
   child_sf: 'Детская Фантастика',
+  comedy: 'Комедия',
   design: 'Искусство, Дизайн',
   dark_fantasy: 'Тёмное Фэнтези',
   economics: 'Экономика',
@@ -146,6 +148,7 @@ export const FB2_GENRES: Record<string, string> = {
   psy_generic: 'Психология',
   prose_military: 'Военная проза',
   popular_business: 'Бизнес-книги',
+  periodic: 'Периодические издания',
   religion_budda: 'Буддизм',
   ref_encyc: 'Энциклопедии',
   ref_dict: 'Словари',
@@ -202,10 +205,13 @@ export const FB2_GENRES: Record<string, string> = {
   sf_rus: 'Русская Фантастика',
   sf_technofantasy: 'Научное Технофэнтези',
   sf_postapocalyptic: 'Пост-апокалиптическая Фантастика',
+  screenplays: 'Сценарии',
+  scenarios: 'Сценарии',
   vampire_book: 'Книги о Вампирах',
   visual_arts: 'Искусство',
   upbringing_book: 'Учебное пособие по воспитанию',
   unrecognised: 'Непризнанное',
+  unfinished: 'Незаконченное',
 };
 
 export const FB2_GENRES_KEYS_SORTED = Object.keys(FB2_GENRES).sort((a, b) => {
