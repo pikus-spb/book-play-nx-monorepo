@@ -1,8 +1,10 @@
 export const environment = {
   production: false,
   // HTTP
-  API_HOST: '192.168.31.200',
+  API_HOST: '176.99.67.42',
   CORS_ALLOWED_LIST: [
+    'http://book-play.ru',
+    'https://book-play.ru',
     'http://localhost:4200',
     'http://192.168.31.200',
     'https://192.168.31.200',
@@ -10,16 +12,16 @@ export const environment = {
     'https://176.99.67.42',
   ],
   // SITE
-  HTTPS_PRIVATE_KEY: '/etc/letsencrypt/live/book-play.ru/name.key',
-  HTTPS_CERTIFICATE: '/etc/letsencrypt/live/book-play.ru/name.crt',
+  HTTPS_PRIVATE_KEY: '/home/petr/ssl/private.key',
+  HTTPS_CERTIFICATE: '/home/petr/ssl/certificate.crt',
   BOOKS_JSON_PATH: '/home/petr/add-books/books-json/',
   DB_CONFIG: Object.freeze({
     connectionLimit: 20,
     connectTimeout: 60000,
     host: '192.168.31.200',
     port: '3306',
-    user: 'petr',
-    password: '1414',
+    user: 'bookplay',
+    password: 'Gremlin10Ekib725',
     database: 'books',
   }),
   RANDOM_AUTHORS_COUNT: 3,
