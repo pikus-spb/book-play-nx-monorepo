@@ -8,9 +8,9 @@
     "build": {
       "executor": "@nx/esbuild:esbuild",
       "outputs": ["{options.outputPath}"],
-      "defaultConfiguration": "production",
+      "defaultConfiguration": "development",
       "options": {
-        "outputFileName": "tube-db.js",
+        "outputFileName": "db-tune.js",
         "thirdParty": true,
         "platform": "node",
         "outputPath": "dist/apps/db-tune-utils",
@@ -18,34 +18,22 @@
         "bundle": true,
         "main": "apps/db-tune-utils/src/main.ts",
         "tsConfig": "apps/db-tune-utils/tsconfig.app.json",
-        "externalDependencies": false,
+        "externalDependencies": true,
         "generatePackageJson": false,
-        "esbuildOptions": {
-          "sourcemap": true,
-          "outExtension": {
-            ".js": ".js"
-          }
-        }
+        "esbuildConfig": "environments/esbuild.config.ts"
       },
       "configurations": {
         "development": {},
-        "production": {
-          "esbuildOptions": {
-            "sourcemap": false,
-            "outExtension": {
-              ".js": ".js"
-            }
-          }
-        }
+        "production": {}
       }
     },
     "serve": {
       "executor": "@nx/js:node",
-      "defaultConfiguration": "development",
+      "defaultConfiguration": "production",
       "dependsOn": ["build"],
       "options": {
         "buildTarget": "db-tune-utils:build",
-        "runBuildTargetDependencies": false
+        "runBuildTargetDependencies": true
       },
       "configurations": {
         "development": {

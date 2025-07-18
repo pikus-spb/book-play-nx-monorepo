@@ -1,6 +1,6 @@
-import { DBBook } from '@book-play/models';
 import { BookInfo, SearchBook } from '@book-play/scraper';
 import { log } from '@book-play/utils-common';
+import { countRows, getBookByIndex } from '@book-play/utils-node';
 import { environment } from 'environments/environment';
 import mysql, { PoolOptions } from 'mysql2';
 
@@ -9,12 +9,12 @@ const pool = mysql.createPool(environment.DB_CONFIG as unknown as PoolOptions);
 export async function run() {
   const scrapper = new SearchBook();
   await scrapper.init();
-  const count = await countBooksToUpdate();
+  const count = await countRows(pool, 'books');
 
   log(`Found ${JSON.stringify(count)} books...`);
 
   for (let i = 0; i < count; i++) {
-    const book = await getBookByIndex(i);
+    const book = await getBookByIndex(pool, i, '*', 'WHERE rating IS NULL');
     if (!book) {
       continue;
     }
@@ -39,8 +39,6 @@ export async function run() {
       };
     }
 
-    console.log('Adding info about ' + book.full + '\n' + bookInfo.rating);
-
     try {
       await new Promise((resolve, reject) => {
         pool.query(
@@ -58,41 +56,9 @@ export async function run() {
       log(e + '\n\r');
     }
 
-    log('Added successfully.\n\r\n\r');
+    log('Added successfully rating: ' + bookInfo.rating + '\n\r\n\r');
   }
 
   await scrapper.finalize();
   console.log('Done. Added info about ' + count + ' books.');
-}
-
-async function countBooksToUpdate(): Promise<number> {
-  return new Promise((resolve, reject) => {
-    pool.query(
-      'select count(id) from books;',
-      (err: Error, result: Record<string, number>[]) => {
-        if (err) {
-          console.error(err);
-          reject(err);
-        } else {
-          resolve(Object.values(result[0])[0]);
-        }
-      }
-    );
-  });
-}
-
-async function getBookByIndex(index: number): Promise<DBBook> {
-  return new Promise((resolve, reject) => {
-    pool.query(
-      `SELECT id, full FROM books WHERE rating IS NULL LIMIT ${index}, 1;`,
-      (err: Error, result: DBBook[]) => {
-        if (err) {
-          console.error(err);
-          reject(err);
-        } else {
-          resolve(result?.[0]);
-        }
-      }
-    );
-  });
 }

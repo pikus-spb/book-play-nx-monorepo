@@ -82,6 +82,24 @@ export const APP_ROUTES: Route[] = [
     title: DEFAULT_TITLE,
   },
   {
+    path: 'advanced-search',
+    loadComponent() {
+      return import(
+        '../../features/advanced-search/components/advanced-search/advanced-search.component'
+      ).then((imported) => imported.AdvancedSearchComponent);
+    },
+    title: DEFAULT_TITLE,
+  },
+  {
+    path: 'advanced-search/:search',
+    loadComponent() {
+      return import(
+        '../../features/advanced-search/components/advanced-search/advanced-search.component'
+      ).then((imported) => imported.AdvancedSearchComponent);
+    },
+    title: DEFAULT_TITLE,
+  },
+  {
     path: '404',
     loadComponent() {
       return import('../../features/404/components/not-found.component').then(

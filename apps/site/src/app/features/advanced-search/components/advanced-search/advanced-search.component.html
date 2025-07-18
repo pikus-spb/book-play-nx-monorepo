@@ -1,0 +1,70 @@
+<div class="container" libPerfectScrollbar>
+  <h5>
+    Расширенный поиск
+    <small
+      ><a [routerLink]="['/books']" class="underline">обычный поиск</a></small
+    >
+  </h5>
+
+  <form [formGroup]="form" (submit)="submit($event)">
+    <section>
+      <span class="header">Режим поиска:</span>
+      <label
+        ><input type="radio" formControlName="mode" value="and" />"И" (каждое
+        условие)</label
+      >
+      <label
+        ><input type="radio" formControlName="mode" value="or" />"ИЛИ (хотя бы
+        одно из условий)</label
+      >
+      <button mat-fab extended="true" color="success" type="submit">
+        <mat-icon>search</mat-icon>
+        Искать
+      </button>
+    </section>
+
+    <section class="parameter-grid">
+      <span>Рейтинг не ниже чем:</span>
+      <input type="text" formControlName="rating" />
+    </section>
+
+    <details #genresContainer>
+      <summary>Жанры</summary>
+      <section libPerfectScrollbar class="genres-grid">
+        @for (key of FB2_GENRES_UNIQUE_KEYS_SORTED; track key) {
+        <label
+          ><input type="checkbox" [formControlName]="key" /><span>{{
+            FB2_GENRES[key]
+          }}</span></label
+        >
+        }
+      </section>
+    </details>
+
+    <div class="action-panel">
+      <button mat-fab extended="true" color="success" type="submit">
+        <mat-icon>search</mat-icon>
+        Искать
+      </button>
+    </div>
+  </form>
+
+  <div #searchResult class="search-result">
+    @if (data()) { @if (data()!.length === 0) {
+    <span>Книги не найдены</span>
+    }
+    <div libPerfectScrollbar class="grid books-grid">
+      @for (item of data(); track item.id){
+      <nav>
+        <lib-tag-link [value]="item.id" linkPrefix="/book">
+          {{ item.full }}
+        </lib-tag-link>
+      </nav>
+      }
+    </div>
+    }
+  </div>
+  @if (error()) {
+  <span>Ошибка: {{ error() | json }}</span>
+  }
+</div>

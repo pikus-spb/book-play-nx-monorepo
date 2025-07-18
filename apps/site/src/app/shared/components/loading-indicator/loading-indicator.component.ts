@@ -1,4 +1,9 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  signal,
+  WritableSignal,
+} from '@angular/core';
 import { MatProgressBar } from '@angular/material/progress-bar';
 
 @Component({
@@ -8,4 +13,14 @@ import { MatProgressBar } from '@angular/material/progress-bar';
   styleUrl: './loading-indicator.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class LoadingIndicatorComponent {}
+export class LoadingIndicatorComponent {
+  protected hidden: WritableSignal<boolean> = signal(true);
+
+  public show() {
+    this.hidden.set(false);
+  }
+
+  public hide() {
+    this.hidden.set(true);
+  }
+}

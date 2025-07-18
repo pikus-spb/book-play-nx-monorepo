@@ -28,7 +28,6 @@ import { CopyrightOwnerComponent } from '../../../shared/components/copyright-ow
 import { CopyrightComponent } from '../../../shared/components/copyright/copyright.component';
 import { MainHeaderComponent } from '../../../shared/components/main-header/main-header.component';
 import { MainMenuComponent } from '../../../shared/components/main-menu/main-menu.component';
-import { AutoPlayService } from '../../../shared/services/tts/auto-play.service';
 import { selectLoading } from '../../../shared/store/loading/loading.selector';
 
 @Component({
@@ -56,7 +55,6 @@ import { selectLoading } from '../../../shared/store/loading/loading.selector';
 export class MainComponent implements AfterViewInit {
   private store = inject(Store);
   private renderer = inject(Renderer2);
-  protected autoPlayService = inject(AutoPlayService);
   protected loading = toSignal(this.store.select(selectLoading));
 
   public ngAfterViewInit() {
