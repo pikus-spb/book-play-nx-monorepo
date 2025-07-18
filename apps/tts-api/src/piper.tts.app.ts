@@ -1,5 +1,6 @@
-import { TtsParams } from '@book-play/models';
+import { TtsParams, Voices } from '@book-play/models';
 import {
+  equalize,
   getRandomFileNames,
   pitch,
   rate,
@@ -29,7 +30,7 @@ export default class PiperTtsApp {
         detached: true,
       });
 
-      const files = getRandomFileNames(4, '.mp3');
+      const files = getRandomFileNames(5, '.mp3');
 
       const args2 = [
         '-f',
@@ -54,11 +55,12 @@ export default class PiperTtsApp {
       this.killProcessOnConnectionClose(child1, reject);
 
       child2.on('close', async () => {
-        await removeSilence(files[0], files[1]);
-        await rate(params.rate, files[1], files[2]);
-        await pitch(params.pitch, '22050', files[2], files[3]);
+        await this.equalize(params.voice, files[0], files[1]);
+        await removeSilence(files[1], files[2]);
+        await rate(params.rate, files[2], files[3]);
+        await pitch(params.pitch, '22050', files[3], files[4]);
 
-        const buffer = fs.readFileSync(files[3]);
+        const buffer = fs.readFileSync(files[4]);
         const blob = new Blob([buffer]);
 
         setTimeout(() => {
@@ -90,5 +92,20 @@ export default class PiperTtsApp {
       this.killTtsProcess(child);
       reject('Http request cancelled');
     });
+  }
+
+  private equalize(
+    voice: string,
+    fileName: string,
+    fileNameOut: string
+  ): Promise<string> {
+    let equalizer;
+    if (voice == Voices.Irina || voice == Voices.Kirill) {
+      equalizer = ['equalizer=f=60:width_type=h:width=150:g=10'];
+    } else if (voice == Voices.Tamara) {
+      equalizer = ['equalizer=f=60:width_type=h:width=150:g=-5'];
+    }
+
+    return equalize(equalizer, fileName, fileNameOut);
   }
 }
