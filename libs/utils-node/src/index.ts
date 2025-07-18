@@ -1,3 +1,4 @@
-export * from './lib/files.ts';
-export * from './lib/zip.ts';
-export * from './lib/audio.ts';
+export * from './lib/files';
+export * from './lib/zip';
+export * from './lib/audio';
+export * from './lib/books-db-utils';

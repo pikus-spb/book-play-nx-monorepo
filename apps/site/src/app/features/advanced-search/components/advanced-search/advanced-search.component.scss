@@ -2,52 +2,64 @@
 @use 'mixins' as *;
 
 :host {
-  display: block;
-  width: 100%;
-  height: 100%;
-
   .container {
+    @include scrollable-container;
+
+    padding: 2 * $default-padding;
     display: flex;
     flex-direction: column;
-    width: 100%;
-    height: 100%;
-    padding: 2 * $default-padding;
+
+    .header {
+      font-size: 1.5em;
+    }
 
     h5 {
-      margin: $default-padding 0 $default-padding 0;
-
       small {
-        font-weight: normal;
         margin-left: $default-padding;
         font-size: 0.5em;
       }
+    }
 
-      span:first-of-type {
-        flex: 0;
-        text-wrap: nowrap;
-      }
+    form {
+      display: block;
 
-      form {
-        display: flex;
-        margin-top: $default-padding;
-        gap: $default-padding;
-
-        input {
-          font-size: 1em;
-          min-width: 200px;
-          max-width: 500px;
-          flex-shrink: 1;
-          flex-grow: 1;
-        }
-      }
-
-      span:last-of-type {
-        flex: 0;
+      > * {
+        margin: $default-padding 0;
       }
     }
 
-    ::ng-deep .books-grid {
-      @include scrollable-container;
+    summary {
+      cursor: pointer;
+    }
+
+    section {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: $default-padding;
+      margin: $default-padding 0;
+
+      &.parameter-grid {
+        max-width: 600px;
+        display: grid;
+        grid-template-columns: 1fr 2fr;
+      }
+
+      &.genres-grid {
+        @include scrollable-container;
+        max-height: 400px;
+      }
+
+      label {
+        display: flex;
+      }
+    }
+
+    .search-result {
+      margin-top: $default-padding;
+    }
+
+    .grid {
       flex: 1 0;
       display: grid;
       grid-gap: $default-padding * 1.5;
@@ -55,6 +67,10 @@
       grid-template-rows: repeat(auto-fit, minmax(min-content, 1fr));
       align-content: start;
       justify-content: start;
+    }
+
+    ::ng-deep .books-grid {
+      @include scrollable-container;
 
       nav {
         mat-chip {

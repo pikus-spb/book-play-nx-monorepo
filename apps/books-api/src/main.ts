@@ -1,4 +1,5 @@
 import { BOOKS_API_PORT, BOOKS_API_PORT_SECURE } from '@book-play/constants';
+import { AdvancedSearchParams, BookData } from '@book-play/models';
 import cors from 'cors';
 import { environment } from 'environments/environment.ts';
 import express from 'express';
@@ -48,18 +49,6 @@ expressApp.get(
       });
   }
 );
-
-expressApp.get('/book/search/:query', cors(corsOptionsDelegate), (req, res) => {
-  const query = req.params.query;
-  app
-    .bookSearch(query)
-    .then((books) => {
-      res.json(books);
-    })
-    .catch((err) => {
-      res.json(err);
-    });
-});
 
 expressApp.get(
   '/author/random/:number?',
@@ -132,6 +121,39 @@ expressApp.get(
       .randomBookIds(number)
       .then((ids) => {
         res.json(ids);
+      })
+      .catch((err) => {
+        res.json(err);
+      });
+  }
+);
+
+expressApp.get('/book/search/:query', cors(corsOptionsDelegate), (req, res) => {
+  const query = req.params.query;
+  app
+    .bookSearch(query)
+    .then((books) => {
+      res.json(books);
+    })
+    .catch((err) => {
+      res.json(err);
+    });
+});
+
+expressApp.get(
+  '/book/advanced-search',
+  cors(corsOptionsDelegate),
+  (req, res) => {
+    const genres = req.query['genres'] as string;
+    const params: AdvancedSearchParams = {
+      genres: genres.length > 0 ? genres.split(',') : [],
+      rating: Number(req.query['rating']),
+      mode: req.query['mode'] === 'and' ? 'and' : 'or',
+    };
+    app
+      .advancedSearch(params)
+      .then((books: BookData[]) => {
+        res.json(books.sort((a, b) => a.full.localeCompare(b.full)));
       })
       .catch((err) => {
         res.json(err);

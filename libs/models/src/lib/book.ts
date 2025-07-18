@@ -21,6 +21,17 @@ export interface BasicBookData {
   full: string;
 }
 
+export interface BookData extends BasicBookData {
+  rating: number;
+  genres: string;
+}
+
+export interface AdvancedSearchParams {
+  genres: string[];
+  rating: number;
+  mode: 'and' | 'or';
+}
+
 export class Book {
   public id?: string;
   public authorId?: string;
