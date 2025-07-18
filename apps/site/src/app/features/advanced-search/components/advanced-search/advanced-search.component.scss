@@ -41,8 +41,11 @@
 
       &.parameter-grid {
         max-width: 600px;
-        display: grid;
-        grid-template-columns: 1fr 2fr;
+        display: flex;
+
+        input {
+          width: 100px;
+        }
       }
 
       &.genres-grid {
