@@ -113,7 +113,7 @@ export class AdvancedSearchComponent {
     return FB2_GENRES_UNIQUE_NAME_SORTED.reduce((memo: string[], genre) => {
       const isChecked = this.form.get(genre)?.value;
       if (isChecked) {
-        memo.push(genre);
+        memo.push(`"${genre}"`);
       }
       return memo;
     }, []);
