@@ -32,7 +32,7 @@ export class SearchBook {
     await new Promise((resolve) => {
       setTimeout(() => {
         resolve(true);
-      }, Math.round(Math.random() * 2000));
+      }, Math.round(Math.random() * 5000));
     });
 
     try {
@@ -57,7 +57,7 @@ export class SearchBook {
       try {
         await this.page.goto(linkUrl, {
           waitUntil: 'domcontentloaded',
-          timeout: 0,
+          timeout: 10000,
         });
       } catch (e) {
         console.error(e);
