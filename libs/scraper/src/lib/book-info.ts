@@ -1,4 +1,3 @@
-import { log } from '@book-play/utils-common';
 import { environment } from 'environments/environment';
 import { Browser, Page } from 'puppeteer';
 import { BookInfo } from '../';
@@ -29,18 +28,17 @@ export class SearchBook {
     const searchBookInfoUrl = `https://fantlab.ru/searchmain?searchstr=${encodeURIComponent(
       query
     )}`;
-    log(searchBookInfoUrl);
 
     await new Promise((resolve) => {
       setTimeout(() => {
         resolve(true);
-      }, Math.round(Math.random() * 10000));
+      }, Math.round(Math.random() * 2000));
     });
 
     try {
       await this.page.goto(searchBookInfoUrl, {
         waitUntil: 'domcontentloaded',
-        timeout: 0,
+        timeout: 10000,
       });
     } catch (e) {
       console.error(e);
@@ -53,8 +51,6 @@ export class SearchBook {
         return link.href;
       }
     });
-
-    log(linkUrl);
 
     let bookInfo;
     if (linkUrl) {

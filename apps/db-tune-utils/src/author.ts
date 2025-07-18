@@ -1,9 +1,9 @@
-import { DB_CONFIG } from '@book-play/constants';
 import { DBBook } from '@book-play/models';
+import { environment } from 'environments/environment';
 import mysql, { escape, PoolOptions } from 'mysql2';
 import { ResultSetHeader } from 'mysql2/typings/mysql/lib/protocol/packets/ResultSetHeader';
 
-const pool = mysql.createPool(DB_CONFIG as unknown as PoolOptions);
+const pool = mysql.createPool(environment.DB_CONFIG as unknown as PoolOptions);
 
 export async function run() {
   const books: DBBook[] = await getBooksToUpdate();

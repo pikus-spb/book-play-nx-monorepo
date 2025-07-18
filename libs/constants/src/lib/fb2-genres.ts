@@ -222,6 +222,36 @@ export const FB2_GENRES: Record<string, string> = {
   unfinished: 'Незаконченное',
 };
 
-export const FB2_GENRES_KEYS_SORTED = Object.keys(FB2_GENRES).sort((a, b) => {
+const FB2_GENRES_KEY_VALUE_SWAPPED = Object.fromEntries(
+  Object.entries(FB2_GENRES).map(([k, v]) => [v, k])
+);
+
+export const FB2_GENRES_UNIQUE = Object.fromEntries(
+  Array.from(new Set(Object.values(FB2_GENRES))).map((translation) => {
+    return [FB2_GENRES_KEY_VALUE_SWAPPED[translation], translation];
+  })
+);
+
+export const FB2_GENRES_UNIQUE_NAME_SORTED = Object.keys(
+  FB2_GENRES_UNIQUE
+).sort((a, b) => {
   return FB2_GENRES[a].localeCompare(FB2_GENRES[b]);
 });
+
+export const FB2_GENRES_ALIASES = Object.values(
+  Object.keys(FB2_GENRES).reduce((memo: Record<string, string[]>, genre) => {
+    if (memo[FB2_GENRES[genre]] == undefined) {
+      memo[FB2_GENRES[genre]] = [];
+    }
+    memo[FB2_GENRES[genre]].push(genre);
+    return memo;
+  }, {})
+).reduce((memo: Record<string, string[]>, genres: string[]) => {
+  if (genres.length > 1) {
+    genres.forEach((alias) => {
+      memo[alias] = genres.filter((genre) => alias !== genre);
+    });
+  }
+
+  return memo;
+}, {});

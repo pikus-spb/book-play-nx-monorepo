@@ -6,6 +6,9 @@ import {
   EmbeddedViewRef,
   inject,
   Input,
+  linkedSignal,
+  OnDestroy,
+  OnInit,
   TemplateRef,
   ViewContainerRef,
 } from '@angular/core';
@@ -17,7 +20,7 @@ import { selectLoading } from '../../store/loading/loading.selector';
 @Directive({
   selector: '[loading]',
 })
-export class LoadingThenShowDirective {
+export class LoadingThenShowDirective implements OnInit, OnDestroy {
   @Input() thenShow?: TemplateRef<unknown>;
   private viewContainerRef = inject(ViewContainerRef);
   private store = inject(Store);
@@ -26,17 +29,17 @@ export class LoadingThenShowDirective {
     read: ViewContainerRef,
   });
   private loadingComponentRef?: ComponentRef<LoadingIndicatorComponent>;
+  private viewContainerRefActual = linkedSignal(
+    () => this.placeHolder() || this.viewContainerRef
+  );
   private embeddedViewRef?: EmbeddedViewRef<unknown>;
 
   constructor() {
     effect(() => {
-      const viewContainerRef = this.placeHolder() || this.viewContainerRef;
       if (this.loading()) {
-        this.loadingComponentRef = viewContainerRef.createComponent(
-          LoadingIndicatorComponent
-        );
+        this.loadingComponentRef?.instance.show();
       } else {
-        this.loadingComponentRef?.destroy();
+        this.loadingComponentRef?.instance.hide();
       }
 
       if (this.thenShow) {
@@ -49,5 +52,15 @@ export class LoadingThenShowDirective {
         }
       }
     });
+  }
+
+  public ngOnInit() {
+    this.loadingComponentRef = this.viewContainerRefActual().createComponent(
+      LoadingIndicatorComponent
+    );
+  }
+
+  public ngOnDestroy() {
+    this.loadingComponentRef?.destroy();
   }
 }

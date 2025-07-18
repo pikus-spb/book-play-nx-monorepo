@@ -11,7 +11,12 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
 import { MatFabButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
-import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import {
+  ActivatedRoute,
+  NavigationEnd,
+  Router,
+  RouterLink,
+} from '@angular/router';
 import { ScrollbarDirective, TagLinkComponent } from '@book-play/ui';
 import { Store } from '@ngrx/store';
 import { LoadingThenShowDirective } from '../../../../shared/directives/loading-then-show/loading-then-show.directive';
@@ -31,6 +36,7 @@ import {
     TagLinkComponent,
     MatFabButton,
     FormsModule,
+    RouterLink,
   ],
   templateUrl: './books.component.html',
   styleUrls: ['./books.component.scss'],

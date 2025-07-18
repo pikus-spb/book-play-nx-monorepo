@@ -1,5 +1,11 @@
 import {
+  FB2_GENRES_ALIASES,
+  MAX_BOOK_SEARCH_RESULTS,
+} from '@book-play/constants';
+import {
+  AdvancedSearchParams,
   BasicBookData,
+  BookData,
   DBAuthor,
   DBAuthorSummary,
   DBBook,
@@ -99,21 +105,6 @@ export default class BooksAPIApp {
     });
   }
 
-  bookSearch(query: string): Promise<BasicBookData[]> {
-    const sqlQuery = `SELECT books.id, books.full FROM books WHERE MATCH (full) AGAINST ('${query}')`;
-
-    return new Promise((resolve, reject) => {
-      pool.query(sqlQuery, (err, result: BasicBookData[]) => {
-        if (err) {
-          console.error(err);
-          reject(err);
-        } else {
-          resolve(result);
-        }
-      });
-    });
-  }
-
   async bookById(id: string): Promise<Partial<DBBook>> {
     try {
       const book = await this.bookSummaryById(id);
@@ -150,6 +141,74 @@ export default class BooksAPIApp {
           }
         }
       );
+    });
+  }
+
+  bookSearch(query: string): Promise<BasicBookData[]> {
+    const sqlQuery = `SELECT books.id, books.full FROM books WHERE MATCH (full) AGAINST ('${query}')`;
+
+    return new Promise((resolve, reject) => {
+      pool.query(sqlQuery, (err, result: BasicBookData[]) => {
+        if (err) {
+          console.error(err);
+          reject(err);
+        } else {
+          resolve(result);
+        }
+      });
+    });
+  }
+
+  advancedSearch(params: AdvancedSearchParams): Promise<BookData[]> {
+    const hasRating = params.rating > 0;
+    const hasGenres = params.genres.length > 0;
+
+    let operator = ' AND ';
+    if (params.mode === 'or') {
+      operator = ' OR ';
+    }
+    const sqlQuery = [
+      'SELECT B.id, B.full ',
+      hasRating ? ', B.rating ' : '',
+      hasGenres ? ', B.genres ' : '',
+      'FROM books AS B ',
+      'LEFT JOIN genres AS G ',
+      'ON G.bookId = B.id ',
+      hasGenres || hasRating ? 'WHERE ' : '',
+      hasRating ? 'B.rating > ' + params.rating : '',
+    ];
+    if (hasGenres) {
+      if (hasRating) {
+        sqlQuery.push(operator);
+      }
+      sqlQuery.push(
+        params.genres
+          .map((genre) => {
+            const aliases = [genre];
+            if (FB2_GENRES_ALIASES[genre]) {
+              aliases.push(...FB2_GENRES_ALIASES[genre]);
+            }
+            return (
+              '(' +
+              aliases.map((item) => `G.genre = '${item}'`).join(' OR ') +
+              ')'
+            );
+          })
+          .join(operator)
+      );
+    }
+
+    sqlQuery.push(` ORDER BY rating LIMIT ${MAX_BOOK_SEARCH_RESULTS}`);
+
+    return new Promise((resolve, reject) => {
+      pool.query(sqlQuery.join(''), (err, result: BookData[]) => {
+        if (err) {
+          console.error(err);
+          reject(err);
+        } else {
+          resolve(result);
+        }
+      });
     });
   }
 }
