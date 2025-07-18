@@ -1,7 +1,7 @@
 <div #container>
   @if (bookData !== null) {
   <div class="scrollable-canvas" libPerfectScrollbar cdkVirtualScrollingElement>
-    <h1>{{ bookData.author.full }} - {{ bookData.name }}</h1>
+    <h4>{{ bookData.author.full }} - {{ bookData.name }}</h4>
     <section class="title-picture-container">
       <img
         [src]="coverSrc()"
