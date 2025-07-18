@@ -26,6 +26,7 @@
     <section class="parameter-grid">
       <span>Рейтинг не ниже чем:</span>
       <input type="text" formControlName="rating" />
+      <span>(из 10)</span>
     </section>
 
     <details #genresContainer>
@@ -51,7 +52,7 @@
 
   <div #searchResult class="search-result">
     @if (data()) { @if (data()!.length === 0) {
-    <span>Книги не найдены</span>
+    <span>По вашему запросы книги не найдены</span>
     }
     <div libPerfectScrollbar class="grid books-grid">
       @for (item of data(); track item.id){
