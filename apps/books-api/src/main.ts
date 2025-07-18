@@ -146,7 +146,10 @@ expressApp.get(
   (req, res) => {
     const genres = req.query['genres'] as string;
     const params: AdvancedSearchParams = {
-      genres: genres.length > 0 ? genres.split(',') : [],
+      genres:
+        genres.length > 0
+          ? genres.split('","').map((genre) => genre.replace(/"/g, ''))
+          : [],
       rating: Number(req.query['rating']),
       mode: req.query['mode'] === 'and' ? 'and' : 'or',
     };
