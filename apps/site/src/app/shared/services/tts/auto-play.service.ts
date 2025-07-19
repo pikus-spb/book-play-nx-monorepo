@@ -4,12 +4,17 @@ import { VOICE_CACHE_PRELOAD_EXTRA } from '@book-play/constants';
 import { Book } from '@book-play/models';
 import { Store } from '@ngrx/store';
 import {
+  debounceTime,
   distinctUntilKeyChanged,
   filter,
+  firstValueFrom,
   fromEvent,
+  map,
   Observable,
+  race,
   skip,
   tap,
+  timer,
 } from 'rxjs';
 import { activeBookSelector } from '../../store/active-book/active-book.selectors';
 import {
@@ -56,9 +61,16 @@ export class AutoPlayService {
 
     fromEvent(window, 'resize')
       .pipe(
-        tap(() => {
-          this.domHelper.showActiveParagraph();
-        }),
+        debounceTime(200),
+        tap(() => this.domHelper.showActiveParagraph()),
+        takeUntilDestroyed()
+      )
+      .subscribe();
+
+    fromEvent(window, 'focus')
+      .pipe(
+        debounceTime(200),
+        tap(() => this.domHelper.showActiveParagraph()),
         takeUntilDestroyed()
       )
       .subscribe();
@@ -107,7 +119,7 @@ export class AutoPlayService {
     this.store.dispatch(loadingEndAction());
 
     while (true) {
-      await this.autoScrollingEnd();
+      await this.autoScrollingEnded();
       await this.ensureAudioDataReady();
 
       this.audioPlayer.setAudio(await this.audioCacheHelperService.getAudio());
@@ -125,17 +137,22 @@ export class AutoPlayService {
     }
   }
 
-  private autoScrollingEnd(): Promise<void> {
+  private autoScrollingEnded(): Promise<boolean> {
     const isScrollingNow = this.eventStateService.get(
       AppEventNames.scrollingIntoView
     )();
     if (isScrollingNow) {
-      return this.eventStateService.waitUntil(
-        AppEventNames.scrollingIntoView,
-        false
+      return firstValueFrom(
+        race(
+          this.eventStateService.waitUntilObservable(
+            AppEventNames.scrollingIntoView,
+            false
+          ),
+          timer(500) // maximum time to wait for scroll ended
+        ).pipe(map(() => true))
       );
     }
-    return Promise.resolve();
+    return Promise.resolve(true);
   }
 
   private get bookLength(): number {
