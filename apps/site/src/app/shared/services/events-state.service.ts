@@ -5,7 +5,7 @@ import {
   Signal,
   WritableSignal,
 } from '@angular/core';
-import { filter, firstValueFrom, Observable, Subject } from 'rxjs';
+import { filter, Observable, Subject } from 'rxjs';
 
 export enum AppEventNames {
   scrollingIntoView = 'scrollingIntoView',
@@ -53,12 +53,13 @@ export class EventsStateService {
     event.signal.set(event.counter > 0);
   }
 
-  public async waitUntil(name: AppEventNames, value: boolean): Promise<void> {
-    await firstValueFrom(
-      this.events
-        .get(name)!
-        .observable.pipe(filter((current) => current === value))
-    );
+  public waitUntilObservable(
+    name: AppEventNames,
+    value: boolean
+  ): Observable<boolean> {
+    return this.events
+      .get(name)!
+      .observable.pipe(filter((current) => current === value));
   }
 
   public get(name: AppEventNames): Signal<boolean> {

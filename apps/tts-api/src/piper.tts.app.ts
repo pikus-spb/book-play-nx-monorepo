@@ -101,9 +101,14 @@ export default class PiperTtsApp {
   ): Promise<string> {
     let equalizer;
     if (voice == Voices.Irina || voice == Voices.Kirill) {
-      equalizer = ['equalizer=f=60:width_type=h:width=150:g=10'];
+      equalizer = ['equalizer=f=50:width_type=h:width=80:g=7'];
     } else if (voice == Voices.Tamara) {
-      equalizer = ['equalizer=f=60:width_type=h:width=150:g=-5'];
+      equalizer = [
+        'equalizer=f=50:width_type=h:width=80:g=-4',
+        'equalizer=f=5300:width_type=h:width=2000:g=-2',
+        'equalizer=f=7500:width_type=h:width=7000:g=-2',
+        'equalizer=f=14500:width_type=h:width=7000:g=-6',
+      ];
     }
 
     return equalize(equalizer, fileName, fileNameOut);
