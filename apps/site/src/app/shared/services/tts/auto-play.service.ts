@@ -22,7 +22,7 @@ import {
   loadingStartAction,
 } from '../../store/loading/loading.action';
 import { VoiceAudioHelperService } from '../../store/voice-audio/voice-audio-helpers';
-import { DomAudioHelperService } from '../dom-audio-helper.service';
+import { AudioPlayerService } from '../audio-player.service';
 import { AppEventNames, EventsStateService } from '../events-state.service';
 import { CursorPositionService } from '../player/cursor-position.service';
 import { DomHelperService } from '../player/dom-helper.service';
@@ -41,7 +41,7 @@ export class AutoPlayService {
       skip(1)
     )
   );
-  private audioPlayer = inject(DomAudioHelperService);
+  private audioPlayer = inject(AudioPlayerService);
   private eventStateService = inject(EventsStateService);
   private cursorService = inject(CursorPositionService);
   private domHelper = inject(DomHelperService);
