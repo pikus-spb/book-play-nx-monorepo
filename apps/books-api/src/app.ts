@@ -10,6 +10,7 @@ import {
   DBAuthorSummary,
   DBBook,
 } from '@book-play/models';
+import { Log } from '@book-play/utils-common';
 import {
   getJsonGzFileName,
   readZippedFile,
@@ -21,6 +22,7 @@ import mysql, { PoolOptions } from 'mysql2';
 const pool = mysql.createPool(environment.DB_CONFIG as unknown as PoolOptions);
 
 export default class BooksAPIApp {
+  @Log()
   public async authorSummary(id: string): Promise<DBAuthorSummary> {
     const sqlQuery = new SQLQueryBuilder()
       .select('id', 'first', 'last', 'about', 'image')
@@ -47,6 +49,7 @@ export default class BooksAPIApp {
     });
   }
 
+  @Log()
   randomAuthors(
     number: string | number = environment.RANDOM_AUTHORS_COUNT
   ): Promise<DBAuthorSummary[]> {
@@ -75,6 +78,8 @@ export default class BooksAPIApp {
       });
     });
   }
+
+  @Log()
   randomBookIds(
     number: string | number = environment.RANDOM_BOOKS_COUNT
   ): Promise<string[]> {
@@ -98,6 +103,7 @@ export default class BooksAPIApp {
     });
   }
 
+  @Log()
   authorBooks(authorId: string): Promise<Partial<DBBook>[]> {
     const sqlQuery = new SQLQueryBuilder()
       .select('id', 'name', 'genres')
@@ -119,6 +125,7 @@ export default class BooksAPIApp {
     });
   }
 
+  @Log()
   async bookById(id: string): Promise<Partial<DBBook>> {
     try {
       const book = await this.bookSummaryById(id);
@@ -133,6 +140,7 @@ export default class BooksAPIApp {
     }
   }
 
+  @Log()
   bookSummaryById(id: string): Promise<Partial<DBBook>> {
     const sqlQuery = `SELECT
           books.id, books.name, books.annotation, books.genres, books.date,
@@ -158,6 +166,7 @@ export default class BooksAPIApp {
     });
   }
 
+  @Log()
   bookSearch(query: string): Promise<BasicBookData[]> {
     const sqlQuery = new SQLQueryBuilder()
       .select('id', 'full')
@@ -179,6 +188,7 @@ export default class BooksAPIApp {
     });
   }
 
+  @Log()
   advancedSearch(params: AdvancedSearchParams): Promise<BookData[]> {
     const hasRating = params.rating > 0;
     const hasGenres = params.genres.length > 0;
