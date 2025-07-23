@@ -29,7 +29,6 @@ export interface BookData extends BasicBookData {
 export interface AdvancedSearchParams {
   genres: string[];
   rating: number;
-  mode: 'and' | 'or';
 }
 
 export class Book {

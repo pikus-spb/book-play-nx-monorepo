@@ -26,8 +26,10 @@ interface JoinClause {
  *   .leftJoin('posts p', 'u.id = p.user_id')
  *   .where('u.active = 1')
  *   .orderBy('u.name')
+ *   .limit(100)
  *   .build();
- * // Result: "SELECT u.name, p.title FROM users u LEFT JOIN posts p ON u.id = p.user_id WHERE u.active = 1 ORDER BY u.name ASC"
+ * // Result: "SELECT u.name, p.title FROM users u LEFT JOIN posts p ON u.id = p.user_id WHERE u.active = 1 ORDER BY
+ * u.name ASC LIMIT 100"
  *
  */
 export class SQLQueryBuilder {
@@ -36,6 +38,7 @@ export class SQLQueryBuilder {
   private joins: JoinClause[] = [];
   private whereConditions: string[] = [];
   private orderClause = '';
+  private limitClause = '';
 
   /**
    * Specifies the columns to select in the query
@@ -156,6 +159,20 @@ export class SQLQueryBuilder {
   }
 
   /**
+   * Adds an LIMIT clause to the query
+   *
+   * @param limit - limit number
+   *
+   * @example
+   * builder.limit(100) // LIMIT 100
+   *
+   */
+  limit(limit: number): this {
+    this.limitClause = `LIMIT ${limit}`;
+    return this;
+  }
+
+  /**
    * Builds and returns the final SQL query string
    *
    * @returns The constructed SQL SELECT statement
@@ -186,6 +203,10 @@ export class SQLQueryBuilder {
 
     if (this.orderClause) {
       query += ` ${this.orderClause}`;
+    }
+
+    if (this.limitClause) {
+      query += ` ${this.limitClause}`;
     }
 
     return query;

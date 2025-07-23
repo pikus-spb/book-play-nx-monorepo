@@ -193,19 +193,8 @@ export default class BooksAPIApp {
     const hasRating = params.rating > 0;
     const hasGenres = params.genres.length > 0;
 
-    let operator = ' AND ';
-    if (params.mode === 'or') {
-      operator = ' OR ';
-    }
-    const select = ['B.id', 'B.full'];
-    if (hasRating) {
-      select.push('B.rating');
-    }
-    if (hasGenres) {
-      select.push('B.genres');
-    }
-    let builder = new SQLQueryBuilder().select(...select);
-    builder = builder
+    let builder = new SQLQueryBuilder()
+      .select('B.id', 'B.full', 'B.rating', 'B.genres')
       .from('books AS B')
       .leftJoin('genres AS G', 'G.bookId = B.id');
 
@@ -213,31 +202,26 @@ export default class BooksAPIApp {
       builder = builder.where('B.rating > ' + params.rating);
     }
 
-    const whereGenreAliases = [];
     if (hasGenres) {
-      if (hasRating) {
-        whereGenreAliases.push(operator);
-      }
-      whereGenreAliases.push(
-        params.genres
-          .map((genre) => {
-            const aliases = [genre];
-            if (FB2_GENRES_ALIASES[genre]) {
-              aliases.push(...FB2_GENRES_ALIASES[genre]);
-            }
-            return (
-              '(' +
-              aliases.map((item) => `G.genre = '${item}'`).join(' OR ') +
-              ')'
-            );
-          })
-          .join(operator)
-      );
+      const whereGenreAliases = params.genres
+        .map((genre) => {
+          const aliases = [genre];
+          if (FB2_GENRES_ALIASES[genre]) {
+            aliases.push(...FB2_GENRES_ALIASES[genre]);
+          }
+          return (
+            '(' +
+            aliases.map((item) => `G.genre = '${item}'`).join(' OR ') +
+            ')'
+          );
+        })
+        .join(' OR ');
+      builder = builder.where(whereGenreAliases);
     }
-    const sqlQuery =
-      builder.build() +
-      whereGenreAliases.join('') +
-      ` ORDER BY rating LIMIT ${MAX_BOOK_SEARCH_RESULTS}`;
+
+    builder = builder.orderBy('rating').limit(MAX_BOOK_SEARCH_RESULTS);
+
+    const sqlQuery = builder.build();
 
     // log(sqlQuery);
 

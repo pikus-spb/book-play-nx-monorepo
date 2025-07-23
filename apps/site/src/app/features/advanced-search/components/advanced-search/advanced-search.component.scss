@@ -53,13 +53,14 @@
         max-height: 400px;
 
         .group,
-        .label {
+        .subgroup {
           display: block;
-          padding-left: $default-padding;
+          line-height: 1.7em;
+          margin-left: $default-padding;
         }
 
-        .label {
-          margin-top: $default-padding;
+        .group {
+          margin-bottom: $default-padding;
         }
       }
 
