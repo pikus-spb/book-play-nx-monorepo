@@ -845,7 +845,15 @@ export const FB2_GENRES: Record<string, string> = {
   языкознание: 'Языкознание',
 };
 
-export const FB_GENRES_TRANSLATED_STRUCTURED = {
+export interface Fb2GenresGroup {
+  [subGroup: string]: string[];
+}
+
+export interface Fb2GenresStructure {
+  [group: string]: Fb2GenresGroup | string[];
+}
+
+export const FB_GENRES_TRANSLATED_STRUCTURED: Fb2GenresStructure = {
   'Художественная литература': {
     Проза: [
       'Проза',
