@@ -1,0 +1,10 @@
+@use 'vars' as *;
+
+:host {
+  display: block;
+
+  .group {
+    display: flex;
+    flex-direction: column;
+  }
+}
