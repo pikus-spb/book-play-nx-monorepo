@@ -26,19 +26,23 @@ export function Log(): MethodDecorator {
     propertyKey: string | symbol,
     descriptor: PropertyDescriptor
   ) {
+    function text(data: any): string {
+      return JSON.stringify(data).substring(0, 200) + '...';
+    }
+
     const originalMethod = descriptor.value;
 
     descriptor.value = function (...args: any[]) {
-      log(`${String(propertyKey)}(${JSON.stringify(args)})`);
+      log(`${String(propertyKey)}( ${text(args)})`);
 
       const result = originalMethod.apply(this, args);
       if (result instanceof Promise) {
         return result.then((res) => {
-          log(`Result: ${JSON.stringify(res)}`);
+          log('Result: ' + text(res));
           return res;
         });
       } else {
-        log(`Result: ${JSON.stringify(result)}`);
+        log('Result: ' + text(result));
       }
       return result;
     };
