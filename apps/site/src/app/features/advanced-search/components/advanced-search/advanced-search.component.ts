@@ -18,8 +18,9 @@ import { MatFabButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { RouterLink } from '@angular/router';
 import {
-  FB2_GENRES,
+  FB2_GENRES_KEY_VALUE_SWAPPED,
   FB2_GENRES_UNIQUE_NAME_SORTED,
+  FB_GENRES_TRANSLATED_STRUCTURED,
 } from '@book-play/constants';
 import { AdvancedSearchParams } from '@book-play/models';
 import { ScrollbarDirective, TagLinkComponent } from '@book-play/ui';
@@ -119,7 +120,9 @@ export class AdvancedSearchComponent {
     }, []);
   }
 
-  protected readonly FB2_GENRES = FB2_GENRES;
-  protected readonly FB2_GENRES_UNIQUE_KEYS_SORTED =
-    FB2_GENRES_UNIQUE_NAME_SORTED;
+  protected readonly FB_GENRES_TRANSLATED_STRUCTURED =
+    FB_GENRES_TRANSLATED_STRUCTURED;
+  protected readonly Object = Object;
+  protected readonly FB2_GENRES_KEY_VALUE_SWAPPED =
+    FB2_GENRES_KEY_VALUE_SWAPPED;
 }
