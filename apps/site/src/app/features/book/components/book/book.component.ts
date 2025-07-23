@@ -17,7 +17,7 @@ import {
   DEFAULT_COVER_SRC,
 } from '@book-play/constants';
 import { Book } from '@book-play/models';
-import { AuthorGenresListComponent } from '@book-play/ui';
+import { AuthorGenresListComponent, StarRatingComponent } from '@book-play/ui';
 import {
   setDocumentTitleWithContext,
   showDefaultCoverImage,
@@ -37,6 +37,7 @@ import { map } from 'rxjs';
     RouterLink,
     AuthorGenresListComponent,
     StarRatingModule,
+    StarRatingComponent,
   ],
 })
 export class BookComponent {

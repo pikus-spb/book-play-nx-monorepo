@@ -36,13 +36,15 @@ export function Log(): MethodDecorator {
       log(`${String(propertyKey)}( ${text(args)})`);
 
       const result = originalMethod.apply(this, args);
-      if (result instanceof Promise) {
-        return result.then((res) => {
-          log('Result: ' + text(res));
-          return res;
-        });
-      } else {
-        log('Result: ' + text(result));
+      if (result) {
+        if (result instanceof Promise) {
+          return result.then((res) => {
+            log('Result: ' + text(res));
+            return res;
+          });
+        } else {
+          log('Result: ' + text(result));
+        }
       }
       return result;
     };

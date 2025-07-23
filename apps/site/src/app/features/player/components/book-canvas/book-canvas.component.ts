@@ -26,6 +26,7 @@ import {
   HeightCalculateComponent,
   HeightDelta,
   ScrollbarDirective,
+  StarRatingComponent,
 } from '@book-play/ui';
 import { showDefaultCoverImage } from '@book-play/utils-browser';
 import { Subject } from 'rxjs';
@@ -45,6 +46,7 @@ import { BookParagraphComponent } from '../book-paragraph/book-paragraph.compone
     BookParagraphComponent,
     HeightCalculateComponent,
     ScrollbarDirective,
+    StarRatingComponent,
   ],
 })
 export class BookCanvasComponent implements OnDestroy {
