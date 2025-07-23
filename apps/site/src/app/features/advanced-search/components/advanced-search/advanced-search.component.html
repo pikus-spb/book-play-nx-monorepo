@@ -9,8 +9,18 @@
   <form [formGroup]="form" (submit)="submit($event)">
     <section class="parameter-grid">
       <span>Рейтинг не ниже чем:</span>
-      <input type="text" formControlName="rating" />
-      <span>(из 10)</span>
+      <input
+        matInput
+        min="0.5"
+        max="10"
+        step="0.5"
+        type="number"
+        formControlName="rating"
+      />
+      <lib-star-rating
+        [rating]="form.controls['rating'].valueChanges | async"
+        [showLabel]="false"
+      ></lib-star-rating>
       <button mat-fab extended="true" color="success" type="submit">
         <mat-icon>search</mat-icon>
         Искать

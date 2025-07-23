@@ -13,16 +13,22 @@ import {
   FormGroup,
   FormsModule,
   ReactiveFormsModule,
+  Validators,
 } from '@angular/forms';
 import { MatFabButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
+import { MatInput } from '@angular/material/input';
 import { RouterLink } from '@angular/router';
 import {
   FB_GENRES_TRANSLATIONS_STRUCTURED,
   isGenreGroup,
 } from '@book-play/constants';
 import { AdvancedSearchParams } from '@book-play/models';
-import { ScrollbarDirective, TagLinkComponent } from '@book-play/ui';
+import {
+  ScrollbarDirective,
+  StarRatingComponent,
+  TagLinkComponent,
+} from '@book-play/ui';
 import { Store } from '@ngrx/store';
 import { StarRatingModule } from 'angular-star-rating';
 import { firstValueFrom, timer } from 'rxjs';
@@ -47,6 +53,8 @@ import { GenreInputGroupComponent } from '../genre-input-group/genre-input-group
     RouterLink,
     StarRatingModule,
     GenreInputGroupComponent,
+    StarRatingComponent,
+    MatInput,
   ],
   templateUrl: './advanced-search.component.html',
   styleUrls: ['./advanced-search.component.scss'],
@@ -63,10 +71,14 @@ export class AdvancedSearchComponent {
 
   constructor() {
     this.form = this.fb.group({
-      rating: [],
+      rating: [[Validators.min(0), Validators.max(10)]],
     });
   }
   protected async submit(event: Event) {
+    if (!this.form.valid) {
+      return;
+    }
+
     this.store.dispatch(loadingStartAction());
 
     let data;

@@ -1,4 +1,5 @@
 import { TtsParams, Voices } from '@book-play/models';
+import { Log, log } from '@book-play/utils-common';
 import {
   equalize,
   getRandomFileNames,
@@ -18,6 +19,7 @@ export default class PiperTtsApp {
     this.req = req;
   }
 
+  @Log()
   public runTts(params: TtsParams): Promise<Blob> {
     return new Promise((resolve, reject) => {
       const args1 = [
@@ -74,16 +76,17 @@ export default class PiperTtsApp {
     });
   }
 
+  @Log()
   private killTtsProcess(process: ChildProcess) {
-    // TODO: create logger
     try {
       process.kill(process.pid);
-      console.log('Successfully killed process ' + process.pid + '.');
+      log('Successfully killed process ' + process.pid + '.');
     } catch (e) {
-      console.log('Could not kill process:' + process.pid);
+      log('Could not kill process:' + process.pid);
     }
   }
 
+  @Log()
   private killProcessOnConnectionClose(
     child: ChildProcess,
     reject: (reason?: any) => void
@@ -94,6 +97,7 @@ export default class PiperTtsApp {
     });
   }
 
+  @Log()
   private equalize(
     voice: string,
     fileName: string,
@@ -103,12 +107,7 @@ export default class PiperTtsApp {
     if (voice == Voices.Irina || voice == Voices.Kirill) {
       equalizer = ['equalizer=f=50:width_type=h:width=80:g=7'];
     } else if (voice == Voices.Tamara) {
-      equalizer = [
-        'equalizer=f=50:width_type=h:width=80:g=-4',
-        'equalizer=f=5300:width_type=h:width=2000:g=-2',
-        'equalizer=f=7500:width_type=h:width=7000:g=-2',
-        'equalizer=f=14500:width_type=h:width=7000:g=-6',
-      ];
+      equalizer = ['equalizer=f=50:width_type=h:width=80:g=-4'];
     }
 
     return equalize(equalizer, fileName, fileNameOut);
