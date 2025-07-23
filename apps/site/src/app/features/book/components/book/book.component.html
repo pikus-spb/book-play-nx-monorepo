@@ -17,14 +17,7 @@
     <lib-author-genres-list [genres]="book.genres">
       @if (book.rating) {
       <span class="book-rating">
-        <span>{{ book.rating }}</span>
-        <star-rating-control
-          [readOnly]="true"
-          [staticColor]="'ok'"
-          [starType]="'svg'"
-          [rating]="book.rating / 2"
-          [showHalfStars]="true"
-        ></star-rating-control>
+        <lib-star-rating [rating]="book.rating"></lib-star-rating>
       </span>
       }
     </lib-author-genres-list>
