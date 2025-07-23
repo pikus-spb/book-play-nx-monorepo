@@ -18,9 +18,8 @@ import { MatFabButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { RouterLink } from '@angular/router';
 import {
-  FB2_GENRES_KEY_VALUE_SWAPPED,
-  FB2_GENRES_UNIQUE_NAME_SORTED,
-  FB_GENRES_TRANSLATED_STRUCTURED,
+  FB_GENRES_TRANSLATIONS_STRUCTURED,
+  isGenreGroup,
 } from '@book-play/constants';
 import { AdvancedSearchParams } from '@book-play/models';
 import { ScrollbarDirective, TagLinkComponent } from '@book-play/ui';
@@ -32,6 +31,7 @@ import {
   loadingEndAction,
   loadingStartAction,
 } from '../../../../shared/store/loading/loading.action';
+import { GenreInputGroupComponent } from '../genre-input-group/genre-input-group.component';
 
 @Component({
   selector: 'books',
@@ -46,6 +46,7 @@ import {
     ReactiveFormsModule,
     RouterLink,
     StarRatingModule,
+    GenreInputGroupComponent,
   ],
   templateUrl: './advanced-search.component.html',
   styleUrls: ['./advanced-search.component.scss'],
@@ -61,30 +62,16 @@ export class AdvancedSearchComponent {
   private genresContainer = viewChild<ElementRef>('genresContainer');
 
   constructor() {
-    const genres = FB2_GENRES_UNIQUE_NAME_SORTED.reduce(
-      (memo: Record<string, [boolean]>, genre) => {
-        memo[genre] = [false];
-        return memo;
-      },
-      {}
-    );
-
     this.form = this.fb.group({
-      ...genres,
       rating: [],
-      mode: ['and'],
     });
   }
-
   protected async submit(event: Event) {
     this.store.dispatch(loadingStartAction());
 
     let data;
     try {
-      const params: AdvancedSearchParams = {
-        genres: this.getFormGenresParams(),
-        ...this.getFormFixedParams(),
-      };
+      const params: AdvancedSearchParams = this.getFormParams();
 
       data = await firstValueFrom(this.booksApiService.advancedSearch(params));
     } catch (e) {
@@ -103,26 +90,21 @@ export class AdvancedSearchComponent {
     this.genresContainer()?.nativeElement.removeAttribute('open');
   }
 
-  private getFormFixedParams() {
-    return {
-      rating: this.form.get('rating')?.value,
-      mode: this.form.get('mode')?.value,
-    };
-  }
+  private getFormParams(): AdvancedSearchParams {
+    const formValue = this.form.value;
+    const rating = formValue['rating'];
 
-  private getFormGenresParams() {
-    return FB2_GENRES_UNIQUE_NAME_SORTED.reduce((memo: string[], genre) => {
-      const isChecked = this.form.get(genre)?.value;
-      if (isChecked) {
-        memo.push(`"${genre}"`);
-      }
-      return memo;
-    }, []);
+    delete formValue['rating'];
+
+    const genres = Object.entries(formValue)
+      .filter(([k, v]) => Boolean(v))
+      .map(([k, v]) => k);
+
+    return { rating, genres };
   }
 
   protected readonly FB_GENRES_TRANSLATED_STRUCTURED =
-    FB_GENRES_TRANSLATED_STRUCTURED;
+    FB_GENRES_TRANSLATIONS_STRUCTURED;
+  protected readonly isGenreGroup = isGenreGroup;
   protected readonly Object = Object;
-  protected readonly FB2_GENRES_KEY_VALUE_SWAPPED =
-    FB2_GENRES_KEY_VALUE_SWAPPED;
 }

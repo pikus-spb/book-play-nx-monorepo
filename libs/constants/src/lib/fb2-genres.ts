@@ -853,7 +853,17 @@ export interface Fb2GenresStructure {
   [group: string]: Fb2GenresGroup | string[];
 }
 
-export const FB_GENRES_TRANSLATED_STRUCTURED: Fb2GenresStructure = {
+export function isGenreGroup(
+  item: Fb2GenresGroup | string[]
+): item is Fb2GenresGroup {
+  return item.length === undefined;
+}
+
+export const FB2_GENRES_KEY_VALUE_SWAPPED = Object.fromEntries(
+  Object.entries(FB2_GENRES).map(([k, v]) => [v, k])
+);
+
+export const FB_GENRES_TRANSLATIONS_STRUCTURED: Fb2GenresStructure = {
   'Художественная литература': {
     Проза: [
       'Проза',
@@ -1116,20 +1126,23 @@ export const FB_GENRES_TRANSLATED_STRUCTURED: Fb2GenresStructure = {
   ],
 };
 
-export const FB2_GENRES_KEY_VALUE_SWAPPED = Object.fromEntries(
-  Object.entries(FB2_GENRES).map(([k, v]) => [v, k])
-);
-
-export const FB2_GENRES_UNIQUE = Object.fromEntries(
-  Array.from(new Set(Object.values(FB2_GENRES))).map((translation) => {
-    return [FB2_GENRES_KEY_VALUE_SWAPPED[translation], translation];
-  })
-);
-
-export const FB2_GENRES_UNIQUE_NAME_SORTED = Object.keys(
-  FB2_GENRES_UNIQUE
-).sort((a, b) => {
-  return FB2_GENRES[a].localeCompare(FB2_GENRES[b]);
+// Reverse translations to genre keys
+Object.keys(FB_GENRES_TRANSLATIONS_STRUCTURED).forEach((key: string) => {
+  if (isGenreGroup(FB_GENRES_TRANSLATIONS_STRUCTURED[key])) {
+    Object.keys(FB_GENRES_TRANSLATIONS_STRUCTURED[key]).forEach(
+      (childKey: string) => {
+        (FB_GENRES_TRANSLATIONS_STRUCTURED[key] as Fb2GenresGroup)[childKey] = (
+          FB_GENRES_TRANSLATIONS_STRUCTURED[key] as Fb2GenresGroup
+        )[childKey]
+          .map((item) => FB2_GENRES_KEY_VALUE_SWAPPED[item])
+          .filter(Boolean);
+      }
+    );
+  } else {
+    FB_GENRES_TRANSLATIONS_STRUCTURED[key] = FB_GENRES_TRANSLATIONS_STRUCTURED[
+      key
+    ].map((item) => FB2_GENRES_KEY_VALUE_SWAPPED[item]);
+  }
 });
 
 export const FB2_GENRES_ALIASES = Object.values(
