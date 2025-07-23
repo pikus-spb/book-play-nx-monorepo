@@ -32,13 +32,41 @@
     <details #genresContainer>
       <summary>Жанры</summary>
       <section libPerfectScrollbar class="genres-grid">
-        @for (key of FB2_GENRES_UNIQUE_KEYS_SORTED; track key) {
-        <label
-          ><input type="checkbox" [formControlName]="key" /><span>{{
-            FB2_GENRES[key]
-          }}</span></label
-        >
-        }
+        @for (group of Object.keys(FB_GENRES_TRANSLATED_STRUCTURED); track
+        group) {
+        {{ group }}<br />
+        @if (FB_GENRES_TRANSLATED_STRUCTURED[group].length) {
+        <div class="group">
+          @for (genre of $any(FB_GENRES_TRANSLATED_STRUCTURED[group]); track
+          genre) {
+          <label>
+            <input
+              type="checkbox"
+              [formControlName]="FB2_GENRES_KEY_VALUE_SWAPPED[genre]"
+            />
+            <span>{{ genre }}</span>
+          </label>
+          }
+        </div>
+        } @else { @for (subGroup of
+        Object.keys(FB_GENRES_TRANSLATED_STRUCTURED[group]); track subGroup) {
+        <div class="group">
+          {{ subGroup }}
+          <div class="group">
+            @for (genre of
+            $any(FB_GENRES_TRANSLATED_STRUCTURED[group])[subGroup]; track genre)
+            {
+            <label>
+              <input
+                type="checkbox"
+                [formControlName]="FB2_GENRES_KEY_VALUE_SWAPPED[genre]"
+              />
+              <span>{{ genre }}</span>
+            </label>
+            }
+          </div>
+        </div>
+        } } }
       </section>
     </details>
 
