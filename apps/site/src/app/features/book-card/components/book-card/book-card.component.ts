@@ -7,9 +7,7 @@ import {
   input,
 } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { MatFabButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
-import { MatTooltip } from '@angular/material/tooltip';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import {
   BOOK_IMAGE_HEIGHT,
@@ -26,21 +24,19 @@ import { StarRatingModule } from 'angular-star-rating';
 import { map } from 'rxjs';
 
 @Component({
-  selector: 'book',
-  templateUrl: './book.component.html',
-  styleUrls: ['./book.component.scss'],
+  selector: 'book-card',
+  templateUrl: './book-card.component.html',
+  styleUrls: ['./book-card.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
-    MatFabButton,
-    MatIcon,
-    MatTooltip,
+    StarRatingModule,
     RouterLink,
     AuthorGenresListComponent,
-    StarRatingModule,
     StarRatingComponent,
+    MatIcon,
   ],
 })
-export class BookComponent {
+export class BookCardComponent {
   public inputBook = input<Book | null>(null, { alias: 'book' });
   private route = inject(ActivatedRoute);
   private routeBook = toSignal(

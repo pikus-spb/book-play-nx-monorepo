@@ -4,7 +4,7 @@
   } @else if (authorSummary().length === 1) {
   <h2>Cлучайный автор дня:</h2>
   } @for (author of authorSummary(); track author.full) {
-  <author [author]="author"></author>
+  <author-card [author]="author"></author-card>
   }
 
   <p>&nbsp;</p>
@@ -13,6 +13,6 @@
   } @else if (books().length === 1) {
   <h2>Случайная книга дня:</h2>
   } @for (book of books(); track book.id) {
-  <book [book]="book"></book>
+  <book-card [book]="book"></book-card>
   }
 </div>
