@@ -38,11 +38,11 @@ import {
     FormsModule,
     RouterLink,
   ],
-  templateUrl: './books.component.html',
-  styleUrls: ['./books.component.scss'],
+  templateUrl: './book-search.component.html',
+  styleUrls: ['./book-search.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BooksComponent implements OnInit {
+export class BookSearchComponent implements OnInit {
   private store = inject(Store);
   protected data = this.store.selectSignal(bookSearchSelector);
   protected errors = this.store.selectSignal(bookSearchErrorsSelector);

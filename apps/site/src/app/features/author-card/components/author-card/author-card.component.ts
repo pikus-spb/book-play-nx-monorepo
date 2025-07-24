@@ -13,13 +13,13 @@ import { hideImage } from '@book-play/utils-browser';
 import { map } from 'rxjs';
 
 @Component({
-  selector: 'author',
-  templateUrl: './author.component.html',
-  styleUrls: ['./author.component.scss'],
+  selector: 'author-card',
+  templateUrl: './author-card.component.html',
+  styleUrls: ['./author-card.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [RouterLink, AuthorGenresListComponent],
 })
-export class AuthorComponent {
+export class AuthorCardComponent {
   private route = inject(ActivatedRoute);
   public inputAuthor = input<AuthorSummary | null>(null, { alias: 'author' });
   private routeAuthor = toSignal(

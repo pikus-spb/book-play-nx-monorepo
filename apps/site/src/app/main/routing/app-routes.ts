@@ -17,9 +17,9 @@ export const APP_ROUTES: Route[] = [
   {
     path: 'book/:id',
     loadComponent() {
-      return import('../../features/book/components/book/book.component').then(
-        (imported) => imported.BookComponent
-      );
+      return import(
+        '../../features/book-card/components/book-card/book-card.component'
+      ).then((imported) => imported.BookCardComponent);
     },
     resolve: {
       book: BookResolver,
@@ -47,8 +47,8 @@ export const APP_ROUTES: Route[] = [
     path: 'author/:id',
     loadComponent() {
       return import(
-        '../../features/author/components/author/author.component'
-      ).then((imported) => imported.AuthorComponent);
+        '../../features/author-card/components/author-card/author-card.component'
+      ).then((imported) => imported.AuthorCardComponent);
     },
     resolve: {
       author: AuthorSummaryResolver,
@@ -67,8 +67,8 @@ export const APP_ROUTES: Route[] = [
     path: 'books',
     loadComponent() {
       return import(
-        '../../features/books/components/books/books.component'
-      ).then((imported) => imported.BooksComponent);
+        '../../features/book-search/components/books/book-search.component'
+      ).then((imported) => imported.BookSearchComponent);
     },
     title: DEFAULT_TITLE,
   },
@@ -76,8 +76,8 @@ export const APP_ROUTES: Route[] = [
     path: 'books/:search',
     loadComponent() {
       return import(
-        '../../features/books/components/books/books.component'
-      ).then((imported) => imported.BooksComponent);
+        '../../features/book-search/components/books/book-search.component'
+      ).then((imported) => imported.BookSearchComponent);
     },
     title: DEFAULT_TITLE,
   },

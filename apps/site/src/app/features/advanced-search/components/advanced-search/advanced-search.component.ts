@@ -1,13 +1,18 @@
 import { CommonModule } from '@angular/common';
 import {
+  AfterViewInit,
   ChangeDetectionStrategy,
   Component,
+  DestroyRef,
   ElementRef,
   inject,
+  model,
+  OnInit,
   signal,
   viewChild,
   WritableSignal,
 } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import {
   FormBuilder,
   FormGroup,
@@ -18,7 +23,12 @@ import {
 import { MatFabButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { MatInput } from '@angular/material/input';
-import { RouterLink } from '@angular/router';
+import {
+  ActivatedRoute,
+  NavigationEnd,
+  Router,
+  RouterLink,
+} from '@angular/router';
 import {
   FB_GENRES_TRANSLATIONS_STRUCTURED,
   isGenreGroup,
@@ -29,6 +39,7 @@ import {
   StarRatingComponent,
   TagLinkComponent,
 } from '@book-play/ui';
+import { createQueryString, parseQueryString } from '@book-play/utils-common';
 import { Store } from '@ngrx/store';
 import { StarRatingModule } from 'angular-star-rating';
 import { firstValueFrom, timer } from 'rxjs';
@@ -60,7 +71,7 @@ import { GenreInputGroupComponent } from '../genre-input-group/genre-input-group
   styleUrls: ['./advanced-search.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AdvancedSearchComponent {
+export class AdvancedSearchComponent implements OnInit, AfterViewInit {
   private booksApiService = inject(BooksApiService);
   protected data: WritableSignal<any> = signal(null);
   protected error: WritableSignal<any> = signal(null);
@@ -68,24 +79,65 @@ export class AdvancedSearchComponent {
   protected form: FormGroup;
   private store = inject(Store);
   private genresContainer = viewChild<ElementRef>('genresContainer');
+  private router = inject(Router);
+  private route = inject(ActivatedRoute);
+  private destroyRef = inject(DestroyRef);
+  protected query = model<string | null>('');
 
   constructor() {
     this.form = this.fb.group({
       rating: [[Validators.min(0), Validators.max(10)]],
     });
   }
-  protected async submit(event: Event) {
-    if (!this.form.valid) {
-      return;
+
+  public ngOnInit(): void {
+    this.router.events
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((event) => {
+        if (event instanceof NavigationEnd) {
+          this.initSearch();
+        }
+      });
+  }
+
+  public ngAfterViewInit(): void {
+    this.initSearch();
+  }
+
+  private async initSearch() {
+    this.query.set(this.route.snapshot.paramMap.get('search'));
+    if (this.query()) {
+      this.setFormValues(parseQueryString(this.query()!));
+      await this.fetchData();
+
+      this.genresContainer()?.nativeElement.removeAttribute('open');
+    }
+  }
+
+  private setFormValues(queryParams: Record<string, string>): void {
+    const formValues: Record<string, any> = {};
+
+    if (queryParams['rating']) {
+      formValues['rating'] = queryParams['rating'];
     }
 
+    if (queryParams['genres']) {
+      queryParams['genres'].split(',').forEach((genre: string) => {
+        Object.assign(formValues, { [genre]: true });
+      });
+    }
+
+    this.form.patchValue(formValues);
+  }
+
+  private async fetchData() {
     this.store.dispatch(loadingStartAction());
 
     let data;
     try {
-      const params: AdvancedSearchParams = this.getFormParams();
-
-      data = await firstValueFrom(this.booksApiService.advancedSearch(params));
+      data = await firstValueFrom(
+        this.booksApiService.advancedSearch(this.query()!)
+      );
     } catch (e) {
       this.error.set(e);
     }
@@ -94,12 +146,18 @@ export class AdvancedSearchComponent {
       this.data.set(data);
     }
 
-    event.preventDefault();
-
     await firstValueFrom(timer(100));
 
     this.store.dispatch(loadingEndAction());
-    this.genresContainer()?.nativeElement.removeAttribute('open');
+  }
+
+  protected async submit(event: Event) {
+    if (!this.form.valid) {
+      return;
+    }
+    const params: AdvancedSearchParams = this.getFormParams();
+    this.router.navigateByUrl(`/advanced-search/${createQueryString(params)}`);
+    event.preventDefault();
   }
 
   private getFormParams(): AdvancedSearchParams {

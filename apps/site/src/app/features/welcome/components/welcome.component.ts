@@ -6,12 +6,12 @@ import { loadRandomAuthorsAction } from '../../../shared/store/random-author-det
 import { randomAuthorsSelector } from '../../../shared/store/random-author-details/random-author-summary.selectors';
 import { loadRandomBooksAction } from '../../../shared/store/random-books/random-books.actions';
 import { randomBooksSelector } from '../../../shared/store/random-books/random-books.selectors';
-import { AuthorComponent } from '../../author/components/author/author.component';
-import { BookComponent } from '../../book/components/book/book.component';
+import { AuthorCardComponent } from '../../author-card/components/author-card/author-card.component';
+import { BookCardComponent } from '../../book-card/components/book-card/book-card.component';
 
 @Component({
   selector: 'welcome',
-  imports: [BookComponent, ScrollbarDirective, AuthorComponent],
+  imports: [BookCardComponent, ScrollbarDirective, AuthorCardComponent],
   templateUrl: './welcome.component.html',
   styleUrls: ['./welcome.component.scss'],
 })
