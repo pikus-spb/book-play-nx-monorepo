@@ -3,7 +3,6 @@ import { inject, Injectable } from '@angular/core';
 import { BOOKS_API_PORT, BOOKS_API_PORT_SECURE } from '@book-play/constants';
 
 import {
-  AdvancedSearchParams,
   Author,
   AuthorSummary,
   BasicBookData,
@@ -14,7 +13,6 @@ import {
   DBBookToUIBook,
 } from '@book-play/models';
 import { getCurrentProtocolUrl } from '@book-play/utils-browser';
-import { createQueryString } from '@book-play/utils-common';
 import { environment } from 'environments/environment';
 import { map, Observable } from 'rxjs';
 
@@ -116,11 +114,8 @@ export class BooksApiService {
     return this.http.get<BasicBookData[]>(url);
   }
 
-  public advancedSearch(
-    params: AdvancedSearchParams
-  ): Observable<BasicBookData[]> {
-    const url =
-      this.apiUrlPrefix + `/book/advanced-search?${createQueryString(params)}`;
+  public advancedSearch(query: string): Observable<BasicBookData[]> {
+    const url = this.apiUrlPrefix + `/book/advanced-search?${query}`;
 
     return this.http.get<BasicBookData[]>(url);
   }
