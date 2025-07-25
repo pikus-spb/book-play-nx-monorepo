@@ -42,7 +42,7 @@ import {
 import { createQueryString, parseQueryString } from '@book-play/utils-common';
 import { Store } from '@ngrx/store';
 import { StarRatingModule } from 'angular-star-rating';
-import { firstValueFrom, timer } from 'rxjs';
+import { firstValueFrom, tap, timer } from 'rxjs';
 import { BooksApiService } from '../../../../shared/services/books/books-api.service';
 import {
   loadingEndAction,
@@ -86,8 +86,43 @@ export class AdvancedSearchComponent implements OnInit, AfterViewInit {
 
   constructor() {
     this.form = this.fb.group({
-      rating: [[Validators.min(0), Validators.max(10)]],
+      rating: [null, [Validators.min(0), Validators.max(10)]],
+      starRating: [],
     });
+
+    this.form
+      .get('rating')
+      ?.valueChanges.pipe(
+        tap((value: number) => {
+          if (this.form.value.starRating !== value) {
+            this.form.patchValue(
+              { starRating: value },
+              {
+                emitEvent: false,
+              }
+            );
+          }
+        }),
+        takeUntilDestroyed()
+      )
+      .subscribe();
+
+    this.form
+      .get('starRating')
+      ?.valueChanges.pipe(
+        tap((value: number) => {
+          if (this.form.value.rating !== value) {
+            this.form.patchValue(
+              { rating: value },
+              {
+                emitEvent: false,
+              }
+            );
+          }
+        }),
+        takeUntilDestroyed()
+      )
+      .subscribe();
   }
 
   public ngOnInit(): void {
@@ -119,6 +154,7 @@ export class AdvancedSearchComponent implements OnInit, AfterViewInit {
 
     if (queryParams['rating']) {
       formValues['rating'] = queryParams['rating'];
+      formValues['starRating'] = queryParams['rating'];
     }
 
     if (queryParams['genres']) {
@@ -165,6 +201,7 @@ export class AdvancedSearchComponent implements OnInit, AfterViewInit {
     const rating = formValue['rating'];
 
     delete formValue['rating'];
+    delete formValue['starRating'];
 
     const genres = Object.entries(formValue)
       .filter(([k, v]) => Boolean(v))
