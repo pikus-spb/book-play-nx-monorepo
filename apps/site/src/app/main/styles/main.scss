@@ -128,28 +128,3 @@ html {
   src: url(/assets/fonts/LiterataBook-Bold.otf) format('opentype');
   font-weight: bold;
 }
-
-// Perfect scrollbar customization
-.ps {
-  .ps__rail-y,
-  .ps__rail-x {
-    &:hover,
-    &:focus,
-    &.ps--clicking {
-      background-color: color.change($default-color-dark, $alpha: 0.1);
-    }
-
-    .ps__thumb-y,
-    .ps__thumb-x {
-      background-color: color.change($default-color-dark, $alpha: 0.8);
-    }
-    .ps__thumb-y {
-      background-color: color.change($default-color-dark, $alpha: 0.8);
-      width: 11px;
-    }
-    .ps__thumb-x {
-      background-color: color.change($default-color-dark, $alpha: 0.8);
-      height: 11px;
-    }
-  }
-}
