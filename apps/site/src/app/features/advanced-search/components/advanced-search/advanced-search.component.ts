@@ -34,11 +34,7 @@ import {
   isGenreGroup,
 } from '@book-play/constants';
 import { AdvancedSearchParams } from '@book-play/models';
-import {
-  ScrollbarDirective,
-  StarRatingComponent,
-  TagLinkComponent,
-} from '@book-play/ui';
+import { StarRatingComponent, TagLinkComponent } from '@book-play/ui';
 import { createQueryString, parseQueryString } from '@book-play/utils-common';
 import { Store } from '@ngrx/store';
 import { StarRatingModule } from 'angular-star-rating';
@@ -54,7 +50,6 @@ import { GenreInputGroupComponent } from '../genre-input-group/genre-input-group
   selector: 'books',
   imports: [
     CommonModule,
-    ScrollbarDirective,
     TagLinkComponent,
     FormsModule,
     MatFabButton,

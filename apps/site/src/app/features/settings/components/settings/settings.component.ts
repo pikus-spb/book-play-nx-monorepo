@@ -14,7 +14,6 @@ import {
   SETTINGS_VOICE_RATE_DELTA,
 } from '@book-play/constants';
 import { Voices } from '@book-play/models';
-import { ScrollbarDirective } from '@book-play/ui';
 import {
   secondsToTimeString,
   timeStringToSeconds,
@@ -35,7 +34,6 @@ import { settingsSelector } from '../../../../shared/store/settings/settings.sel
     MatButtonToggleModule,
     MatSlider,
     MatSliderThumb,
-    ScrollbarDirective,
     NgxMatTimepickerFieldComponent,
   ],
 })

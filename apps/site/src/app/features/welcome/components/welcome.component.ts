@@ -1,5 +1,4 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { ScrollbarDirective } from '@book-play/ui';
 import { Store } from '@ngrx/store';
 import { environment } from 'environments/environment';
 import { loadRandomAuthorsAction } from '../../../shared/store/random-author-details/random-author-summary.actions';
@@ -11,7 +10,7 @@ import { BookCardComponent } from '../../book-card/components/book-card/book-car
 
 @Component({
   selector: 'welcome',
-  imports: [BookCardComponent, ScrollbarDirective, AuthorCardComponent],
+  imports: [BookCardComponent, AuthorCardComponent],
   templateUrl: './welcome.component.html',
   styleUrls: ['./welcome.component.scss'],
 })
