@@ -17,6 +17,7 @@ export default [
       ],
       '@angular-eslint/component-selector': 'off',
       '@angular-eslint/prefer-standalone': 'off',
+      '@angular-eslint/no-input-rename': 'off'
     },
   },
   {
