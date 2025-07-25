@@ -1,6 +1,6 @@
 <div #container>
   @if (bookData !== null) {
-  <div class="scrollable-canvas" libPerfectScrollbar cdkVirtualScrollingElement>
+  <div class="scrollable-canvas" cdkVirtualScrollingElement>
     <h4>
       {{ bookData.author.full }} - {{ bookData.name }} @if (book()!.rating) {
       <lib-star-rating

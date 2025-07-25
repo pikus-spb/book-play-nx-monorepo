@@ -1,4 +1,4 @@
-<div class="container" libPerfectScrollbar>
+<div class="container">
   <h5>
     Расширенный поиск
     <small
@@ -32,7 +32,7 @@
 
     <details #genresContainer>
       <summary>Жанры</summary>
-      <section libPerfectScrollbar class="genres-grid">
+      <section class="genres-grid">
         @for (group of Object.keys(FB_GENRES_TRANSLATED_STRUCTURED); track
         group) { @if (isGenreGroup(FB_GENRES_TRANSLATED_STRUCTURED[group])) {
         {{ group }}
@@ -74,7 +74,7 @@
     @if (data()) { @if (data()!.length === 0) {
     <span>По вашему запросы книги не найдены</span>
     }
-    <div libPerfectScrollbar class="grid books-grid">
+    <div class="grid books-grid">
       @for (item of data(); track item.id){
       <nav>
         <lib-tag-link [value]="item.id" linkPrefix="/book">

@@ -11,7 +11,6 @@ import {
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatButton } from '@angular/material/button';
-import { ScrollbarDirective } from '@book-play/ui';
 import { blobToBase64 } from '@book-play/utils-browser';
 import { Store } from '@ngrx/store';
 import {
@@ -32,7 +31,7 @@ import {
 
 @Component({
   selector: 'voice',
-  imports: [MatButton, AsyncPipe, ScrollbarDirective],
+  imports: [MatButton, AsyncPipe],
   templateUrl: './voice.component.html',
   styleUrls: ['./voice.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

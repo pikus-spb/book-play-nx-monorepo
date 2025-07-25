@@ -25,7 +25,6 @@ import { Book } from '@book-play/models';
 import {
   HeightCalculateComponent,
   HeightDelta,
-  ScrollbarDirective,
   StarRatingComponent,
 } from '@book-play/ui';
 import { showDefaultCoverImage } from '@book-play/utils-browser';
@@ -45,7 +44,6 @@ import { BookParagraphComponent } from '../book-paragraph/book-paragraph.compone
     ExperimentalScrollingModule,
     BookParagraphComponent,
     HeightCalculateComponent,
-    ScrollbarDirective,
     StarRatingComponent,
   ],
 })
