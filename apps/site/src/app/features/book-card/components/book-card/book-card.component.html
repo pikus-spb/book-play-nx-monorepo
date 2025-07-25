@@ -17,7 +17,10 @@
     <lib-author-genres-list [genres]="book.genres">
       @if (book.rating) {
       <span class="book-rating">
-        <lib-star-rating [rating]="book.rating"></lib-star-rating>
+        <lib-star-rating
+          [rating]="book.rating"
+          [readOnly]="true"
+        ></lib-star-rating>
       </span>
       }
     </lib-author-genres-list>

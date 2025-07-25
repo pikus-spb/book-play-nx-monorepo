@@ -1,11 +1,11 @@
-<div [formGroup]="formGroup()!">
-  <star-rating-control
-    [staticColor]="'ok'"
-    [starType]="'svg'"
-    [rating]="rating() / 2"
-    [showHalfStars]="true"
-    [labelText]="showLabel() ? rating().toString() : ''"
-    labelPosition="right"
-    [formControlName]="formControlName()"
-  ></star-rating-control>
-</div>
+<star-rating-control
+  [readOnly]="disabled()"
+  [staticColor]="'ok'"
+  [starType]="'svg'"
+  [rating]="rating()"
+  [showHalfStars]="true"
+  [labelText]="showLabel() ? (rating() * 2).toString() : ''"
+  (ratingChange)="setValue($event)"
+  (starClickChange)="onTouched()"
+  labelPosition="right"
+></star-rating-control>
