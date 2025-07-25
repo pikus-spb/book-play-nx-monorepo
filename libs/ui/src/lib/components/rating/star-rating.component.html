@@ -1,9 +1,11 @@
-<star-rating-control
-  [readOnly]="true"
-  [staticColor]="'ok'"
-  [starType]="'svg'"
-  [rating]="rating() / 2"
-  [showHalfStars]="true"
-  [labelText]="showLabel() ? rating().toString() : ''"
-  labelPosition="right"
-></star-rating-control>
+<div [formGroup]="formGroup()!">
+  <star-rating-control
+    [staticColor]="'ok'"
+    [starType]="'svg'"
+    [rating]="rating() / 2"
+    [showHalfStars]="true"
+    [labelText]="showLabel() ? rating().toString() : ''"
+    labelPosition="right"
+    [formControlName]="formControlName()"
+  ></star-rating-control>
+</div>
