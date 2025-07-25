@@ -1,0 +1,9 @@
+::ng-deep star-rating-control {
+  > div {
+    cursor: pointer;
+  }
+
+  > div.read-only {
+    pointer-events: none;
+  }
+}
