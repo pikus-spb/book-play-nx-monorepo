@@ -1,9 +1,11 @@
 <star-rating-control
-  [readOnly]="true"
+  [readOnly]="disabled()"
   [staticColor]="'ok'"
   [starType]="'svg'"
-  [rating]="rating() / 2"
+  [rating]="rating()"
   [showHalfStars]="true"
-  [labelText]="showLabel() ? rating().toString() : ''"
+  [labelText]="showLabel() ? (rating() * 2).toString() : ''"
+  (ratingChange)="setValue($event)"
+  (starClickChange)="onTouched()"
   labelPosition="right"
 ></star-rating-control>
