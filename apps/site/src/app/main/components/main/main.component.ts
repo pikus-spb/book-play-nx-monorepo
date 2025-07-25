@@ -18,7 +18,6 @@ import { RouterModule } from '@angular/router';
 import {
   DarkModeSwitcherComponent,
   KeepScreenOnComponent,
-  ScrollbarDirective,
 } from '@book-play/ui';
 import { isDarkMode, listenDarkModeChange } from '@book-play/utils-browser';
 import { Store } from '@ngrx/store';
@@ -47,7 +46,6 @@ import { selectLoading } from '../../../shared/store/loading/loading.selector';
     MatSidenav,
     MatSidenavContent,
     MatSidenavContainer,
-    ScrollbarDirective,
     DarkModeSwitcherComponent,
     KeepScreenOnComponent,
   ],
