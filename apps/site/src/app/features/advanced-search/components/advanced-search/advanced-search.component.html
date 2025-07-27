@@ -35,29 +35,25 @@
       <section class="genres-grid">
         @for (group of Object.keys(FB_GENRES_TRANSLATED_STRUCTURED); track
         group) { @if (isGenreGroup(FB_GENRES_TRANSLATED_STRUCTURED[group])) {
-        {{ group }}
-        <div class="group">
+        <genre-input-group [name]="group">
           @for (subGroup of Object.keys(FB_GENRES_TRANSLATED_STRUCTURED[group]);
           track subGroup) {
-          {{ subGroup }}
-          <div class="subgroup">
-            <genre-input-group
-              [formGroup]="form"
-              [controlNames]="
-                $any(FB_GENRES_TRANSLATED_STRUCTURED[group])[subGroup]
-              "
-            ></genre-input-group>
-          </div>
-          }
-        </div>
-        } @else {
-        {{ group }}
-        <div class="group">
           <genre-input-group
+            [name]="subGroup"
+            [subgroup]="true"
             [formGroup]="form"
-            [controlNames]="$any(FB_GENRES_TRANSLATED_STRUCTURED[group])"
+            [controlNames]="
+              $any(FB_GENRES_TRANSLATED_STRUCTURED[group])[subGroup]
+            "
           ></genre-input-group>
-        </div>
+          }
+        </genre-input-group>
+        } @else {
+        <genre-input-group
+          [formGroup]="form"
+          [controlNames]="$any(FB_GENRES_TRANSLATED_STRUCTURED[group])"
+          [name]="group"
+        ></genre-input-group>
         } }
       </section>
     </details>
