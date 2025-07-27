@@ -51,17 +51,6 @@
       &.genres-grid {
         @include scrollable-container;
         max-height: 400px;
-
-        .group,
-        .subgroup {
-          display: block;
-          line-height: 1.7em;
-          margin-left: $default-padding;
-        }
-
-        .group {
-          margin-bottom: $default-padding;
-        }
       }
 
       label {

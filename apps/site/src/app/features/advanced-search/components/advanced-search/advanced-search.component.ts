@@ -33,7 +33,7 @@ import {
   FB_GENRES_TRANSLATIONS_STRUCTURED,
   isGenreGroup,
 } from '@book-play/constants';
-import { AdvancedSearchParams } from '@book-play/models';
+import { AdvancedSearchParams, BasicBookData } from '@book-play/models';
 import { StarRatingComponent, TagLinkComponent } from '@book-play/ui';
 import { createQueryString, parseQueryString } from '@book-play/utils-common';
 import { Store } from '@ngrx/store';
@@ -103,9 +103,10 @@ export class AdvancedSearchComponent implements OnInit, AfterViewInit {
     this.query.set(this.route.snapshot.paramMap.get('search'));
     if (this.query()) {
       this.setFormValues(parseQueryString(this.query()!));
-      await this.fetchData();
-
-      this.genresContainer()?.nativeElement.removeAttribute('open');
+      const data = await this.fetchData();
+      if (data && data.length > 0) {
+        this.genresContainer()?.nativeElement.removeAttribute('open');
+      }
     }
   }
 
@@ -125,7 +126,7 @@ export class AdvancedSearchComponent implements OnInit, AfterViewInit {
     this.form.patchValue(formValues);
   }
 
-  private async fetchData() {
+  private async fetchData(): Promise<BasicBookData[] | undefined> {
     this.store.dispatch(loadingStartAction());
 
     let data;
@@ -144,6 +145,7 @@ export class AdvancedSearchComponent implements OnInit, AfterViewInit {
     await firstValueFrom(timer(100));
 
     this.store.dispatch(loadingEndAction());
+    return data;
   }
 
   protected async submit(event: Event) {

@@ -3,8 +3,21 @@
 :host {
   display: block;
 
+  .group,
+  .subgroup {
+    display: block;
+    line-height: 2em;
+    margin-left: $default-padding;
+
+    div.genres-list {
+      margin-left: $default-padding;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax($card-width * 2, 1fr));
+      grid-template-rows: repeat(auto-fit, minmax(min-content, 1fr));
+    }
+  }
+
   .group {
-    display: flex;
-    flex-direction: column;
+    margin-bottom: $default-padding;
   }
 }

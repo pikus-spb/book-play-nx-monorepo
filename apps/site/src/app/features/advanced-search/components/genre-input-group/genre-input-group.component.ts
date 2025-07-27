@@ -20,12 +20,14 @@ import { FB2_GENRES } from '@book-play/constants';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class GenreInputGroupComponent implements OnInit {
-  public formGroup = input.required<FormGroup>();
-  public controlNames = input.required<string[]>();
+  public formGroup = input<FormGroup>();
+  public controlNames = input<string[]>();
+  public subgroup = input<boolean>(false);
+  public name = input.required<string>();
 
   public ngOnInit() {
-    this.controlNames().forEach((name) => {
-      this.formGroup().addControl(name, new FormControl(''));
+    this.controlNames()?.forEach((name) => {
+      this.formGroup()?.addControl(name, new FormControl(''));
     });
   }
 
