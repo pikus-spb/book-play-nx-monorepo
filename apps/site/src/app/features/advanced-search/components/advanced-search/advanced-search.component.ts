@@ -44,7 +44,7 @@ import {
   loadingEndAction,
   loadingStartAction,
 } from '../../../../shared/store/loading/loading.action';
-import { GenreInputGroupComponent } from '../genre-input-group/genre-input-group.component';
+import { GenreInputControlComponent } from '../genre-input-control/genre-input-control.component';
 
 @Component({
   selector: 'books',
@@ -58,9 +58,9 @@ import { GenreInputGroupComponent } from '../genre-input-group/genre-input-group
     ReactiveFormsModule,
     RouterLink,
     StarRatingModule,
-    GenreInputGroupComponent,
     StarRatingComponent,
     MatInput,
+    GenreInputControlComponent,
   ],
   templateUrl: './advanced-search.component.html',
   styleUrls: ['./advanced-search.component.scss'],
