@@ -48,11 +48,6 @@
         }
       }
 
-      &.genres-grid {
-        @include scrollable-container;
-        max-height: 400px;
-      }
-
       label {
         display: flex;
       }

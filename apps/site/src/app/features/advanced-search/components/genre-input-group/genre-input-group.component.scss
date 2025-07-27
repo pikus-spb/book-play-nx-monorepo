@@ -3,6 +3,10 @@
 :host {
   display: block;
 
+  summary {
+    cursor: pointer;
+  }
+
   .group,
   .subgroup {
     display: block;
