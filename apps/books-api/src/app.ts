@@ -10,7 +10,7 @@ import {
   DBAuthorSummary,
   DBBook,
 } from '@book-play/models';
-import { Log } from '@book-play/utils-common';
+import { log, Log } from '@book-play/utils-common';
 import {
   getJsonGzFileName,
   readZippedFile,
@@ -223,7 +223,7 @@ export default class BooksAPIApp {
 
     const sqlQuery = builder.build();
 
-    // log(sqlQuery);
+    log(sqlQuery);
 
     return new Promise((resolve, reject) => {
       pool.query(sqlQuery, (err, result: BookData[]) => {
