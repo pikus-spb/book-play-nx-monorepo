@@ -38,4 +38,4 @@ export const VOICE_CACHE_PRELOAD_EXTRA = Object.freeze({
   default: 10,
   max: 50,
 });
-export const MAX_BOOK_SEARCH_RESULTS = 400;
+export const MAX_BOOK_SEARCH_RESULTS = 1000;
