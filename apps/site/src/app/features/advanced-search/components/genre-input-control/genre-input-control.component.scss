@@ -1,6 +1,2 @@
-@use 'mixins' as *;
-
 .container {
-  @include scrollable-container;
-  max-height: 400px;
 }

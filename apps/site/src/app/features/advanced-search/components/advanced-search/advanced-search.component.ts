@@ -15,6 +15,7 @@ import {
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import {
   FormBuilder,
+  FormControl,
   FormGroup,
   FormsModule,
   ReactiveFormsModule,
@@ -29,16 +30,13 @@ import {
   Router,
   RouterLink,
 } from '@angular/router';
-import {
-  FB_GENRES_TRANSLATIONS_STRUCTURED,
-  isGenreGroup,
-} from '@book-play/constants';
+import { FB2_GENRES } from '@book-play/constants';
 import { AdvancedSearchParams, BasicBookData } from '@book-play/models';
 import { StarRatingComponent, TagLinkComponent } from '@book-play/ui';
 import { createQueryString, parseQueryString } from '@book-play/utils-common';
 import { Store } from '@ngrx/store';
 import { StarRatingModule } from 'angular-star-rating';
-import { firstValueFrom, timer } from 'rxjs';
+import { firstValueFrom } from 'rxjs';
 import { BooksApiService } from '../../../../shared/services/books/books-api.service';
 import {
   loadingEndAction,
@@ -68,20 +66,23 @@ import { GenreInputControlComponent } from '../genre-input-control/genre-input-c
 })
 export class AdvancedSearchComponent implements OnInit, AfterViewInit {
   private booksApiService = inject(BooksApiService);
-  protected data: WritableSignal<any> = signal(null);
+  protected data: WritableSignal<BasicBookData[]> = signal([]);
   protected error: WritableSignal<any> = signal(null);
   private fb = inject(FormBuilder);
   protected form: FormGroup;
   private store = inject(Store);
-  private genresContainer = viewChild<ElementRef>('genresContainer');
   private router = inject(Router);
   private route = inject(ActivatedRoute);
   private destroyRef = inject(DestroyRef);
   protected query = model<string | null>('');
+  private searchResult = viewChild<ElementRef>('searchResult');
 
   constructor() {
     this.form = this.fb.group({
       rating: [null, [Validators.min(0), Validators.max(10)]],
+    });
+    Object.keys(FB2_GENRES).forEach((name) => {
+      this.form.addControl(name, new FormControl(''));
     });
   }
 
@@ -103,10 +104,13 @@ export class AdvancedSearchComponent implements OnInit, AfterViewInit {
     this.query.set(this.route.snapshot.paramMap.get('search'));
     if (this.query()) {
       this.setFormValues(parseQueryString(this.query()!));
-      const data = await this.fetchData();
-      if (data && data.length > 0) {
-        this.genresContainer()?.nativeElement.removeAttribute('open');
-      }
+      await this.fetchData();
+      setTimeout(() =>
+        this.searchResult()?.nativeElement.scrollIntoView(
+          { block: 'start', behavior: 'smooth' },
+          200
+        )
+      );
     }
   }
 
@@ -126,14 +130,16 @@ export class AdvancedSearchComponent implements OnInit, AfterViewInit {
     this.form.patchValue(formValues);
   }
 
-  private async fetchData(): Promise<BasicBookData[] | undefined> {
+  private async fetchData() {
     this.store.dispatch(loadingStartAction());
 
     let data;
     try {
-      data = await firstValueFrom(
-        this.booksApiService.advancedSearch(this.query()!)
-      );
+      if (this.query()) {
+        data = await firstValueFrom(
+          this.booksApiService.advancedSearch(this.query()!)
+        );
+      }
     } catch (e) {
       this.error.set(e);
     }
@@ -141,11 +147,7 @@ export class AdvancedSearchComponent implements OnInit, AfterViewInit {
     if (data) {
       this.data.set(data);
     }
-
-    await firstValueFrom(timer(100));
-
     this.store.dispatch(loadingEndAction());
-    return data;
   }
 
   protected async submit(event: Event) {
@@ -154,7 +156,6 @@ export class AdvancedSearchComponent implements OnInit, AfterViewInit {
     }
     const params: AdvancedSearchParams = this.getFormParams();
     this.router.navigateByUrl(`/advanced-search/${createQueryString(params)}`);
-    event.preventDefault();
   }
 
   private getFormParams(): AdvancedSearchParams {
@@ -170,8 +171,5 @@ export class AdvancedSearchComponent implements OnInit, AfterViewInit {
     return { rating, genres };
   }
 
-  protected readonly FB_GENRES_TRANSLATED_STRUCTURED =
-    FB_GENRES_TRANSLATIONS_STRUCTURED;
-  protected readonly isGenreGroup = isGenreGroup;
   protected readonly Object = Object;
 }
