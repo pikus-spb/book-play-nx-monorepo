@@ -71,7 +71,6 @@
           }
         ],
         "styles": [
-          "perfect-scrollbar/css/perfect-scrollbar.css",
           "css-star-rating/css/star-rating.min.css",
           "apps/site/src/app/main/styles/main.scss"
         ]
