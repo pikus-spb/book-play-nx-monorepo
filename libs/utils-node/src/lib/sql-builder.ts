@@ -137,7 +137,7 @@ export class SQLQueryBuilder {
    *
    */
   where(condition: string): this {
-    this.whereConditions.push(condition);
+    this.whereConditions.push(`(${condition})`);
     return this;
   }
 

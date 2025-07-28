@@ -148,7 +148,7 @@ export class AutoPlayService {
             AppEventNames.scrollingIntoView,
             false
           ),
-          timer(500) // maximum time to wait for scroll ended
+          timer(1000) // maximum time to wait for scroll ended
         ).pipe(map(() => true))
       );
     }
