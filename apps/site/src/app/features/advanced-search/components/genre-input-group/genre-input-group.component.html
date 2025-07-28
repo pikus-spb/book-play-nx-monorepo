@@ -1,15 +1,16 @@
-<details [class]="subgroup() ? 'subgroup' : 'group'">
+<details
+  [class]="subgroup() ? 'subgroup' : 'group'"
+  [attr.open]="(open | async) || undefined"
+>
   <summary>{{ name() }}</summary>
-  @if (formGroup() && controlNames()) {
-  <div class="genres-list">
-    @for (name of controlNames(); track name) {
-    <label>
-      <input type="checkbox" [formControl]="$any(formGroup()!.get(name))" />
-      <span>{{ FB2_GENRES[name] }}</span>
-    </label>
-    }
-  </div>
-  } @else {
-  <ng-content></ng-content>
-  }
+  <ng-content>
+    <div class="genres-list">
+      @for (name of $any(controlNames()); track name) {
+      <label>
+        <input type="checkbox" [formControl]="$any(form()!.get(name))" />
+        <span>{{ FB2_GENRES[name] }}</span>
+      </label>
+      }
+    </div>
+  </ng-content>
 </details>
