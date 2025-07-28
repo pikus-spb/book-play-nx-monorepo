@@ -1,25 +1,25 @@
 <div class="container">
-  @for (group of Object.keys(FB_GENRES_TRANSLATED_STRUCTURED); track group) {
-  @if (isGenreGroup(FB_GENRES_TRANSLATED_STRUCTURED[group])) {
+  @for (group of Object.keys(FB_GENRES_STRUCTURED); track group) { @if
+  (isGenreGroup(FB_GENRES_STRUCTURED[group])) {
   <genre-input-group
     [name]="group"
     [form]="form()"
-    [controlNames]="$any(FB_GENRES_TRANSLATED_STRUCTURED[group])"
+    [controlNames]="$any(FB_GENRES_STRUCTURED[group])"
   >
-    @for (subGroup of Object.keys(FB_GENRES_TRANSLATED_STRUCTURED[group]); track
-    subGroup) {
+    @for (subGroup of Object.keys(FB_GENRES_STRUCTURED[group]); track subGroup)
+    {
     <genre-input-group
       [name]="subGroup"
       [subgroup]="true"
       [form]="form()"
-      [controlNames]="$any(FB_GENRES_TRANSLATED_STRUCTURED[group])[subGroup]"
+      [controlNames]="$any(FB_GENRES_STRUCTURED[group])[subGroup]"
     ></genre-input-group>
     }
   </genre-input-group>
   } @else {
   <genre-input-group
     [form]="form()"
-    [controlNames]="$any(FB_GENRES_TRANSLATED_STRUCTURED[group])"
+    [controlNames]="$any(FB_GENRES_STRUCTURED[group])"
     [name]="group"
   ></genre-input-group>
   } }

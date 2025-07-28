@@ -1,7 +1,7 @@
 <mat-chip-set aria-label="Жанры">
   @for (genre of genres(); track genre) {
   <mat-chip disableRipple="true">
-    {{ genre | genre }}
+    <a [routerLink]="linkPrefix() + genre">{{ genre | genre }}</a>
   </mat-chip>
   }
   <ng-content></ng-content>
