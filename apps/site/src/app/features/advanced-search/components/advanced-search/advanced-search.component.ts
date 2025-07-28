@@ -30,7 +30,10 @@ import {
   Router,
   RouterLink,
 } from '@angular/router';
-import { FB2_GENRES } from '@book-play/constants';
+import {
+  FB2_GENRES_ALIASES,
+  FB_GENRES_STRUCTURED_ARRAY,
+} from '@book-play/constants';
 import { AdvancedSearchParams, BasicBookData } from '@book-play/models';
 import { StarRatingComponent, TagLinkComponent } from '@book-play/ui';
 import { createQueryString, parseQueryString } from '@book-play/utils-common';
@@ -81,7 +84,7 @@ export class AdvancedSearchComponent implements OnInit, AfterViewInit {
     this.form = this.fb.group({
       rating: [null, [Validators.min(0), Validators.max(10)]],
     });
-    Object.keys(FB2_GENRES).forEach((name) => {
+    FB_GENRES_STRUCTURED_ARRAY.forEach((name) => {
       this.form.addControl(name, new FormControl(''));
     });
   }
@@ -117,13 +120,21 @@ export class AdvancedSearchComponent implements OnInit, AfterViewInit {
   private setFormValues(queryParams: Record<string, string>): void {
     const formValues: Record<string, any> = {};
 
-    if (queryParams['rating']) {
+    if (!isNaN(parseFloat(queryParams['rating']))) {
       formValues['rating'] = queryParams['rating'];
     }
-
     if (queryParams['genres']) {
       queryParams['genres'].split(',').forEach((genre: string) => {
-        Object.assign(formValues, { [genre]: true });
+        if (genre in this.form.value) {
+          Object.assign(formValues, { [genre]: true });
+        } else if (FB2_GENRES_ALIASES[genre] !== undefined) {
+          const alias = FB2_GENRES_ALIASES[genre].find(
+            (alias) => alias in this.form.value
+          );
+          if (alias) {
+            Object.assign(formValues, { [alias]: true });
+          }
+        }
       });
     }
 

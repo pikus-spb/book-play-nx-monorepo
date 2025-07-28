@@ -332,6 +332,7 @@ export const FB2_GENRES: Record<string, string> = {
   love_detective: 'Любовный детектив',
   love_erotical: 'Эротический роман',
   love_erotika: 'Эротика',
+  love_erotica: 'Эротика',
   love_fantasy: 'Любовное фэнтези',
   love_femslash: 'Фемслэш',
   love_hard: 'Страстный роман',
@@ -414,7 +415,7 @@ export const FB2_GENRES: Record<string, string> = {
   'political-fiction': 'Политическая фантастика',
   popadancy: 'Попаданцы',
   'popadancy-v-magicheskie-miry': 'Попаданцы в магические миры',
-  popadanec: 'Попаданец',
+  popadanec: 'Попаданцы',
   popadantsy: 'Попаданцы',
   'popadantsy-v-kosmos': 'Попаданцы в космос',
   'popadantsy-v-magicheskie-miry': 'Попаданцы в магические миры',
@@ -845,6 +846,8 @@ export const FB2_GENRES: Record<string, string> = {
   языкознание: 'Языкознание',
 };
 
+// export const arr = Array.from(new Set(Object.values(FB2_GENRES)));
+
 export interface Fb2GenresGroup {
   [subGroup: string]: string[];
 }
@@ -859,11 +862,11 @@ export function isGenreGroup(
   return item.length === undefined;
 }
 
-export const FB2_GENRES_KEY_VALUE_SWAPPED = Object.fromEntries(
+export const FB2_GENRES_SWAPPED = Object.fromEntries(
   Object.entries(FB2_GENRES).map(([k, v]) => [v, k])
 );
 
-export const FB_GENRES_TRANSLATIONS_STRUCTURED: Fb2GenresStructure = {
+export const FB_GENRES_STRUCTURED: Fb2GenresStructure = {
   'Художественная литература': {
     Проза: [
       'Проза',
@@ -1127,23 +1130,38 @@ export const FB_GENRES_TRANSLATIONS_STRUCTURED: Fb2GenresStructure = {
 };
 
 // Reverse translations to genre keys
-Object.keys(FB_GENRES_TRANSLATIONS_STRUCTURED).forEach((key: string) => {
-  if (isGenreGroup(FB_GENRES_TRANSLATIONS_STRUCTURED[key])) {
-    Object.keys(FB_GENRES_TRANSLATIONS_STRUCTURED[key]).forEach(
-      (childKey: string) => {
-        (FB_GENRES_TRANSLATIONS_STRUCTURED[key] as Fb2GenresGroup)[childKey] = (
-          FB_GENRES_TRANSLATIONS_STRUCTURED[key] as Fb2GenresGroup
-        )[childKey]
-          .map((item) => FB2_GENRES_KEY_VALUE_SWAPPED[item])
-          .filter(Boolean);
-      }
-    );
+Object.keys(FB_GENRES_STRUCTURED).forEach((key: string) => {
+  if (isGenreGroup(FB_GENRES_STRUCTURED[key])) {
+    Object.keys(FB_GENRES_STRUCTURED[key]).forEach((childKey: string) => {
+      (FB_GENRES_STRUCTURED[key] as Fb2GenresGroup)[childKey] = (
+        FB_GENRES_STRUCTURED[key] as Fb2GenresGroup
+      )[childKey]
+        .map((item) => FB2_GENRES_SWAPPED[item])
+        .filter(Boolean);
+    });
   } else {
-    FB_GENRES_TRANSLATIONS_STRUCTURED[key] = FB_GENRES_TRANSLATIONS_STRUCTURED[
-      key
-    ].map((item) => FB2_GENRES_KEY_VALUE_SWAPPED[item]);
+    FB_GENRES_STRUCTURED[key] = FB_GENRES_STRUCTURED[key].map(
+      (item) => FB2_GENRES_SWAPPED[item]
+    );
   }
 });
+
+export const FB_GENRES_STRUCTURED_ARRAY = Object.keys(
+  FB_GENRES_STRUCTURED
+).reduce((memo: string[], key: string) => {
+  if (isGenreGroup(FB_GENRES_STRUCTURED[key])) {
+    memo.push(
+      ...Object.keys(FB_GENRES_STRUCTURED[key])
+        .map((subgroup) => {
+          return (FB_GENRES_STRUCTURED[key] as Fb2GenresGroup)[subgroup];
+        })
+        .flat()
+    );
+  } else {
+    memo.push(...FB_GENRES_STRUCTURED[key]);
+  }
+  return memo;
+}, []);
 
 export const FB2_GENRES_ALIASES = Object.values(
   Object.keys(FB2_GENRES).reduce((memo: Record<string, string[]>, genre) => {
