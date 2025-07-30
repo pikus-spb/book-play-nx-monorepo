@@ -4,7 +4,6 @@ import {
   ChangeDetectionStrategy,
   Component,
   DestroyRef,
-  ElementRef,
   inject,
   model,
   OnInit,
@@ -79,7 +78,6 @@ export class AdvancedSearchComponent implements OnInit, AfterViewInit {
   private route = inject(ActivatedRoute);
   private destroyRef = inject(DestroyRef);
   protected query = model<string | null>('');
-  private searchResult = viewChild<ElementRef>('searchResult');
   private expansionPanel = viewChild(MatExpansionPanel);
 
   constructor() {
@@ -114,14 +112,7 @@ export class AdvancedSearchComponent implements OnInit, AfterViewInit {
     if (this.query()) {
       this.setFormValues(parseQueryString(this.query()!));
       this.expansionPanel()?.close();
-
       await this.fetchData();
-      setTimeout(() =>
-        this.searchResult()?.nativeElement.scrollIntoView(
-          { block: 'start', behavior: 'smooth' },
-          200
-        )
-      );
     }
   }
 
