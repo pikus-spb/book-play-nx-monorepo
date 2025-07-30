@@ -15,13 +15,17 @@ import {
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import {
   FormBuilder,
-  FormControl,
   FormGroup,
   FormsModule,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
 import { MatFabButton } from '@angular/material/button';
+import { MatChip } from '@angular/material/chips';
+import {
+  MatExpansionModule,
+  MatExpansionPanel,
+} from '@angular/material/expansion';
 import { MatIcon } from '@angular/material/icon';
 import { MatInput } from '@angular/material/input';
 import {
@@ -30,10 +34,7 @@ import {
   Router,
   RouterLink,
 } from '@angular/router';
-import {
-  FB2_GENRES_ALIASES,
-  FB_GENRES_STRUCTURED_ARRAY,
-} from '@book-play/constants';
+import { FB2_GENRE_UNIQUE_KEYS, FB2_GENRES } from '@book-play/constants';
 import { AdvancedSearchParams, BasicBookData } from '@book-play/models';
 import { StarRatingComponent, TagLinkComponent } from '@book-play/ui';
 import { createQueryString, parseQueryString } from '@book-play/utils-common';
@@ -45,7 +46,6 @@ import {
   loadingEndAction,
   loadingStartAction,
 } from '../../../../shared/store/loading/loading.action';
-import { GenreInputControlComponent } from '../genre-input-control/genre-input-control.component';
 
 @Component({
   selector: 'books',
@@ -61,7 +61,8 @@ import { GenreInputControlComponent } from '../genre-input-control/genre-input-c
     StarRatingModule,
     StarRatingComponent,
     MatInput,
-    GenreInputControlComponent,
+    MatChip,
+    MatExpansionModule,
   ],
   templateUrl: './advanced-search.component.html',
   styleUrls: ['./advanced-search.component.scss'],
@@ -79,13 +80,18 @@ export class AdvancedSearchComponent implements OnInit, AfterViewInit {
   private destroyRef = inject(DestroyRef);
   protected query = model<string | null>('');
   private searchResult = viewChild<ElementRef>('searchResult');
+  private expansionPanel = viewChild(MatExpansionPanel);
 
   constructor() {
     this.form = this.fb.group({
       rating: [null, [Validators.min(0), Validators.max(10)]],
-    });
-    FB_GENRES_STRUCTURED_ARRAY.forEach((name) => {
-      this.form.addControl(name, new FormControl(''));
+      ...Object.keys(FB2_GENRES).reduce(
+        (memo: Record<string, any[]>, genreKey: string) => {
+          memo[genreKey] = [false];
+          return memo;
+        },
+        {}
+      ),
     });
   }
 
@@ -107,6 +113,8 @@ export class AdvancedSearchComponent implements OnInit, AfterViewInit {
     this.query.set(this.route.snapshot.paramMap.get('search'));
     if (this.query()) {
       this.setFormValues(parseQueryString(this.query()!));
+      this.expansionPanel()?.close();
+
       await this.fetchData();
       setTimeout(() =>
         this.searchResult()?.nativeElement.scrollIntoView(
@@ -120,20 +128,11 @@ export class AdvancedSearchComponent implements OnInit, AfterViewInit {
   private setFormValues(queryParams: Record<string, string>): void {
     const formValues: Record<string, any> = {};
 
-    if (!isNaN(parseFloat(queryParams['rating']))) {
-      formValues['rating'] = queryParams['rating'];
-    }
+    formValues['rating'] = queryParams['rating'];
     if (queryParams['genres']) {
       queryParams['genres'].split(',').forEach((genre: string) => {
         if (genre in this.form.value) {
           Object.assign(formValues, { [genre]: true });
-        } else if (FB2_GENRES_ALIASES[genre] !== undefined) {
-          const alias = FB2_GENRES_ALIASES[genre].find(
-            (alias) => alias in this.form.value
-          );
-          if (alias) {
-            Object.assign(formValues, { [alias]: true });
-          }
         }
       });
     }
@@ -161,7 +160,7 @@ export class AdvancedSearchComponent implements OnInit, AfterViewInit {
     this.store.dispatch(loadingEndAction());
   }
 
-  protected async submit(event: Event) {
+  protected async submit() {
     if (!this.form.valid) {
       return;
     }
@@ -169,8 +168,13 @@ export class AdvancedSearchComponent implements OnInit, AfterViewInit {
     this.router.navigateByUrl(`/advanced-search/${createQueryString(params)}`);
   }
 
-  private getFormParams(): AdvancedSearchParams {
-    const formValue = this.form.value;
+  protected unselectGenre($event: Event, genre: string) {
+    $event.stopPropagation();
+    this.form.patchValue({ [genre]: false });
+  }
+
+  protected getFormParams(): AdvancedSearchParams {
+    const formValue = { ...this.form.value };
     const rating = formValue['rating'];
 
     delete formValue['rating'];
@@ -183,4 +187,6 @@ export class AdvancedSearchComponent implements OnInit, AfterViewInit {
   }
 
   protected readonly Object = Object;
+  protected readonly FB2_GENRES = FB2_GENRES;
+  protected readonly FB2_GENRE_UNIQUE_KEYS = FB2_GENRE_UNIQUE_KEYS;
 }
