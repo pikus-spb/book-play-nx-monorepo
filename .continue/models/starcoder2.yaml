@@ -1,0 +1,9 @@
+name: starcoder2
+version: 0.0.1
+schema: v1
+models:
+  - provider: ollama
+    model: starcoder2:7b
+    name: starcoder2
+    roles:
+      - autocomplete
