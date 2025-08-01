@@ -7,9 +7,8 @@ import {
   inject,
   model,
   OnInit,
-  signal,
+  resource,
   viewChild,
-  WritableSignal,
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import {
@@ -34,7 +33,7 @@ import {
   RouterLink,
 } from '@angular/router';
 import { FB2_GENRE_UNIQUE_KEYS, FB2_GENRES } from '@book-play/constants';
-import { AdvancedSearchParams, BasicBookData } from '@book-play/models';
+import { AdvancedSearchParams } from '@book-play/models';
 import { StarRatingComponent, TagLinkComponent } from '@book-play/ui';
 import { createQueryString, parseQueryString } from '@book-play/utils-common';
 import { Store } from '@ngrx/store';
@@ -69,15 +68,24 @@ import {
 })
 export class AdvancedSearchComponent implements OnInit, AfterViewInit {
   private booksApiService = inject(BooksApiService);
-  protected data: WritableSignal<BasicBookData[]> = signal([]);
-  protected error: WritableSignal<any> = signal(null);
+  protected data = resource({
+    params: () => (this.query() !== '' ? this.query() : undefined),
+    loader: async ({ params }) => {
+      this.store.dispatch(loadingStartAction());
+      const result = await firstValueFrom(
+        this.booksApiService.advancedSearch(params)
+      );
+      this.store.dispatch(loadingEndAction());
+      return result;
+    },
+  });
   private fb = inject(FormBuilder);
   protected form: FormGroup;
   private store = inject(Store);
   private router = inject(Router);
   private route = inject(ActivatedRoute);
   private destroyRef = inject(DestroyRef);
-  protected query = model<string | null>('');
+  protected query = model<string>('');
   private expansionPanel = viewChild(MatExpansionPanel);
 
   constructor() {
@@ -107,12 +115,11 @@ export class AdvancedSearchComponent implements OnInit, AfterViewInit {
     this.initSearch();
   }
 
-  private async initSearch() {
-    this.query.set(this.route.snapshot.paramMap.get('search'));
+  private initSearch() {
+    this.query.set(this.route.snapshot.paramMap.get('search') ?? '');
     if (this.query()) {
-      this.setFormValues(parseQueryString(this.query()!));
+      this.setFormValues(parseQueryString(this.query()));
       this.expansionPanel()?.close();
-      await this.fetchData();
     }
   }
 
@@ -129,26 +136,6 @@ export class AdvancedSearchComponent implements OnInit, AfterViewInit {
     }
 
     this.form.patchValue(formValues);
-  }
-
-  private async fetchData() {
-    this.store.dispatch(loadingStartAction());
-
-    let data;
-    try {
-      if (this.query()) {
-        data = await firstValueFrom(
-          this.booksApiService.advancedSearch(this.query()!)
-        );
-      }
-    } catch (e) {
-      this.error.set(e);
-    }
-
-    if (data) {
-      this.data.set(data);
-    }
-    this.store.dispatch(loadingEndAction());
   }
 
   protected async submit() {
