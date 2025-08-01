@@ -59,23 +59,23 @@
     </div>
   </form>
   <p>&nbsp;</p>
-  <h5>Результаты поиска</h5>
   <div class="search-result">
-    @if (data()) { @if (data()!.length === 0) {
-    <span>По вашему запросы книги не найдены</span>
-    }
+    @if (data.value()) {
+    <h5>Результаты поиска</h5>
     <div class="grid books-grid">
-      @for (item of data(); track item.id){
+      @for (item of data.value(); track item.id){
       <nav>
         <lib-tag-link [value]="item.id" linkPrefix="/book">
           {{ item.full }}
         </lib-tag-link>
       </nav>
+      } @empty {
+      <span>По вашему запросы книги не найдены</span>
       }
     </div>
     }
   </div>
-  @if (error()) {
-  <span>Ошибка: {{ error() | json }}</span>
+  @if (data.error()) {
+  <span>Ошибка: {{ data.error() | json }}</span>
   }
 </div>
