@@ -29,28 +29,7 @@
         Искать
       </button>
     </section>
-
-    <mat-expansion-panel>
-      <mat-expansion-panel-header>
-        <mat-panel-title>Жанры</mat-panel-title>
-        <mat-panel-description>
-          @for (genre of getFormParams().genres; track genre) {
-          <mat-chip (click)="unselectGenre($event, genre)"
-            >{{ FB2_GENRES[genre] }} ✕</mat-chip
-          >
-          }
-        </mat-panel-description>
-      </mat-expansion-panel-header>
-      <div class="content">
-        @for (genreKey of FB2_GENRE_UNIQUE_KEYS; track genreKey) {
-        <label>
-          <input type="checkbox" [formControlName]="genreKey" />
-          <span>{{ FB2_GENRES[genreKey] }}</span>
-        </label>
-        }
-      </div>
-    </mat-expansion-panel>
-
+    <genres-filter-control [form]="form"> </genres-filter-control>
     <div class="action-panel">
       <button mat-fab extended="true" color="success" type="submit">
         <mat-icon>search</mat-icon>
