@@ -19,11 +19,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { MatFabButton } from '@angular/material/button';
-import { MatChip } from '@angular/material/chips';
-import {
-  MatExpansionModule,
-  MatExpansionPanel,
-} from '@angular/material/expansion';
+import { MatExpansionPanel } from '@angular/material/expansion';
 import { MatIcon } from '@angular/material/icon';
 import { MatInput } from '@angular/material/input';
 import {
@@ -32,7 +28,7 @@ import {
   Router,
   RouterLink,
 } from '@angular/router';
-import { FB2_GENRE_UNIQUE_KEYS, FB2_GENRES } from '@book-play/constants';
+import { FB2_GENRES } from '@book-play/constants';
 import { AdvancedSearchParams } from '@book-play/models';
 import { StarRatingComponent, TagLinkComponent } from '@book-play/ui';
 import { createQueryString, parseQueryString } from '@book-play/utils-common';
@@ -44,6 +40,7 @@ import {
   loadingEndAction,
   loadingStartAction,
 } from '../../../../shared/store/loading/loading.action';
+import { GenresFilterControlComponent } from '../genres-filter-control/genres-filter-control.component';
 
 @Component({
   selector: 'books',
@@ -59,8 +56,7 @@ import {
     StarRatingModule,
     StarRatingComponent,
     MatInput,
-    MatChip,
-    MatExpansionModule,
+    GenresFilterControlComponent,
   ],
   templateUrl: './advanced-search.component.html',
   styleUrls: ['./advanced-search.component.scss'],
@@ -146,11 +142,6 @@ export class AdvancedSearchComponent implements OnInit, AfterViewInit {
     this.router.navigateByUrl(`/advanced-search/${createQueryString(params)}`);
   }
 
-  protected unselectGenre($event: Event, genre: string) {
-    $event.stopPropagation();
-    this.form.patchValue({ [genre]: false });
-  }
-
   protected getFormParams(): AdvancedSearchParams {
     const formValue = { ...this.form.value };
     const rating = formValue['rating'];
@@ -165,6 +156,4 @@ export class AdvancedSearchComponent implements OnInit, AfterViewInit {
   }
 
   protected readonly Object = Object;
-  protected readonly FB2_GENRES = FB2_GENRES;
-  protected readonly FB2_GENRE_UNIQUE_KEYS = FB2_GENRE_UNIQUE_KEYS;
 }

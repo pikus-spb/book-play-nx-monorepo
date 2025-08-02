@@ -1,0 +1,23 @@
+<mat-expansion-panel>
+  <mat-expansion-panel-header>
+    <mat-panel-title>Жанры</mat-panel-title>
+    <mat-panel-description>
+      @for (genre of selectedGenres$ | async; track genre) {
+      <mat-chip (click)="unselectGenre($event, genre)"
+        >{{ FB2_GENRES[genre] }} ✕</mat-chip
+      >
+      }
+    </mat-panel-description>
+  </mat-expansion-panel-header>
+  <div class="genres-list-container" [formGroup]="form()">
+    <genres-list-filter [genres]="genreKeys"></genres-list-filter>
+    <div class="genres-list">
+      @for (genreKey of genreKeys(); track genreKey) {
+      <label>
+        <input type="checkbox" [formControlName]="genreKey" />
+        <span>{{ FB2_GENRES[genreKey] }}</span>
+      </label>
+      }
+    </div>
+  </div>
+</mat-expansion-panel>
