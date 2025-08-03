@@ -11,7 +11,7 @@ import {
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatInput } from '@angular/material/input';
-import { FB2_GENRE_UNIQUE_KEYS } from '@book-play/constants';
+import { FB2_GENRE_UNIQUE_KEYS, FB2_GENRES } from '@book-play/constants';
 import { debounceTime, distinctUntilChanged, fromEvent, tap } from 'rxjs';
 
 @Component({
@@ -43,7 +43,7 @@ export class GenresListFilterComponent implements OnInit {
     this.genres().set(
       FB2_GENRE_UNIQUE_KEYS.filter((key) => {
         const query = (event.target as HTMLInputElement).value;
-        return key.toLowerCase().match(query.toLowerCase());
+        return FB2_GENRES[key].toLowerCase().match(query.toLowerCase());
       })
     );
   }
