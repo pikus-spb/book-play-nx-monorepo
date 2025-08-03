@@ -41,10 +41,7 @@ export class GenresFilterControlComponent implements OnInit {
 
   ngOnInit() {
     this.selectedGenres$ = this.form().valueChanges.pipe(
-      map(() => {
-        const formValue = this.form().value;
-        delete formValue.rating;
-
+      map((formValue) => {
         return Object.entries(formValue)
           .filter(([k, v]) => Boolean(v))
           .map(([k, v]) => k);

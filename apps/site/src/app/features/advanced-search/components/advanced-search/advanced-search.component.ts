@@ -87,13 +87,15 @@ export class AdvancedSearchComponent implements OnInit, AfterViewInit {
   constructor() {
     this.form = this.fb.group({
       rating: [null, [Validators.min(0), Validators.max(10)]],
-      ...Object.keys(FB2_GENRES).reduce(
-        (memo: Record<string, any[]>, genreKey: string) => {
-          memo[genreKey] = [false];
-          return memo;
-        },
-        {}
-      ),
+      genres: this.fb.group({
+        ...Object.keys(FB2_GENRES).reduce(
+          (memo: Record<string, any[]>, genreKey: string) => {
+            memo[genreKey] = [false];
+            return memo;
+          },
+          {}
+        ),
+      }),
     });
   }
 
@@ -111,6 +113,10 @@ export class AdvancedSearchComponent implements OnInit, AfterViewInit {
     this.initSearch();
   }
 
+  protected get genresGroup(): FormGroup {
+    return this.form.get('genres') as FormGroup;
+  }
+
   private initSearch() {
     this.query.set(this.route.snapshot.paramMap.get('search') ?? '');
     if (this.query()) {
@@ -120,18 +126,19 @@ export class AdvancedSearchComponent implements OnInit, AfterViewInit {
   }
 
   private setFormValues(queryParams: Record<string, string>): void {
-    const formValues: Record<string, any> = {};
-
-    formValues['rating'] = queryParams['rating'];
-    if (queryParams['genres']) {
-      queryParams['genres'].split(',').forEach((genre: string) => {
-        if (genre in this.form.value) {
-          Object.assign(formValues, { [genre]: true });
-        }
-      });
+    if (queryParams['rating'] !== null) {
+      this.form.patchValue({ rating: queryParams['rating'] });
     }
 
-    this.form.patchValue(formValues);
+    if (queryParams['genres']) {
+      if (this.genresGroup) {
+        queryParams['genres'].split(',').forEach((genre: string) => {
+          if (genre in this.genresGroup.value) {
+            this.genresGroup.patchValue({ [genre]: true });
+          }
+        });
+      }
+    }
   }
 
   protected async submit() {
@@ -143,14 +150,15 @@ export class AdvancedSearchComponent implements OnInit, AfterViewInit {
   }
 
   protected getFormParams(): AdvancedSearchParams {
-    const formValue = { ...this.form.value };
-    const rating = formValue['rating'];
+    const rating = this.form.value['rating'];
 
-    delete formValue['rating'];
-
-    const genres = Object.entries(formValue)
-      .filter(([k, v]) => Boolean(v))
-      .map(([k, v]) => k);
+    const formValue = this.genresGroup.value;
+    let genres: string[] = [];
+    if (formValue) {
+      genres = Object.entries(formValue)
+        .filter(([k, v]) => Boolean(v))
+        .map(([k, v]) => k);
+    }
 
     return { rating, genres };
   }
