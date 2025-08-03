@@ -36,7 +36,7 @@
     }
 
     .mat-expansion-panel-content-wrapper {
-      height: 100%;
+      height: calc(100% - 48px);
 
       .mat-expansion-panel-body {
         .genres-list-container {
@@ -45,10 +45,9 @@
           .genres-list {
             @include scrollable-container;
 
+            height: calc(100% - 2 * $default-padding);
             display: flex;
             flex-direction: column;
-            margin-left: $default-padding;
-            margin-top: $default-padding;
           }
         }
       }
