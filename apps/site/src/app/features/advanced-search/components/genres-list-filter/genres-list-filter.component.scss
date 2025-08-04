@@ -1,0 +1,10 @@
+@use 'vars' as *;
+
+:host {
+  display: block;
+  height: calc(2 * $default-padding);
+
+  input {
+    width: 200px;
+  }
+}
