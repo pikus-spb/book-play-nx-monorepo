@@ -19,11 +19,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { MatFabButton } from '@angular/material/button';
-import { MatChip } from '@angular/material/chips';
-import {
-  MatExpansionModule,
-  MatExpansionPanel,
-} from '@angular/material/expansion';
+import { MatExpansionPanel } from '@angular/material/expansion';
 import { MatIcon } from '@angular/material/icon';
 import { MatInput } from '@angular/material/input';
 import {
@@ -32,7 +28,7 @@ import {
   Router,
   RouterLink,
 } from '@angular/router';
-import { FB2_GENRE_UNIQUE_KEYS, FB2_GENRES } from '@book-play/constants';
+import { FB2_GENRES } from '@book-play/constants';
 import { AdvancedSearchParams } from '@book-play/models';
 import { StarRatingComponent, TagLinkComponent } from '@book-play/ui';
 import { createQueryString, parseQueryString } from '@book-play/utils-common';
@@ -44,6 +40,7 @@ import {
   loadingEndAction,
   loadingStartAction,
 } from '../../../../shared/store/loading/loading.action';
+import { GenresFilterControlComponent } from '../genres-filter-control/genres-filter-control.component';
 
 @Component({
   selector: 'books',
@@ -59,8 +56,7 @@ import {
     StarRatingModule,
     StarRatingComponent,
     MatInput,
-    MatChip,
-    MatExpansionModule,
+    GenresFilterControlComponent,
   ],
   templateUrl: './advanced-search.component.html',
   styleUrls: ['./advanced-search.component.scss'],
@@ -91,13 +87,15 @@ export class AdvancedSearchComponent implements OnInit, AfterViewInit {
   constructor() {
     this.form = this.fb.group({
       rating: [null, [Validators.min(0), Validators.max(10)]],
-      ...Object.keys(FB2_GENRES).reduce(
-        (memo: Record<string, any[]>, genreKey: string) => {
-          memo[genreKey] = [false];
-          return memo;
-        },
-        {}
-      ),
+      genres: this.fb.group({
+        ...Object.keys(FB2_GENRES).reduce(
+          (memo: Record<string, any[]>, genreKey: string) => {
+            memo[genreKey] = [false];
+            return memo;
+          },
+          {}
+        ),
+      }),
     });
   }
 
@@ -115,6 +113,10 @@ export class AdvancedSearchComponent implements OnInit, AfterViewInit {
     this.initSearch();
   }
 
+  protected get genresGroup(): FormGroup {
+    return this.form.get('genres') as FormGroup;
+  }
+
   private initSearch() {
     this.query.set(this.route.snapshot.paramMap.get('search') ?? '');
     if (this.query()) {
@@ -124,18 +126,19 @@ export class AdvancedSearchComponent implements OnInit, AfterViewInit {
   }
 
   private setFormValues(queryParams: Record<string, string>): void {
-    const formValues: Record<string, any> = {};
-
-    formValues['rating'] = queryParams['rating'];
-    if (queryParams['genres']) {
-      queryParams['genres'].split(',').forEach((genre: string) => {
-        if (genre in this.form.value) {
-          Object.assign(formValues, { [genre]: true });
-        }
-      });
+    if (queryParams['rating'] !== null) {
+      this.form.patchValue({ rating: queryParams['rating'] });
     }
 
-    this.form.patchValue(formValues);
+    if (queryParams['genres']) {
+      if (this.genresGroup) {
+        queryParams['genres'].split(',').forEach((genre: string) => {
+          if (genre in this.genresGroup.value) {
+            this.genresGroup.patchValue({ [genre]: true });
+          }
+        });
+      }
+    }
   }
 
   protected async submit() {
@@ -146,25 +149,19 @@ export class AdvancedSearchComponent implements OnInit, AfterViewInit {
     this.router.navigateByUrl(`/advanced-search/${createQueryString(params)}`);
   }
 
-  protected unselectGenre($event: Event, genre: string) {
-    $event.stopPropagation();
-    this.form.patchValue({ [genre]: false });
-  }
-
   protected getFormParams(): AdvancedSearchParams {
-    const formValue = { ...this.form.value };
-    const rating = formValue['rating'];
+    const rating = this.form.value['rating'];
 
-    delete formValue['rating'];
-
-    const genres = Object.entries(formValue)
-      .filter(([k, v]) => Boolean(v))
-      .map(([k, v]) => k);
+    const formValue = this.genresGroup.value;
+    let genres: string[] = [];
+    if (formValue) {
+      genres = Object.entries(formValue)
+        .filter(([k, v]) => Boolean(v))
+        .map(([k, v]) => k);
+    }
 
     return { rating, genres };
   }
 
   protected readonly Object = Object;
-  protected readonly FB2_GENRES = FB2_GENRES;
-  protected readonly FB2_GENRE_UNIQUE_KEYS = FB2_GENRE_UNIQUE_KEYS;
 }
