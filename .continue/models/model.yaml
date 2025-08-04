@@ -1,0 +1,10 @@
+name: deepseek-coder
+version: 0.0.1
+schema: v1
+models:
+  - provider: ollama
+    model: deepseek-coder:6.7b
+    name: deepseek-coder
+    roles:
+      - autocomplete
+      - chat
