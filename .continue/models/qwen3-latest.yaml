@@ -1,9 +1,0 @@
-name: qwen3
-version: 0.0.1
-schema: v1
-models:
-  - provider: ollama
-    model: qwen3:latest
-    name: qwen3
-    roles:
-      - chat
