@@ -1,0 +1,56 @@
+@use 'vars' as *;
+@use 'mixins' as *;
+
+:host {
+  ::ng-deep mat-expansion-panel {
+    width: 100%;
+
+    &.mat-expanded {
+      height: 400px;
+
+      mat-expansion-panel-header {
+        height: var(--mat-expansion-header-collapsed-state-height, 48px);
+      }
+
+      .mat-expansion-panel-body {
+        height: 100%;
+      }
+    }
+
+    mat-panel-title {
+      flex: 0 1;
+    }
+
+    mat-panel-description {
+      flex: 1 0;
+      gap: $default-padding;
+
+      ::ng-deep mat-chip {
+        .mat-mdc-chip-action-label {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+        }
+      }
+    }
+
+    .mat-expansion-panel-content-wrapper {
+      height: calc(100% - 48px);
+
+      .mat-expansion-panel-body {
+        .genres-list-container {
+          height: 100%;
+
+          .genres-list {
+            @include scrollable-container;
+
+            height: calc(100% - 2 * $default-padding);
+            display: flex;
+            flex-direction: column;
+          }
+        }
+      }
+    }
+  }
+}
