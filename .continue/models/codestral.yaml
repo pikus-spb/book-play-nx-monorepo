@@ -1,0 +1,9 @@
+name: codestral
+version: 0.0.1
+schema: v1
+models:
+  - provider: ollama
+    model: codestral:22b-v0.1-q2_K
+    name: codestral
+    roles:
+      - autocomplete
