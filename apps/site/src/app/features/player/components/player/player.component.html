@@ -1,7 +1,8 @@
 @if (book()) {
 <ng-container class="container">
+  <keep-screen-on [enabled]="keepScreenOnEnable()"></keep-screen-on>
   @if (countDownEnabled()) {
-  <countdown-timer></countdown-timer>
+  <countdown-timer (complete)="countdownTimerComplete()"></countdown-timer>
   }
   <book-canvas
     [book]="book"

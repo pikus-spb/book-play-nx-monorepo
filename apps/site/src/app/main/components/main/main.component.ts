@@ -15,10 +15,7 @@ import {
 } from '@angular/material/sidenav';
 import { MatToolbar } from '@angular/material/toolbar';
 import { RouterModule } from '@angular/router';
-import {
-  DarkModeSwitcherComponent,
-  KeepScreenOnComponent,
-} from '@book-play/ui';
+import { DarkModeSwitcherComponent } from '@book-play/ui';
 import { isDarkMode, listenDarkModeChange } from '@book-play/utils-browser';
 import { Store } from '@ngrx/store';
 
@@ -47,7 +44,6 @@ import { selectLoading } from '../../../shared/store/loading/loading.selector';
     MatSidenavContent,
     MatSidenavContainer,
     DarkModeSwitcherComponent,
-    KeepScreenOnComponent,
   ],
 })
 export class MainComponent implements AfterViewInit {
