@@ -33,6 +33,8 @@ export class KeepScreenOnComponent {
           subscription.unsubscribe();
           log('No sleep video started');
         });
+      } else {
+        this.noSleepVideo()?.nativeElement.pause();
       }
     });
   }
