@@ -3,6 +3,7 @@ import {
   Component,
   effect,
   inject,
+  output,
   viewChild,
 } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
@@ -13,8 +14,8 @@ import {
   CountdownConfig,
   CountdownEvent,
 } from 'ngx-countdown';
-import { AutoPlayService } from '../../shared/services/tts/auto-play.service';
-import { settingsSelector } from '../../shared/store/settings/settings.selectors';
+import { AutoPlayService } from '../../../../shared/services/tts/auto-play.service';
+import { settingsSelector } from '../../../../shared/store/settings/settings.selectors';
 
 @Component({
   selector: 'countdown-timer',
@@ -24,6 +25,7 @@ import { settingsSelector } from '../../shared/store/settings/settings.selectors
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CountdownTimerComponent {
+  public complete = output<void>();
   private autoPlayService = inject(AutoPlayService);
   protected stopped = toSignal(this.autoPlayService.stopped$);
   protected countdownConfig: CountdownConfig = {
@@ -54,6 +56,7 @@ export class CountdownTimerComponent {
     if ($event.action === 'done') {
       this.autoPlayService.stop();
       this.resetTimer();
+      this.complete.emit();
     }
   }
 
