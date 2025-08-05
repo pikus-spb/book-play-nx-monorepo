@@ -5,12 +5,15 @@ import {
   effect,
   inject,
   linkedSignal,
+  signal,
+  WritableSignal,
 } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { RouterHelperService } from '@book-play/ui';
+import { KeepScreenOnComponent, RouterHelperService } from '@book-play/ui';
 import { setDocumentTitleWithContext } from '@book-play/utils-browser';
+import { log } from '@book-play/utils-common';
 import { Store } from '@ngrx/store';
-import { firstValueFrom } from 'rxjs';
+import { firstValueFrom, fromEvent, merge } from 'rxjs';
 
 import { AutoPlayService } from '../../../../shared/services/tts/auto-play.service';
 import {
@@ -19,15 +22,19 @@ import {
 } from '../../../../shared/store/active-book/active-book.actions';
 import { activeBookSelector } from '../../../../shared/store/active-book/active-book.selectors';
 import { settingsSelector } from '../../../../shared/store/settings/settings.selectors';
-import { CountdownTimerComponent } from '../../../countdown-timer/countdown-timer.component';
 import { BookCanvasComponent } from '../book-canvas/book-canvas.component';
+import { CountdownTimerComponent } from '../countdown-timer/countdown-timer.component';
 
 @Component({
   selector: 'player',
   templateUrl: './player.component.html',
   styleUrls: ['./player.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [BookCanvasComponent, CountdownTimerComponent],
+  imports: [
+    BookCanvasComponent,
+    CountdownTimerComponent,
+    KeepScreenOnComponent,
+  ],
 })
 export class PlayerComponent implements AfterViewInit {
   private autoPlayService = inject(AutoPlayService);
@@ -39,6 +46,7 @@ export class PlayerComponent implements AfterViewInit {
   protected countDownEnabled = linkedSignal(() => {
     return this.settings().timer > 0;
   });
+  protected keepScreenOnEnable: WritableSignal<boolean> = signal(true);
 
   constructor() {
     // Effect to update window title
@@ -50,7 +58,25 @@ export class PlayerComponent implements AfterViewInit {
     });
   }
 
-  public async ngAfterViewInit() {
+  public ngAfterViewInit() {
+    this.initActiveBook();
+  }
+
+  protected countdownTimerComplete() {
+    this.keepScreenOnEnable.set(false);
+    log('Countdown time complete - turning off keep screen on...');
+
+    const subscription = merge(
+      fromEvent(document, 'click'),
+      fromEvent(document, 'touchend')
+    ).subscribe(() => {
+      this.keepScreenOnEnable.set(true);
+      subscription.unsubscribe();
+      log('Keep screen on restarted');
+    });
+  }
+
+  private async initActiveBook() {
     const id = (await firstValueFrom(this.route.paramMap)).get('id');
     if (id) {
       this.store.dispatch(activeBookLoadByIdAction({ id }));
