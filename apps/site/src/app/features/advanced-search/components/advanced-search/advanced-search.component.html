@@ -37,19 +37,19 @@
       </button>
     </div>
   </form>
-  <p>&nbsp;</p>
   <div class="search-result">
     @if (data.value()) {
     <h5>Результаты поиска</h5>
-    <div class="grid books-grid">
+    <div class="books-list">
       @for (item of data.value(); track item.id){
-      <nav>
-        <lib-tag-link [value]="item.id" linkPrefix="/book">
-          {{ item.full }}
-        </lib-tag-link>
-      </nav>
+      <a [routerLink]="['/book', item.id]" class="underline">{{ item.full }}</a>
+      <lib-star-rating
+        [readOnly]="true"
+        [rating]="item.rating"
+        [showLabel]="false"
+      ></lib-star-rating>
       } @empty {
-      <span>По вашему запросы книги не найдены</span>
+      <span>По Вашему запросу найти книги не удалось.</span>
       }
     </div>
     }
