@@ -5,9 +5,11 @@
   .container {
     @include scrollable-container;
 
-    padding: 2 * $default-padding;
-    display: flex;
-    flex-direction: column;
+    & {
+      padding: 2 * $default-padding;
+      display: flex;
+      flex-direction: column;
+    }
 
     .header {
       font-size: 1.5em;

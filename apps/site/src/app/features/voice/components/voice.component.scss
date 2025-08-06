@@ -3,7 +3,10 @@
 
 .container {
   @include scrollable-container;
-  padding: 2 * $default-padding;
+
+  & {
+    padding: 2 * $default-padding;
+  }
 
   textarea {
     width: 400px;

@@ -8,9 +8,12 @@
 
   .container {
     @include scrollable-container;
-    display: flex;
-    flex-direction: column;
-    padding: 2 * $default-padding;
+
+    & {
+      display: flex;
+      flex-direction: column;
+      padding: 2 * $default-padding;
+    }
 
     h5 {
       small {
@@ -45,13 +48,16 @@
 
     ::ng-deep .books-grid {
       @include scrollable-container;
-      flex: 1 0;
-      display: grid;
-      grid-gap: $default-padding * 1.5;
-      grid-template-columns: repeat(auto-fit, minmax($card-width * 2, 1fr));
-      grid-template-rows: repeat(auto-fit, minmax(min-content, 1fr));
-      align-content: start;
-      justify-content: start;
+
+      & {
+        flex: 1 0;
+        display: grid;
+        grid-gap: $default-padding * 1.5;
+        grid-template-columns: repeat(auto-fit, minmax($card-width * 2, 1fr));
+        grid-template-rows: repeat(auto-fit, minmax(min-content, 1fr));
+        align-content: start;
+        justify-content: start;
+      }
 
       nav {
         mat-chip {
