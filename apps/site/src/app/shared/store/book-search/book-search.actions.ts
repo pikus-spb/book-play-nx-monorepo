@@ -1,4 +1,4 @@
-import { BasicBookData, Errors } from '@book-play/models';
+import { BookData, Errors } from '@book-play/models';
 import { createAction, props } from '@ngrx/store';
 
 export enum BookSearchActions {
@@ -14,7 +14,7 @@ export const bookSearchAction = createAction(
 
 export const bookSearchSuccessAction = createAction(
   BookSearchActions.BookSearchSuccess,
-  props<{ books: BasicBookData[] }>()
+  props<{ books: BookData[] }>()
 );
 
 export const bookSearchFailureAction = createAction(
