@@ -17,7 +17,7 @@ import {
   Router,
   RouterLink,
 } from '@angular/router';
-import { TagLinkComponent } from '@book-play/ui';
+import { StarRatingComponent } from '@book-play/ui';
 import { Store } from '@ngrx/store';
 import { LoadingThenShowDirective } from '../../../../shared/directives/loading-then-show/loading-then-show.directive';
 import { bookSearchAction } from '../../../../shared/store/book-search/book-search.actions';
@@ -32,10 +32,10 @@ import {
     CommonModule,
     LoadingThenShowDirective,
     MatIcon,
-    TagLinkComponent,
     MatFabButton,
     FormsModule,
     RouterLink,
+    StarRatingComponent,
   ],
   templateUrl: './book-search.component.html',
   styleUrls: ['./book-search.component.scss'],
