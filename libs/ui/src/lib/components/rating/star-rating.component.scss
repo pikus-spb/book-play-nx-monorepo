@@ -1,6 +1,8 @@
 :host {
   display: inline-block;
-  > span {
+  height: 25px;
+
+  > div {
     opacity: 50%;
   }
 
