@@ -12,7 +12,10 @@
 
 .container {
   @include scrollable-container;
-  padding: $default-padding * 2;
+
+  & {
+    padding: $default-padding * 2;
+  }
 
   form {
     display: grid;

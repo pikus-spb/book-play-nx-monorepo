@@ -1,6 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { BasicBookData } from '@book-play/models';
+import { BookData } from '@book-play/models';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { ROUTER_REQUEST } from '@ngrx/router-store';
 import { Store } from '@ngrx/store';
@@ -32,7 +32,7 @@ export class BookSearchEffects {
         return this.booksApiService.bookSearch(query).pipe(
           takeUntil(this.actions$.pipe(ofType(ROUTER_REQUEST))),
           tap(() => this.store.dispatch(loadingEndAction())),
-          map((books: BasicBookData[]) => {
+          map((books: BookData[]) => {
             return bookSearchSuccessAction({ books });
           }),
           catchError((errorResponse: HttpErrorResponse) => {
