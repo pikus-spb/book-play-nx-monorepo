@@ -45,9 +45,11 @@
           .genres-list {
             @include scrollable-container;
 
-            height: calc(100% - 2 * $default-padding);
-            display: flex;
-            flex-direction: column;
+            & {
+              height: calc(100% - 2 * $default-padding);
+              display: flex;
+              flex-direction: column;
+            }
           }
         }
       }
