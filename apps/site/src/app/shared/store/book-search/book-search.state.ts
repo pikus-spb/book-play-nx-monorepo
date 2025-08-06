@@ -1,7 +1,7 @@
-import { BasicBookData, Errors } from '@book-play/models';
+import { BookData, Errors } from '@book-play/models';
 
 export interface BookSearchState {
-  books: BasicBookData[] | null;
+  books: BookData[] | null;
   errors: Errors;
 }
 
