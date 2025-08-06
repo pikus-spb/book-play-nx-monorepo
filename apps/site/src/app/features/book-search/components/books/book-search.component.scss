@@ -46,38 +46,10 @@
       }
     }
 
-    ::ng-deep .books-grid {
-      @include scrollable-container;
-
-      & {
-        flex: 1 0;
-        display: grid;
-        grid-gap: $default-padding * 1.5;
-        grid-template-columns: repeat(auto-fit, minmax($card-width * 2, 1fr));
-        grid-template-rows: repeat(auto-fit, minmax(min-content, 1fr));
-        align-content: start;
-        justify-content: start;
-      }
-
-      nav {
-        mat-chip {
-          .mdc-evolution-chip__cell {
-            width: 100%;
-
-            .mdc-evolution-chip__action {
-              width: 100%;
-
-              .mdc-evolution-chip__text-label {
-                width: 100%;
-              }
-            }
-          }
-        }
-      }
-
-      .virtual-spacer {
-        grid-column: 1 / -1;
-      }
+    .books-list {
+      display: grid;
+      grid-template-columns: auto auto;
+      justify-content: start;
     }
   }
 }

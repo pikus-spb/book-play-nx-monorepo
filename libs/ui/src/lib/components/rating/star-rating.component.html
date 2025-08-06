@@ -1,3 +1,4 @@
+@if (rating() || !disabled()) {
 <star-rating-control
   [readOnly]="disabled()"
   [staticColor]="'ok'"
@@ -9,3 +10,4 @@
   (starClickChange)="onTouched()"
   labelPosition="right"
 ></star-rating-control>
+}
