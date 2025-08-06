@@ -1,9 +1,16 @@
-::ng-deep star-rating-control {
-  > div {
-    cursor: pointer;
+:host {
+  display: inline-block;
+  > span {
+    opacity: 50%;
   }
 
-  > div.read-only {
-    pointer-events: none;
+  ::ng-deep star-rating-control {
+    > div {
+      cursor: pointer;
+    }
+
+    > div.read-only {
+      pointer-events: none;
+    }
   }
 }

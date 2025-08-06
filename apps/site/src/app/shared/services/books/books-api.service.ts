@@ -5,8 +5,8 @@ import { BOOKS_API_PORT, BOOKS_API_PORT_SECURE } from '@book-play/constants';
 import {
   Author,
   AuthorSummary,
-  BasicBookData,
   Book,
+  BookData,
   DBAuthor,
   DBAuthorSummary,
   DBBook,
@@ -108,15 +108,15 @@ export class BooksApiService {
     );
   }
 
-  public bookSearch(query: string): Observable<BasicBookData[]> {
+  public bookSearch(query: string): Observable<BookData[]> {
     const url = this.apiUrlPrefix + `/book/search/${query}`;
 
-    return this.http.get<BasicBookData[]>(url);
+    return this.http.get<BookData[]>(url);
   }
 
-  public advancedSearch(query: string): Observable<BasicBookData[]> {
+  public advancedSearch(query: string): Observable<BookData[]> {
     const url = this.apiUrlPrefix + `/book/advanced-search?${query}`;
 
-    return this.http.get<BasicBookData[]>(url);
+    return this.http.get<BookData[]>(url);
   }
 }
