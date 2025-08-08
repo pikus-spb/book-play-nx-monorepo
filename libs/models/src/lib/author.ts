@@ -33,7 +33,11 @@ export class Author {
   }
 
   public get full(): string {
-    return `${this.first} ${this.last}`;
+    if (this.first || this.last) {
+      return `${this.first} ${this.last}`;
+    } else {
+      return '';
+    }
   }
 }
 

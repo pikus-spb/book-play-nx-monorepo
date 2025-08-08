@@ -105,7 +105,7 @@ export default class BooksAPIApp {
   @Log()
   authorBooks(authorId: string): Promise<Partial<DBBook>[]> {
     const sqlQuery = new SQLQueryBuilder()
-      .select('id', 'name', 'genres')
+      .select('id', 'name', 'genres', 'rating')
       .from('books')
       .where(`authorId = "${authorId}"`)
       .orderBy('name')

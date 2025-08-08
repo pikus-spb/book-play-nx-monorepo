@@ -1,5 +1,6 @@
 :host {
-  display: inline-block;
+  display: flex;
+  align-items: start;
   height: 25px;
 
   > div {

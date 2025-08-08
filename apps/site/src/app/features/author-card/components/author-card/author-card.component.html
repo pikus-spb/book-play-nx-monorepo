@@ -10,14 +10,10 @@
     <lib-author-genres-list [genres]="author.genres"> </lib-author-genres-list>
     <span class="annotation" [innerHTML]="author.about"></span>
     <div class="books">
-      <h4>Произведения:</h4>
-      @for (book of author.books; track book.name) {
-      <div>
-        <a [routerLink]="['/book', book.id]" class="underline">{{
-          book.name
-        }}</a>
-      </div>
-      }
+      <lib-books-list
+        title="Произведения"
+        [data]="signal(author.books)"
+      ></lib-books-list>
     </div>
   </div>
 </div>
