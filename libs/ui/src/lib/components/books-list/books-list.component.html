@@ -1,0 +1,15 @@
+@let books = data(); @if (books && books()) {
+<h5>{{ title() }}</h5>
+<div class="books-list">
+  @for (item of books(); track item.id){
+  <a [routerLink]="['/book', item.id]" class="underline">{{ item.full }}</a>
+  <lib-star-rating
+    [readOnly]="true"
+    [rating]="item.rating || 0"
+    [showLabel]="true"
+  ></lib-star-rating>
+  } @empty {
+  <span>{{ noDataText() }}</span>
+  }
+</div>
+}

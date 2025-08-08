@@ -38,21 +38,7 @@
     </div>
   </form>
   <div class="search-result">
-    @if (data.value()) {
-    <h5>Результаты поиска</h5>
-    <div class="books-list">
-      @for (item of data.value(); track item.id){
-      <a [routerLink]="['/book', item.id]" class="underline">{{ item.full }}</a>
-      <lib-star-rating
-        [readOnly]="true"
-        [rating]="item.rating"
-        [showLabel]="true"
-      ></lib-star-rating>
-      } @empty {
-      <span>По Вашему запросу найти книги не удалось.</span>
-      }
-    </div>
-    }
+    <lib-books-list [data]="data.value"></lib-books-list>
   </div>
   @if (data.error()) {
   <span>Ошибка: {{ data.error() | json }}</span>
