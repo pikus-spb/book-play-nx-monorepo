@@ -4,7 +4,6 @@ import {
 } from '@book-play/constants';
 import {
   AdvancedSearchParams,
-  BasicBookData,
   BookData,
   DBAuthor,
   DBAuthorSummary,
@@ -167,9 +166,9 @@ export default class BooksAPIApp {
   }
 
   @Log()
-  bookSearch(query: string): Promise<BasicBookData[]> {
+  bookSearch(query: string): Promise<BookData[]> {
     const sqlQuery = new SQLQueryBuilder()
-      .select('id', 'full')
+      .select('id', 'full', 'rating')
       .from('books')
       .where(`MATCH (full) AGAINST ('${query}')`)
       .build();
@@ -177,7 +176,7 @@ export default class BooksAPIApp {
     // log(sqlQuery);
 
     return new Promise((resolve, reject) => {
-      pool.query(sqlQuery, (err, result: BasicBookData[]) => {
+      pool.query(sqlQuery, (err, result: BookData[]) => {
         if (err) {
           console.error(err);
           reject(err);
@@ -219,7 +218,7 @@ export default class BooksAPIApp {
       builder = builder.where(whereGenreAliases);
     }
 
-    builder = builder.orderBy('rating').limit(MAX_BOOK_SEARCH_RESULTS);
+    builder = builder.orderBy('rating', false).limit(MAX_BOOK_SEARCH_RESULTS);
 
     const sqlQuery = builder.build();
 
