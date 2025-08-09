@@ -53,12 +53,6 @@
 
     .search-result {
       margin-top: $default-padding;
-
-      .books-list {
-        display: grid;
-        grid-template-columns: auto auto;
-        justify-content: start;
-      }
     }
   }
 }

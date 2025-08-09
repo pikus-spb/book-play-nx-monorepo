@@ -20,21 +20,7 @@
     <span #loading></span>
   </h5>
   <ng-template #books>
-    @if (data()) {
-    <h5>Результаты поиска</h5>
-    <div class="books-list">
-      @for (item of data(); track item.id) {
-      <a [routerLink]="['/book', item.id]" class="underline">{{ item.full }}</a>
-      <lib-star-rating
-        [readOnly]="true"
-        [rating]="item.rating"
-        [showLabel]="true"
-      ></lib-star-rating>
-      } @empty {
-      <span>По Вашему запросу найти книги не удалось.</span>
-      }
-    </div>
-    }
+    <lib-books-list [data]="data"></lib-books-list>
   </ng-template>
   @if (errors() && errors().length > 0) {
   <span>Ошибка: {{ errors().join(' ') }}</span>

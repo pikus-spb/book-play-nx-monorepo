@@ -27,7 +27,7 @@ export interface BookData extends BasicBookData {
 }
 
 export interface AdvancedSearchParams {
-  genres: string[];
+  genres: Genre[];
   rating: number;
 }
 
@@ -58,7 +58,11 @@ export class Book {
   }
 
   public get full(): string {
-    return `${this.author.full} - ${this.name}`;
+    if (this.author.full) {
+      return `${this.author.full} - ${this.name}`;
+    } else {
+      return this.name;
+    }
   }
 
   public get hash(): string {
