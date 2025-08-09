@@ -502,6 +502,7 @@ export const FB2_GENRES: Record<string, string> = {
   samizdat: 'Самиздат',
   scenarios: 'Сценарии',
   'sci-fi': 'Научная фантастика',
+  sf_litrpg: 'Научное Лит-РПГ',
   science: 'Наука',
   'science-fiction': 'Научная фантастика',
   science_archaeology: 'Археология',
