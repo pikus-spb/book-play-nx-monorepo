@@ -30,7 +30,7 @@ import {
 } from '@angular/router';
 import { FB2_GENRES } from '@book-play/constants';
 import { AdvancedSearchParams } from '@book-play/models';
-import { StarRatingComponent } from '@book-play/ui';
+import { BooksListComponent, StarRatingComponent } from '@book-play/ui';
 import { createQueryString, parseQueryString } from '@book-play/utils-common';
 import { Store } from '@ngrx/store';
 import { StarRatingModule } from 'angular-star-rating';
@@ -56,6 +56,7 @@ import { GenresFilterControlComponent } from '../genres-filter-control/genres-fi
     StarRatingComponent,
     MatInput,
     GenresFilterControlComponent,
+    BooksListComponent,
   ],
   templateUrl: './advanced-search.component.html',
   styleUrls: ['./advanced-search.component.scss'],
