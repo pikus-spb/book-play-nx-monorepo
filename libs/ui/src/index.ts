@@ -6,7 +6,9 @@ export * from './lib/components/author-genres-list/author-genres-list.component'
 export * from './lib/components/dark-mode-switcher/dark-mode-switcher.component';
 export * from './lib/components/keep-screen-on/keep-screen-on.component';
 export * from './lib/components/rating/star-rating.component';
+export * from './lib/components/books-list/books-list.component';
 export * from './lib/pipes/genre/genre.pipe';
 export * from './lib/pipes/genre/genres.pipe';
+export * from './lib/pipes/cast/cast.pipe';
 export * from './lib/services/fb2-file-reader.service';
 export * from './lib/services/router-helper.service';

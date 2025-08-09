@@ -4,11 +4,12 @@ import {
   computed,
   inject,
   input,
+  signal,
 } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { AuthorSummary } from '@book-play/models';
-import { AuthorGenresListComponent } from '@book-play/ui';
+import { AuthorGenresListComponent, BooksListComponent } from '@book-play/ui';
 import { hideImage } from '@book-play/utils-browser';
 import { map } from 'rxjs';
 
@@ -17,7 +18,7 @@ import { map } from 'rxjs';
   templateUrl: './author-card.component.html',
   styleUrls: ['./author-card.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [RouterLink, AuthorGenresListComponent],
+  imports: [RouterLink, AuthorGenresListComponent, BooksListComponent],
 })
 export class AuthorCardComponent {
   private route = inject(ActivatedRoute);
@@ -30,4 +31,5 @@ export class AuthorCardComponent {
   });
 
   protected readonly hideImage = hideImage;
+  protected readonly signal = signal;
 }
