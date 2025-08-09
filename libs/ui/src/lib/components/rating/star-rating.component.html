@@ -5,7 +5,7 @@
   [starType]="'svg'"
   [rating]="rating()"
   [showHalfStars]="true"
-  [labelText]="showLabel() ? (rating() * 2).toString() : ''"
+  [labelText]="showLabel() ? (rating() * 2).toFixed(1) : ''"
   (ratingChange)="setValue($event)"
   (starClickChange)="onTouched()"
   labelPosition="right"
