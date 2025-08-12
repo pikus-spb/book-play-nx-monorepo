@@ -1,7 +1,9 @@
-import { AsyncPipe } from '@angular/common';
+import { AsyncPipe, CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
+  inject,
   input,
   OnInit,
   signal,
@@ -15,7 +17,7 @@ import {
   MatExpansionPanelHeader,
 } from '@angular/material/expansion';
 import { FB2_GENRE_UNIQUE_KEYS, FB2_GENRES } from '@book-play/constants';
-import { map, Observable } from 'rxjs';
+import { map, Observable, tap } from 'rxjs';
 import { GenresListFilterComponent } from '../genres-list-filter/genres-list-filter.component';
 
 @Component({
@@ -26,9 +28,10 @@ import { GenresListFilterComponent } from '../genres-list-filter/genres-list-fil
     MatExpansionPanelDescription,
     MatExpansionPanelHeader,
     ReactiveFormsModule,
-    AsyncPipe,
     MatExpansionModule,
     GenresListFilterComponent,
+    AsyncPipe,
+    CommonModule,
   ],
   templateUrl: './genres-filter-control.component.html',
   styleUrl: './genres-filter-control.component.scss',
@@ -36,8 +39,9 @@ import { GenresListFilterComponent } from '../genres-list-filter/genres-list-fil
 })
 export class GenresFilterControlComponent implements OnInit {
   public form = input.required<FormGroup>();
-  protected selectedGenres$!: Observable<string[]>;
+  protected selectedGenres$?: Observable<string[]>;
   protected genreKeys = signal(FB2_GENRE_UNIQUE_KEYS);
+  private cd = inject(ChangeDetectorRef);
 
   ngOnInit() {
     this.selectedGenres$ = this.form().valueChanges.pipe(
@@ -45,6 +49,9 @@ export class GenresFilterControlComponent implements OnInit {
         return Object.entries(formValue)
           .filter(([k, v]) => Boolean(v))
           .map(([k, v]) => k);
+      }),
+      tap(() => {
+        setTimeout(() => this.cd.markForCheck(), 300);
       })
     );
   }

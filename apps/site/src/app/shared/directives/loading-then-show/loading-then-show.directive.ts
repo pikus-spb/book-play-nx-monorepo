@@ -13,9 +13,9 @@ import {
   ViewContainerRef,
 } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
+import { selectLoading } from '@book-play/store';
 import { Store } from '@ngrx/store';
 import { LoadingIndicatorComponent } from '../../components/loading-indicator/loading-indicator.component';
-import { selectLoading } from '../../store/loading/loading.selector';
 
 @Directive({
   selector: '[loading]',

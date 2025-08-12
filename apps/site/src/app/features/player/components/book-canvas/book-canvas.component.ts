@@ -21,17 +21,15 @@ import {
   BOOK_IMAGE_WIDTH,
   DEFAULT_COVER_SRC,
 } from '@book-play/constants';
-import { Book } from '@book-play/models';
+import { Book, HeightDelta } from '@book-play/models';
 import {
-  HeightCalculateComponent,
-  HeightDelta,
-  StarRatingComponent,
-} from '@book-play/ui';
+  DomHelperService,
+  setupViewportScrollerService,
+  TextIndexMapperService,
+} from '@book-play/services';
+import { HeightCalculateComponent, StarRatingComponent } from '@book-play/ui';
 import { showDefaultCoverImage } from '@book-play/utils-browser';
 import { Subject } from 'rxjs';
-import { DomHelperService } from '../../../../shared/services/player/dom-helper.service';
-import { TextIndexMapperService } from '../../../../shared/services/player/text-index-mapper.service';
-import { setupViewportScrollerService } from '../../../../shared/services/player/viewport-scroller.service';
 import { BookParagraphComponent } from '../book-paragraph/book-paragraph.component';
 
 @Component({

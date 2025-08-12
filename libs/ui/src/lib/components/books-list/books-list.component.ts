@@ -4,13 +4,13 @@ import {
   input,
   Signal,
 } from '@angular/core';
-import { RouterLink } from '@angular/router';
 import { Book, BookData } from '@book-play/models';
-import { StarRatingComponent } from '../rating/star-rating.component';
+import { BookDetailsComponent } from '../book-details/book-details.component';
+import { StarRatingComponent } from '../star-rating/star-rating.component';
 
 @Component({
   selector: 'lib-books-list',
-  imports: [StarRatingComponent, RouterLink],
+  imports: [StarRatingComponent, BookDetailsComponent],
   templateUrl: './books-list.component.html',
   styleUrl: './books-list.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
