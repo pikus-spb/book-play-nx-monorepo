@@ -8,8 +8,7 @@ import {
 import { MatMiniFabButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { MatTooltip } from '@angular/material/tooltip';
-
-import { AutoPlayService } from '../../services/tts/auto-play.service';
+import { AutoPlayService } from '../../services/auto-play.service';
 
 @Component({
   selector: 'player-button',

@@ -1,0 +1,24 @@
+@use 'vars' as *;
+
+dialog {
+  background-color: var(
+    --mat-sidenav-content-background-color,
+    var(--mat-sys-background)
+  );
+  width: $card-width * 3;
+  z-index: 9999;
+  border: $default-border;
+  cursor: default;
+  color: var(--mat-sidenav-content-text-color, var(--mat-sys-on-background));
+
+  &::backdrop {
+    backdrop-filter: blur(5px);
+  }
+
+  .close-button {
+    position: absolute;
+    right: $default-padding;
+    top: $default-padding;
+    cursor: pointer;
+  }
+}

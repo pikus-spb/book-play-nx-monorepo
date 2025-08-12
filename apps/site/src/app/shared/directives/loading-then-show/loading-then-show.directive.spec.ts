@@ -12,7 +12,7 @@ import {
   BrowserDynamicTestingModule,
   platformBrowserDynamicTesting,
 } from '@angular/platform-browser-dynamic/testing';
-import { EventsStateService } from '../../services/events-state.service';
+import { EventsStateService } from '@book-play/services';
 import { LoadingThenShowDirective } from './loading-then-show.directive';
 
 @Component({

@@ -1,0 +1,46 @@
+@if (book(); as book) {
+<div>
+  <img
+    [src]="coverSrc()"
+    [width]="BOOK_IMAGE_WIDTH"
+    [height]="BOOK_IMAGE_HEIGHT"
+    (error)="showDefaultCoverImage($event)"
+    alt="Обложка книги"
+  />
+  <div class="content">
+    <h4>
+      <a [routerLink]="['/author', book.author.id]">{{ book.author.full }}</a>
+    </h4>
+    <h2>
+      <a [routerLink]="['/book', book.id]">{{ book.name }}</a>
+    </h2>
+    <lib-author-genres-list [genres]="book.genres">
+      <span class="book-rating">
+        <lib-star-rating
+          [showLabel]="true"
+          [rating]="book.rating ?? 0"
+          [readOnly]="true"
+        ></lib-star-rating>
+      </span>
+    </lib-author-genres-list>
+    @if (book.date) {
+    <span class="date">{{ book.date }}</span>
+    }
+    <span class="annotation" [innerHTML]="book.annotation"></span>
+    <div class="action-panel">
+      <button
+        mat-fab
+        extended="true"
+        color="success"
+        matTooltip="Слушать"
+        matTooltipPosition="below"
+        matTooltipShowDelay="1500"
+        (click)="playBook()"
+      >
+        <mat-icon>play_arrow</mat-icon>
+        Слушать
+      </button>
+    </div>
+  </div>
+</div>
+}

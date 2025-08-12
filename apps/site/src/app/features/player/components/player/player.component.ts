@@ -9,19 +9,20 @@ import {
   WritableSignal,
 } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { KeepScreenOnComponent, RouterHelperService } from '@book-play/ui';
+import { RouterHelperService } from '@book-play/services';
+import {
+  activeBookImportFromPersistenceStorageAction,
+  activeBookLoadByIdAction,
+  activeBookSelector,
+  settingsSelector,
+} from '@book-play/store';
+import { KeepScreenOnComponent } from '@book-play/ui';
 import { setDocumentTitleWithContext } from '@book-play/utils-browser';
 import { log } from '@book-play/utils-common';
 import { Store } from '@ngrx/store';
 import { firstValueFrom, fromEvent, merge } from 'rxjs';
+import { AutoPlayService } from '../../../../shared/services/auto-play.service';
 
-import { AutoPlayService } from '../../../../shared/services/tts/auto-play.service';
-import {
-  activeBookImportFromPersistenceStorageAction,
-  activeBookLoadByIdAction,
-} from '../../../../shared/store/active-book/active-book.actions';
-import { activeBookSelector } from '../../../../shared/store/active-book/active-book.selectors';
-import { settingsSelector } from '../../../../shared/store/settings/settings.selectors';
 import { BookCanvasComponent } from '../book-canvas/book-canvas.component';
 import { CountdownTimerComponent } from '../countdown-timer/countdown-timer.component';
 

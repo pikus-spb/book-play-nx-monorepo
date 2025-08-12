@@ -1,5 +1,5 @@
 <div class="container">
-  <h5 loading [thenShow]="books">
+  <h5 loading>
     Поиск по имени
     <small>
       <a [routerLink]="['/advanced-search']" class="underline">
@@ -19,9 +19,7 @@
     </form>
     <span #loading></span>
   </h5>
-  <ng-template #books>
-    <lib-books-list [data]="data"></lib-books-list>
-  </ng-template>
+  <lib-books-list [data]="data"></lib-books-list>
   @if (errors() && errors().length > 0) {
   <span>Ошибка: {{ errors().join(' ') }}</span>
   }
