@@ -11,6 +11,8 @@ import {
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatButton } from '@angular/material/button';
+import { TtsApiService } from '@book-play/services';
+import { loadingEndAction, loadingStartAction } from '@book-play/store';
 import { blobToBase64 } from '@book-play/utils-browser';
 import { Store } from '@ngrx/store';
 import {
@@ -23,11 +25,6 @@ import {
   switchMap,
   tap,
 } from 'rxjs';
-import { TtsApiService } from '../../../shared/services/tts/tts-api.service';
-import {
-  loadingEndAction,
-  loadingStartAction,
-} from '../../../shared/store/loading/loading.action';
 
 @Component({
   selector: 'voice',

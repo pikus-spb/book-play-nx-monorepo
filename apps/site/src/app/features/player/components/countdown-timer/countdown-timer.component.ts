@@ -8,14 +8,14 @@ import {
 } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { DEFAULT_COUNTDOWN_TIMER_VALUE } from '@book-play/constants';
+import { settingsSelector } from '@book-play/store';
 import { Store } from '@ngrx/store';
 import {
   CountdownComponent,
   CountdownConfig,
   CountdownEvent,
 } from 'ngx-countdown';
-import { AutoPlayService } from '../../../../shared/services/tts/auto-play.service';
-import { settingsSelector } from '../../../../shared/store/settings/settings.selectors';
+import { AutoPlayService } from '../../../../shared/services/auto-play.service';
 
 @Component({
   selector: 'countdown-timer',
