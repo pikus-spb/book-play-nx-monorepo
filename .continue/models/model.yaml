@@ -1,10 +1,12 @@
-name: deepseek-coder
+name: gpt-oss
 version: 0.0.1
 schema: v1
 models:
   - provider: ollama
-    model: deepseek-coder:6.7b
-    name: deepseek-coder
+    model: gpt-oss:120b
+    name: gpt-oss
+    apiKey: '22a1cf579581463a9a517046e676d8ef.nWTRfuNEcodQhXQgUhH6rt4p'
+    apiBase: 'https://ollama.com'
     roles:
       - autocomplete
       - chat

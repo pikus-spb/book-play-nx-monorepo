@@ -15,7 +15,7 @@ import {
   PARAGRAPH_CLASS_PREFIX,
 } from '@book-play/constants';
 import { ImageBase64Data, isTextParagraph } from '@book-play/models';
-import { CursorPositionService } from '../../../../shared/services/player/cursor-position.service';
+import { CursorPositionService } from '@book-play/services';
 
 @Component({
   selector: 'book-paragraph',
