@@ -2,12 +2,14 @@
 <h5>{{ title() }}</h5>
 <div class="books-list">
   @for (item of books(); track item.id){
-  <a [routerLink]="['/book', item.id]" class="underline">{{ item.full }}</a>
-  <lib-star-rating
-    [readOnly]="true"
-    [rating]="item.rating || 0"
-    [showLabel]="true"
-  ></lib-star-rating>
+  <div class="book-item">
+    <a [bookId]="item.id" libBookDetails class="underline">{{ item.full }}</a>
+    <lib-star-rating
+      [readOnly]="true"
+      [rating]="item.rating || 0"
+      [showLabel]="true"
+    ></lib-star-rating>
+  </div>
   } @empty {
   <span>{{ noDataText() }}</span>
   }

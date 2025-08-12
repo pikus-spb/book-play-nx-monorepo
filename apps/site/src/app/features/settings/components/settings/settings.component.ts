@@ -14,6 +14,7 @@ import {
   SETTINGS_VOICE_RATE_DELTA,
 } from '@book-play/constants';
 import { Voices } from '@book-play/models';
+import { settingsSelector, settingsUpdateAction } from '@book-play/store';
 import {
   secondsToTimeString,
   timeStringToSeconds,
@@ -21,8 +22,6 @@ import {
 import { Store } from '@ngrx/store';
 import { NgxMatTimepickerFieldComponent } from 'ngx-mat-timepicker';
 import { debounceTime, map, tap } from 'rxjs';
-import { settingsUpdateAction } from '../../../../shared/store/settings/settings.actions';
-import { settingsSelector } from '../../../../shared/store/settings/settings.selectors';
 
 @Component({
   selector: 'settings',

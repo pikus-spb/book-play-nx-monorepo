@@ -30,16 +30,13 @@ import {
 } from '@angular/router';
 import { FB2_GENRES } from '@book-play/constants';
 import { AdvancedSearchParams } from '@book-play/models';
+import { BooksApiService } from '@book-play/services';
+import { loadingEndAction, loadingStartAction } from '@book-play/store';
 import { BooksListComponent, StarRatingComponent } from '@book-play/ui';
 import { createQueryString, parseQueryString } from '@book-play/utils-common';
 import { Store } from '@ngrx/store';
 import { StarRatingModule } from 'angular-star-rating';
 import { firstValueFrom } from 'rxjs';
-import { BooksApiService } from '../../../../shared/services/books/books-api.service';
-import {
-  loadingEndAction,
-  loadingStartAction,
-} from '../../../../shared/store/loading/loading.action';
 import { GenresFilterControlComponent } from '../genres-filter-control/genres-filter-control.component';
 
 @Component({
