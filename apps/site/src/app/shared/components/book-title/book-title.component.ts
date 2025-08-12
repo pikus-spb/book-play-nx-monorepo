@@ -7,9 +7,9 @@ import {
 import { toSignal } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
 import { Book } from '@book-play/models';
+import { activeBookSelector } from '@book-play/store';
 import { LinkComponent } from '@book-play/ui';
 import { Store } from '@ngrx/store';
-import { activeBookSelector } from '../../store/active-book/active-book.selectors';
 
 @Component({
   selector: 'book-title',

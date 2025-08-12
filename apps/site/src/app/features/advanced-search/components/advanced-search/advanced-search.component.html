@@ -17,7 +17,7 @@
         type="number"
         placeholder="От 0 до 10"
         formControlName="rating"
-        [value]="form.value.rating"
+        [value]="form.value.rating || ''"
       />
       <lib-star-rating
         formControlName="rating"

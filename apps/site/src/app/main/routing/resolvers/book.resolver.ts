@@ -1,11 +1,9 @@
 import { inject, Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve } from '@angular/router';
 import { Book } from '@book-play/models';
+import { bookSummarySelector, loadBookSummaryAction } from '@book-play/store';
 import { Store } from '@ngrx/store';
 import { filter, Observable } from 'rxjs';
-
-import { loadBookSummaryAction } from '../../../shared/store/book-summary/book-summary.actions';
-import { bookSummarySelector } from '../../../shared/store/book-summary/book-summary.selectors';
 
 @Injectable({
   providedIn: 'root',

@@ -15,6 +15,7 @@ import {
 } from '@angular/material/sidenav';
 import { MatToolbar } from '@angular/material/toolbar';
 import { RouterModule } from '@angular/router';
+import { selectLoading } from '@book-play/store';
 import { DarkModeSwitcherComponent } from '@book-play/ui';
 import { isDarkMode, listenDarkModeChange } from '@book-play/utils-browser';
 import { Store } from '@ngrx/store';
@@ -24,7 +25,6 @@ import { CopyrightOwnerComponent } from '../../../shared/components/copyright-ow
 import { CopyrightComponent } from '../../../shared/components/copyright/copyright.component';
 import { MainHeaderComponent } from '../../../shared/components/main-header/main-header.component';
 import { MainMenuComponent } from '../../../shared/components/main-menu/main-menu.component';
-import { selectLoading } from '../../../shared/store/loading/loading.selector';
 
 @Component({
   selector: 'main',
