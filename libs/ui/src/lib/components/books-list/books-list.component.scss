@@ -4,9 +4,11 @@
   display: block;
 
   .books-list {
-    display: grid;
-    grid-template-columns: auto auto;
-    justify-content: start;
-    grid-column-gap: $default-padding;
+    .book-item {
+      display: flex;
+      flex-direction: row;
+      justify-content: start;
+      gap: $default-padding;
+    }
   }
 }

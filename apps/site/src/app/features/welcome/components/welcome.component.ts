@@ -1,12 +1,15 @@
 import { Component, inject, OnInit } from '@angular/core';
+import {
+  loadRandomAuthorsAction,
+  loadRandomBooksAction,
+  randomAuthorsSelector,
+  randomBooksSelector,
+} from '@book-play/store';
+import { BookCardComponent } from '@book-play/ui';
 import { Store } from '@ngrx/store';
 import { environment } from 'environments/environment';
-import { loadRandomAuthorsAction } from '../../../shared/store/random-author-details/random-author-summary.actions';
-import { randomAuthorsSelector } from '../../../shared/store/random-author-details/random-author-summary.selectors';
-import { loadRandomBooksAction } from '../../../shared/store/random-books/random-books.actions';
-import { randomBooksSelector } from '../../../shared/store/random-books/random-books.selectors';
+
 import { AuthorCardComponent } from '../../author-card/components/author-card/author-card.component';
-import { BookCardComponent } from '../../book-card/components/book-card/book-card.component';
 
 @Component({
   selector: 'welcome',

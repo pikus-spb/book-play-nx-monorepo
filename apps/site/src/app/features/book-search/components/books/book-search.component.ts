@@ -17,14 +17,14 @@ import {
   Router,
   RouterLink,
 } from '@angular/router';
+import {
+  bookSearchAction,
+  bookSearchErrorsSelector,
+  bookSearchSelector,
+} from '@book-play/store';
 import { BooksListComponent } from '@book-play/ui';
 import { Store } from '@ngrx/store';
 import { LoadingThenShowDirective } from '../../../../shared/directives/loading-then-show/loading-then-show.directive';
-import { bookSearchAction } from '../../../../shared/store/book-search/book-search.actions';
-import {
-  bookSearchErrorsSelector,
-  bookSearchSelector,
-} from '../../../../shared/store/book-search/book-search.selectors';
 
 @Component({
   selector: 'books',

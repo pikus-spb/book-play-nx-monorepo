@@ -1,0 +1,23 @@
+<ng-content></ng-content>
+<ng-template #template>
+  <dialog
+    #dialog
+    tabindex="0"
+    (click)="closeAndStopEvent($event)"
+    (keyup)="closeAndStopEvent($event)"
+  >
+    <div
+      class="close-button"
+      tabindex="0"
+      (click)="closeAndStopEvent($event)"
+      (keyup)="closeAndStopEvent($event)"
+    >
+      <mat-icon>close</mat-icon>
+    </div>
+    <book-card
+      (click)="stopEvent($event)"
+      [book]="book()"
+      [updateWindowTitle]="false"
+    ></book-card>
+  </dialog>
+</ng-template>
