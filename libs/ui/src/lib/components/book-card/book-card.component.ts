@@ -2,9 +2,9 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
-  effect,
   inject,
   input,
+  OnInit,
 } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { MatFabButton } from '@angular/material/button';
@@ -41,7 +41,7 @@ import { StarRatingComponent } from '../star-rating/star-rating.component';
     MatTooltip,
   ],
 })
-export class BookCardComponent {
+export class BookCardComponent implements OnInit {
   public inputBook = input<Book | null>(null, { alias: 'book' });
   public updateWindowTitle = input<boolean>(true);
   private route = inject(ActivatedRoute);
@@ -58,15 +58,13 @@ export class BookCardComponent {
     return src ?? DEFAULT_COVER_SRC;
   });
 
-  constructor() {
-    effect(() => {
-      if (this.updateWindowTitle()) {
-        const book = this.book();
-        if (book !== null) {
-          setDocumentTitleWithContext(book.full);
-        }
+  ngOnInit() {
+    if (this.updateWindowTitle()) {
+      const book = this.book();
+      if (book !== null) {
+        setDocumentTitleWithContext(book.full);
       }
-    });
+    }
   }
 
   public playBook(): void {
