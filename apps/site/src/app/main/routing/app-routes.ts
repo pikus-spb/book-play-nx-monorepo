@@ -1,5 +1,6 @@
 import { Route } from '@angular/router';
 import { DEFAULT_TITLE } from '@book-play/constants';
+import { BookCardComponent } from '@book-play/ui';
 import { StopBookPlayGuard } from './guards/stop-book-play.guard';
 import { AuthorSummaryResolver } from './resolvers/author-summary.resolver';
 import { BookResolver } from './resolvers/book.resolver';
@@ -16,11 +17,7 @@ export const APP_ROUTES: Route[] = [
   },
   {
     path: 'book/:id',
-    loadComponent() {
-      return import(
-        '../../features/book-card/components/book-card/book-card.component'
-      ).then((imported) => imported.BookCardComponent);
-    },
+    component: BookCardComponent,
     resolve: {
       book: BookResolver,
     },

@@ -8,7 +8,7 @@ import {
   output,
   ViewContainerRef,
 } from '@angular/core';
-import { HeightDelta } from '../../model/delta';
+import { HeightDelta } from '@book-play/models';
 import { CalculateComponent } from './calculate.component';
 
 @Component({
