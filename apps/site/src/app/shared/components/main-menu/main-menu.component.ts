@@ -8,11 +8,13 @@ import {
 import { MatIcon } from '@angular/material/icon';
 import { MatListItem, MatNavList } from '@angular/material/list';
 import { RouterModule } from '@angular/router';
+import { BookPersistenceStorageService } from '@book-play/services';
+import {
+  activeBookImportFromFileAction,
+  activeBookSelector,
+} from '@book-play/store';
 import { Store } from '@ngrx/store';
 import { UploadFileDirective } from '../../directives/file-upload/upload-file.directive';
-import { BookPersistenceStorageService } from '../../services/books/book-persistence-storage.service';
-import { activeBookImportFromFileAction } from '../../store/active-book/active-book.actions';
-import { activeBookSelector } from '../../store/active-book/active-book.selectors';
 
 @Component({
   selector: 'main-menu',

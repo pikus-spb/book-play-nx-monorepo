@@ -10,8 +10,8 @@ import { MatFabButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { MatTooltip } from '@angular/material/tooltip';
 import { Router } from '@angular/router';
+import { activeBookSelector } from '@book-play/store';
 import { Store } from '@ngrx/store';
-import { activeBookSelector } from '../../store/active-book/active-book.selectors';
 import { PlayerButtonComponent } from '../player-button/player-button.component';
 
 @Component({

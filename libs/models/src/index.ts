@@ -6,3 +6,4 @@ export * from './lib/indexed-db';
 export * from './lib/tts-params';
 export * from './lib/settings';
 export * from './lib/general';
+export * from './lib/delta';
