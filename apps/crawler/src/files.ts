@@ -1,20 +1,21 @@
+import { error, log } from '@book-play/utils-common';
 import fs from 'fs';
 import path from 'path';
 import { workingDirectory } from './app.ts';
 
 export function findFiles(ext: string): Promise<string[]> {
-  console.log(`Start looking for ${ext} files....`);
+  log(`Start looking for ${ext} files....`);
   return new Promise((resolve, reject) => {
     getDirectoryListing(
       workingDirectory,
       ext,
       (err: Error, results: string[]) => {
         if (err) {
-          console.error(err);
+          error(err);
           reject(err);
           return;
         }
-        console.log(`Found ${results.length} ${ext} files.`);
+        log(`Found ${results.length} ${ext} files.`);
         resolve(results);
       }
     );
@@ -40,7 +41,7 @@ export function getDirectoryListing(
           });
         } else {
           if (file.endsWith(extension)) {
-            console.log('Found: ' + file + '...');
+            log('Found: ' + file + '...');
             results.push(file);
           }
           next();
@@ -59,6 +60,6 @@ export function getDirectoryListing(
 export function deleteFiles(files: string[]) {
   for (const file of files) {
     fs.unlinkSync(file);
-    console.log('Deleted: ' + file);
+    log('Deleted: ' + file);
   }
 }
