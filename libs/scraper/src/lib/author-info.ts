@@ -1,27 +1,25 @@
 const puppeteer = require('puppeteer');
 const randomUseragent = require('random-useragent');
 
+import { randomSleep } from '@book-play/utils-node';
 import { AuthorInfo } from '../';
 
 export async function searchAuthor(
   firstName: string,
   lastName: string
 ): Promise<AuthorInfo | undefined> {
-  const query = firstName + ' ' + lastName;
   // Prevent blocking via random timer
-  const randomSleepAmount = Math.round(Math.random() * 200);
-  await new Promise((resolve) =>
-    setTimeout(() => resolve(true), randomSleepAmount)
-  );
+  await randomSleep(7000);
+  // Prevent blocking via random user agent
+  const userAgent = randomUseragent.getRandom();
 
+  const query = firstName + ' ' + lastName;
   const browser = await puppeteer.launch({
     executablePath: '/usr/bin/google-chrome',
     headless: true,
     args: ['--no-sandbox'],
   });
   const page = await browser.newPage();
-  // Prevent blocking via random user agent
-  const userAgent = randomUseragent.getRandom();
   await page.setUserAgent(userAgent);
 
   const searchAuthorInfoUrl = `https://www.litres.ru/search/authors/?q=${encodeURIComponent(
