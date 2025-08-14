@@ -1,3 +1,5 @@
+import { log } from '@book-play/utils-common';
+import { randomSleep } from '@book-play/utils-node';
 import { environment } from 'environments/environment';
 import { Browser, Page } from 'puppeteer';
 import { BookInfo } from '../';
@@ -16,29 +18,31 @@ export class SearchBook {
       args: ['--no-sandbox'],
     });
     this.page = await this.browser.newPage();
+    log('Init Chrome OK...');
   }
 
   public async finalize() {
     await this.browser.close();
+    log('Closed Chrome');
   }
 
   public async searchBook(query: string): Promise<BookInfo | undefined> {
+    // Prevent blocking via random timer
+    await randomSleep(7000);
     // Prevent blocking via random user agent
-    await this.page.setUserAgent(randomUseragent.getRandom());
+    const userAgent = randomUseragent.getRandom();
+
+    await this.page.setUserAgent(userAgent);
     const searchBookInfoUrl = `https://fantlab.ru/searchmain?searchstr=${encodeURIComponent(
       query
     )}`;
 
-    await new Promise((resolve) => {
-      setTimeout(() => {
-        resolve(true);
-      }, Math.round(Math.random() * 5000));
-    });
+    log(searchBookInfoUrl);
 
     try {
       await this.page.goto(searchBookInfoUrl, {
         waitUntil: 'domcontentloaded',
-        timeout: 10000,
+        timeout: 2000,
       });
     } catch (e) {
       console.error(e);
@@ -52,12 +56,14 @@ export class SearchBook {
       }
     });
 
+    log(linkUrl);
+
     let bookInfo;
     if (linkUrl) {
       try {
         await this.page.goto(linkUrl, {
           waitUntil: 'domcontentloaded',
-          timeout: 10000,
+          timeout: 2000,
         });
       } catch (e) {
         console.error(e);
@@ -65,13 +71,12 @@ export class SearchBook {
       }
 
       bookInfo = await this.page.evaluate(() => {
-        const span: HTMLSpanElement = document.querySelector(
+        const span: HTMLSpanElement | null = document.querySelector(
           'div.rating-block-body dl span[itemprop="ratingValue"]'
         );
 
-        let rating;
-
-        if (span) {
+        let rating = 0;
+        if (span !== null) {
           rating = parseFloat(span.innerText);
         }
 
