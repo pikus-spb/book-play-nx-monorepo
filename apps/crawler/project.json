@@ -16,7 +16,7 @@
         "outputPath": "dist/apps/crawler",
         "format": ["cjs"],
         "bundle": true,
-        "main": "apps/crawler/src/main.ts",
+        "main": "apps/crawler/src/app.ts",
         "tsConfig": "apps/crawler/tsconfig.app.json",
         "esbuildConfig": "environments/esbuild.config.ts",
         "externalDependencies": false,
