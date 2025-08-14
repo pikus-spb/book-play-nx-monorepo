@@ -54,6 +54,7 @@ export async function saveToDataBase(
     await addGenres(pool, bookId, genres).catch((err) => {
       error(err);
     });
+    log(JSON.stringify(genres));
   }
 
   return bookId;
