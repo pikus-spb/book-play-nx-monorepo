@@ -3,6 +3,7 @@
     "target": "es2022",
     "forceConsistentCasingInFileNames": true,
     "strict": true,
+    "esModuleInterop": true,
     "noImplicitOverride": true,
     "noPropertyAccessFromIndexSignature": true,
     "noImplicitReturns": true,

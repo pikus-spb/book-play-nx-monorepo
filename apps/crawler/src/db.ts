@@ -1,25 +1,30 @@
-import { DBAuthor, DBBook } from '@book-play/models';
+import { DBAuthor, DBBook, Genre } from '@book-play/models';
+import { error, log } from '@book-play/utils-common';
+import { addGenres } from '@book-play/utils-node';
 import { escape } from 'mysql2';
+import { Pool as BasePool } from 'mysql2/typings/mysql/lib/Pool';
 import { ResultSetHeader } from 'mysql2/typings/mysql/lib/protocol/packets/ResultSetHeader';
-import { pool } from './app.ts';
 
 export async function saveToDataBase(
+  pool: BasePool,
   book: DBBook,
   author: DBAuthor
 ): Promise<string> {
   if (!book.authorId) {
     try {
-      book.authorId = await insertAuthor(author);
+      book.authorId = await insertAuthor(pool, author);
     } catch (e) {
-      console.error('Could not insert author: ' + author.full);
+      error('Could not insert author: ' + author.full);
       throw e;
     }
   }
 
-  return new Promise((resolve, reject) => {
+  log('Saving book to database...');
+
+  const bookId: string = await new Promise((resolve, reject) => {
     pool.query(
-      'INSERT INTO books (authorId, name, annotation, genres, date, full, cover)' +
-        ' VALUES (?, ?, ?, ?, ?, ?, ?)',
+      'INSERT INTO books (authorId, name, annotation, genres, date, full, cover, rating)' +
+        ' VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
       [
         book.authorId,
         book.name,
@@ -28,20 +33,36 @@ export async function saveToDataBase(
         book.date,
         book.full,
         book.cover,
+        book.rating,
       ],
-      (err: Error, result: ResultSetHeader) => {
+      (err: any, result: ResultSetHeader) => {
         if (err) {
+          error(err);
           reject(err);
         } else {
-          const bookId = result.insertId.toString();
-          resolve(bookId);
+          resolve(result.insertId.toString());
         }
       }
     );
   });
+
+  const genres: Genre[] = JSON.parse(book.genres).filter(
+    (genre: Genre) => genre.length < 50
+  );
+  if (genres && genres.length > 0) {
+    log('Adding Genres...');
+    await addGenres(pool, bookId, genres).catch((err) => {
+      error(err);
+    });
+  }
+
+  return bookId;
 }
 
-export function queryAuthorId(authorFullName: string): Promise<number> {
+export function queryAuthorId(
+  pool: BasePool,
+  authorFullName: string
+): Promise<number> {
   return new Promise((resolve, reject) => {
     pool.query(
       `SELECT id FROM authors WHERE full = ${escape(authorFullName)} LIMIT 1`,
@@ -58,7 +79,10 @@ export function queryAuthorId(authorFullName: string): Promise<number> {
   });
 }
 
-export function insertAuthor(author: DBAuthor): Promise<string> {
+export function insertAuthor(
+  pool: BasePool,
+  author: DBAuthor
+): Promise<string> {
   return new Promise((resolve, reject) => {
     pool.query(
       'INSERT INTO authors (first, last, full, image, about) VALUES (?, ?, ?, ?, ?)',
