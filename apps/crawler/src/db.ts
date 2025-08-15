@@ -23,7 +23,7 @@ export async function saveToDataBase(
 
   const bookId: string = await new Promise((resolve, reject) => {
     pool.query(
-      'INSERT INTO books (authorId, name, annotation, genres, date, full, cover, rating)' +
+      'INSERT INTO books (authorId, name, annotation, genres, date, full, cover)' +
         ' VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
       [
         book.authorId,
@@ -33,7 +33,6 @@ export async function saveToDataBase(
         book.date,
         book.full,
         book.cover,
-        book.rating,
       ],
       (err: any, result: ResultSetHeader) => {
         if (err) {
