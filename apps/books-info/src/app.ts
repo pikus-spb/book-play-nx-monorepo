@@ -40,10 +40,14 @@ export async function run() {
       continue;
     }
 
-    if (!bookInfo || !bookInfo.rating) {
-      bookInfo = {
-        rating: 0,
-      };
+    if (!bookInfo) {
+      bookInfo = {} as BookInfo;
+      if (!bookInfo.rating) {
+        bookInfo.rating = 0;
+      }
+      if (!bookInfo.annotation) {
+        bookInfo.annotation = 'н/д';
+      }
     }
 
     let sqlQuery = `UPDATE books SET rating=${bookInfo.rating}`;
@@ -52,7 +56,7 @@ export async function run() {
     }
     sqlQuery += ` WHERE id=${book.id}`;
 
-    // log(sqlQuery);
+    log(sqlQuery);
 
     try {
       await new Promise((resolve, reject) => {
