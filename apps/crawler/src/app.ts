@@ -9,7 +9,6 @@ import {
 import { environment } from 'environments/environment.ts';
 import mysql, { PoolOptions } from 'mysql2';
 import { addAdditionalDataToAuthor } from './author-info.ts';
-import { addAdditionalDataToBook } from './book-info.ts';
 import { saveToDataBase } from './db';
 import { queryAuthorId } from './db.ts';
 import { deleteFiles, findFiles } from './files.ts';
@@ -65,9 +64,6 @@ async function parseFb2Files(results: string[]) {
             log('Adding info about author "' + dbAuthor.full + '"...');
             await addAdditionalDataToAuthor(dbAuthor);
           }
-
-          log('Adding additional info about book...');
-          await addAdditionalDataToBook(scrapper, dbBook);
 
           try {
             const insertedId = await saveToDataBase(pool, dbBook, dbAuthor);
