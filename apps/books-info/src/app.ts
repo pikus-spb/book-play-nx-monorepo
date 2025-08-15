@@ -51,7 +51,7 @@ export async function run() {
     }
 
     let sqlQuery = `UPDATE books SET rating=${bookInfo.rating}`;
-    if (bookInfo.annotation) {
+    if (book.annotation === '' || bookInfo.annotation !== 'н/д') {
       sqlQuery += `, annotation=${escape(bookInfo.annotation)}`;
     }
     sqlQuery += ` WHERE id=${book.id}`;
