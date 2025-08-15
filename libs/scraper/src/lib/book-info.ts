@@ -71,16 +71,21 @@ export class SearchBook {
       }
 
       bookInfo = await this.page.evaluate(() => {
-        const span: HTMLSpanElement | null = document.querySelector(
+        let rating = 0;
+        let span: HTMLSpanElement | null = document.querySelector(
           'div.rating-block-body dl span[itemprop="ratingValue"]'
         );
-
-        let rating = 0;
         if (span !== null) {
           rating = parseFloat(span.innerText);
         }
 
-        return { rating };
+        let annotation = null;
+        span = document.querySelector('#annotation-unit .responses-list');
+        if (span !== null) {
+          annotation = span.innerText;
+        }
+
+        return { rating, annotation };
       });
     }
 
