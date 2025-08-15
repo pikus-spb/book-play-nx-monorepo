@@ -79,7 +79,7 @@ export class SearchBook {
           rating = parseFloat(span.innerText);
         }
 
-        let annotation = null;
+        let annotation = 'н/д';
         span = document.querySelector('#annotation-unit .responses-list');
         if (span !== null) {
           annotation = span.innerText;
