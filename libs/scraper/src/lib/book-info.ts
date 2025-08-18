@@ -45,7 +45,6 @@ export class SearchBook {
         timeout: 2000,
       });
     } catch (e) {
-      console.error(e);
       return Promise.reject(e);
     }
 
@@ -58,7 +57,10 @@ export class SearchBook {
 
     log(linkUrl);
 
-    let bookInfo;
+    let bookInfo: BookInfo = {
+      rating: 0,
+      annotation: null,
+    };
     if (linkUrl) {
       try {
         await this.page.goto(linkUrl, {
@@ -66,27 +68,30 @@ export class SearchBook {
           timeout: 2000,
         });
       } catch (e) {
-        console.error(e);
-        return;
+        return Promise.reject(e);
       }
 
-      bookInfo = await this.page.evaluate(() => {
-        let rating = 0;
-        let span: HTMLSpanElement | null = document.querySelector(
-          'div.rating-block-body dl span[itemprop="ratingValue"]'
-        );
-        if (span !== null) {
-          rating = parseFloat(span.innerText);
-        }
+      try {
+        bookInfo = await this.page.evaluate(() => {
+          let rating = 0;
+          let span: HTMLSpanElement | null = document.querySelector(
+            'div.rating-block-body dl span[itemprop="ratingValue"]'
+          );
+          if (span !== null) {
+            rating = parseFloat(span.innerText);
+          }
 
-        let annotation = 'н/д';
-        span = document.querySelector('#annotation-unit .responses-list');
-        if (span !== null) {
-          annotation = span.innerText;
-        }
+          let annotation = null;
+          span = document.querySelector('#annotation-unit .responses-list');
+          if (span !== null) {
+            annotation = span.innerText;
+          }
 
-        return { rating, annotation };
-      });
+          return { rating, annotation };
+        });
+      } catch (e) {
+        return Promise.reject(e);
+      }
     }
 
     return bookInfo;

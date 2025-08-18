@@ -1,5 +1,5 @@
 import { BookInfo, SearchBook } from '@book-play/scraper';
-import { log } from '@book-play/utils-common';
+import { error, log } from '@book-play/utils-common';
 import { countRows, getBookByIndex } from '@book-play/utils-node';
 import { environment } from 'environments/environment';
 import mysql, { escape, PoolOptions } from 'mysql2';
@@ -26,35 +26,34 @@ export async function run() {
 
     log('Searching book: ' + book.full + ' ...');
 
-    let bookInfo: BookInfo;
+    const bookInfo: BookInfo = {
+      rating: book.rating || 0,
+      annotation: book.annotation || 'н/д',
+    };
 
     await scrapper.finalize();
     await scrapper.init();
 
+    let searchResult = null;
     try {
-      bookInfo = await scrapper.searchBook(book.full);
+      searchResult = await scrapper.searchBook(book.full);
     } catch (e) {
-      log(e);
+      error(e);
       log('Reinit browser and retry...');
       i--;
       continue;
     }
 
-    if (!bookInfo) {
-      bookInfo = {} as BookInfo;
-      if (!bookInfo.rating) {
-        bookInfo.rating = 0;
-      }
-      if (!bookInfo.annotation) {
-        bookInfo.annotation = 'н/д';
-      }
+    if (searchResult?.rating) {
+      bookInfo.rating = searchResult.rating;
+    }
+    if (searchResult?.annotation) {
+      bookInfo.annotation = searchResult.annotation;
     }
 
-    let sqlQuery = `UPDATE books SET rating=${bookInfo.rating}`;
-    if (book.annotation === '' || bookInfo.annotation !== 'н/д') {
-      sqlQuery += `, annotation=${escape(bookInfo.annotation)}`;
-    }
-    sqlQuery += ` WHERE id=${book.id}`;
+    const sqlQuery = `UPDATE books SET rating=${
+      bookInfo.rating
+    }, annotation=${escape(bookInfo.annotation)} WHERE id=${book.id}`;
 
     log(sqlQuery);
 
@@ -69,10 +68,10 @@ export async function run() {
         });
       });
     } catch (e) {
-      log(e + '\n\r');
+      error(e);
     }
 
-    log('Added successfully: ' + JSON.stringify(bookInfo) + '\n\r\n\r');
+    log('Added successfully: ' + JSON.stringify(bookInfo) + '\n\n');
   }
 
   await scrapper.finalize();
