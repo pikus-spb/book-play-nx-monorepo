@@ -1,3 +1,4 @@
+import { NOT_AVAILABLE } from '@book-play/constants';
 import { BookInfo, SearchBook } from '@book-play/scraper';
 import { error, log } from '@book-play/utils-common';
 import { countRows, getBookByIndex } from '@book-play/utils-node';
@@ -28,7 +29,7 @@ export async function run() {
 
     const bookInfo: BookInfo = {
       rating: book.rating || 0,
-      annotation: book.annotation || 'н/д',
+      annotation: book.annotation || NOT_AVAILABLE,
     };
 
     await scrapper.finalize();

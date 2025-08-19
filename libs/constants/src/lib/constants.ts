@@ -11,6 +11,7 @@ export const DEFAULT_COVER_SRC = '/assets/images/empty-cover.jpg';
 export const BOOK_IMAGE_WIDTH = 200;
 export const BOOK_IMAGE_HEIGHT = 300;
 export const BOOK_IMAGE_MARGIN = 32;
+export const NOT_AVAILABLE = 'н/д';
 export const DEFAULT_TITLE_PREFIX = 'Book-play.ru';
 export const DEFAULT_EMPTY_CONTEXT =
   'бесплатная платформа для прослушивания книг, озвученных нейросетью.';
