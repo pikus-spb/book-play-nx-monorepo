@@ -25,8 +25,11 @@
     </lib-author-genres-list>
     @if (book.date) {
     <span class="date">{{ book.date }}</span>
-    }
+    } @if (book.annotation !== NOT_AVAILABLE) {
     <span class="annotation" [innerHTML]="book.annotation"></span>
+    } @else {
+    <span class="annotation disabled">Аннотация не доступна</span>
+    }
     <div class="action-panel">
       <button
         mat-fab
