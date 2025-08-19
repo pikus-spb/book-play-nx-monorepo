@@ -15,6 +15,7 @@ import {
   BOOK_IMAGE_HEIGHT,
   BOOK_IMAGE_WIDTH,
   DEFAULT_COVER_SRC,
+  NOT_AVAILABLE,
 } from '@book-play/constants';
 import { Book } from '@book-play/models';
 import {
@@ -74,4 +75,5 @@ export class BookCardComponent implements OnInit {
   protected readonly BOOK_IMAGE_WIDTH = BOOK_IMAGE_WIDTH;
   protected readonly BOOK_IMAGE_HEIGHT = BOOK_IMAGE_HEIGHT;
   protected readonly showDefaultCoverImage = showDefaultCoverImage;
+  protected readonly NOT_AVAILABLE = NOT_AVAILABLE;
 }
