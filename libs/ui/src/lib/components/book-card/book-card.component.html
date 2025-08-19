@@ -22,10 +22,11 @@
           [readOnly]="true"
         ></lib-star-rating>
       </span>
+      @if (book.date) {
+      <span>{{ book.date }}</span>
+      }
     </lib-author-genres-list>
-    @if (book.date) {
-    <span class="date">{{ book.date }}</span>
-    } @if (book.annotation !== NOT_AVAILABLE) {
+    @if (book.annotation !== NOT_AVAILABLE) {
     <span class="annotation" [innerHTML]="book.annotation"></span>
     } @else {
     <span class="annotation disabled">Аннотация не доступна</span>
