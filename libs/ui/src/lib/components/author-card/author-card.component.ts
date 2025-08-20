@@ -9,9 +9,10 @@ import {
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { AuthorSummary } from '@book-play/models';
-import { AuthorGenresListComponent, BooksListComponent } from '@book-play/ui';
 import { hideImage } from '@book-play/utils-browser';
 import { map } from 'rxjs';
+import { AuthorGenresListComponent } from '../author-genres-list/author-genres-list.component';
+import { BooksListComponent } from '../books-list/books-list.component';
 
 @Component({
   selector: 'author-card',
