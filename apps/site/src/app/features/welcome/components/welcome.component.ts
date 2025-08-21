@@ -5,11 +5,9 @@ import {
   randomAuthorsSelector,
   randomBooksSelector,
 } from '@book-play/store';
-import { BookCardComponent } from '@book-play/ui';
+import { AuthorCardComponent, BookCardComponent } from '@book-play/ui';
 import { Store } from '@ngrx/store';
 import { environment } from 'environments/environment';
-
-import { AuthorCardComponent } from '../../author-card/components/author-card/author-card.component';
 
 @Component({
   selector: 'welcome',
