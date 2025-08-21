@@ -2,12 +2,11 @@
 
 :host {
   display: block;
-  padding-left: $default-padding;
+  padding: $default-padding;
   max-width: $card-width * 3;
 
   & > div {
     display: block;
-    margin: $default-padding 0;
     min-height: calc(300px + $default-padding * 2);
     padding: $default-padding;
 

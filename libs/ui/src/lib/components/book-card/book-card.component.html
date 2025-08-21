@@ -1,13 +1,13 @@
 @if (book(); as book) {
-<div>
-  <img
-    [src]="coverSrc()"
-    [width]="BOOK_IMAGE_WIDTH"
-    [height]="BOOK_IMAGE_HEIGHT"
-    (error)="showDefaultCoverImage($event)"
-    alt="Обложка книги"
-  />
-  <div class="content">
+<div class="content">
+  <div>
+    <img
+      [src]="coverSrc()"
+      [width]="BOOK_IMAGE_WIDTH"
+      [height]="BOOK_IMAGE_HEIGHT"
+      (error)="showDefaultCoverImage($event)"
+      alt="Обложка книги"
+    />
     <h4>
       <a [routerLink]="['/author', book.author.id]">{{ book.author.full }}</a>
     </h4>
@@ -26,25 +26,25 @@
       <div class="label-value medium">{{ book.date }} г.</div>
       }
     </lib-author-genres-list>
-    @if (book.annotation !== NOT_AVAILABLE) {
-    <span class="annotation" [innerHTML]="book.annotation"></span>
-    } @else {
-    <span class="annotation disabled">Аннотация не доступна</span>
-    }
-    <div class="action-panel">
-      <button
-        mat-fab
-        extended="true"
-        color="success"
-        matTooltip="Слушать"
-        matTooltipPosition="below"
-        matTooltipShowDelay="1500"
-        (click)="playBook()"
-      >
-        <mat-icon>play_arrow</mat-icon>
-        Слушать
-      </button>
-    </div>
+  </div>
+  @if (book.annotation !== NOT_AVAILABLE) {
+  <div class="annotation" [innerHTML]="book.annotation"></div>
+  } @else {
+  <div class="annotation disabled">Аннотация не доступна</div>
+  }
+  <div class="action-panel">
+    <button
+      mat-fab
+      extended="true"
+      color="success"
+      matTooltip="Слушать"
+      matTooltipPosition="below"
+      matTooltipShowDelay="1500"
+      (click)="playBook()"
+    >
+      <mat-icon>play_arrow</mat-icon>
+      Слушать
+    </button>
   </div>
 </div>
 }

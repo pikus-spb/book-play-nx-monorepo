@@ -5,6 +5,7 @@ export * from './lib/components/author-genres-list/author-genres-list.component'
 export * from './lib/components/dark-mode-switcher/dark-mode-switcher.component';
 export * from './lib/components/keep-screen-on/keep-screen-on.component';
 export * from './lib/components/star-rating/star-rating.component';
+export * from './lib/components/author-card/author-card.component';
 export * from './lib/components/book-card/book-card.component';
 export * from './lib/components/books-list/books-list.component';
 export * from './lib/components/book-details/book-details.component';

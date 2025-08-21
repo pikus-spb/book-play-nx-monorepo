@@ -16,10 +16,9 @@
     }
   }
 
-  author,
-  book {
+  author-card,
+  book-card {
     border: $default-border;
-    border-radius: $default-border-radius;
     margin-bottom: $default-padding;
   }
 }
