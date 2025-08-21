@@ -6,6 +6,7 @@ dialog {
     var(--mat-sys-background)
   );
   width: $card-width * 3;
+  height: min($card-width * 3, 100%);
   z-index: 9999;
   border: $default-border;
   cursor: default;
@@ -20,5 +21,9 @@ dialog {
     right: $default-padding;
     top: $default-padding;
     cursor: pointer;
+  }
+
+  ::ng-deep book-card {
+    height: 100%;
   }
 }
