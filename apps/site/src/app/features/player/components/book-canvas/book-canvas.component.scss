@@ -28,14 +28,15 @@ div {
       color: $default-color-dark;
     }
 
-    h1,
-    h2,
-    h3,
-    h4,
-    h5,
-    h6,
+    .book-header,
     section {
       padding: 0 $default-padding * 2;
+    }
+
+    .book-header {
+      font-size: 32px;
+      padding-left: 32px;
+      margin-bottom: 16px;
     }
 
     lib-star-rating {
@@ -51,7 +52,7 @@ div {
       display: block;
     }
 
-    ::ng-deep p {
+    ::ng-deep span.p {
       cursor: pointer;
       padding: 0 $default-padding * 2;
       text-align: justify;
@@ -69,7 +70,7 @@ div {
 
 ::ng-deep {
   book-canvas {
-    p.active {
+    span.p.active {
       &:before {
         content: '▶️';
       }
@@ -78,7 +79,7 @@ div {
 
   .loading {
     book-canvas {
-      p.active {
+      span.p.active {
         &:before {
           content: '⌛';
         }
