@@ -2,13 +2,15 @@
 
 :host {
   display: block;
-  padding-left: $default-padding;
+  padding: $default-padding;
   max-width: $card-width * 3;
 
-  & > div {
-    display: block;
-    margin: $default-padding 0;
-    min-height: calc(300px + $default-padding * 2);
+  .content {
+    height: 100%;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto minmax(100px, auto) auto;
+    grid-row-gap: 2 * $default-padding;
     padding: $default-padding;
 
     h4 {
@@ -21,51 +23,47 @@
       float: left;
     }
 
-    .content {
-      display: block;
+    button {
+      border-radius: $default-border-radius;
+    }
 
-      button {
-        border-radius: $default-border-radius;
+    .annotation {
+      text-align: justify;
+      overflow-y: auto;
+      padding-right: $default-padding;
+
+      &.disabled {
+        opacity: 0.3;
       }
+    }
 
-      .annotation {
-        display: inline-block;
-        text-align: justify;
+    ::ng-deep lib-author-genres-list {
+      mat-chip-set {
+        margin-bottom: $default-padding;
 
-        &.disabled {
-          opacity: 0.3;
-        }
-      }
+        > div {
+          align-items: center;
+          row-gap: $default-padding;
+          column-gap: calc($default-padding / 2);
 
-      ::ng-deep lib-author-genres-list {
-        mat-chip-set {
-          margin-bottom: $default-padding;
+          > span {
+            padding: calc($default-padding / 2);
+          }
 
-          > div {
-            align-items: center;
-            row-gap: $default-padding;
-            column-gap: calc($default-padding / 2);
+          .book-rating {
+            display: flex;
+            justify-content: center;
 
-            > span {
-              padding: calc($default-padding / 2);
-            }
-
-            .book-rating {
+            star-rating-control {
               display: flex;
-              justify-content: center;
-
-              star-rating-control {
-                display: flex;
-              }
             }
           }
         }
       }
+    }
 
-      .action-panel {
-        display: block;
-        margin: 2 * $default-padding 0;
-      }
+    .action-panel {
+      align-self: end;
     }
   }
 }
