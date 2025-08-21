@@ -1,6 +1,6 @@
 import { Route } from '@angular/router';
 import { DEFAULT_TITLE } from '@book-play/constants';
-import { BookCardComponent } from '@book-play/ui';
+import { AuthorCardComponent, BookCardComponent } from '@book-play/ui';
 import { StopBookPlayGuard } from './guards/stop-book-play.guard';
 import { AuthorSummaryResolver } from './resolvers/author-summary.resolver';
 import { BookResolver } from './resolvers/book.resolver';
@@ -42,11 +42,7 @@ export const APP_ROUTES: Route[] = [
   },
   {
     path: 'author/:id',
-    loadComponent() {
-      return import(
-        '../../features/author-card/components/author-card/author-card.component'
-      ).then((imported) => imported.AuthorCardComponent);
-    },
+    component: AuthorCardComponent,
     resolve: {
       author: AuthorSummaryResolver,
     },
