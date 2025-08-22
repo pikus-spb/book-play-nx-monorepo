@@ -1,12 +1,13 @@
 @if (isTextParagraph(text)) {
-<p
+<span
+  class="p"
   [ngClass]="PARAGRAPH_CLASS_PREFIX + index()"
   [class.active]="isActive()"
   (click)="activated.emit(index())"
   (keydown.enter)="activated.emit(index())"
 >
   {{ text }}
-</p>
+</span>
 } @else {
 <img
   [src]="toBase64String(text)"

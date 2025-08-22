@@ -4,7 +4,7 @@ export const BOOKS_API_PORT_SECURE = 8443;
 export const TTS_API_PORT = 8181;
 export const TTS_API_PORT_SECURE = 8143;
 // LIBRARY
-export const PARAGRAPH_CLASS_PREFIX = 'book-paragraph-';
+export const PARAGRAPH_CLASS_PREFIX = 'book-p-';
 // SITE
 export const DEFAULT_COUNTDOWN_TIMER_VALUE = 60 * 60 * 1.5;
 export const DEFAULT_COVER_SRC = '/assets/images/empty-cover.jpg';
