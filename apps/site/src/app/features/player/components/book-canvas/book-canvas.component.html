@@ -1,14 +1,15 @@
 <div #container>
   @if (bookData !== null) {
   <div class="scrollable-canvas" cdkVirtualScrollingElement>
-    <h4>
-      {{ bookData.author.full }} - {{ bookData.name }} @if (book()!.rating) {
+    <div class="book-header">
+      {{ bookData.author.full }} - {{ bookData.name }}
+      @if (book()!.rating) {
       <lib-star-rating
         [rating]="book()!.rating!"
         [readOnly]="true"
       ></lib-star-rating>
       }
-    </h4>
+    </div>
     <section class="title-picture-container">
       <img
         [src]="coverSrc()"
