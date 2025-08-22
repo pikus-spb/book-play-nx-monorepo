@@ -1,4 +1,4 @@
-import { Injectable, OnDestroy, inject } from '@angular/core';
+import { inject, Injectable, OnDestroy } from '@angular/core';
 import { PARAGRAPH_CLASS_PREFIX } from '@book-play/constants';
 import { Subject } from 'rxjs';
 import { CursorPositionService } from './cursor-position.service';
