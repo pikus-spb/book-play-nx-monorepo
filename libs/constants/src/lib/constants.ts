@@ -15,7 +15,8 @@ export const NOT_AVAILABLE = 'н/д';
 export const DEFAULT_TITLE_PREFIX = 'Book-play.ru';
 export const DEFAULT_EMPTY_CONTEXT =
   'бесплатная платформа для прослушивания книг, озвученных нейросетью.';
-export const DEFAULT_TITLE_CONTEXT = 'бесплатно слушать книгу онлайн';
+export const DEFAULT_AUTHOR_TITLE_CONTEXT = 'слушать все произведения автора';
+export const DEFAULT_BOOK_TITLE_CONTEXT = 'бесплатно слушать книгу онлайн';
 export const DEFAULT_TITLE = [DEFAULT_TITLE_PREFIX, DEFAULT_EMPTY_CONTEXT].join(
   ' - '
 );
