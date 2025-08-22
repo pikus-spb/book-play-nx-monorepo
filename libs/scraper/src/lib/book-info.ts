@@ -42,7 +42,7 @@ export class SearchBook {
     try {
       await this.page.goto(searchBookInfoUrl, {
         waitUntil: 'domcontentloaded',
-        timeout: 2000,
+        timeout: 5000,
       });
     } catch (e) {
       return Promise.reject(e);
@@ -65,7 +65,7 @@ export class SearchBook {
       try {
         await this.page.goto(linkUrl, {
           waitUntil: 'domcontentloaded',
-          timeout: 2000,
+          timeout: 5000,
         });
       } catch (e) {
         return Promise.reject(e);
