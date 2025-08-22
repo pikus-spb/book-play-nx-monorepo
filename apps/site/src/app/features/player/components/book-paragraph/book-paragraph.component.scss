@@ -1,6 +1,13 @@
 @use 'vars' as *;
 
 :host {
+  .p {
+    margin-bottom: $default-padding;
+    margin-top: 0;
+    padding: 0 calc(2 * $default-padding);
+    display: block;
+  }
+
   img {
     display: block;
     margin: $default-padding-px calc(2 * $default-padding-px);

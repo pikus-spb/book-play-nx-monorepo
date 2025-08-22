@@ -1,6 +1,10 @@
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 import { ElementRef } from '@angular/core';
-import { BOOK_IMAGE_HEIGHT, BOOK_IMAGE_MARGIN } from '@book-play/constants';
+import {
+  BOOK_IMAGE_HEIGHT,
+  BOOK_IMAGE_MARGIN,
+  PARAGRAPH_CLASS_PREFIX,
+} from '@book-play/constants';
 import { filterTextParagraphs, HeightDelta } from '@book-play/models';
 import { getParagraphNode } from '@book-play/utils-browser';
 import { first, firstValueFrom, Observable, tap, timer } from 'rxjs';
@@ -56,17 +60,21 @@ class ViewportScrollerService {
 
   private async adjustOffset(index: number, guessOffset: number) {
     const shownParagraphs = Array.from(
-      this.el?.nativeElement.querySelectorAll('book-paragraph > p')
+      this.el?.nativeElement.querySelectorAll('book-paragraph > span.p')
     );
     const firstParagraph = shownParagraphs[0] as HTMLElement;
     const lastParagraph = shownParagraphs.slice(-1)[0] as HTMLElement;
 
     if (firstParagraph && lastParagraph) {
       const start = Number(
-        firstParagraph.className.match(/book-paragraph-(\d+)$/)?.[1]
+        firstParagraph.className.match(
+          new RegExp(`${PARAGRAPH_CLASS_PREFIX}(\\d+)$`)
+        )?.[1]
       );
       const end = Number(
-        lastParagraph.className.match(/book-paragraph-(\d+)$/)?.[1]
+        lastParagraph.className.match(
+          new RegExp(`${PARAGRAPH_CLASS_PREFIX}(\\d+)$`)
+        )?.[1]
       );
 
       if (index >= start && index <= end) {
