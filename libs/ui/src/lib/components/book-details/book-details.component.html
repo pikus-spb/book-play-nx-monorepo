@@ -14,10 +14,6 @@
     >
       <mat-icon>close</mat-icon>
     </div>
-    <book-card
-      (click)="stopEvent($event)"
-      [book]="book()"
-      [updateWindowTitle]="false"
-    ></book-card>
+    <book-card (click)="stopEvent($event)" [book]="book()"></book-card>
   </dialog>
 </ng-template>
