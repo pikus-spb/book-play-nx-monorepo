@@ -1,4 +1,4 @@
-@if (authorSummary(); as author) {
+@if (author(); as author) {
 <div>
   @if (author.image) {
   <img [src]="author.image" (error)="hideImage($event)" alt="Обложка книги" />
