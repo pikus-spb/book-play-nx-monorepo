@@ -17,7 +17,7 @@ import {
   settingsSelector,
 } from '@book-play/store';
 import { KeepScreenOnComponent } from '@book-play/ui';
-import { setDocumentTitleWithContext } from '@book-play/utils-browser';
+import { setDocumentBookTitleWithContext } from '@book-play/utils-browser';
 import { log } from '@book-play/utils-common';
 import { Store } from '@ngrx/store';
 import { firstValueFrom, fromEvent, merge } from 'rxjs';
@@ -54,7 +54,7 @@ export class PlayerComponent implements AfterViewInit {
     effect(() => {
       const book = this.book();
       if (book !== null && this.routerHelperService.isRouteActive('player')) {
-        setDocumentTitleWithContext(book.full);
+        setDocumentBookTitleWithContext(book.full);
       }
     });
   }
