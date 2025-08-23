@@ -1,5 +1,5 @@
 import {
-  DEFAULT_TITLE_CONTEXT,
+  DEFAULT_BOOK_TITLE_CONTEXT,
   DEFAULT_TITLE_PREFIX,
 } from '@book-play/constants';
 
@@ -9,7 +9,7 @@ export function setWindowTitle(title: string): void {
   }
 }
 
-export function setDocumentTitleWithContext(context: string): void {
-  const title = [context, DEFAULT_TITLE_CONTEXT, DEFAULT_TITLE_PREFIX];
+export function setDocumentBookTitleWithContext(context: string): void {
+  const title = [context, DEFAULT_BOOK_TITLE_CONTEXT, DEFAULT_TITLE_PREFIX];
   setWindowTitle(title.join(' - '));
 }
