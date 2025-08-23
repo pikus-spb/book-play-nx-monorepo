@@ -1,5 +1,5 @@
 @let books = data(); @if (books && books()) {
-<h5>{{ title() }}</h5>
+<h5>{{ headerText() }}</h5>
 <div class="books-list">
   @for (item of books(); track item.id){
   <div class="book-item">
