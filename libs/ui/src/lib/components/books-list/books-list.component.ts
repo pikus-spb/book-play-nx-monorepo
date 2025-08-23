@@ -18,7 +18,7 @@ import { StarRatingComponent } from '../star-rating/star-rating.component';
 export class BooksListComponent {
   public data =
     input<Signal<Partial<Book>[] | BookData[] | null | undefined>>();
-  public title = input<string>('Результаты поиска');
+  public headerText = input<string>('Результаты поиска');
   public noDataText = input<string>(
     'По Вашему запросу найти книги не удалось.'
   );
