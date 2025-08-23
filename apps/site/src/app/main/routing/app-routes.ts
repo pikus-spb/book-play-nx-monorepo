@@ -1,6 +1,7 @@
 import { Route } from '@angular/router';
 import { DEFAULT_TITLE } from '@book-play/constants';
-import { AuthorCardComponent, BookCardComponent } from '@book-play/ui';
+import { AuthorPageComponent, BookPageComponent } from '@book-play/ui';
+import { WelcomeComponent } from '../../features/welcome/components/welcome.component';
 import { StopBookPlayGuard } from './guards/stop-book-play.guard';
 import { AuthorSummaryResolver } from './resolvers/author-summary.resolver';
 import { BookResolver } from './resolvers/book.resolver';
@@ -8,16 +9,12 @@ import { BookResolver } from './resolvers/book.resolver';
 export const APP_ROUTES: Route[] = [
   {
     path: 'index',
-    loadComponent() {
-      return import('../../features/welcome/components/welcome.component').then(
-        (imported) => imported.WelcomeComponent
-      );
-    },
+    component: WelcomeComponent,
     title: DEFAULT_TITLE,
   },
   {
     path: 'book/:id',
-    component: BookCardComponent,
+    component: BookPageComponent,
     resolve: {
       book: BookResolver,
     },
@@ -42,7 +39,7 @@ export const APP_ROUTES: Route[] = [
   },
   {
     path: 'author/:id',
-    component: AuthorCardComponent,
+    component: AuthorPageComponent,
     resolve: {
       author: AuthorSummaryResolver,
     },
