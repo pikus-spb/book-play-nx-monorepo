@@ -14,8 +14,7 @@ import {
   MatSidenavContent,
 } from '@angular/material/sidenav';
 import { MatToolbar } from '@angular/material/toolbar';
-import { Router, RouterModule } from '@angular/router';
-import { BookPersistenceStorageService } from '@book-play/services';
+import { RouterModule } from '@angular/router';
 import { selectLoading } from '@book-play/store';
 import { DarkModeSwitcherComponent } from '@book-play/ui';
 import { isDarkMode, listenDarkModeChange } from '@book-play/utils-browser';
@@ -49,27 +48,17 @@ import { MainMenuComponent } from '../../../shared/components/main-menu/main-men
 })
 export class MainComponent implements AfterViewInit {
   private store = inject(Store);
-  private router = inject(Router);
   private renderer = inject(Renderer2);
   protected loading = toSignal(this.store.select(selectLoading));
-  private bookPersistenceStorageService = inject(BookPersistenceStorageService);
 
   public ngAfterViewInit() {
     this.detectColorScheme(isDarkMode());
     this.addListeners();
-    this.navigateToPlayerIfNeeded();
   }
 
   @HostBinding('class.loading')
   get loadingState() {
     return this.loading();
-  }
-
-  private async navigateToPlayerIfNeeded() {
-    const data = await this.bookPersistenceStorageService.get();
-    if (data && data.content.length > 0) {
-      await this.router.navigateByUrl('/player');
-    }
   }
 
   private detectColorScheme(darkMode: boolean): void {
