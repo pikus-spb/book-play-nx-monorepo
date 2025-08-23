@@ -1,5 +1,7 @@
+import { inject } from '@angular/core';
 import { Route } from '@angular/router';
 import { DEFAULT_TITLE } from '@book-play/constants';
+import { BookPersistenceStorageService } from '@book-play/services';
 import { AuthorPageComponent, BookPageComponent } from '@book-play/ui';
 import { WelcomeComponent } from '../../features/welcome/components/welcome.component';
 import { StopBookPlayGuard } from './guards/stop-book-play.guard';
@@ -116,6 +118,19 @@ export const APP_ROUTES: Route[] = [
     },
     title: DEFAULT_TITLE,
   },
-  { path: '', redirectTo: '/index', pathMatch: 'full' },
+  {
+    path: '',
+    redirectTo: async () => {
+      const bookPersistenceStorageService = inject(
+        BookPersistenceStorageService
+      );
+      const data = await bookPersistenceStorageService.get();
+      if (data && data.content.length > 0) {
+        return '/player';
+      }
+      return '/index';
+    },
+    pathMatch: 'full',
+  },
   { path: '**', redirectTo: '404' },
 ];
