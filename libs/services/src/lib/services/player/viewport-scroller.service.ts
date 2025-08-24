@@ -58,7 +58,17 @@ class ViewportScrollerService {
     return 0;
   }
 
-  private async adjustOffset(index: number, guessOffset: number) {
+  private async adjustOffset(
+    index: number,
+    guessOffset: number,
+    iterationNumber: number
+  ) {
+    if (iterationNumber > 10) {
+      // Restart from the beginning because of too many adjustments
+      this.scrollToIndex(index);
+      return;
+    }
+
     const shownParagraphs = Array.from(
       this.el?.nativeElement.querySelectorAll('book-paragraph > span.p')
     );
@@ -87,11 +97,11 @@ class ViewportScrollerService {
         }
 
         await firstValueFrom(timer(1));
-        await this.adjustOffset(index, guessOffset);
+        await this.adjustOffset(index, guessOffset, iterationNumber + 1);
       }
     } else {
       await firstValueFrom(timer(1));
-      await this.adjustOffset(index, guessOffset);
+      await this.adjustOffset(index, guessOffset, iterationNumber + 1);
     }
   }
 
@@ -114,7 +124,7 @@ class ViewportScrollerService {
       this.viewport.scrollToOffset(Math.round(guessOffset), 'instant');
 
       await firstValueFrom(timer(1));
-      await this.adjustOffset(index, guessOffset);
+      await this.adjustOffset(index, guessOffset, 0);
     }
   }
 }
