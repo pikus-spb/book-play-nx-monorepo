@@ -55,6 +55,13 @@ body {
   height: 100%;
 }
 
+.p {
+  margin-bottom: $default-padding;
+  margin-top: 0;
+  padding: 0 calc(2 * $default-padding);
+  display: block;
+}
+
 ::-webkit-scrollbar {
   width: 15px;
 }
