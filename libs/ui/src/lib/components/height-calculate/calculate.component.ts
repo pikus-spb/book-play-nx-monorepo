@@ -16,8 +16,8 @@ const SAMPLE = `Участвовавшая в беседе Нэнси Уайт �
   templateUrl: './calculate.component.html',
   styles: [
     `
-      p {
-        visibility: hidden;
+      span.p {
+        opacity: 0;
       }
     `,
   ],

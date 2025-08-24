@@ -17,14 +17,19 @@ export class DomHelperService implements OnDestroy {
     return document.body.querySelector(`.${PARAGRAPH_CLASS_PREFIX}${index}`);
   }
 
-  public showActiveParagraph = async (index = this.cursorService.position) => {
-    const node = this.getParagraphNode(index);
-    if (node) {
-      node.scrollIntoView({ block: 'center' });
-    } else {
-      await this.scrollPositionHelper.scrollToIndex(index);
+  public async showActiveParagraph(
+    index = this.cursorService.position,
+    force = false
+  ) {
+    if (document.hasFocus() || force) {
+      const node = this.getParagraphNode(index);
+      if (node) {
+        node.scrollIntoView({ block: 'center' });
+      } else {
+        await this.scrollPositionHelper.scrollToIndex(index);
+      }
     }
-  };
+  }
 
   ngOnDestroy() {
     this.viewportScrolledDestroy$.next();
