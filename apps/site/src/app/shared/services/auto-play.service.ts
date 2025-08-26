@@ -23,11 +23,11 @@ import {
   firstValueFrom,
   fromEvent,
   map,
+  merge,
   Observable,
   race,
   skip,
   tap,
-  timer,
 } from 'rxjs';
 import { AudioPreloadingService } from './audio-preloading.service';
 
@@ -64,15 +64,7 @@ export class AutoPlayService {
       )
       .subscribe();
 
-    fromEvent(window, 'resize')
-      .pipe(
-        debounceTime(200),
-        tap(() => this.domHelper.showActiveParagraph()),
-        takeUntilDestroyed()
-      )
-      .subscribe();
-
-    fromEvent(window, 'focus')
+    merge(fromEvent(window, 'resize'), fromEvent(window, 'focus'))
       .pipe(
         debounceTime(200),
         tap(() => this.domHelper.showActiveParagraph()),
@@ -151,6 +143,11 @@ export class AutoPlayService {
   }
 
   private autoScrollingEnded(): Promise<boolean> {
+    // Don't care about scrolling while window is inactive
+    if (!document.hasFocus()) {
+      return Promise.resolve(true);
+    }
+
     const isScrollingNow = this.eventStateService.get(
       AppEventNames.scrollingIntoView
     )();
@@ -161,7 +158,7 @@ export class AutoPlayService {
             AppEventNames.scrollingIntoView,
             false
           ),
-          timer(1000) // maximum time to wait for scroll ended
+          fromEvent(window, 'blur')
         ).pipe(map(() => true))
       );
     }
