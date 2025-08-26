@@ -8,7 +8,6 @@ import {
 } from '@book-play/constants';
 import { filterTextParagraphs, HeightDelta } from '@book-play/models';
 import { getParagraphNode } from '@book-play/utils-browser';
-import { log } from '@book-play/utils-common';
 import {
   first,
   Observable,
@@ -75,7 +74,6 @@ class ViewportScrollerService {
     iterationNumber: number,
     forceStopSubject$: Subject<null>
   ): Observable<null> {
-    log('Iteration number: ' + iterationNumber);
     if (iterationNumber > MAX_BOOK_SCROLL_ADJUSTMENTS) {
       // Restart from the beginning because of too many adjustments
       return this.scrollToIndex(index, forceStopSubject$);
