@@ -7,6 +7,7 @@ export const TTS_API_PORT_SECURE = 8143;
 export const PARAGRAPH_CLASS_PREFIX = 'book-p-';
 // SITE
 export const DEFAULT_COUNTDOWN_TIMER_VALUE = 60 * 60 * 1.5;
+export const MAX_BOOK_SCROLL_ADJUSTMENTS = 1000;
 export const DEFAULT_COVER_SRC = '/assets/images/empty-cover.jpg';
 export const BOOK_IMAGE_WIDTH = 200;
 export const BOOK_IMAGE_HEIGHT = 300;
