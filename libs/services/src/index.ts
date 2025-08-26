@@ -4,7 +4,6 @@ export * from './lib/services/books/books-api.service';
 export * from './lib/services/books/book-persistence-storage.service';
 export * from './lib/services/player/cursor-position.service';
 export * from './lib/services/player/dom-helper.service';
-export * from './lib/services/player/scroll-position-helper.service';
 export * from './lib/services/player/viewport-scroller.service';
 export * from './lib/services/player/text-index-mapper.service';
 export * from './lib/services/dom-audio-helper.service';

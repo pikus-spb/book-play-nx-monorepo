@@ -28,7 +28,6 @@ import {
   race,
   skip,
   tap,
-  timer,
 } from 'rxjs';
 import { AudioPreloadingService } from './audio-preloading.service';
 
@@ -159,8 +158,7 @@ export class AutoPlayService {
             AppEventNames.scrollingIntoView,
             false
           ),
-          fromEvent(window, 'blur'),
-          timer(5000) // maximum time to wait for scroll ended
+          fromEvent(window, 'blur')
         ).pipe(map(() => true))
       );
     }
