@@ -3,13 +3,24 @@ import { ElementRef } from '@angular/core';
 import {
   BOOK_IMAGE_HEIGHT,
   BOOK_IMAGE_MARGIN,
+  MAX_BOOK_SCROLL_ADJUSTMENTS,
   PARAGRAPH_CLASS_PREFIX,
 } from '@book-play/constants';
 import { filterTextParagraphs, HeightDelta } from '@book-play/models';
 import { getParagraphNode } from '@book-play/utils-browser';
-import { first, firstValueFrom, Observable, tap, timer } from 'rxjs';
+import { log } from '@book-play/utils-common';
+import {
+  first,
+  Observable,
+  of,
+  race,
+  Subject,
+  switchMap,
+  tap,
+  timer,
+} from 'rxjs';
 
-export let viewportScroller: null | ViewportScrollerService = null;
+export let viewportScrollerService: null | ViewportScrollerService = null;
 
 const IMAGE_DELTA = BOOK_IMAGE_HEIGHT + BOOK_IMAGE_MARGIN;
 
@@ -29,7 +40,7 @@ class ViewportScrollerService {
         tap(() => {
           this.el = undefined;
           this.viewport = undefined;
-          viewportScroller = null;
+          viewportScrollerService = null;
         })
       )
       .subscribe();
@@ -58,15 +69,16 @@ class ViewportScrollerService {
     return 0;
   }
 
-  private async adjustOffset(
+  private adjustOffset(
     index: number,
     guessOffset: number,
-    iterationNumber: number
-  ) {
-    if (iterationNumber > 10) {
+    iterationNumber: number,
+    forceStopSubject$: Subject<null>
+  ): Observable<null> {
+    log('Iteration number: ' + iterationNumber);
+    if (iterationNumber > MAX_BOOK_SCROLL_ADJUSTMENTS) {
       // Restart from the beginning because of too many adjustments
-      this.scrollToIndex(index);
-      return;
+      return this.scrollToIndex(index, forceStopSubject$);
     }
 
     const shownParagraphs = Array.from(
@@ -89,6 +101,7 @@ class ViewportScrollerService {
 
       if (index >= start && index <= end) {
         this.scrollToFoundParagraph(index);
+        return of(null);
       } else {
         if (index < start) {
           guessOffset = this.scrollToOffset(guessOffset, -1);
@@ -96,36 +109,49 @@ class ViewportScrollerService {
           guessOffset = this.scrollToOffset(guessOffset, 1);
         }
 
-        await firstValueFrom(timer(1));
-        await this.adjustOffset(index, guessOffset, iterationNumber + 1);
+        return timer(1).pipe(
+          switchMap(() =>
+            this.adjustOffset(
+              index,
+              guessOffset,
+              iterationNumber + 1,
+              forceStopSubject$
+            )
+          )
+        );
       }
     } else {
-      await firstValueFrom(timer(1));
-      await this.adjustOffset(index, guessOffset, iterationNumber + 1);
+      return this.scrollToIndex(index, forceStopSubject$);
     }
   }
 
-  public async scrollToIndex(index: number): Promise<void> {
-    if (this.viewport) {
-      let guessOffset = 0;
+  public scrollToIndex(
+    index: number,
+    forceStopSubject$: Subject<null>
+  ): Observable<null> {
+    let guessOffset = 0;
+    const paragraphs = this.paragraphs.slice(0, index);
+    const textParagraphs = filterTextParagraphs(paragraphs);
 
-      const paragraphs = this.paragraphs.slice(0, index);
-      const textParagraphs = filterTextParagraphs(paragraphs);
+    textParagraphs.forEach((p) => {
+      const rowsNum = Math.ceil(p.length / this.delta.length);
+      guessOffset += rowsNum * this.delta.height + this.delta.margin;
+    });
 
-      textParagraphs.forEach((p) => {
-        const rowsNum = Math.ceil(p.length / this.delta.length);
-        guessOffset += rowsNum * this.delta.height + this.delta.margin;
-      });
+    const imagesNumber = paragraphs.length - textParagraphs.length;
 
-      const imagesNumber = paragraphs.length - textParagraphs.length;
+    guessOffset += IMAGE_DELTA * imagesNumber;
 
-      guessOffset += IMAGE_DELTA * imagesNumber;
+    this.viewport?.scrollToOffset(Math.round(guessOffset), 'instant');
 
-      this.viewport.scrollToOffset(Math.round(guessOffset), 'instant');
-
-      await firstValueFrom(timer(1));
-      await this.adjustOffset(index, guessOffset, 0);
-    }
+    return timer(1).pipe(
+      switchMap(() => {
+        return race(
+          this.adjustOffset(index, guessOffset, 0, forceStopSubject$),
+          forceStopSubject$
+        );
+      })
+    );
   }
 }
 
@@ -136,10 +162,10 @@ export function setupViewportScrollerService(
   paragraphs: string[],
   destroy$: Observable<void>
 ) {
-  if (viewportScroller !== null) {
-    viewportScroller.delta = delta;
+  if (viewportScrollerService !== null) {
+    viewportScrollerService.delta = delta;
   } else {
-    viewportScroller = new ViewportScrollerService(
+    viewportScrollerService = new ViewportScrollerService(
       el,
       viewport,
       delta,
