@@ -6,7 +6,6 @@ import {
   DestroyRef,
   inject,
   model,
-  OnInit,
   resource,
   viewChild,
 } from '@angular/core';
@@ -19,7 +18,6 @@ import {
   Validators,
 } from '@angular/forms';
 import { MatFabButton } from '@angular/material/button';
-import { MatExpansionPanel } from '@angular/material/expansion';
 import { MatIcon } from '@angular/material/icon';
 import { MatInput } from '@angular/material/input';
 import {
@@ -59,7 +57,7 @@ import { GenresFilterControlComponent } from '../genres-filter-control/genres-fi
   styleUrls: ['./advanced-search.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AdvancedSearchComponent implements OnInit, AfterViewInit {
+export class AdvancedSearchComponent implements AfterViewInit {
   private booksApiService = inject(BooksApiService);
   protected data = resource({
     params: () => (this.query() !== '' ? this.query() : undefined),
@@ -79,7 +77,7 @@ export class AdvancedSearchComponent implements OnInit, AfterViewInit {
   private route = inject(ActivatedRoute);
   private destroyRef = inject(DestroyRef);
   protected query = model<string>('');
-  private expansionPanel = viewChild(MatExpansionPanel);
+  private genresControl = viewChild(GenresFilterControlComponent);
 
   constructor() {
     this.form = this.fb.group({
@@ -94,9 +92,7 @@ export class AdvancedSearchComponent implements OnInit, AfterViewInit {
         ),
       }),
     });
-  }
 
-  public ngOnInit(): void {
     this.router.events
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((event) => {
@@ -118,7 +114,7 @@ export class AdvancedSearchComponent implements OnInit, AfterViewInit {
     this.query.set(this.route.snapshot.paramMap.get('search') ?? '');
     if (this.query()) {
       this.setFormValues(parseQueryString(this.query()));
-      this.expansionPanel()?.close();
+      this.genresControl()?.close();
     }
   }
 
