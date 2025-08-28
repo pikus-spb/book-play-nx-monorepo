@@ -7,6 +7,7 @@ import {
   input,
   OnInit,
   signal,
+  viewChild,
 } from '@angular/core';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatChip } from '@angular/material/chips';
@@ -42,6 +43,7 @@ export class GenresFilterControlComponent implements OnInit {
   protected selectedGenres$?: Observable<string[]>;
   protected genreKeys = signal(FB2_GENRE_UNIQUE_KEYS);
   private cd = inject(ChangeDetectorRef);
+  private panel = viewChild(MatExpansionPanel);
 
   ngOnInit() {
     this.selectedGenres$ = this.form().valueChanges.pipe(
@@ -54,6 +56,10 @@ export class GenresFilterControlComponent implements OnInit {
         setTimeout(() => this.cd.markForCheck(), 300);
       })
     );
+  }
+
+  public close(): void {
+    this.panel()?.close();
   }
 
   protected unselectGenre($event: Event, genre: string) {

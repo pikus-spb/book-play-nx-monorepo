@@ -1,11 +1,25 @@
 import { inject } from '@angular/core';
 import { Route } from '@angular/router';
-import { DEFAULT_TITLE } from '@book-play/constants';
+import {
+  ADVANCED_BOOK_SEARCH_TITLE,
+  DEFAULT_TITLE,
+  NOT_FOUND_PAGE_TITLE,
+  RIGHTHOLDERS_PAGE_TITLE,
+  SETTINGS_PAGE_TITLE,
+  VOICE_PAGE_TITLE,
+} from '@book-play/constants';
 import { BookPersistenceStorageService } from '@book-play/services';
 import { AuthorPageComponent, BookPageComponent } from '@book-play/ui';
+import {
+  getAuthorPageTitle,
+  getBookPageTitle,
+  getBookSearchPageTitle,
+} from '@book-play/utils-browser';
+import { PlayerComponent } from '../../features/player/components/player/player.component';
 import { WelcomeComponent } from '../../features/welcome/components/welcome.component';
 import { StopBookPlayGuard } from './guards/stop-book-play.guard';
 import { AuthorSummaryResolver } from './resolvers/author-summary.resolver';
+import { BookSummaryResolver } from './resolvers/book-summary.resolver';
 import { BookResolver } from './resolvers/book.resolver';
 
 export const APP_ROUTES: Route[] = [
@@ -16,32 +30,62 @@ export const APP_ROUTES: Route[] = [
   },
   {
     path: 'book/:id',
-    component: BookPageComponent,
+    children: [
+      {
+        path: '',
+        title: (route) => {
+          return getBookPageTitle(route.data['book'].full);
+        },
+        component: BookPageComponent,
+      },
+    ],
     resolve: {
-      book: BookResolver,
+      book: BookSummaryResolver,
     },
   },
   {
     path: 'player',
-    loadComponent() {
-      return import(
-        '../../features/player/components/player/player.component'
-      ).then((imported) => imported.PlayerComponent);
+    children: [
+      {
+        path: '',
+        title: (route) => {
+          return getBookPageTitle(route.data['book'].full);
+        },
+        component: PlayerComponent,
+      },
+    ],
+    resolve: {
+      book: BookResolver,
     },
     canDeactivate: [StopBookPlayGuard],
   },
   {
     path: 'player/:id',
-    loadComponent() {
-      return import(
-        '../../features/player/components/player/player.component'
-      ).then((imported) => imported.PlayerComponent);
+    children: [
+      {
+        path: '',
+        title: (route) => {
+          return getBookPageTitle(route.data['book'].full);
+        },
+        component: PlayerComponent,
+      },
+    ],
+    resolve: {
+      book: BookResolver,
     },
     canDeactivate: [StopBookPlayGuard],
   },
   {
     path: 'author/:id',
-    component: AuthorPageComponent,
+    children: [
+      {
+        path: '',
+        title: (route) => {
+          return getAuthorPageTitle(route.data['author'].full);
+        },
+        component: AuthorPageComponent,
+      },
+    ],
     resolve: {
       author: AuthorSummaryResolver,
     },
@@ -53,43 +97,55 @@ export const APP_ROUTES: Route[] = [
         (imported) => imported.VoiceComponent
       );
     },
-    title: DEFAULT_TITLE,
+    title: VOICE_PAGE_TITLE,
   },
   {
     path: 'books',
-    loadComponent() {
-      return import(
-        '../../features/book-search/components/books/book-search.component'
-      ).then((imported) => imported.BookSearchComponent);
-    },
-    title: DEFAULT_TITLE,
-  },
-  {
-    path: 'books/:search',
-    loadComponent() {
-      return import(
-        '../../features/book-search/components/books/book-search.component'
-      ).then((imported) => imported.BookSearchComponent);
-    },
-    title: DEFAULT_TITLE,
+    children: [
+      {
+        path: '',
+        loadComponent() {
+          return import(
+            '../../features/book-search/components/books/book-search.component'
+          ).then((imported) => imported.BookSearchComponent);
+        },
+        title: () => getBookSearchPageTitle(),
+      },
+      {
+        path: ':search',
+        loadComponent() {
+          return import(
+            '../../features/book-search/components/books/book-search.component'
+          ).then((imported) => imported.BookSearchComponent);
+        },
+        title: (route) => {
+          const query = route.paramMap.get('search');
+          return getBookSearchPageTitle(query);
+        },
+      },
+    ],
   },
   {
     path: 'advanced-search',
-    loadComponent() {
-      return import(
-        '../../features/advanced-search/components/advanced-search/advanced-search.component'
-      ).then((imported) => imported.AdvancedSearchComponent);
-    },
-    title: DEFAULT_TITLE,
-  },
-  {
-    path: 'advanced-search/:search',
-    loadComponent() {
-      return import(
-        '../../features/advanced-search/components/advanced-search/advanced-search.component'
-      ).then((imported) => imported.AdvancedSearchComponent);
-    },
-    title: DEFAULT_TITLE,
+    children: [
+      {
+        path: '',
+        loadComponent() {
+          return import(
+            '../../features/advanced-search/components/advanced-search/advanced-search.component'
+          ).then((imported) => imported.AdvancedSearchComponent);
+        },
+      },
+      {
+        path: ':search',
+        loadComponent() {
+          return import(
+            '../../features/advanced-search/components/advanced-search/advanced-search.component'
+          ).then((imported) => imported.AdvancedSearchComponent);
+        },
+      },
+    ],
+    title: ADVANCED_BOOK_SEARCH_TITLE,
   },
   {
     path: '404',
@@ -98,7 +154,7 @@ export const APP_ROUTES: Route[] = [
         (imported) => imported.NotFoundComponent
       );
     },
-    title: DEFAULT_TITLE,
+    title: NOT_FOUND_PAGE_TITLE,
   },
   {
     path: 'for-right-holders',
@@ -107,7 +163,7 @@ export const APP_ROUTES: Route[] = [
         '../../features/for-right-holders/components/for-right-holders.component'
       ).then((imported) => imported.ForRightHoldersComponent);
     },
-    title: DEFAULT_TITLE,
+    title: RIGHTHOLDERS_PAGE_TITLE,
   },
   {
     path: 'settings',
@@ -116,10 +172,11 @@ export const APP_ROUTES: Route[] = [
         '../../features/settings/components/settings/settings.component'
       ).then((imported) => imported.SettingsComponent);
     },
-    title: DEFAULT_TITLE,
+    title: SETTINGS_PAGE_TITLE,
   },
   {
     path: '',
+    pathMatch: 'full',
     redirectTo: async () => {
       const bookPersistenceStorageService = inject(
         BookPersistenceStorageService
@@ -130,7 +187,6 @@ export const APP_ROUTES: Route[] = [
       }
       return '/index';
     },
-    pathMatch: 'full',
   },
   { path: '**', redirectTo: '404' },
 ];

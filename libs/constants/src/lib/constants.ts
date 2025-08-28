@@ -13,14 +13,35 @@ export const BOOK_IMAGE_WIDTH = 200;
 export const BOOK_IMAGE_HEIGHT = 300;
 export const BOOK_IMAGE_MARGIN = 32;
 export const NOT_AVAILABLE = 'н/д';
+// Заголовки
 export const DEFAULT_TITLE_PREFIX = 'Book-play.ru';
-export const DEFAULT_EMPTY_CONTEXT =
+export const VOICE_PAGE_TITLE = [
+  'Озвучить произвольный текст с помощью нейронной сети',
+  DEFAULT_TITLE_PREFIX,
+].join(' - ');
+export const RIGHTHOLDERS_PAGE_TITLE = [
+  'Для правообладателей',
+  DEFAULT_TITLE_PREFIX,
+].join(' - ');
+export const NOT_FOUND_PAGE_TITLE = [
+  'Страница не найдена',
+  DEFAULT_TITLE_PREFIX,
+].join(' - ');
+export const SETTINGS_PAGE_TITLE = [
+  'Настройки голоса и таймера',
+  DEFAULT_TITLE_PREFIX,
+].join(' - ');
+export const EMPTY_CONTEXT =
   'бесплатная платформа для прослушивания книг, озвученных нейросетью.';
-export const DEFAULT_AUTHOR_TITLE_CONTEXT = 'слушать все произведения автора';
-export const DEFAULT_BOOK_TITLE_CONTEXT = 'бесплатно слушать книгу онлайн';
-export const DEFAULT_TITLE = [DEFAULT_TITLE_PREFIX, DEFAULT_EMPTY_CONTEXT].join(
-  ' - '
-);
+export const BOOK_SEARCH_TITLE_CONTEXT =
+  'Искать книги по автору или названию в бибиотеке';
+export const ADVANCED_BOOK_SEARCH_TITLE = [
+  'Расширенный поиск книг в бибиотеке - по жанру или рейтингу',
+  DEFAULT_TITLE_PREFIX,
+].join(' - ');
+export const AUTHOR_TITLE_CONTEXT = 'слушать все произведения автора';
+export const BOOK_TITLE_CONTEXT = 'бесплатно слушать книгу онлайн';
+export const DEFAULT_TITLE = [DEFAULT_TITLE_PREFIX, EMPTY_CONTEXT].join(' - ');
 export const SETTINGS_VOICE_RATE_DELTA = 20;
 export const SETTINGS_VOICE_PITCH_DELTA = 15;
 // BOOKS CRAWLER
