@@ -1,0 +1,6 @@
+# robots.txt for book-play.ru site
+User-agent: *
+
+Allow: /
+
+Sitemap: https://book-play.ru/sitemap.xml
