@@ -1,5 +1,7 @@
 import {
-  DEFAULT_BOOK_TITLE_CONTEXT,
+  AUTHOR_TITLE_CONTEXT,
+  BOOK_SEARCH_TITLE_CONTEXT,
+  BOOK_TITLE_CONTEXT,
   DEFAULT_TITLE_PREFIX,
 } from '@book-play/constants';
 
@@ -10,6 +12,21 @@ export function setWindowTitle(title: string): void {
 }
 
 export function setDocumentBookTitleWithContext(context: string): void {
-  const title = [context, DEFAULT_BOOK_TITLE_CONTEXT, DEFAULT_TITLE_PREFIX];
-  setWindowTitle(title.join(' - '));
+  setWindowTitle(getBookPageTitle(context));
+}
+
+export function getBookPageTitle(bookName: string): string {
+  return [bookName, BOOK_TITLE_CONTEXT, DEFAULT_TITLE_PREFIX].join(' - ');
+}
+
+export function getAuthorPageTitle(authorName: string): string {
+  return [authorName, AUTHOR_TITLE_CONTEXT, DEFAULT_TITLE_PREFIX].join(' - ');
+}
+
+export function getBookSearchPageTitle(query?: string | null): string {
+  const parts = [BOOK_SEARCH_TITLE_CONTEXT, DEFAULT_TITLE_PREFIX];
+  if (query) {
+    parts.unshift(`"${query}"`);
+  }
+  return parts.join(' - ');
 }
