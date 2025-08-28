@@ -68,6 +68,16 @@
             "glob": "**/favicon.ico",
             "input": "apps/site/src/assets/",
             "output": "/"
+          },
+          {
+            "glob": "**/robots.txt",
+            "input": "apps/site/src/assets/",
+            "output": "/"
+          },
+          {
+            "glob": "**/sitemap.xml",
+            "input": "apps/site/src/assets/",
+            "output": "/"
           }
         ],
         "styles": [
