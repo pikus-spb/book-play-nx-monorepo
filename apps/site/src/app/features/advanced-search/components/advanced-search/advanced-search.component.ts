@@ -36,6 +36,7 @@ import { Store } from '@ngrx/store';
 import { StarRatingModule } from 'angular-star-rating';
 import { firstValueFrom } from 'rxjs';
 import { GenresFilterControlComponent } from '../genres-filter-control/genres-filter-control.component';
+import { maxGenresSelectedValidator } from '../../form-validator/max-genres-selected.validator';
 
 @Component({
   selector: 'books',
@@ -82,15 +83,18 @@ export class AdvancedSearchComponent implements AfterViewInit {
   constructor() {
     this.form = this.fb.group({
       rating: [null, [Validators.min(0), Validators.max(10)]],
-      genres: this.fb.group({
-        ...Object.keys(FB2_GENRES).reduce(
-          (memo: Record<string, any[]>, genreKey: string) => {
-            memo[genreKey] = [false];
-            return memo;
-          },
-          {}
-        ),
-      }),
+      genres: this.fb.group(
+        {
+          ...Object.keys(FB2_GENRES).reduce(
+            (memo: Record<string, boolean[]>, genreKey: string) => {
+              memo[genreKey] = [false];
+              return memo;
+            },
+            {}
+          ),
+        },
+        { validators: maxGenresSelectedValidator(3) }
+      ),
     });
 
     this.router.events

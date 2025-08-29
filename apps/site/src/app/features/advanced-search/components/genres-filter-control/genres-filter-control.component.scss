@@ -5,6 +5,30 @@
   ::ng-deep mat-expansion-panel {
     width: 100%;
 
+    @keyframes error-message-amnimation {
+      from {
+        opacity: 0;
+        transform: translateX(-30px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateX(0px);
+      }
+    }
+
+    .error {
+      display: flex;
+      align-items: center;
+      margin: $default-padding 0;
+      animation: error-message-amnimation 300ms;
+
+      mat-icon {
+        margin-right: calc($default-padding / 2);
+        color: #f44336;
+      }
+    }
+
     &.mat-expanded {
       height: 400px;
 
