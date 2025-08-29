@@ -11,10 +11,13 @@ import {
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import {
+  AbstractControl,
   FormBuilder,
   FormGroup,
   FormsModule,
   ReactiveFormsModule,
+  ValidationErrors,
+  ValidatorFn,
   Validators,
 } from '@angular/forms';
 import { MatFabButton } from '@angular/material/button';
@@ -82,15 +85,18 @@ export class AdvancedSearchComponent implements AfterViewInit {
   constructor() {
     this.form = this.fb.group({
       rating: [null, [Validators.min(0), Validators.max(10)]],
-      genres: this.fb.group({
-        ...Object.keys(FB2_GENRES).reduce(
-          (memo: Record<string, any[]>, genreKey: string) => {
-            memo[genreKey] = [false];
-            return memo;
-          },
-          {}
-        ),
-      }),
+      genres: this.fb.group(
+        {
+          ...Object.keys(FB2_GENRES).reduce(
+            (memo: Record<string, boolean[]>, genreKey: string) => {
+              memo[genreKey] = [false];
+              return memo;
+            },
+            {}
+          ),
+        },
+        { validators: this.maxGenresSelectedValidator(3) }
+      ),
     });
 
     this.router.events
@@ -100,6 +106,28 @@ export class AdvancedSearchComponent implements AfterViewInit {
           this.initSearch();
         }
       });
+  }
+
+  private maxGenresSelectedValidator(max = 3): ValidatorFn {
+    return (formGroup: AbstractControl): ValidationErrors | null => {
+      const formValue = formGroup.value;
+      if (formValue) {
+        const genresNum = Object.entries(formValue).reduce(
+          (memo, [key, value]) => {
+            if (value) {
+              memo++;
+            }
+            return memo;
+          },
+          0
+        );
+
+        if (genresNum > max) {
+          return { maxGenres: { actual: genresNum, max } };
+        }
+      }
+      return null;
+    };
   }
 
   public ngAfterViewInit(): void {

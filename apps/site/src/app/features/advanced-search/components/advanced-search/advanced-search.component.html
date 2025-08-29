@@ -24,14 +24,26 @@
         [rating]="form.value.rating"
         [showLabel]="false"
       ></lib-star-rating>
-      <button mat-fab extended="true" color="success" type="submit">
+      <button
+        mat-fab
+        extended="true"
+        color="success"
+        type="submit"
+        [disabled]="form.invalid"
+      >
         <mat-icon>search</mat-icon>
         Искать
       </button>
     </section>
     <genres-filter-control [form]="genresGroup"></genres-filter-control>
     <div class="action-panel">
-      <button mat-fab extended="true" color="success" type="submit">
+      <button
+        mat-fab
+        extended="true"
+        color="success"
+        type="submit"
+        [disabled]="form.invalid"
+      >
         <mat-icon>search</mat-icon>
         Искать
       </button>
