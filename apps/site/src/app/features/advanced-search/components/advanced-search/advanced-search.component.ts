@@ -11,10 +11,13 @@ import {
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import {
+  AbstractControl,
   FormBuilder,
   FormGroup,
   FormsModule,
   ReactiveFormsModule,
+  ValidationErrors,
+  ValidatorFn,
   Validators,
 } from '@angular/forms';
 import { MatFabButton } from '@angular/material/button';
@@ -36,7 +39,6 @@ import { Store } from '@ngrx/store';
 import { StarRatingModule } from 'angular-star-rating';
 import { firstValueFrom } from 'rxjs';
 import { GenresFilterControlComponent } from '../genres-filter-control/genres-filter-control.component';
-import { maxGenresSelectedValidator } from '../../form-validator/max-genres-selected.validator';
 
 @Component({
   selector: 'books',
@@ -93,7 +95,7 @@ export class AdvancedSearchComponent implements AfterViewInit {
             {}
           ),
         },
-        { validators: maxGenresSelectedValidator(3) }
+        { validators: this.maxGenresSelectedValidator(3) }
       ),
     });
 
@@ -104,6 +106,28 @@ export class AdvancedSearchComponent implements AfterViewInit {
           this.initSearch();
         }
       });
+  }
+
+  private maxGenresSelectedValidator(max = 3): ValidatorFn {
+    return (formGroup: AbstractControl): ValidationErrors | null => {
+      const formValue = formGroup.value;
+      if (formValue) {
+        const genresNum = Object.entries(formValue).reduce(
+          (memo, [key, value]) => {
+            if (value) {
+              memo++;
+            }
+            return memo;
+          },
+          0
+        );
+
+        if (genresNum > max) {
+          return { maxGenres: { actual: genresNum, max } };
+        }
+      }
+      return null;
+    };
   }
 
   public ngAfterViewInit(): void {

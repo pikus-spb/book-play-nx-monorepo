@@ -2,7 +2,9 @@
   "name": "@book-play/source",
   "version": "0.0.0",
   "license": "MIT",
-  "scripts": {},
+  "scripts": {
+    "prepare": "husky"
+  },
   "private": true,
   "dependencies": {
     "@angular/animations": "20.0.3",
