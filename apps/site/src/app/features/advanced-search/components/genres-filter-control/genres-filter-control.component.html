@@ -11,6 +11,13 @@
       </mat-panel-description>
     </mat-expansion-panel-header>
     <div class="genres-list-container">
+      @if (form().errors?.['maxGenres']) {
+      <span class="error">
+        <mat-icon>error</mat-icon>
+        Пожалуйста, выберите не более
+        {{ form().errors?.['maxGenres'].max }} жанров
+      </span>
+      }
       <genres-list-filter [genres]="genreKeys"></genres-list-filter>
       <div class="genres-list" [formGroup]="form()">
         @for (genreKey of genreKeys(); track genreKey) {

@@ -11,10 +11,6 @@
       flex-direction: column;
     }
 
-    .header {
-      font-size: 1.5em;
-    }
-
     h5 {
       small {
         margin-left: $default-padding;
@@ -44,10 +40,6 @@
         input {
           width: 100px;
         }
-      }
-
-      label {
-        display: flex;
       }
     }
 

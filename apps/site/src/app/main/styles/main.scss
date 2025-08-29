@@ -32,10 +32,12 @@ $dark-theme: mat.define-theme(
     ),
   )
 );
+
 body {
   @include mat.all-component-themes($theme);
   @include mat.typography-hierarchy($theme);
 }
+
 body.light {
   @include mat.all-component-colors($light-theme);
 }
@@ -150,6 +152,30 @@ html {
     min-width: $body-min-width;
     height: 100%;
     overflow: hidden;
+  }
+}
+
+@keyframes error-message-amnimation {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0px);
+  }
+}
+
+.error {
+  display: flex;
+  align-items: center;
+  margin: $default-padding 0;
+  animation: error-message-amnimation 300ms;
+
+  mat-icon {
+    margin-right: calc($default-padding / 2);
+    color: #f44336;
   }
 }
 

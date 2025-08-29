@@ -11,6 +11,7 @@ import {
 } from '@angular/core';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatChip } from '@angular/material/chips';
+import { MatIcon } from '@angular/material/icon';
 import {
   MatExpansionModule,
   MatExpansionPanel,
@@ -25,6 +26,7 @@ import { GenresListFilterComponent } from '../genres-list-filter/genres-list-fil
   selector: 'genres-filter-control',
   imports: [
     MatChip,
+    MatIcon,
     MatExpansionPanel,
     MatExpansionPanelDescription,
     MatExpansionPanelHeader,
