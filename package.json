@@ -3,9 +3,7 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
-    "prepare": "husky init",
-    "lint": "npx nx run-many --target=lint --all",
-    "test-all": "npx nx run-many --target=test --all"
+    "prepare": "husky init"
   },
   "private": true,
   "dependencies": {

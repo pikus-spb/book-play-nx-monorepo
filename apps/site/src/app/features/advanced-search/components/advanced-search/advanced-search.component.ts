@@ -178,7 +178,7 @@ export class AdvancedSearchComponent implements AfterViewInit {
     if (formValue) {
       genres = Object.entries(formValue)
         .filter(([k, v]) => Boolean(v))
-        .map(([k, v]) => k);
+        .map(([k]) => k);
     }
 
     return { rating, genres };
