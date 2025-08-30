@@ -2,5 +2,5 @@
 . "$(dirname "$0")/_/husky.sh"
 
 echo 'Husky pre-push hook running...'
-npx nx run-many -t test --all
+npx nx run-many -t test
 echo 'Husky pre-push hook completed.'
