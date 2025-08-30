@@ -15,7 +15,7 @@ describe('KeepScreenOnComponent', () => {
       imports: [KeepScreenOnComponent],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(KeepScreenOnComponent);
+    // fixture = TestBed.createComponent(KeepScreenOnComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
