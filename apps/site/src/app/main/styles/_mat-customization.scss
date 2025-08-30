@@ -1,0 +1,29 @@
+@use '_vars' as *;
+
+mat-chip {
+  background-color: var(
+    --mat-fab-container-color,
+    var(--mat-sys-primary-container)
+  ) !important;
+
+  .mdc-evolution-chip__cell {
+    display: flex;
+    width: 100%;
+
+    .mdc-evolution-chip__action {
+      width: calc(100% - $default-padding) !important;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      a {
+        display: inherit;
+        width: inherit;
+        text-decoration: none;
+        overflow: hidden !important;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+      }
+    }
+  }
+}
