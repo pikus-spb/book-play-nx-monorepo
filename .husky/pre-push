@@ -1,5 +1,6 @@
 #!/bin/sh
 . "$(dirname "$0")/_/husky.sh"
 
- npx nx run-many -t test --all
-
+echo 'Husky pre-push hook running...'
+npx nx run-many -t test --all
+echo 'Husky pre-push hook completed.'
