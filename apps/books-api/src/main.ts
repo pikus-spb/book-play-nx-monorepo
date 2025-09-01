@@ -9,6 +9,7 @@ import http from 'http';
 import * as https from 'node:https';
 import BooksAPIApp from './app';
 
+log('\n\n\n');
 log('=================================');
 log('Starting....');
 

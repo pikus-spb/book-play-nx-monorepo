@@ -3,7 +3,7 @@ import {
   YANDEX_TTS_API_URL,
 } from '@book-play/constants';
 import { TtsParams, Voices } from '@book-play/models';
-import { createQueryString } from '@book-play/utils-common';
+import { createQueryString, Log, log } from '@book-play/utils-common';
 import {
   equalize,
   getRandomFileNames,
@@ -13,6 +13,7 @@ import {
 import fs from 'fs';
 
 export default class YandexTtsApp {
+  @Log()
   public tts(params: TtsParams): Promise<Blob> {
     const postParams = {
       ...YANDEX_TTS_API_DEFAULT_OPTIONS,
@@ -21,6 +22,7 @@ export default class YandexTtsApp {
       text: encodeURIComponent(params.text),
     };
 
+    log('yandex-tts: ' + JSON.stringify(postParams));
     return fetch(YANDEX_TTS_API_URL, {
       method: 'POST',
       headers: {
@@ -30,6 +32,7 @@ export default class YandexTtsApp {
     }).then((response) => response.blob());
   }
 
+  @Log()
   private equalize(
     voice: string,
     fileName: string,
@@ -52,6 +55,7 @@ export default class YandexTtsApp {
       ];
     }
 
+    log('yandex-tts equalizer: ' + equalizer.join(', '));
     return equalize(equalizer, fileName, fileNameOut);
   }
 
@@ -63,6 +67,7 @@ export default class YandexTtsApp {
 
     fs.writeFileSync(files[0], buffer);
 
+    log('yandex-tts: post-process audio...');
     await this.equalize(params.voice, files[0], files[1]);
     await pitch(params.pitch, '48000', files[1], files[2]);
     await rate(params.rate, files[2], files[3]);
@@ -72,6 +77,7 @@ export default class YandexTtsApp {
 
     setTimeout(() => {
       files.forEach((file) => {
+        log('yandex-tts: delete file ' + file);
         fs.unlinkSync(file);
       });
     }, 100);
