@@ -10,12 +10,16 @@ import * as https from 'node:https';
 import EdgeTtsApp from './edge.tts.app.ts';
 import PiperTtsApp from './piper.tts.app.ts';
 import YandexTtsApp from './yandex.tts.app.ts';
+import { Log, log } from '@book-play/utils-common';
 
 const privateKey = fs.readFileSync(environment.HTTPS_PRIVATE_KEY, 'utf8');
 const certificate = fs.readFileSync(environment.HTTPS_CERTIFICATE, 'utf8');
 const credentials = { key: privateKey, cert: certificate };
 
 const expressApp = express();
+
+log('\n\n\n');
+log('Starting TTS API...');
 
 function corsOptionsDelegate(req, callback) {
   if (environment.CORS_ALLOWED_LIST.indexOf(req.header('Origin')) >= 0) {
@@ -32,11 +36,11 @@ const httpServer = http.createServer(expressApp);
 const httpsServer = https.createServer(credentials, expressApp);
 
 httpServer.listen(TTS_API_PORT, () => {
-  console.log(`Web server is listening on port ${TTS_API_PORT}`);
+  log(`Web server started and is listening port ${TTS_API_PORT}`);
 });
 
 httpsServer.listen(TTS_API_PORT_SECURE, () => {
-  console.log(`Web server is listening on port ${TTS_API_PORT_SECURE}`);
+  log(`Web server started and is listening port ${TTS_API_PORT_SECURE}`);
 });
 
 expressApp.post(
