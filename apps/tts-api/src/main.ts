@@ -1,5 +1,6 @@
 import { TTS_API_PORT, TTS_API_PORT_SECURE } from '@book-play/constants';
 import { TtsParams, Voices } from '@book-play/models';
+import { error, log } from '@book-play/utils-common';
 import bodyParser from 'body-parser';
 import cors from 'cors';
 import { environment } from 'environments/environment.ts';
@@ -10,7 +11,6 @@ import * as https from 'node:https';
 import EdgeTtsApp from './edge.tts.app.ts';
 import PiperTtsApp from './piper.tts.app.ts';
 import YandexTtsApp from './yandex.tts.app.ts';
-import { Log, log } from '@book-play/utils-common';
 
 const privateKey = fs.readFileSync(environment.HTTPS_PRIVATE_KEY, 'utf8');
 const certificate = fs.readFileSync(environment.HTTPS_CERTIFICATE, 'utf8');
@@ -65,7 +65,7 @@ expressApp.post(
         mp3Data = await new EdgeTtsApp().runTts(params);
       }
     } catch (e) {
-      console.error(e);
+      error(e);
       res.status(500).send({
         message: String(e),
       });

@@ -8,7 +8,7 @@ const puppeteer = require('puppeteer');
 const randomUseragent = require('random-useragent');
 
 export class SearchBook {
-  private browser!: Browser;
+  private browser: Browser;
   private page!: Page;
 
   public async init() {
@@ -18,12 +18,12 @@ export class SearchBook {
       args: ['--no-sandbox'],
     });
     this.page = await this.browser.newPage();
-    log('Init Chrome OK...');
+    log('Opened Chrome Pupeeter...');
   }
 
   public async finalize() {
-    await this.browser.close();
-    log('Closed Chrome');
+    await this.browser?.close();
+    log('Closed Chrome Pupeeter...');
   }
 
   public async searchBook(query: string): Promise<BookInfo | undefined> {
@@ -55,12 +55,17 @@ export class SearchBook {
       }
     });
 
-    log(linkUrl);
+    if (linkUrl) {
+      log('Book page found: ' + linkUrl);
+    } else {
+      log('Book page not found!');
+    }
 
     let bookInfo: BookInfo = {
       rating: 0,
       annotation: null,
     };
+
     if (linkUrl) {
       try {
         await this.page.goto(linkUrl, {

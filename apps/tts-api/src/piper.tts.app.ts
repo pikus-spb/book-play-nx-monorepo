@@ -1,5 +1,5 @@
 import { TtsParams, Voices } from '@book-play/models';
-import { Log, log } from '@book-play/utils-common';
+import { error, Log, log } from '@book-play/utils-common';
 import {
   equalize,
   getRandomFileNames,
@@ -28,8 +28,6 @@ export default class PiperTtsApp {
         '--output-raw',
       ];
 
-      log('piper tts: ' + args1.join(' '));
-
       const child1 = spawn(environment.PIPER_TTS_PATH + '/piper', args1, {
         detached: true,
       });
@@ -51,16 +49,13 @@ export default class PiperTtsApp {
       ];
       const child2 = spawn('/usr/bin/ffmpeg', args2, { detached: true });
 
-      log('piper tts ffmpeg: ' + args2.join(' '));
       child1.stdout.pipe(child2.stdin);
-
       child1.stdin.write(params.text);
       child1.stdin.end();
 
       this.killProcessOnConnectionClose(child1, reject);
 
       child2.on('close', async () => {
-        log('piper tts: post-process audio...');
         await this.equalize(params.voice, files[0], files[1]);
         await removeSilence(files[1], files[2]);
         await rate(params.rate, files[2], files[3]);
@@ -71,7 +66,6 @@ export default class PiperTtsApp {
 
         setTimeout(() => {
           files.forEach((file) => {
-            log('piper tts: delete file ' + file);
             fs.unlinkSync(file);
           });
         }, 300);
@@ -87,7 +81,7 @@ export default class PiperTtsApp {
       process.kill(process.pid);
       log('Successfully killed process ' + process.pid + '.');
     } catch (e) {
-      log('Could not kill process:' + process.pid);
+      error('Could not kill process:' + process.pid);
     }
   }
 
