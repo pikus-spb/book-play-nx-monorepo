@@ -56,9 +56,9 @@ export class SearchBook {
     });
 
     if (linkUrl) {
-      log('Book page found: ' + linkUrl);
+      log(linkUrl);
     } else {
-      log('Book page not found!');
+      log('Book not found :(');
     }
 
     let bookInfo: BookInfo = {
