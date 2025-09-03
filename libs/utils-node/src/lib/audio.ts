@@ -38,7 +38,7 @@ export function pitch(
       console.error(e);
       reject(e);
     }
-    process.on('close', () => {
+    process?.on('close', () => {
       resolve(fileNameOut);
     });
   });
@@ -72,7 +72,7 @@ export function rate(
       console.error(e);
       reject(e);
     }
-    process.on('close', () => {
+    process?.on('close', () => {
       resolve(fileNameOut);
     });
   });
@@ -119,7 +119,7 @@ export function equalize(
       console.error(e);
       reject(e);
     }
-    process.on('close', () => {
+    process?.on('close', () => {
       resolve(fileNameOut);
     });
   });

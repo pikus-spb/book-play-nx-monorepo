@@ -7,72 +7,86 @@ import mysql, { escape, PoolOptions } from 'mysql2';
 
 const pool = mysql.createPool(environment.DB_CONFIG as unknown as PoolOptions);
 
+log('Starting books info scrapper...');
+
 export async function run() {
   const scrapper = new SearchBook();
 
-  let books: Partial<DBBook>[];
-  let count = 0;
+  log('\n\n\n');
+  log('Scapper initialized...');
 
-  do {
-    books = await selectBooks();
-    count += books.length;
-    for (let i = 0; i < books.length; i++) {
-      const book = books[i];
-      log('Searching book: ' + book.full + ' ...');
+  const books: Partial<DBBook>[] = await selectBooks();
 
-      const bookInfo: BookInfo = {
-        rating: book.rating || 0,
-        annotation: book.annotation || NOT_AVAILABLE,
-      };
+  log('Selected ' + books.length + ' books from DB');
 
-      await scrapper.init();
+  let retryNum = 0;
+  for (let i = 0; i < books.length; i++) {
+    const book = books[i];
+    log('\n\n\n');
+    log('Searching book: ' + book.full + ' ...');
 
-      let searchResult = null;
-      try {
-        searchResult = await scrapper.searchBook(book.full);
-      } catch (e) {
-        error(e);
-        log('Reinit browser and retry...');
+    const bookInfo: BookInfo = {
+      rating: book.rating || 0,
+      annotation: book.annotation || NOT_AVAILABLE,
+    };
+
+    await scrapper.init();
+    let searchResult = null;
+    try {
+      searchResult = await scrapper.searchBook(book.full);
+    } catch (e) {
+      error(e);
+      log('Reinit Pupeeter and retry...');
+
+      retryNum++;
+
+      if (retryNum >= 3) {
+        log('Too many retries, skip this book');
+        retryNum = 0;
+      } else {
         i--;
-        continue;
       }
 
-      if (searchResult?.rating) {
-        bookInfo.rating = searchResult.rating;
-      }
-      if (searchResult?.annotation) {
-        bookInfo.annotation = searchResult.annotation;
-      }
-
-      const sqlQuery = `UPDATE books SET rating=${
-        bookInfo.rating
-      }, annotation=${escape(bookInfo.annotation)} WHERE id=${book.id}`;
-
-      log(sqlQuery);
-
-      try {
-        await new Promise((resolve, reject) => {
-          pool.query(sqlQuery, (err: Error) => {
-            if (err) {
-              reject(err);
-            } else {
-              resolve(true);
-            }
-          });
-        });
-      } catch (e) {
-        error(e);
-      }
-
-      log('Added successfully: ' + JSON.stringify(bookInfo) + '\n\n');
+      continue;
+    } finally {
       await scrapper.finalize();
     }
-  } while (books.length > 0);
 
-  console.log('Done. Added info about ' + count + ' books.');
+    log('Search result: ' + JSON.stringify(searchResult));
+
+    if (searchResult?.rating) {
+      bookInfo.rating = searchResult.rating;
+    }
+    if (searchResult?.annotation) {
+      bookInfo.annotation = searchResult.annotation;
+    }
+
+    const sqlQuery = `UPDATE books SET rating=${
+      bookInfo.rating
+    }, annotation=${escape(bookInfo.annotation)} WHERE id=${book.id}`;
+
+    try {
+      await new Promise((resolve, reject) => {
+        pool.query(sqlQuery, (err: Error) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(true);
+          }
+        });
+      });
+    } catch (e) {
+      error(e);
+    }
+
+    log('Added successfully: ' + JSON.stringify(bookInfo) + '\n\n');
+  }
+
+  console.log('Done. Added info about ' + books.length + ' books.');
 }
 
 async function selectBooks(): Promise<Partial<DBBook>[]> {
+  log('Selecting books from DB...');
   return new Promise((resolve, reject) => {
     pool.query(
       `SELECT id, full, rating, annotation FROM books WHERE rating IS NULL OR annotation = '' LIMIT 100`,
