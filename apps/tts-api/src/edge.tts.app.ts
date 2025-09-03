@@ -25,13 +25,10 @@ export default class EdgeTtsApp {
     args.push(`--voice=${voice}`);
     args.push(`--write-media=${files[0]}`);
 
-    log('edge-tts: ' + args.join(' '));
-
     const ttsProc = spawn('edge-tts', args, { detached: true });
 
     return new Promise((resolve) => {
       ttsProc.on('close', async () => {
-        log('edge-tts: remove silence and adjust pitch/rate...');
         await removeSilence(files[0], files[1]);
         await pitch(params.pitch, '24000', files[1], files[2]);
         await rate(params.rate, files[2], files[3]);
@@ -43,7 +40,6 @@ export default class EdgeTtsApp {
 
         setTimeout(() => {
           files.forEach((file) => {
-            log('edge-tts: delete file ' + file);
             fs.unlinkSync(file);
           });
         }, 100);
