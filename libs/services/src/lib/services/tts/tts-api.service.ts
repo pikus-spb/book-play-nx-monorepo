@@ -13,21 +13,20 @@ import { getSettings } from '../../utils/settings';
 })
 export class TtsApiService {
   private http = inject(HttpClient);
+  private url =
+    getCurrentProtocolUrl(
+      environment.API_HOST,
+      TTS_API_PORT,
+      TTS_API_PORT_SECURE
+    ) + '/tts';
 
   public textToSpeech(text: string): Observable<Blob> {
-    const url =
-      getCurrentProtocolUrl(
-        environment.API_HOST,
-        TTS_API_PORT,
-        TTS_API_PORT_SECURE
-      ) + '/tts';
-
     const safeText = encodeURIComponent(text);
     const { pitch, rate, voice } = getSettings();
     const options: TtsParams = { text: safeText, pitch, rate, voice };
     const postParams = createQueryString(options);
 
-    return this.http.post(url, postParams, {
+    return this.http.post(this.url, postParams, {
       headers: new HttpHeaders({
         'Content-Type': 'application/x-www-form-urlencoded',
       }),
