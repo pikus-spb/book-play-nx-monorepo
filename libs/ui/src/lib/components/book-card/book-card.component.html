@@ -32,7 +32,10 @@
   } @else {
   <div class="annotation disabled">Аннотация не доступна</div>
   }
+
   <div class="action-panel">
+    @if (book.blocked === false) { Книга заблокирована по требованию
+    правообладателя. } @else {
     <button
       mat-fab
       extended="true"
@@ -45,6 +48,7 @@
       <mat-icon>play_arrow</mat-icon>
       Слушать
     </button>
+    }
   </div>
 </div>
 }

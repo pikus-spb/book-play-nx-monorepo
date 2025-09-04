@@ -128,9 +128,14 @@ export default class BooksAPIApp {
   async bookById(id: string): Promise<Partial<DBBook>> {
     try {
       const book = await this.bookSummaryById(id);
-      book.paragraphs = JSON.parse(
-        readZippedFile(getJsonGzFileName(environment.BOOKS_JSON_PATH + id))
-      );
+      if (book.blocked) {
+        book.paragraphs =
+          '["Книга заблокирована по требованию правообладателя."]';
+      } else {
+        book.paragraphs = readZippedFile(
+          getJsonGzFileName(environment.BOOKS_JSON_PATH + id)
+        );
+      }
 
       return book;
     } catch (err) {
@@ -143,7 +148,7 @@ export default class BooksAPIApp {
   bookSummaryById(id: string): Promise<Partial<DBBook>> {
     const sqlQuery = `SELECT
           books.id, books.name, books.annotation, books.genres, books.date,
-            books.full, books.cover, books.rating,
+            books.full, books.cover, books.rating, books.blocked,
           authors.first, authors.last, authors.id as authorId 
           FROM books
           CROSS JOIN authors
