@@ -10,6 +10,7 @@ import { MatIcon } from '@angular/material/icon';
 import { MatTooltip } from '@angular/material/tooltip';
 import { Router, RouterLink } from '@angular/router';
 import {
+  BLOCKED_BOOK_TEXT,
   BOOK_IMAGE_HEIGHT,
   BOOK_IMAGE_WIDTH,
   DEFAULT_COVER_SRC,
@@ -49,6 +50,7 @@ export class BookCardComponent {
     this.router.navigateByUrl('/player/' + this.book()?.id);
   }
 
+  protected readonly BLOCKED_BOOK_TEXT = BLOCKED_BOOK_TEXT;
   protected readonly BOOK_IMAGE_WIDTH = BOOK_IMAGE_WIDTH;
   protected readonly BOOK_IMAGE_HEIGHT = BOOK_IMAGE_HEIGHT;
   protected readonly showDefaultCoverImage = showDefaultCoverImage;

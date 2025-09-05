@@ -1,4 +1,5 @@
 import {
+  BLOCKED_BOOK_TEXT,
   FB2_GENRES_ALIASES,
   MAX_BOOK_SEARCH_RESULTS,
 } from '@book-play/constants';
@@ -129,8 +130,7 @@ export default class BooksAPIApp {
     try {
       const book = await this.bookSummaryById(id);
       if (book.blocked) {
-        book.paragraphs =
-          '["Книга заблокирована по требованию правообладателя."]';
+        book.paragraphs = `["${BLOCKED_BOOK_TEXT}"]`;
       } else {
         book.paragraphs = readZippedFile(
           getJsonGzFileName(environment.BOOKS_JSON_PATH + id)

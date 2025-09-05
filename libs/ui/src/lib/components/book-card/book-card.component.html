@@ -34,8 +34,9 @@
   }
 
   <div class="action-panel">
-    @if (book.blocked === false) { Книга заблокирована по требованию
-    правообладателя. } @else {
+    @if (book.blocked) {
+    <span>{{ BLOCKED_BOOK_TEXT }}</span>
+    } @else {
     <button
       mat-fab
       extended="true"
