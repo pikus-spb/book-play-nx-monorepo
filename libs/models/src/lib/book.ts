@@ -14,6 +14,7 @@ export interface DBBook {
   cover?: string;
   rating?: number;
   paragraphs: string;
+  blocked: boolean;
 }
 
 export interface BasicBookData {
@@ -42,10 +43,11 @@ export class Book {
   public cover?: ImageBase64Data;
   public rating?: number;
   public paragraphs!: string[];
+  public blocked!: boolean;
   public textParagraphs: string[] = [];
 
   constructor(obj: Partial<Book>) {
-    Object.assign(this, obj, {});
+    Object.assign(this, { ...obj });
 
     this.textParagraphs = filterTextParagraphs(this.paragraphs);
 

@@ -31,26 +31,25 @@ function corsOptionsDelegate(req, callback): void {
 log('Setup CORS...' + JSON.stringify(environment.CORS_ALLOWED_LIST));
 
 const httpServer = http.createServer(expressApp);
-log('Starting httpServer on ' + BOOKS_API_PORT);
+log('Starting httpServer on ' + BOOKS_API_PORT + '...');
 
 const httpsServer = https.createServer(credentials, expressApp);
-log('Starting httpsServer on ' + BOOKS_API_PORT_SECURE);
+log('Starting httpsServer on ' + BOOKS_API_PORT_SECURE + '...');
 
 const app = new BooksAPIApp();
-log('Running BooksAPIApp...');
+log('Started books-api...');
 
 httpServer.listen(BOOKS_API_PORT, () => {
-  log(`Started server successfully on port ${BOOKS_API_PORT}.`);
+  log(`Listening port ${BOOKS_API_PORT}...`);
 });
 httpsServer.listen(BOOKS_API_PORT_SECURE, () => {
-  log(`Started server successfully on port ${BOOKS_API_PORT_SECURE}.`);
+  log(`Listening port ${BOOKS_API_PORT_SECURE}...`);
 });
 
 expressApp.get(
   '/author/id/:id/summary',
   cors(corsOptionsDelegate),
   (req, res) => {
-    log('GET: /author/id/:id/summary ' + JSON.stringify(req.params));
     const id = req.params.id;
     app
       .authorSummary(id)
@@ -67,7 +66,6 @@ expressApp.get(
   '/author/random/:number?',
   cors(corsOptionsDelegate),
   (req, res) => {
-    log('GET: /author/random/:number? ' + JSON.stringify(req.params));
     const number = req.params.number;
     app
       .randomAuthors(number)
@@ -84,7 +82,6 @@ expressApp.get(
   '/author/id/:id/books',
   cors(corsOptionsDelegate),
   (req, res) => {
-    log('GET: /author/id/:id/books ' + JSON.stringify(req.params));
     const id = req.params.id;
     app
       .authorBooks(id)
@@ -101,7 +98,6 @@ expressApp.get(
   '/book/id/:id',
   cors(corsOptionsDelegate),
   (req: express.Request, res: express.Response) => {
-    log('GET: /book/id/:id ' + JSON.stringify(req.params));
     const id = req.params.id;
     app
       .bookById(id)
@@ -117,7 +113,6 @@ expressApp.get(
   '/book/id/:id/summary',
   cors(corsOptionsDelegate),
   (req, res) => {
-    log('GET: /book/id/:id/summary ' + JSON.stringify(req.params));
     const id = req.params.id;
     app
       .bookSummaryById(id)
@@ -133,7 +128,6 @@ expressApp.get(
   '/book/random-id/:number?',
   cors(corsOptionsDelegate),
   (req, res) => {
-    log('GET: /book/random-id/:number? ' + JSON.stringify(req.params));
     const number = req.params.number;
     app
       .randomBookIds(number)
@@ -147,7 +141,6 @@ expressApp.get(
 );
 
 expressApp.get('/book/search/:query', cors(corsOptionsDelegate), (req, res) => {
-  log('GET: /book/search/:query ' + JSON.stringify(req.params));
   const query = req.params.query;
   app
     .bookSearch(query)
@@ -163,7 +156,6 @@ expressApp.get(
   '/book/advanced-search',
   cors(corsOptionsDelegate),
   (req, res) => {
-    log('GET: /book/advanced-search ' + JSON.stringify(req.query));
     const genres = req.query['genres'] as string;
     const params: AdvancedSearchParams = {
       genres: genres.length > 0 ? genres.split(',') : [],

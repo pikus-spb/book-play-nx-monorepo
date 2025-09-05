@@ -14,6 +14,8 @@ export const BOOK_IMAGE_HEIGHT = 300;
 export const BOOK_IMAGE_MARGIN = 32;
 export const NOT_AVAILABLE = 'н/д';
 // Заголовки
+export const BLOCKED_BOOK_TEXT =
+  'Книга была удалена по требованию правообладателя (но вы все еще можете прослушать её на сайте, самостоятельно купив и загрузив в плеер).';
 export const DEFAULT_TITLE_PREFIX = 'Book-play.ru';
 export const VOICE_PAGE_TITLE = [
   'Озвучить произвольный текст с помощью нейронной сети',
