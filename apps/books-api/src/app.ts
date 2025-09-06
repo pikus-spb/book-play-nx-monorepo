@@ -132,8 +132,8 @@ export default class BooksAPIApp {
       if (book.blocked) {
         book.paragraphs = `["${BLOCKED_BOOK_TEXT}"]`;
       } else {
-        book.paragraphs = readZippedFile(
-          getJsonGzFileName(environment.BOOKS_JSON_PATH + id)
+        book.paragraphs = JSON.parse(
+          readZippedFile(getJsonGzFileName(environment.BOOKS_JSON_PATH + id))
         );
       }
 
@@ -164,7 +164,10 @@ export default class BooksAPIApp {
         } else if (result.length === 0) {
           reject('Book not found with id: ' + id);
         } else {
-          resolve(result[0]);
+          const book = result[0];
+          book.blocked = Boolean(book.blocked); // convert to boolean from 1/0/null
+
+          resolve(book);
         }
       });
     });

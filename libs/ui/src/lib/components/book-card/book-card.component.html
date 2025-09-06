@@ -35,7 +35,9 @@
 
   <div class="action-panel">
     @if (book.blocked) {
-    <span>{{ BLOCKED_BOOK_TEXT }}</span>
+    <strong
+      ><i>{{ BLOCKED_BOOK_TEXT }}</i>
+    </strong>
     } @else {
     <button
       mat-fab

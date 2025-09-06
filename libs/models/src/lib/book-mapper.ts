@@ -12,7 +12,7 @@ export function DBBookToUIBook(book: Partial<DBBook>): Book {
     date: book.date,
     rating: book.rating,
     paragraphs: JSON.parse(book.paragraphs || '[]'),
-    blocked: book.blocked || false,
+    blocked: book.blocked,
     cover: ImageBase64Data.fromBase64String(book.cover || ''),
     author: new Author({
       id: book.authorId,
@@ -37,7 +37,7 @@ export function UIBookToDBBook(input: Book): DBBook {
     cover: input.cover?.toBase64String() || '',
     full: input.full,
     rating: input.rating,
-    blocked: input.blocked || false,
+    blocked: input.blocked,
   };
 }
 
