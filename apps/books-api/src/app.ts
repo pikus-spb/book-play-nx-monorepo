@@ -1,4 +1,5 @@
 import {
+  BLOCKED_BOOK_TEXT,
   FB2_GENRES_ALIASES,
   MAX_BOOK_SEARCH_RESULTS,
 } from '@book-play/constants';
@@ -128,9 +129,13 @@ export default class BooksAPIApp {
   async bookById(id: string): Promise<Partial<DBBook>> {
     try {
       const book = await this.bookSummaryById(id);
-      book.paragraphs = JSON.parse(
-        readZippedFile(getJsonGzFileName(environment.BOOKS_JSON_PATH + id))
-      );
+      if (book.blocked) {
+        book.paragraphs = `["${BLOCKED_BOOK_TEXT}"]`;
+      } else {
+        book.paragraphs = JSON.parse(
+          readZippedFile(getJsonGzFileName(environment.BOOKS_JSON_PATH + id))
+        );
+      }
 
       return book;
     } catch (err) {
@@ -143,7 +148,7 @@ export default class BooksAPIApp {
   bookSummaryById(id: string): Promise<Partial<DBBook>> {
     const sqlQuery = `SELECT
           books.id, books.name, books.annotation, books.genres, books.date,
-            books.full, books.cover, books.rating,
+            books.full, books.cover, books.rating, books.blocked,
           authors.first, authors.last, authors.id as authorId 
           FROM books
           CROSS JOIN authors
@@ -159,7 +164,10 @@ export default class BooksAPIApp {
         } else if (result.length === 0) {
           reject('Book not found with id: ' + id);
         } else {
-          resolve(result[0]);
+          const book = result[0];
+          book.blocked = Boolean(book.blocked); // convert to boolean from 1/0/null
+
+          resolve(book);
         }
       });
     });
