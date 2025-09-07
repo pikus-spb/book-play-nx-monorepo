@@ -53,6 +53,12 @@ div {
       display: block;
     }
 
+    cdk-virtual-scroll-viewport {
+      height: 100%;
+      flex-grow: 1;
+      flex-shrink: 0;
+    }
+
     ::ng-deep span.p {
       cursor: pointer;
       padding: 0 $default-padding * 2;
