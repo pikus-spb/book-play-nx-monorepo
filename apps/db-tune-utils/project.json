@@ -8,19 +8,18 @@
     "build": {
       "executor": "@nx/esbuild:esbuild",
       "outputs": ["{options.outputPath}"],
-      "defaultConfiguration": "development",
+      "defaultConfiguration": "production",
       "options": {
         "outputFileName": "db-tune.js",
         "thirdParty": true,
         "platform": "node",
         "outputPath": "dist/apps/db-tune-utils",
-        "format": ["cjs"],
+        "format": ["esm"],
         "bundle": true,
         "main": "apps/db-tune-utils/src/main.ts",
         "tsConfig": "apps/db-tune-utils/tsconfig.app.json",
         "externalDependencies": true,
-        "generatePackageJson": false,
-        "esbuildConfig": "environments/esbuild.config.ts"
+        "generatePackageJson": false
       },
       "configurations": {
         "development": {},
