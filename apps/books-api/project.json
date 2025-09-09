@@ -8,17 +8,16 @@
     "build": {
       "executor": "@nx/esbuild:esbuild",
       "outputs": ["{options.outputPath}"],
-      "defaultConfiguration": "development",
+      "defaultConfiguration": "production",
       "options": {
         "outputFileName": "books-api.js",
         "thirdParty": true,
         "platform": "node",
         "outputPath": "dist/apps/books-api",
-        "format": ["cjs"],
+        "format": ["esm"],
         "bundle": true,
         "main": "apps/books-api/src/main.ts",
         "tsConfig": "apps/books-api/tsconfig.app.json",
-        "esbuildConfig": "environments/esbuild.config.ts",
         "externalDependencies": false,
         "generatePackageJson": false
       },

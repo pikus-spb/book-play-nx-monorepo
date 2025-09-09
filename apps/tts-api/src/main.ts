@@ -1,9 +1,12 @@
-import { TTS_API_PORT, TTS_API_PORT_SECURE } from '@book-play/constants';
+import {
+  environment,
+  TTS_API_PORT,
+  TTS_API_PORT_SECURE,
+} from '@book-play/constants';
 import { TtsParams, Voices } from '@book-play/models';
 import { error, log } from '@book-play/utils-common';
 import bodyParser from 'body-parser';
 import cors from 'cors';
-import { environment } from 'environments/environment.ts';
 import express from 'express';
 import fs from 'fs';
 import http from 'http';

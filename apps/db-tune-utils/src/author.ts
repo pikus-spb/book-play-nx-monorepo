@@ -1,5 +1,5 @@
+import { environment } from '@book-play/constants';
 import { DBBook } from '@book-play/models';
-import { environment } from 'environments/environment';
 import mysql, { escape, PoolOptions } from 'mysql2';
 import { ResultSetHeader } from 'mysql2/typings/mysql/lib/protocol/packets/ResultSetHeader';
 

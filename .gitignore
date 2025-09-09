@@ -47,4 +47,4 @@ Thumbs.db
 /.nx/
 /patches/
 .cursor/rules/nx-rules.mdc
-environments
+libs/constants/src/lib/environment.ts
