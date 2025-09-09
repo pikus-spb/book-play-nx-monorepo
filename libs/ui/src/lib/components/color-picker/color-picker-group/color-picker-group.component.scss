@@ -1,0 +1,14 @@
+@use 'vars' as *;
+
+:host {
+  display: flex;
+  flex-direction: row;
+  gap: calc(2 * $default-padding);
+  align-items: center;
+
+  .title {
+    display: flex;
+    justify-content: center;
+    width: 100px;
+  }
+}

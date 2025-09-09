@@ -78,6 +78,12 @@
           }
         }
       }
+
+      &.readerViewSettings {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
     }
 
     ::ng-deep {

@@ -63,5 +63,31 @@
         [format]="24"
       ></ngx-mat-timepicker-field>
     </fieldset>
+
+    <h3>Режим чтения</h3>
+    <fieldset class="readerViewSettings">
+      <lib-color-picker-group formControlName="readerViewMode">
+        <lib-color-picker
+          color="#FFFFFF"
+          value="white"
+          title="Белый"
+        ></lib-color-picker>
+        <lib-color-picker
+          color="#F6F0E3"
+          value="warm"
+          title="Теплый"
+        ></lib-color-picker>
+        <lib-color-picker
+          color="#4B4B4B"
+          value="dark"
+          title="Темный"
+        ></lib-color-picker>
+        <lib-color-picker
+          color="#111111"
+          value="black"
+          title="Черный"
+        ></lib-color-picker>
+      </lib-color-picker-group>
+    </fieldset>
   </form>
 </div>

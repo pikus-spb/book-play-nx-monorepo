@@ -22,6 +22,7 @@ import {
 import { Store } from '@ngrx/store';
 import { NgxMatTimepickerFieldComponent } from 'ngx-mat-timepicker';
 import { debounceTime, map, tap } from 'rxjs';
+import { ColorPickerGroupComponent, ColorPickerComponent } from '@book-play/ui';
 
 @Component({
   selector: 'settings',
@@ -34,6 +35,8 @@ import { debounceTime, map, tap } from 'rxjs';
     MatSlider,
     MatSliderThumb,
     NgxMatTimepickerFieldComponent,
+    ColorPickerComponent,
+    ColorPickerGroupComponent,
   ],
 })
 export class SettingsComponent {
@@ -63,6 +66,7 @@ export class SettingsComponent {
       rate: [rate],
       pitch: [pitch],
       timer: [secondsToTimeString(timer)],
+      readerViewMode: ['white'],
       timerEnabled: [timer > 0],
     });
   }
@@ -72,11 +76,12 @@ export class SettingsComponent {
       .pipe(
         debounceTime(100),
         map((valueChanges) => {
-          const { voice, rate, pitch, timer } = valueChanges;
+          const { voice, rate, pitch, timer, readerViewMode } = valueChanges;
           return {
             voice,
             rate,
             pitch,
+            readerViewMode,
             timer: timeStringToSeconds(String(timer)),
           };
         }),
