@@ -76,14 +76,11 @@ export class SettingsComponent {
       .pipe(
         debounceTime(100),
         map((valueChanges) => {
-          const { voice, rate, pitch, timer, readerViewMode } = valueChanges;
-          return {
-            voice,
-            rate,
-            pitch,
-            readerViewMode,
-            timer: timeStringToSeconds(String(timer)),
-          };
+          const { timer } = valueChanges;
+          return Object.assign(
+            { ...valueChanges },
+            { timer: timeStringToSeconds(String(timer)) }
+          );
         }),
         tap((settings) => {
           this.store.dispatch(settingsUpdateAction({ settings }));
