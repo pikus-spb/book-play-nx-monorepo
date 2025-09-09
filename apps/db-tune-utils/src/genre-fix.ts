@@ -1,6 +1,6 @@
+import { environment } from '@book-play/constants';
 import { DBBook } from '@book-play/models';
 import { log } from '@book-play/utils-common';
-import { environment } from 'environments/environment';
 import mysql, { escape, PoolOptions } from 'mysql2';
 import { Pool as BasePool } from 'mysql2/typings/mysql/lib/Pool';
 import { ResultSetHeader } from 'mysql2/typings/mysql/lib/protocol/packets/ResultSetHeader';

@@ -1,4 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
+import { environment } from '@book-play/constants';
 import {
   loadRandomAuthorsAction,
   loadRandomBooksAction,
@@ -7,7 +8,6 @@ import {
 } from '@book-play/store';
 import { AuthorCardComponent, BookCardComponent } from '@book-play/ui';
 import { Store } from '@ngrx/store';
-import { environment } from 'environments/environment';
 
 @Component({
   selector: 'welcome',

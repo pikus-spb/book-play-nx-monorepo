@@ -1,10 +1,13 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { TTS_API_PORT, TTS_API_PORT_SECURE } from '@book-play/constants';
+import {
+  environment,
+  TTS_API_PORT,
+  TTS_API_PORT_SECURE,
+} from '@book-play/constants';
 import { TtsParams } from '@book-play/models';
 import { getCurrentProtocolUrl } from '@book-play/utils-browser';
 import { createQueryString } from '@book-play/utils-common';
-import { environment } from 'environments/environment';
 import { Observable } from 'rxjs';
 import { getSettings } from '../../utils/settings';
 

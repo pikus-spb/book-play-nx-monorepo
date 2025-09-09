@@ -1,3 +1,4 @@
+import { environment } from '@book-play/constants';
 import { UIAuthorToDBAuthor, UIBookToDBBook } from '@book-play/models';
 import { SearchBook } from '@book-play/scraper';
 import { error, Fb2Parser, log } from '@book-play/utils-common';
@@ -6,7 +7,6 @@ import {
   saveContentsToZipFile,
   unzipFile,
 } from '@book-play/utils-node';
-import { environment } from 'environments/environment.ts';
 import mysql, { PoolOptions } from 'mysql2';
 import { addAdditionalDataToAuthor } from './author-info.ts';
 import { saveToDataBase } from './db';
