@@ -1,7 +1,7 @@
+import { environment } from '@book-play/constants';
 import { DBBook } from '@book-play/models';
 import { log } from '@book-play/utils-common';
 import { addGenres } from '@book-play/utils-node';
-import { environment } from 'environments/environment';
 import mysql, { PoolOptions } from 'mysql2';
 import { Pool as BasePool } from 'mysql2/typings/mysql/lib/Pool';
 

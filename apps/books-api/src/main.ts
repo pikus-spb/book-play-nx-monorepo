@@ -1,8 +1,11 @@
-import { BOOKS_API_PORT, BOOKS_API_PORT_SECURE } from '@book-play/constants';
+import {
+  BOOKS_API_PORT,
+  BOOKS_API_PORT_SECURE,
+  environment,
+} from '@book-play/constants';
 import { AdvancedSearchParams, BookData } from '@book-play/models';
 import { log } from '@book-play/utils-common';
 import cors from 'cors';
-import { environment } from 'environments/environment.ts';
 import express from 'express';
 import fs from 'fs';
 import http from 'http';

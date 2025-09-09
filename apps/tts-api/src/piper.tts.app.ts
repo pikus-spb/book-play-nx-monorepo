@@ -1,3 +1,4 @@
+import { environment } from '@book-play/constants';
 import { TtsParams, Voices } from '@book-play/models';
 import { error, Log, log } from '@book-play/utils-common';
 import {
@@ -8,7 +9,6 @@ import {
   removeSilence,
 } from '@book-play/utils-node';
 import { ChildProcess, spawn } from 'child_process';
-import { environment } from 'environments/environment';
 import express from 'express';
 import fs from 'fs';
 

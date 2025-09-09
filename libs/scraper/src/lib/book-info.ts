@@ -1,6 +1,6 @@
+import { environment } from '@book-play/constants';
 import { log } from '@book-play/utils-common';
 import { randomSleep } from '@book-play/utils-node';
-import { environment } from 'environments/environment';
 import { Browser, Page } from 'puppeteer';
 import { BookInfo } from '../';
 

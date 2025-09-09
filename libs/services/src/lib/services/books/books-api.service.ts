@@ -1,7 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { BOOKS_API_PORT, BOOKS_API_PORT_SECURE } from '@book-play/constants';
-
+import {
+  BOOKS_API_PORT,
+  BOOKS_API_PORT_SECURE,
+  environment,
+} from '@book-play/constants';
 import {
   Author,
   AuthorSummary,
@@ -13,7 +16,6 @@ import {
   DBBookToUIBook,
 } from '@book-play/models';
 import { getCurrentProtocolUrl } from '@book-play/utils-browser';
-import { environment } from 'environments/environment';
 import { map, Observable } from 'rxjs';
 
 @Injectable({

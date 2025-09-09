@@ -1,5 +1,6 @@
 import {
   BLOCKED_BOOK_TEXT,
+  environment,
   FB2_GENRES_ALIASES,
   MAX_BOOK_SEARCH_RESULTS,
 } from '@book-play/constants';
@@ -16,7 +17,6 @@ import {
   readZippedFile,
   SQLQueryBuilder,
 } from '@book-play/utils-node';
-import { environment } from 'environments/environment.ts';
 import mysql, { PoolOptions } from 'mysql2';
 
 const pool = mysql.createPool(environment.DB_CONFIG as unknown as PoolOptions);

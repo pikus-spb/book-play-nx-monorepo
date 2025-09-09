@@ -1,8 +1,7 @@
-import { NOT_AVAILABLE } from '@book-play/constants';
+import { environment, NOT_AVAILABLE } from '@book-play/constants';
 import { DBBook } from '@book-play/models';
 import { BookInfo, SearchBook } from '@book-play/scraper';
 import { error, log } from '@book-play/utils-common';
-import { environment } from 'environments/environment';
 import mysql, { escape, PoolOptions } from 'mysql2';
 
 const pool = mysql.createPool(environment.DB_CONFIG as unknown as PoolOptions);
