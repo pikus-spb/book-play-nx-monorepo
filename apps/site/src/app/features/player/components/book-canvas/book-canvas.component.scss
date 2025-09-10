@@ -55,6 +55,7 @@ div {
 
     .book-header {
       font-size: 32px;
+      text-align: center;
       padding-left: 32px;
       margin-bottom: 16px;
       line-height: 1.5;
@@ -67,6 +68,8 @@ div {
 
     img {
       max-width: 100%;
+      display: block;
+      margin: 0 auto;
     }
 
     .title-picture-container {
