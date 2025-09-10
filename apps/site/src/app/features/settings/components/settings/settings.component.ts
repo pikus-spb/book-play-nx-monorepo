@@ -60,13 +60,13 @@ export class SettingsComponent {
   }
 
   private initializeValues(): void {
-    const { voice, rate, pitch, timer } = this.settings();
+    const { voice, rate, pitch, timer, readerViewMode } = this.settings();
     this.form = this.fb.group({
       voice: [voice],
       rate: [rate],
       pitch: [pitch],
       timer: [secondsToTimeString(timer)],
-      readerViewMode: ['white'],
+      readerViewMode: [readerViewMode],
       timerEnabled: [timer > 0],
     });
   }
