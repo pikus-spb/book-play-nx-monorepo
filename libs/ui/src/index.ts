@@ -11,6 +11,8 @@ export * from './lib/components/book-page/book-page.component';
 export * from './lib/components/book-card/book-card.component';
 export * from './lib/components/books-list/books-list.component';
 export * from './lib/components/book-details/book-details.component';
+export * from './lib/components/color-picker/color-picker/color-picker.component';
+export * from './lib/components/color-picker/color-picker-group/color-picker-group.component';
 export * from './lib/pipes/genre/genre.pipe';
 export * from './lib/pipes/genre/genres.pipe';
 export * from './lib/pipes/cast/cast.pipe';

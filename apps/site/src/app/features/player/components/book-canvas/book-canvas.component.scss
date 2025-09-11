@@ -1,6 +1,32 @@
 @use 'vars' as *;
 @use 'mixins' as *;
 
+// Reder View Modes
+:host.white {
+  .scrollable-canvas {
+    background-color: var(--reader-view-white-color);
+    color: var(--reader-view-white-font--color);
+  }
+}
+:host.warm {
+  .scrollable-canvas {
+    background-color: var(--reader-view-warm-color);
+    color: var(--reader-view-warm-font--color);
+  }
+}
+:host.dark {
+  .scrollable-canvas {
+    background-color: var(--reader-view-dark-color);
+    color: var(--reader-view-dark-font--color);
+  }
+}
+:host.black {
+  .scrollable-canvas {
+    background-color: var(--reader-view-black-color);
+    color: var(--reader-view-black-font--color);
+  }
+}
+
 div {
   width: 100%;
   height: 100%;
@@ -16,16 +42,10 @@ div {
       width: 100%;
       max-width: 100%;
       height: 100%;
-      background-color: burlywood;
-      -webkit-text-fill-color: rgba(0, 0, 0, 0.88);
     }
 
     & * {
-      font-family: Literata !important;
-    }
-
-    a {
-      color: $default-color-dark;
+      font-family: SanFrancisco !important;
     }
 
     .book-header,
@@ -35,6 +55,7 @@ div {
 
     .book-header {
       font-size: 32px;
+      text-align: center;
       padding-left: 32px;
       margin-bottom: 16px;
       line-height: 1.5;
@@ -47,6 +68,8 @@ div {
 
     img {
       max-width: 100%;
+      display: block;
+      margin: 0 auto;
     }
 
     .title-picture-container {
@@ -62,7 +85,9 @@ div {
     ::ng-deep span.p {
       cursor: pointer;
       padding: 0 $default-padding * 2;
-      text-align: justify;
+      text-align: start;
+      font-size: 19px;
+      line-height: 27px;
 
       &.active {
         font-weight: bold;
