@@ -1,4 +1,4 @@
 #!/bin/sh
 . "$(dirname "$0")/_/husky.sh"
 
-npx nx affected -t lint --parallel=5
+npx nx affected -t lint

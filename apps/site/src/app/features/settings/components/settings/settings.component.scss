@@ -18,13 +18,12 @@
   }
 
   form {
-    display: grid;
-    grid-auto-rows: 50px;
-    align-items: center;
-    grid-gap: $default-padding;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: $default-padding;
     width: min-content;
     max-width: $body-min-width;
-    gap: $default-padding;
 
     h3 {
       margin: 0;
@@ -37,12 +36,13 @@
     }
 
     fieldset {
+      width: 100%;
       padding: 3px $default-padding;
       display: grid;
       grid-template-columns: minmax(20%, 1fr) auto minmax(20%, 1fr);
       border-radius: $default-border-radius;
       align-items: center;
-      gap: $default-padding;
+      grid-gap: $default-padding;
 
       &.timer {
         display: flex;
@@ -77,6 +77,12 @@
             display: none;
           }
         }
+      }
+
+      &.readerViewSettings {
+        display: flex;
+        align-items: center;
+        justify-content: center;
       }
     }
 

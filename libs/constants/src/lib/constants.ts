@@ -30,7 +30,7 @@ export const NOT_FOUND_PAGE_TITLE = [
   DEFAULT_TITLE_PREFIX,
 ].join(' - ');
 export const SETTINGS_PAGE_TITLE = [
-  'Настройки голоса и таймера',
+  'Настройки сайта',
   DEFAULT_TITLE_PREFIX,
 ].join(' - ');
 export const EMPTY_CONTEXT =
