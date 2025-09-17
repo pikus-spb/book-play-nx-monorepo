@@ -126,9 +126,9 @@ export default class BooksAPIApp {
   }
 
   @Log()
-  async bookById(id: string): Promise<Partial<DBBook>> {
+  async bookById(id: string, password = ''): Promise<Partial<DBBook>> {
     try {
-      const book = await this.bookSummaryById(id);
+      const book = await this.bookSummaryById(id, password);
       if (book.blocked) {
         book.paragraphs = `["${BLOCKED_BOOK_TEXT}"]`;
       } else {
@@ -145,7 +145,7 @@ export default class BooksAPIApp {
   }
 
   @Log()
-  bookSummaryById(id: string): Promise<Partial<DBBook>> {
+  bookSummaryById(id: string, password = ''): Promise<Partial<DBBook>> {
     const sqlQuery = `SELECT
           books.id, books.name, books.annotation, books.genres, books.date,
             books.full, books.cover, books.rating, books.blocked,
@@ -165,7 +165,12 @@ export default class BooksAPIApp {
           reject('Book not found with id: ' + id);
         } else {
           const book = result[0];
-          book.blocked = Boolean(book.blocked); // convert to boolean from 1/0/null
+
+          if (password === environment.UNBLOCK_CONTENT_PASSWORD) {
+            book.blocked = false;
+          } else {
+            book.blocked = Boolean(book.blocked); // convert to boolean from 1/0/null
+          }
 
           resolve(book);
         }

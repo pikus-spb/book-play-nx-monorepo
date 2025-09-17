@@ -1,4 +1,5 @@
 import {
+  HTTP_INTERCEPTORS,
   provideHttpClient,
   withInterceptorsFromDi,
 } from '@angular/common/http';
@@ -38,6 +39,7 @@ import { StarRatingModule } from 'angular-star-rating';
 
 import { MainComponent } from './components/main/main.component';
 import { APP_ROUTES } from './routing/app-routes';
+import { UnblockContentInterceptor } from './routing/http-interceptor/unblock-content.interceptor';
 
 bootstrapApplication(MainComponent, {
   providers: [
@@ -75,5 +77,10 @@ bootstrapApplication(MainComponent, {
       StoreDevtoolsModule.instrument(),
       StoreRouterConnectingModule.forRoot()
     ),
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: UnblockContentInterceptor,
+      multi: true,
+    },
   ],
 }).catch((err) => console.error(err));
