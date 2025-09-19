@@ -44,7 +44,6 @@ export class VoiceAudioEffects {
   ttsSpeechLoad$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(VoiceAudioActions.VoiceAudioLoad),
-      distinctUntilChanged((prev, curr) => prev.text === curr.text),
       withLatestFrom(this.store.select(voiceAudioSelector)),
       mergeMap(([{ text }, cache]) => {
         if (cache.has(text)) {
