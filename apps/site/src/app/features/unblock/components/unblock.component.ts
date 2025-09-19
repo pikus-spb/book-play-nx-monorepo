@@ -10,6 +10,8 @@ import { environment, UNBLOCK_CONTENT_COOKIE_NAME } from '@book-play/constants';
 })
 export class UnblockComponent implements OnInit {
   ngOnInit(): void {
-    document.cookie = `${UNBLOCK_CONTENT_COOKIE_NAME}=${environment.UNBLOCK_CONTENT_PASSWORD}; path=/; max-age=31536000`;
+    document.cookie = `${UNBLOCK_CONTENT_COOKIE_NAME}=${
+      environment.UNBLOCK_CONTENT_PASSWORD
+    }; path=/; max-age=${30 * 24 * 60 * 60}`;
   }
 }
