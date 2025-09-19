@@ -14,7 +14,7 @@
         "thirdParty": true,
         "platform": "node",
         "outputPath": "dist/apps/tts-api",
-        "format": ["esm"],
+        "format": ["cjs"],
         "bundle": true,
         "main": "apps/tts-api/src/main.ts",
         "tsConfig": "apps/tts-api/tsconfig.app.json",

@@ -1,8 +1,18 @@
+import { environment } from './environment';
+
 // HTTP
 export const BOOKS_API_PORT = 8282;
 export const BOOKS_API_PORT_SECURE = 8443;
 export const TTS_API_PORT = 8181;
 export const TTS_API_PORT_SECURE = 8143;
+export const UNBLOCK_CONTENT_COOKIE_NAME = 'unblock.cookie.password';
+export const UNBLOCK_HEADER_NAME = 'X-Unblock-Token';
+export const CORS_OPTIONS = {
+  origin: environment.CORS_ALLOWED_LIST,
+  methods: ['GET', 'POST', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', UNBLOCK_HEADER_NAME],
+  preflightContinue: true,
+};
 // LIBRARY
 export const PARAGRAPH_CLASS_PREFIX = 'book-p-';
 // SITE
