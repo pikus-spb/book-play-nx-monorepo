@@ -14,7 +14,7 @@
         "thirdParty": true,
         "platform": "node",
         "outputPath": "dist/apps/books-api",
-        "format": ["esm"],
+        "format": ["cjs"],
         "bundle": true,
         "main": "apps/books-api/src/main.ts",
         "tsConfig": "apps/books-api/tsconfig.app.json",
