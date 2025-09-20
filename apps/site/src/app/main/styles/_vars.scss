@@ -19,17 +19,29 @@ $default-color-dark: rgb(0 0 0);
 $default-highlight-color: rgb(200 200 200 / 25%);
 // == Etc ==
 $default-border: $default-border-width solid $default-highlight-color;
-// = Book Reader View Mode  =
+// = Book Reader View Mode colors =
+$reader-view-white-color: #ffffff;
+$reader-view-white-font-color: #2f2f2f;
+
+$reader-view-warm-color: #f6f0e3;
+$reader-view-warm-font-color: #3b2b1f;
+
+$reader-view-dark-color: #4b4b4b;
+$reader-view-dark-font-color: #d5d5d5;
+
+$reader-view-black-color: #111111;
+$reader-view-black-font-color: #a6a6a7;
+
 :root {
-  --reader-view-white-color: #ffffff;
-  --reader-view-white-font--color: #2f2f2f;
+  --reader-view-white-color: #{$reader-view-white-color};
+  --reader-view-white-font-color: #{$reader-view-white-font-color};
 
-  --reader-view-warm-color: #f6f0e3;
-  --reader-view-warm-font--color: #3b2b1f;
+  --reader-view-warm-color: #{$reader-view-warm-color};
+  --reader-view-warm-font-color: #{$reader-view-warm-font-color};
 
-  --reader-view-dark-color: #4b4b4b;
-  --reader-view-dark-font--color: #d5d5d5;
+  --reader-view-dark-color: #{$reader-view-dark-color};
+  --reader-view-dark-font-color: #{$reader-view-dark-font-color};
 
-  --reader-view-black-color: #111111;
-  --reader-view-black-font--color: #a6a6a7;
+  --reader-view-black-color: #{$reader-view-black-color};
+  --reader-view-black-font-color: #{$reader-view-black-font-color};
 }

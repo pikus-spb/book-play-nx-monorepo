@@ -21,7 +21,7 @@ import {
   BOOK_IMAGE_WIDTH,
   DEFAULT_COVER_SRC,
 } from '@book-play/constants';
-import { Book, DefaultSettings, HeightDelta } from '@book-play/models';
+import { Book, HeightDelta } from '@book-play/models';
 import {
   DomHelperService,
   setupViewportScrollerService,
@@ -44,9 +44,6 @@ import { BookParagraphComponent } from '../book-paragraph/book-paragraph.compone
     HeightCalculateComponent,
     StarRatingComponent,
   ],
-  host: {
-    '[class]': 'getReaderViewModeClass()',
-  },
 })
 export class BookCanvasComponent implements OnDestroy {
   private el = inject(ElementRef);
@@ -97,12 +94,6 @@ export class BookCanvasComponent implements OnDestroy {
 
   public onParagraphClick(index: number): void {
     this.paragraphClick.emit(index);
-  }
-
-  protected getReaderViewModeClass(): string {
-    return (
-      localStorage.getItem('readerViewMode') || DefaultSettings.readerViewMode
-    );
   }
 
   ngOnDestroy() {
