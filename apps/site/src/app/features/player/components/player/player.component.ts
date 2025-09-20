@@ -15,6 +15,7 @@ import { AutoPlayService } from '../../../../shared/services/auto-play.service';
 
 import { BookCanvasComponent } from '../book-canvas/book-canvas.component';
 import { CountdownTimerComponent } from '../countdown-timer/countdown-timer.component';
+import { DefaultSettings } from '@book-play/models';
 
 @Component({
   selector: 'player',
@@ -26,6 +27,9 @@ import { CountdownTimerComponent } from '../countdown-timer/countdown-timer.comp
     CountdownTimerComponent,
     KeepScreenOnComponent,
   ],
+  host: {
+    '[class]': 'getReaderViewModeClass()',
+  },
 })
 export class PlayerComponent {
   private autoPlayService = inject(AutoPlayService);
@@ -49,6 +53,12 @@ export class PlayerComponent {
       subscription.unsubscribe();
       log('Keep screen on restarted');
     });
+  }
+
+  protected getReaderViewModeClass(): string {
+    return (
+      localStorage.getItem('readerViewMode') || DefaultSettings.readerViewMode
+    );
   }
 
   public startPlayParagraph(index: number): void {
