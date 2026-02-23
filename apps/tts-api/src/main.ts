@@ -14,7 +14,7 @@ import http from 'http';
 import * as https from 'node:https';
 import EdgeTtsApp from './edge.tts.app.ts';
 import PiperTtsApp from './piper.tts.app.ts';
-import YandexTtsApp from './yandex.tts.app.ts';
+import GoogleTtsApp from './google.tts.app';
 
 const privateKey = fs.readFileSync(environment.HTTPS_PRIVATE_KEY, 'utf8');
 const certificate = fs.readFileSync(environment.HTTPS_CERTIFICATE, 'utf8');
@@ -48,12 +48,8 @@ expressApp.post('/tts', async (req: express.Request, res: express.Response) => {
 
   let mp3Data = null;
   try {
-    if (
-      [Voices.Ermil, Voices.Jane, Voices.Omazh, Voices.Zahar].includes(
-        params.voice
-      )
-    ) {
-      mp3Data = await new YandexTtsApp().runTts(params);
+    if (params.voice === Voices.Vasilisa) {
+      mp3Data = await new GoogleTtsApp().runTts(params);
     } else if (
       [Voices.Irina, Voices.Tamara, Voices.Kirill].includes(params.voice)
     ) {

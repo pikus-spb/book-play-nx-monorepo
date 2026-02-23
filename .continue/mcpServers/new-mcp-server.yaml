@@ -1,0 +1,11 @@
+name: Angular MCP server
+version: 0.0.1
+schema: v1
+mcpServers:
+  - name: Angular MCP server
+    command: npx
+    args:
+      - -y
+      - ng
+      - mcp
+    env: {}

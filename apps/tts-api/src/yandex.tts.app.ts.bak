@@ -8,7 +8,7 @@ import {
   equalize,
   getRandomFileNames,
   pitch,
-  rate,
+  rate, 
 } from '@book-play/utils-node';
 import fs from 'fs';
 
