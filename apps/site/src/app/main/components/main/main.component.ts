@@ -6,7 +6,6 @@ import {
   inject,
   Renderer2,
 } from '@angular/core';
-import { toSignal } from '@angular/core/rxjs-interop';
 import { MatProgressBar } from '@angular/material/progress-bar';
 import {
   MatSidenav,
@@ -15,10 +14,9 @@ import {
 } from '@angular/material/sidenav';
 import { MatToolbar } from '@angular/material/toolbar';
 import { RouterModule } from '@angular/router';
-import { selectLoading } from '@book-play/store';
 import { DarkModeSwitcherComponent } from '@book-play/ui';
 import { isDarkMode, listenDarkModeChange } from '@book-play/utils-browser';
-import { Store } from '@ngrx/store';
+import { LoadingService } from '@book-play/services';
 
 import { BookTitleComponent } from '../../../shared/components/book-title/book-title.component';
 import { CopyrightOwnerComponent } from '../../../shared/components/copyright-owner/copyright-owner.component';
@@ -47,9 +45,8 @@ import { MainMenuComponent } from '../../../shared/components/main-menu/main-men
   ],
 })
 export class MainComponent implements AfterViewInit {
-  private store = inject(Store);
   private renderer = inject(Renderer2);
-  protected loading = toSignal(this.store.select(selectLoading));
+  protected loading = inject(LoadingService).loading;
 
   public ngAfterViewInit() {
     this.detectColorScheme(isDarkMode());

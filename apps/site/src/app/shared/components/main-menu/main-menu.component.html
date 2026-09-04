@@ -10,7 +10,7 @@
     routerLinkActive="active"
     ><mat-icon>cloud_upload</mat-icon>Загрузить
   </a>
-  @if (activeBookPresent() | async) {
+  @if (activeBookPresent()) {
   <a mat-list-item [routerLink]="['player']" routerLinkActive="active">
     <mat-icon>play_arrow</mat-icon>Плеер
   </a>

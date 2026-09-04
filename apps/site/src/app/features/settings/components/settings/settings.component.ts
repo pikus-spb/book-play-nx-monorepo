@@ -4,6 +4,7 @@ import {
   Component,
   DestroyRef,
   inject,
+  signal,
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
@@ -16,17 +17,17 @@ import {
   SETTINGS_VOICE_RATE_DELTA,
   UNBLOCK_CONTENT_COOKIE_NAME,
 } from '@book-play/constants';
-import { Voices } from '@book-play/models';
-import { settingsSelector, settingsUpdateAction } from '@book-play/store';
+import { Settings, Voices } from '@book-play/models';
+import { getSettings, storeSettings } from '@book-play/services';
 import { ColorPickerComponent, ColorPickerGroupComponent } from '@book-play/ui';
 import { getCookie } from '@book-play/utils-browser';
 import {
   secondsToTimeString,
   timeStringToSeconds,
 } from '@book-play/utils-common';
-import { Store } from '@ngrx/store';
 import { NgxMatTimepickerFieldComponent } from 'ngx-mat-timepicker';
 import { debounceTime, map, tap } from 'rxjs';
+import { VoiceAudioService } from '../../../../shared/services/voice-audio.service';
 
 @Component({
   selector: 'settings',
@@ -41,15 +42,15 @@ import { debounceTime, map, tap } from 'rxjs';
     NgxMatTimepickerFieldComponent,
     ColorPickerComponent,
     ColorPickerGroupComponent,
-    CommonModule
-],
+    CommonModule,
+  ],
 })
 export class SettingsComponent {
   protected form!: FormGroup;
 
   private fb = inject(FormBuilder);
-  private store = inject(Store);
-  protected settings = this.store.selectSignal(settingsSelector);
+  private voiceAudio = inject(VoiceAudioService);
+  protected settings = signal(getSettings());
   private destroyRef = inject(DestroyRef);
 
   constructor() {
@@ -91,8 +92,16 @@ export class SettingsComponent {
             { timer: timeStringToSeconds(String(timer)) }
           );
         }),
-        tap((settings) => {
-          this.store.dispatch(settingsUpdateAction({ settings }));
+        tap((settings: Settings) => {
+          const previous = this.settings();
+          storeSettings(settings);
+          this.settings.set(settings);
+          if (
+            `${settings.voice}${settings.rate}${settings.pitch}` !==
+            `${previous.voice}${previous.rate}${previous.pitch}`
+          ) {
+            this.voiceAudio.reset();
+          }
         }),
         takeUntilDestroyed(this.destroyRef)
       )

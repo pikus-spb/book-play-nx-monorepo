@@ -1,20 +1,16 @@
-import { AsyncPipe } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
-  computed,
+  effect,
   inject,
+  signal,
 } from '@angular/core';
 import { MatIcon } from '@angular/material/icon';
 import { MatListItem, MatNavList } from '@angular/material/list';
 import { RouterModule } from '@angular/router';
 import { BookPersistenceStorageService } from '@book-play/services';
-import {
-  activeBookImportFromFileAction,
-  activeBookSelector,
-} from '@book-play/store';
-import { Store } from '@ngrx/store';
 import { UploadFileDirective } from '../../directives/file-upload/upload-file.directive';
+import { ActiveBookService } from '../../services/active-book.service';
 
 @Component({
   selector: 'main-menu',
@@ -27,32 +23,36 @@ import { UploadFileDirective } from '../../directives/file-upload/upload-file.di
     MatIcon,
     MatNavList,
     MatListItem,
-    AsyncPipe,
   ],
 })
 export class MainMenuComponent {
-  private store = inject(Store);
-
-  public activeBook = this.store.selectSignal(activeBookSelector);
-  public activeBookPresent = computed(async () => {
-    const book = this.activeBook();
-    if (book) {
-      return true;
-    } else {
-      const data = await this.bookPersistenceStorageService.get();
-      if (data && data.content.length > 0) {
-        return true;
-      }
-    }
-
-    return false;
-  });
-
+  private activeBookService = inject(ActiveBookService);
   private bookPersistenceStorageService = inject(BookPersistenceStorageService);
+
+  public activeBook = this.activeBookService.book;
+  public activeBookPresent = signal(false);
+
+  constructor() {
+    effect(() => {
+      if (this.activeBook()) {
+        this.activeBookPresent.set(true);
+      }
+    });
+
+    if (!this.activeBook()) {
+      this.bookPersistenceStorageService
+        .hasBook()
+        .then((present) => {
+          if (!this.activeBook()) {
+            this.activeBookPresent.set(present);
+          }
+        });
+    }
+  }
 
   fileUploaded(files?: FileList) {
     if (files && files.length > 0) {
-      this.store.dispatch(activeBookImportFromFileAction({ file: files[0] }));
+      this.activeBookService.importFromFile(files[0]);
     }
   }
 }

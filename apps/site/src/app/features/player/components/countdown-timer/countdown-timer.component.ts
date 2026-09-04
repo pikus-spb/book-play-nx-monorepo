@@ -8,8 +8,7 @@ import {
 } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { DEFAULT_COUNTDOWN_TIMER_VALUE } from '@book-play/constants';
-import { settingsSelector } from '@book-play/store';
-import { Store } from '@ngrx/store';
+import { getSettings } from '@book-play/services';
 import {
   CountdownComponent,
   CountdownConfig,
@@ -29,22 +28,16 @@ export class CountdownTimerComponent {
   private autoPlayService = inject(AutoPlayService);
   protected stopped = toSignal(this.autoPlayService.stopped$);
   protected countdownConfig: CountdownConfig = {
-    leftTime: DEFAULT_COUNTDOWN_TIMER_VALUE,
+    leftTime: getSettings().timer || DEFAULT_COUNTDOWN_TIMER_VALUE,
     format: 'HH:mm:ss',
     demand: true,
     notify: 1,
   };
   private countDownComponent = viewChild(CountdownComponent);
-  private store = inject(Store);
-  private settings = this.store.selectSignal(settingsSelector);
 
   constructor() {
     effect(() => {
       this.checkStopped();
-    });
-
-    effect(() => {
-      this.countdownConfig.leftTime = this.settings().timer;
     });
   }
 

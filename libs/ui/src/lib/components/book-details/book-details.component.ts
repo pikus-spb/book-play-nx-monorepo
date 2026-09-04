@@ -5,13 +5,15 @@ import {
   EmbeddedViewRef,
   inject,
   input,
+  signal,
   TemplateRef,
   viewChild,
   ViewContainerRef,
 } from '@angular/core';
 import { MatIcon } from '@angular/material/icon';
-import { bookSummarySelector, loadBookSummaryAction } from '@book-play/store';
-import { Store } from '@ngrx/store';
+import { Book } from '@book-play/models';
+import { BooksApiService, LoadingService } from '@book-play/services';
+import { firstValueFrom } from 'rxjs';
 import { BookCardComponent } from '../book-card/book-card.component';
 
 @Component({
@@ -29,14 +31,15 @@ export class BookDetailsComponent {
   protected template = viewChild<TemplateRef<unknown>>('template');
   protected viewContainer = inject(ViewContainerRef);
   protected dialog = viewChild<ElementRef>('dialog');
-  private store = inject(Store);
+  private booksApiService = inject(BooksApiService);
+  private loading = inject(LoadingService);
   private embeddedViewRef?: EmbeddedViewRef<unknown>;
-  protected book = this.store.selectSignal(bookSummarySelector);
+  protected book = signal<Book | null>(null);
 
-  protected onClick(event: Event) {
+  protected async onClick(event: Event) {
     const bookId = this.bookId();
     if (bookId) {
-      this.store.dispatch(loadBookSummaryAction({ bookId }));
+      this.book.set(null);
 
       const template = this.template();
       if (template) {
@@ -44,6 +47,16 @@ export class BookDetailsComponent {
       }
       this.showDialog();
       event.preventDefault();
+
+      try {
+        this.book.set(
+          await this.loading.trackPromise(
+            firstValueFrom(this.booksApiService.loadBookSummaryById(bookId))
+          )
+        );
+      } catch {
+        this.book.set(null);
+      }
     }
   }
 

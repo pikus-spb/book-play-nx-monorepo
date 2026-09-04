@@ -6,6 +6,7 @@ import {
   inject,
   model,
   OnInit,
+  resource,
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
@@ -17,13 +18,9 @@ import {
   Router,
   RouterLink,
 } from '@angular/router';
-import {
-  bookSearchAction,
-  bookSearchErrorsSelector,
-  bookSearchSelector,
-} from '@book-play/store';
+import { BooksApiService, LoadingService } from '@book-play/services';
 import { BooksListComponent } from '@book-play/ui';
-import { Store } from '@ngrx/store';
+import { firstValueFrom } from 'rxjs';
 import { LoadingThenShowDirective } from '../../../../shared/directives/loading-then-show/loading-then-show.directive';
 
 @Component({
@@ -42,10 +39,20 @@ import { LoadingThenShowDirective } from '../../../../shared/directives/loading-
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BookSearchComponent implements OnInit {
-  private store = inject(Store);
-  protected data = this.store.selectSignal(bookSearchSelector);
-  protected errors = this.store.selectSignal(bookSearchErrorsSelector);
+  private booksApiService = inject(BooksApiService);
+  private loading = inject(LoadingService);
   protected query = model<string | null>('');
+  protected data = resource({
+    params: () => this.query() || '',
+    loader: async ({ params }) => {
+      if (!params) {
+        return null;
+      }
+      return this.loading.trackPromise(
+        firstValueFrom(this.booksApiService.bookSearch(params))
+      );
+    },
+  });
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private destroyRef = inject(DestroyRef);
@@ -64,13 +71,6 @@ export class BookSearchComponent implements OnInit {
 
   protected initSearch(): void {
     this.query.set(this.route.snapshot.paramMap.get('search'));
-    if (this.query()) {
-      this.store.dispatch(
-        bookSearchAction({
-          query: this.query()!,
-        })
-      );
-    }
   }
 
   protected submit(event: Event): void {

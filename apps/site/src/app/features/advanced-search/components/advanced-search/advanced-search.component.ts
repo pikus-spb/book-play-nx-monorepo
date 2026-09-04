@@ -31,11 +31,9 @@ import {
 } from '@angular/router';
 import { FB2_GENRES } from '@book-play/constants';
 import { AdvancedSearchParams } from '@book-play/models';
-import { BooksApiService } from '@book-play/services';
-import { loadingEndAction, loadingStartAction } from '@book-play/store';
+import { BooksApiService, LoadingService } from '@book-play/services';
 import { BooksListComponent, StarRatingComponent } from '@book-play/ui';
 import { createQueryString, parseQueryString } from '@book-play/utils-common';
-import { Store } from '@ngrx/store';
 import { StarRatingModule } from 'angular-star-rating';
 import { firstValueFrom } from 'rxjs';
 import { GenresFilterControlComponent } from '../genres-filter-control/genres-filter-control.component';
@@ -62,20 +60,17 @@ import { GenresFilterControlComponent } from '../genres-filter-control/genres-fi
 })
 export class AdvancedSearchComponent implements AfterViewInit {
   private booksApiService = inject(BooksApiService);
+  private loading = inject(LoadingService);
   protected data = resource({
     params: () => (this.query() !== '' ? this.query() : undefined),
     loader: async ({ params }) => {
-      this.store.dispatch(loadingStartAction());
-      const result = await firstValueFrom(
-        this.booksApiService.advancedSearch(params)
+      return this.loading.trackPromise(
+        firstValueFrom(this.booksApiService.advancedSearch(params))
       );
-      this.store.dispatch(loadingEndAction());
-      return result;
     },
   });
   private fb = inject(FormBuilder);
   protected form: FormGroup;
-  private store = inject(Store);
   private router = inject(Router);
   private route = inject(ActivatedRoute);
   private destroyRef = inject(DestroyRef);

@@ -19,8 +19,8 @@
     </form>
     <span #loading></span>
   </h5>
-  <lib-books-list [data]="data"></lib-books-list>
-  @if (errors() && errors().length > 0) {
-  <span>Ошибка: {{ errors().join(' ') }}</span>
+  <lib-books-list [data]="data.value"></lib-books-list>
+  @if (data.error()) {
+  <span>Ошибка: {{ data.error() | json }}</span>
   }
 </div>

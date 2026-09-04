@@ -195,8 +195,7 @@ export const APP_ROUTES: Route[] = [
       const bookPersistenceStorageService = inject(
         BookPersistenceStorageService
       );
-      const data = await bookPersistenceStorageService.get();
-      if (data && data.content.length > 0) {
+      if (await bookPersistenceStorageService.hasBook()) {
         return '/player';
       }
       return '/index';

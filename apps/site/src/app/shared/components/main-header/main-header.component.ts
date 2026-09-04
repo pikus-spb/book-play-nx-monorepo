@@ -6,13 +6,13 @@ import {
   inject,
   Output,
 } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { MatFabButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { MatTooltip } from '@angular/material/tooltip';
 import { Router } from '@angular/router';
-import { activeBookSelector } from '@book-play/store';
-import { Store } from '@ngrx/store';
 import { PlayerButtonComponent } from '../player-button/player-button.component';
+import { ActiveBookService } from '../../services/active-book.service';
 
 @Component({
   selector: 'main-header',
@@ -23,10 +23,11 @@ import { PlayerButtonComponent } from '../player-button/player-button.component'
 })
 export class MainHeaderComponent {
   @Output() showMenu = new EventEmitter<void>();
+  private router = inject(Router);
+  private activeBook = inject(ActiveBookService).book;
+  private routeChanged = toSignal(this.router.events);
   public playerIsActive = computed(() => {
+    this.routeChanged();
     return this.activeBook() && this.router.url.indexOf('/player') !== -1;
   });
-  private store = inject(Store);
-  private activeBook = this.store.selectSignal(activeBookSelector);
-  private router = inject(Router);
 }

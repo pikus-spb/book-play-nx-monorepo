@@ -19,6 +19,11 @@ export class BookPersistenceStorageService extends Dexie {
     return this.dbTable.where({ id: 1 }).first();
   }
 
+  /** Existence check without reading the full book payload. */
+  async hasBook(): Promise<boolean> {
+    return (await this.dbTable.where({ id: 1 }).count()) > 0;
+  }
+
   set(content: string): Promise<number> {
     this.dbTable.clear();
 

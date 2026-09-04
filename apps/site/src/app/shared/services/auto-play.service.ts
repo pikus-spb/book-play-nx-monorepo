@@ -1,55 +1,41 @@
 import { effect, inject, Injectable } from '@angular/core';
-import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { VOICE_CACHE_PRELOAD_EXTRA } from '@book-play/constants';
-import { Book } from '@book-play/models';
 import {
   AppEventNames,
   CursorPositionService,
   DomAudioHelperService,
   DomHelperService,
   EventsStateService,
+  LoadingService,
 } from '@book-play/services';
 import {
-  activeBookSelector,
-  loadingEndAction,
-  loadingStartAction,
-  VoiceAudioHelperService,
-} from '@book-play/store';
-import { Store } from '@ngrx/store';
-import {
   debounceTime,
-  distinctUntilKeyChanged,
-  filter,
   firstValueFrom,
   fromEvent,
   map,
   merge,
   Observable,
   race,
-  skip,
   tap,
 } from 'rxjs';
+import { ActiveBookService } from './active-book.service';
 import { AudioPreloadingService } from './audio-preloading.service';
+import { VoiceAudioService } from './voice-audio.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AutoPlayService {
-  private store = inject(Store);
-  private activeBook = this.store.selectSignal(activeBookSelector);
-  private activeBookChanged = toSignal(
-    this.store.select(activeBookSelector).pipe(
-      filter((value) => value !== null),
-      distinctUntilKeyChanged<Book>('hash'),
-      skip(1)
-    )
-  );
+  private activeBook = inject(ActiveBookService).book;
+  private loading = inject(LoadingService);
   private audioPlayer = inject(DomAudioHelperService);
   private eventStateService = inject(EventsStateService);
   private cursorPositionService = inject(CursorPositionService);
   private domHelper = inject(DomHelperService);
   private audioPreloadingService = inject(AudioPreloadingService);
-  private audioCacheHelperService = inject(VoiceAudioHelperService);
+  private voiceAudio = inject(VoiceAudioService);
+  private previousBookHash?: string;
 
   constructor() {
     this.cursorPositionService.position$
@@ -73,27 +59,30 @@ export class AutoPlayService {
       .subscribe();
 
     effect(() => {
-      if (this.activeBookChanged()) {
+      const book = this.activeBook();
+      if (book && this.previousBookHash && this.previousBookHash !== book.hash) {
         this.stop();
         this.domHelper.showActiveParagraph();
       }
+      this.previousBookHash = book?.hash;
     });
   }
 
   public async ensureAudioDataReady() {
-    if (
-      !(await this.audioCacheHelperService.getAudio(
-        this.cursorPositionService.position
-      ))
-    ) {
-      this.store.dispatch(loadingStartAction());
+    const text =
+      this.activeBook()?.textParagraphs[this.cursorPositionService.position];
+    if (!text || this.voiceAudio.getCached(text)) {
+      return;
+    }
 
+    this.loading.start();
+    try {
       await this.audioPreloadingService.preloadParagraph(
         this.cursorPositionService.position,
         VOICE_CACHE_PRELOAD_EXTRA.min
       );
-
-      this.store.dispatch(loadingEndAction());
+    } finally {
+      this.loading.end();
     }
   }
 
@@ -117,17 +106,14 @@ export class AutoPlayService {
     if (index >= 0 && index < this.bookLength) {
       this.cursorPositionService.position = index;
     }
-    this.store.dispatch(loadingEndAction());
 
     while (true) {
       await this.autoScrollingEnded();
       await this.ensureAudioDataReady();
 
-      this.audioPlayer.setAudio(
-        await this.audioCacheHelperService.getAudio(
-          this.cursorPositionService.position
-        )
-      );
+      const text =
+        this.activeBook()!.textParagraphs[this.cursorPositionService.position];
+      this.audioPlayer.setAudio(this.voiceAudio.getCached(text));
 
       await this.audioPlayer.play();
 

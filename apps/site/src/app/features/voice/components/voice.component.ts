@@ -11,10 +11,8 @@ import {
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatButton } from '@angular/material/button';
-import { TtsApiService } from '@book-play/services';
-import { loadingEndAction, loadingStartAction } from '@book-play/store';
+import { LoadingService, TtsApiService } from '@book-play/services';
 import { blobToBase64 } from '@book-play/utils-browser';
-import { Store } from '@ngrx/store';
 import {
   BehaviorSubject,
   distinctUntilChanged,
@@ -40,7 +38,7 @@ export class VoiceComponent implements AfterViewInit {
 
   public text = '';
   public valid$: Subject<boolean> = new BehaviorSubject(false);
-  private store = inject(Store);
+  private loading = inject(LoadingService);
   private speechService = inject(TtsApiService);
   private destroyRef = inject(DestroyRef);
 
@@ -59,18 +57,16 @@ export class VoiceComponent implements AfterViewInit {
   }
 
   async voice() {
-    this.store.dispatch(loadingStartAction());
-
-    const data = await firstValueFrom(
-      this.speechService.textToSpeech(this.text).pipe(
-        switchMap((blob: Blob) => {
-          return blobToBase64(blob);
-        })
+    const data = await this.loading.trackPromise(
+      firstValueFrom(
+        this.speechService.textToSpeech(this.text).pipe(
+          switchMap((blob: Blob) => {
+            return blobToBase64(blob);
+          })
+        )
       )
     );
     this.addAudioElement(data, this.text);
-
-    this.store.dispatch(loadingEndAction());
   }
 
   ngAfterViewInit() {

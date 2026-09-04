@@ -12,9 +12,7 @@ import {
   TemplateRef,
   ViewContainerRef,
 } from '@angular/core';
-import { toSignal } from '@angular/core/rxjs-interop';
-import { selectLoading } from '@book-play/store';
-import { Store } from '@ngrx/store';
+import { LoadingService } from '@book-play/services';
 import { LoadingIndicatorComponent } from '../../components/loading-indicator/loading-indicator.component';
 
 @Directive({
@@ -23,8 +21,7 @@ import { LoadingIndicatorComponent } from '../../components/loading-indicator/lo
 export class LoadingThenShowDirective implements OnInit, OnDestroy {
   @Input() thenShow?: TemplateRef<unknown>;
   private viewContainerRef = inject(ViewContainerRef);
-  private store = inject(Store);
-  private loading = toSignal(this.store.select(selectLoading));
+  private loading = inject(LoadingService).loading;
   private placeHolder = contentChild('loading', {
     read: ViewContainerRef,
   });

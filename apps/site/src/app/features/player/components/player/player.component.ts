@@ -2,20 +2,19 @@ import {
   ChangeDetectionStrategy,
   Component,
   inject,
-  linkedSignal,
   signal,
   WritableSignal,
 } from '@angular/core';
-import { activeBookSelector, settingsSelector } from '@book-play/store';
+import { DefaultSettings } from '@book-play/models';
+import { getSettings } from '@book-play/services';
 import { KeepScreenOnComponent } from '@book-play/ui';
 import { log } from '@book-play/utils-common';
-import { Store } from '@ngrx/store';
 import { fromEvent, merge } from 'rxjs';
+import { ActiveBookService } from '../../../../shared/services/active-book.service';
 import { AutoPlayService } from '../../../../shared/services/auto-play.service';
 
 import { BookCanvasComponent } from '../book-canvas/book-canvas.component';
 import { CountdownTimerComponent } from '../countdown-timer/countdown-timer.component';
-import { DefaultSettings } from '@book-play/models';
 
 @Component({
   selector: 'player',
@@ -33,12 +32,8 @@ import { DefaultSettings } from '@book-play/models';
 })
 export class PlayerComponent {
   private autoPlayService = inject(AutoPlayService);
-  private store = inject(Store);
-  public book = this.store.selectSignal(activeBookSelector);
-  private settings = this.store.selectSignal(settingsSelector);
-  protected countDownEnabled = linkedSignal(() => {
-    return this.settings().timer > 0;
-  });
+  public book = inject(ActiveBookService).book;
+  protected countDownEnabled = signal(getSettings().timer > 0);
   protected keepScreenOnEnable: WritableSignal<boolean> = signal(true);
 
   protected countdownTimerComplete() {

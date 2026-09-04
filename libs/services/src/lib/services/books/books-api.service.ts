@@ -16,7 +16,7 @@ import {
   DBBookToUIBook,
 } from '@book-play/models';
 import { getCurrentProtocolUrl } from '@book-play/utils-browser';
-import { map, Observable } from 'rxjs';
+import { forkJoin, map, Observable, of, switchMap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -61,6 +61,19 @@ export class BooksApiService {
   ): Observable<string[]> {
     const url = this.apiUrlPrefix + `/book/random-id/${number}`;
     return this.http.get<string[]>(url);
+  }
+
+  public loadRandomBooks(
+    number = environment.RANDOM_BOOKS_COUNT
+  ): Observable<Book[]> {
+    return this.loadRandomBookIds(number).pipe(
+      switchMap((ids: string[]) => {
+        if (ids.length === 0) {
+          return of([]);
+        }
+        return forkJoin(ids.map((id) => this.loadBookSummaryById(id)));
+      })
+    );
   }
 
   public loadAuthorBooks(id: string): Observable<Book[]> {
