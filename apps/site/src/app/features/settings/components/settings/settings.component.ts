@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -10,11 +11,15 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatSlider, MatSliderThumb } from '@angular/material/slider';
 import {
   DEFAULT_COUNTDOWN_TIMER_VALUE,
+  environment,
   SETTINGS_VOICE_PITCH_DELTA,
   SETTINGS_VOICE_RATE_DELTA,
+  UNBLOCK_CONTENT_COOKIE_NAME,
 } from '@book-play/constants';
 import { Voices } from '@book-play/models';
 import { settingsSelector, settingsUpdateAction } from '@book-play/store';
+import { ColorPickerComponent, ColorPickerGroupComponent } from '@book-play/ui';
+import { getCookie } from '@book-play/utils-browser';
 import {
   secondsToTimeString,
   timeStringToSeconds,
@@ -22,7 +27,6 @@ import {
 import { Store } from '@ngrx/store';
 import { NgxMatTimepickerFieldComponent } from 'ngx-mat-timepicker';
 import { debounceTime, map, tap } from 'rxjs';
-import { ColorPickerGroupComponent, ColorPickerComponent } from '@book-play/ui';
 
 @Component({
   selector: 'settings',
@@ -37,7 +41,8 @@ import { ColorPickerGroupComponent, ColorPickerComponent } from '@book-play/ui';
     NgxMatTimepickerFieldComponent,
     ColorPickerComponent,
     ColorPickerGroupComponent,
-  ],
+    CommonModule
+],
 })
 export class SettingsComponent {
   protected form!: FormGroup;
@@ -57,6 +62,10 @@ export class SettingsComponent {
     value += event.deltaY > 0 ? -1 : 1;
     this.form.patchValue({ [fieldName]: value });
     event.stopPropagation();
+  }
+
+  protected hasDisallowedContent(): boolean {
+    return getCookie(UNBLOCK_CONTENT_COOKIE_NAME) === environment.UNBLOCK_CONTENT_PASSWORD;
   }
 
   private initializeValues(): void {
