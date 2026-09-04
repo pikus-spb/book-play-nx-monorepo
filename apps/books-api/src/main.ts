@@ -59,7 +59,7 @@ expressApp.get('/author/id/:id/summary', (req, res) => {
 });
 
 expressApp.get('/author/random/:number?', (req, res) => {
-  const number = req.params.number;
+  const { number } = req.params as { number?: string };
   app
     .randomAuthors(number)
     .then((authors) => {
@@ -88,7 +88,7 @@ expressApp.get(
     const id = req.params.id;
     const password = req.header(UNBLOCK_HEADER_NAME) || '';
     app
-      .bookById(id, password)
+      .bookById(id as string, password)
       .then((book) => {
         res.json(book);
       })
@@ -110,7 +110,7 @@ expressApp.get('/book/id/:id/summary', (req, res) => {
     });
 });
 expressApp.get('/book/random-id/:number?', (req, res) => {
-  const number = req.params.number;
+  const { number } = req.params as { number?: string };
   app
     .randomBookIds(number)
     .then((ids) => {

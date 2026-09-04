@@ -1,13 +1,14 @@
 import { TtsParams } from '@book-play/models';
-import { log, Log } from '@book-play/utils-common';
+import { Log } from '@book-play/utils-common';
 import {
   getRandomFileNames,
   pitch,
   rate,
   removeSilence,
+  runProcess,
+  throwIfAborted,
 } from '@book-play/utils-node';
 import { Blob } from 'buffer';
-import { spawn } from 'child_process';
 import fs from 'fs';
 
 export default class EdgeTtsApp {
@@ -16,34 +17,35 @@ export default class EdgeTtsApp {
   }
 
   @Log()
-  public runTts(params: TtsParams): Promise<Blob> {
+  public async runTts(params: TtsParams, signal?: AbortSignal): Promise<Blob> {
     const { text, voice } = params;
     const files = getRandomFileNames(4, '.mp3');
 
-    const args = [];
-    args.push(`--text="${this.normalizeText(text)}"`);
-    args.push(`--voice=${voice}`);
-    args.push(`--write-media=${files[0]}`);
+    try {
+      throwIfAborted(signal);
 
-    const ttsProc = spawn('edge-tts', args, { detached: true });
+      const args = [];
+      args.push(`--text="${this.normalizeText(text)}"`);
+      args.push(`--voice=${voice}`);
+      args.push(`--write-media=${files[0]}`);
 
-    return new Promise((resolve) => {
-      ttsProc.on('close', async () => {
-        await removeSilence(files[0], files[1]);
-        await pitch(params.pitch, '24000', files[1], files[2]);
-        await rate(params.rate, files[2], files[3]);
+      await runProcess('edge-tts', args, { signal });
+      await removeSilence(files[0], files[1], { signal });
+      await pitch(params.pitch, '24000', files[1], files[2], { signal });
+      await rate(params.rate, files[2], files[3], { signal });
 
-        const buffer = fs.readFileSync(files[3]);
-        const blob = new Blob([buffer]);
+      throwIfAborted(signal);
+      const buffer = fs.readFileSync(files[3]);
 
-        resolve(blob);
-
-        setTimeout(() => {
-          files.forEach((file) => {
+      return new Blob([buffer]);
+    } finally {
+      setTimeout(() => {
+        files.forEach((file) => {
+          if (fs.existsSync(file)) {
             fs.unlinkSync(file);
-          });
-        }, 100);
-      });
-    });
+          }
+        });
+      }, 100);
+    }
   }
 }

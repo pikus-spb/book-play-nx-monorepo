@@ -9,6 +9,7 @@ export enum Voices {
   Kirill = 'kirill',
   Irina = 'irina',
   Vasilisa = 'vasilisa',
+  F5 = 'Klukvin',
 }
 
 export interface TtsParams {

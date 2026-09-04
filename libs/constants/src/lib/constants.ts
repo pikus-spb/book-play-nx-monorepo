@@ -59,7 +59,7 @@ export const SETTINGS_VOICE_PITCH_DELTA = 15;
 // BOOKS CRAWLER
 export const MAX_IMAGE_DATA_LENGTH = 1000000;
 // TTS API
-export const YANDEX_TTS_API_URL = 'https://tts.voicetech.yandex.net/generate';
+export const YANDEX_TTS_API_URL = 'https://tts.api.cloud.yandex.net/speech/v1/tts:synthesize';
 export const YANDEX_TTS_API_DEFAULT_OPTIONS = Object.freeze({
   key: '069b6659-984b-4c5f-880e-aaedcfd84102',
   format: 'mp3',
