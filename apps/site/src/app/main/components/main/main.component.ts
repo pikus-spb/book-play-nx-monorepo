@@ -1,10 +1,8 @@
 import {
-  AfterViewInit,
   ChangeDetectionStrategy,
   Component,
   HostBinding,
-  inject,
-  Renderer2,
+  inject
 } from '@angular/core';
 import { MatProgressBar } from '@angular/material/progress-bar';
 import {
@@ -14,8 +12,7 @@ import {
 } from '@angular/material/sidenav';
 import { MatToolbar } from '@angular/material/toolbar';
 import { RouterModule } from '@angular/router';
-import { DarkModeSwitcherComponent } from '@book-play/ui';
-import { isDarkMode, listenDarkModeChange } from '@book-play/utils-browser';
+
 import { LoadingService } from '@book-play/services';
 
 import { BookTitleComponent } from '../../../shared/components/book-title/book-title.component';
@@ -23,7 +20,7 @@ import { CopyrightOwnerComponent } from '../../../shared/components/copyright-ow
 import { CopyrightComponent } from '../../../shared/components/copyright/copyright.component';
 import { MainHeaderComponent } from '../../../shared/components/main-header/main-header.component';
 import { MainMenuComponent } from '../../../shared/components/main-menu/main-menu.component';
-
+ 
 @Component({
   selector: 'main',
   templateUrl: './main.component.html',
@@ -41,29 +38,15 @@ import { MainMenuComponent } from '../../../shared/components/main-menu/main-men
     MatSidenav,
     MatSidenavContent,
     MatSidenavContainer,
-    DarkModeSwitcherComponent,
   ],
 })
-export class MainComponent implements AfterViewInit {
-  private renderer = inject(Renderer2);
+
+export class MainComponent {
   protected loading = inject(LoadingService).loading;
 
-  public ngAfterViewInit() {
-    this.detectColorScheme(isDarkMode());
-    this.addListeners();
-  }
 
   @HostBinding('class.loading')
   get loadingState() {
     return this.loading();
   }
-
-  private detectColorScheme(darkMode: boolean): void {
-    this.renderer.removeClass(document.body, darkMode ? 'light' : 'dark');
-    this.renderer.addClass(document.body, darkMode ? 'dark' : 'light');
-  }
-
-  private addListeners(): void {
-    listenDarkModeChange((isDarkMode) => this.detectColorScheme(isDarkMode));
-  }
-}
+} 

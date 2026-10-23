@@ -1,16 +1,15 @@
+import {
+  HttpEvent,
+  HttpHandler,
+  HttpInterceptor,
+  HttpRequest,
+} from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import {
-  HttpRequest,
-  HttpHandler,
-  HttpEvent,
-  HttpInterceptor,
-} from '@angular/common/http';
-import { Observable } from 'rxjs';
-import {
-  UNBLOCK_CONTENT_COOKIE_NAME,
+  environment,
   UNBLOCK_HEADER_NAME,
 } from '@book-play/constants';
-import { getCookie } from '@book-play/utils-browser';
+import { Observable } from 'rxjs';
 
 @Injectable()
 export class UnblockContentInterceptor implements HttpInterceptor {
@@ -18,15 +17,11 @@ export class UnblockContentInterceptor implements HttpInterceptor {
     request: HttpRequest<unknown>,
     next: HttpHandler
   ): Observable<HttpEvent<unknown>> {
-    const cookieValue = getCookie(UNBLOCK_CONTENT_COOKIE_NAME);
-    let modifiedRequest = request;
-    if (cookieValue) {
-      modifiedRequest = request.clone({
+    const modifiedRequest = request.clone({
         setHeaders: {
-          [UNBLOCK_HEADER_NAME]: cookieValue,
+          [UNBLOCK_HEADER_NAME]: environment.UNBLOCK_CONTENT_PASSWORD,
         },
       });
-    }
     return next.handle(modifiedRequest);
   }
 }

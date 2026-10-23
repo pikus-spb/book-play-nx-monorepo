@@ -17,5 +17,13 @@
 
   .button {
     cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .icon-greyscale {
+    color: #808080;
+    filter: grayscale(100%);
   }
 }

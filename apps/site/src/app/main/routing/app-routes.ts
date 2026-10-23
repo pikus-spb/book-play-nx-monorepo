@@ -174,20 +174,7 @@ export const APP_ROUTES: Route[] = [
     },
     title: SETTINGS_PAGE_TITLE,
   },
-  {
-    path: 'admin',
-    children: [
-      {
-        path: 'unblock1234',
-        loadComponent() {
-          return import(
-            '../../features/unblock/components/unblock.component'
-          ).then((imported) => imported.UnblockComponent);
-        },
-      },
-    ],
-    title: 'Разблокировка контента',
-  },
+  
   {
     path: '',
     pathMatch: 'full',

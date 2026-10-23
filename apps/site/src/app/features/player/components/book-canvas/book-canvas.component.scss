@@ -68,6 +68,13 @@ div {
 
         &:before {
           margin-left: -$default-padding;
+          display: inline-block;
+          width: 14px;
+          text-align: center;
+          margin-right: 4px;
+          font-size: 12px;
+          vertical-align: middle;
+          filter: grayscale(100%);
         }
       }
     }
@@ -78,7 +85,7 @@ div {
   book-canvas {
     span.p.active {
       &:before {
-        content: '▶️';
+        content: '\25B6';
       }
     }
   }
@@ -87,7 +94,14 @@ div {
     book-canvas {
       span.p.active {
         &:before {
-          content: '⌛';
+          content: '\231B';
+          display: inline-block;
+          width: 14px;
+          text-align: center;
+          margin-right: 4px;
+          font-size: 12px;
+          vertical-align: middle;
+          filter: grayscale(100%);
         }
       }
     }

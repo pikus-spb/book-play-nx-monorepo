@@ -12,15 +12,12 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatSlider, MatSliderThumb } from '@angular/material/slider';
 import {
   DEFAULT_COUNTDOWN_TIMER_VALUE,
-  environment,
   SETTINGS_VOICE_PITCH_DELTA,
-  SETTINGS_VOICE_RATE_DELTA,
-  UNBLOCK_CONTENT_COOKIE_NAME,
+  SETTINGS_VOICE_RATE_DELTA
 } from '@book-play/constants';
 import { Settings, Voices } from '@book-play/models';
 import { getSettings, storeSettings } from '@book-play/services';
 import { ColorPickerComponent, ColorPickerGroupComponent } from '@book-play/ui';
-import { getCookie } from '@book-play/utils-browser';
 import {
   secondsToTimeString,
   timeStringToSeconds,
@@ -65,14 +62,10 @@ export class SettingsComponent {
     event.stopPropagation();
   }
 
-  protected hasDisallowedContent(): boolean {
-    return getCookie(UNBLOCK_CONTENT_COOKIE_NAME) === environment.UNBLOCK_CONTENT_PASSWORD;
-  }
-
   private initializeValues(): void {
-    const { voice, rate, pitch, timer, readerViewMode } = this.settings();
+    const { rate, pitch, timer, readerViewMode } = this.settings();
     this.form = this.fb.group({
-      voice: [voice],
+      voice: [Voices.F5],
       rate: [rate],
       pitch: [pitch],
       timer: [secondsToTimeString(timer)],

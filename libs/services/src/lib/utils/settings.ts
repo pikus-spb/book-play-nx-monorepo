@@ -7,7 +7,6 @@ import {
 } from '@book-play/models';
 
 export function getSettings(): Settings {
-  const voice = localStorage.getItem('voice') || DefaultSettings.voice;
   const rate = localStorage.getItem('rate') || DefaultSettings.rate;
   const pitch = localStorage.getItem('pitch') || DefaultSettings.pitch;
   const readerViewMode = (localStorage.getItem('readerViewMode') ||
@@ -15,17 +14,16 @@ export function getSettings(): Settings {
   const timerStored = localStorage.getItem('timer');
   const timer =
     timerStored === null ? DEFAULT_COUNTDOWN_TIMER_VALUE : Number(timerStored);
-  return { voice: voice as Voices, rate, pitch, timer, readerViewMode };
+  return { voice: Voices.F5, rate, pitch, timer, readerViewMode };
 }
 
 export function storeSettings({
-  voice,
   rate,
   pitch,
   timer,
   readerViewMode,
 }: Settings): void {
-  localStorage.setItem('voice', voice || DefaultSettings.voice);
+  localStorage.setItem('voice', Voices.F5);
   localStorage.setItem('rate', rate || DefaultSettings.rate);
   localStorage.setItem('pitch', pitch || DefaultSettings.pitch);
   localStorage.setItem(
