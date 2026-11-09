@@ -9,6 +9,7 @@ import { TtsParams } from '@book-play/models';
 import { getCurrentProtocolUrl } from '@book-play/utils-browser';
 import { createQueryString } from '@book-play/utils-common';
 import { Observable } from 'rxjs';
+import { convertNumbersToRussianWords } from '../../utils/number-to-words-ru';
 import { getSettings } from '../../utils/settings';
 
 @Injectable({
@@ -24,7 +25,8 @@ export class TtsApiService {
     ) + '/tts';
 
   public textToSpeech(text: string): Observable<Blob> {
-    const safeText = encodeURIComponent(text);
+    const textWithRussianNumbers = convertNumbersToRussianWords(text);
+    const safeText = encodeURIComponent(textWithRussianNumbers);
     const { pitch, rate, voice } = getSettings();
     const options: TtsParams = { text: safeText, pitch, rate, voice };
     const postParams = createQueryString(options);
