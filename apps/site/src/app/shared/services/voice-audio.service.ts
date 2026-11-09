@@ -2,7 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { VOICE_CACHE_PRELOAD_EXTRA } from '@book-play/constants';
 import { TtsApiService } from '@book-play/services';
 import { blobToBase64 } from '@book-play/utils-browser';
-import { firstValueFrom, switchMap } from 'rxjs';
+import { firstValueFrom, fromEvent, switchMap, takeUntil } from 'rxjs';
 
 interface AudioCacheRecord {
   data: string;
@@ -21,7 +21,7 @@ export class VoiceAudioService {
     return this.cache.get(text)?.data ?? '';
   }
 
-  async load(text: string): Promise<string> {
+  async load(text: string, signal: AbortSignal): Promise<string> {
     const cached = this.getCached(text);
     if (cached) {
       return cached;
@@ -31,9 +31,9 @@ export class VoiceAudioService {
     if (pending) {
       return pending;
     }
-
+    const abort$ = fromEvent(signal, 'abort');
     const request = firstValueFrom(
-      this.ttsApiService.textToSpeech(text).pipe(switchMap(blobToBase64))
+      this.ttsApiService.textToSpeech(text).pipe(switchMap(blobToBase64), takeUntil(abort$))
     )
       .then((data) => {
         this.cache.set(text, { data, timestamp: Date.now() });
