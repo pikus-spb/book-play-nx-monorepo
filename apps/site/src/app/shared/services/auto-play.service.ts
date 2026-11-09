@@ -111,13 +111,13 @@ export class AutoPlayService {
         this.activeBook()!.textParagraphs[this.cursorPositionService.position];
       this.audioPlayer.setAudio(this.voiceAudio.getCached(text));
 
+      this.continuePreloadingAhead();
+      
       await this.audioPlayer.play();
 
       // Fire-and-forget: preload next paragraph in background while current plays
       if (!this.audioPlayer.stopped && this.cursorPositionService.position + 1 < this.bookLength) {
-        this.continuePreloadingAhead().catch(() => {
-          // Ignore preload errors - they're non-blocking
-        });
+        
         
         this.cursorPositionService.position++;
       } else {
