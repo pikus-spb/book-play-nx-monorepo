@@ -42,10 +42,16 @@ export class AutoPlayService {
       .pipe(
         tap(() => {
           this.domHelper.showActiveParagraph();
+          if (!this.audioPlayer.stopped) {
+            this.audioPreloadingService.preloadParagraph(
+              this.cursorPositionService.position
+            );
+          }
         }),
         takeUntilDestroyed()
       )
       .subscribe();
+
     merge(fromEvent(window, 'resize'), fromEvent(window, 'focus'))
       .pipe(
         debounceTime(200),
@@ -111,38 +117,16 @@ export class AutoPlayService {
         this.activeBook()!.textParagraphs[this.cursorPositionService.position];
       this.audioPlayer.setAudio(this.voiceAudio.getCached(text));
 
-      this.continuePreloadingAhead();
-      
       await this.audioPlayer.play();
 
-      // Fire-and-forget: preload next paragraph in background while current plays
-      if (!this.audioPlayer.stopped && this.cursorPositionService.position + 1 < this.bookLength) {
-        
-        
+      if (
+        !this.audioPlayer.stopped &&
+        this.cursorPositionService.position + 1 < this.bookLength
+      ) {
         this.cursorPositionService.position++;
       } else {
         break;
       }
-    }
-  }
-
-  private async continuePreloadingAhead(): Promise<void> {
-    const text =
-      this.activeBook()!.textParagraphs[this.cursorPositionService.position];
-    
-    // Preload the next paragraph ahead of time while current one is playing
-    if (this.cursorPositionService.position + 1 < this.bookLength) {
-      const nextText =
-        this.activeBook()!.textParagraphs[this.cursorPositionService.position + 1];
-      
-      if (!nextText || this.voiceAudio.getCached(nextText)) {
-        return;
-      }
-
-      await this.audioPreloadingService.preloadParagraph(
-        this.cursorPositionService.position + 1,
-        VOICE_CACHE_PRELOAD_EXTRA.default
-      );
     }
   }
 
